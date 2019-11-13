@@ -3,6 +3,9 @@
     Gaussian Mixture Model in matplotlib
 """
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
+
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from mpl_toolkits.mplot3d import Axes3D
@@ -17,7 +20,8 @@ def plot_contour3d_input2d(
         x0_min=None,
         x0_max=None,
         x1_min=None,
-        x1_max=None
+        x1_max=None,
+        ringcontour=True
 ):
     """
         Visualizing Gaussian Mixture Models.
@@ -43,7 +47,7 @@ def plot_contour3d_input2d(
 
     # Now evaluate the point at each gaussian mixture model...
     # Should refactor this function into visualizing any probability density!!
-    _Z = tf.math.log(pdf(_XX) + 1.e-3)
+    _Z = -tf.math.log(pdf(_XX) + 1.e-3)
 
     print("Input Z is: ")
     print(_Z)
@@ -52,27 +56,28 @@ def plot_contour3d_input2d(
 
     assert np.count_nonzero(_Z) > 0, _Z
 
-    plt.contour(_X, _Y, _Z,
-                norm=LogNorm(vmin=1.0, vmax=1000.0),
-                levels=np.logspace(0, 3, 10)
-                )
+    if not ringcontour:
+        plt.contour(_X, _Y, _Z,
+                    norm=LogNorm(vmin=1.0, vmax=1000.0),
+                    levels=np.logspace(0, 3, 10)
+                    )
 
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-
-    # Make data
-    # u = np.linspace(0, 2 * np.pi, 100)
-    # v = np.linspace(0, np.pi, 100)
-    # x = 10 * np.outer(np.cos(u), np.sin(v))
-    # y = 10 * np.outer(np.sin(u), np.sin(v))
-    # z = 10 * np.outer(np.ones(np.size(u)), np.cos(v))
+    if ringcontour:
+        ax = fig.gca(projection='3d')
+    else:
+        ax = fig.add_subplot(111, projection='3d')
 
     # Plot the surface
-    ax.plot_surface(_X, _Y, _Z,
-                    cmap=cm.coolwarm,
-                    linewidth=0,
-                    antialiased=False
-                    )
+    if ringcontour:
+        ax.contourf(_X, _Y, _Z)
+    else:
+
+        ax.plot_surface(_X, _Y, _Z,
+                        cmap=cm.coolwarm,
+                        linewidth=0,
+                        antialiased=False
+                        )
 
     # print("Contour done")
     # plt.scatter(_X[:, 0], _X[:, 1], .8)
