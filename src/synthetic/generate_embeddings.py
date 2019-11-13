@@ -28,15 +28,16 @@ def generate_synthetic_embedding(d, components, spherical=True, maximum_variance
     if maximum_variance is None:
         maximum_variance = np.sqrt(d)
 
-    emb_mu = tf.random.normal((components, d)) * d
+    emb_mu = tf.random.normal((components, d)) * d * 5
     emb_sigma = tf.random.normal((components, d)) * d # Can be unfolded column-wise because diagonal covariance matrices
     emb_sigma = tf.math.abs(emb_sigma) # Making the covariance matrix psd! (cov matrix cannot define a negative eigenvalues)
 
     if spherical:
+        # TODO:, how to make this spherical!
         elementswise_norm = tf.norm(emb_mu, axis=1, ord=2, keepdims=True)
         #print("elementwise norm: ", elementswise_norm)
-        emb_mu = tf.math.divide(emb_mu, elementswise_norm)
-        emb_sigma = tf.math.divide(emb_sigma, maximum_variance)
+        # emb_mu = tf.math.divide(emb_mu, elementswise_norm)
+        # emb_sigma = tf.math.divide(emb_sigma, maximum_variance)
 
     return emb_mu, emb_sigma
 

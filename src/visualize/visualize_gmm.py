@@ -11,7 +11,9 @@ from matplotlib.colors import LogNorm
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 
-from src.functional.pdf import pdf_gaussian
+import tensorflow as tf
+
+from src.functional.pdf import pdf_gaussian, pdf_gmm_diagional_covariance
 from src.synthetic.generate_embeddings import generate_synthetic_embedding
 
 
@@ -142,9 +144,11 @@ if __name__ == "__main__":
 
     dimensions = 2
 
+    src_components = 10
+
     emb_src = generate_synthetic_embedding(
         d=dimensions,
-        components=10
+        components=src_components
     )
     emb_tgt = generate_synthetic_embedding(
         d=dimensions,
@@ -155,19 +159,22 @@ if __name__ == "__main__":
     # Visualize the first sampled Gaussian
     #########################################
 
-    mu = tf.expand_dims(emb_src[0][0, :], 0)
-    cov = emb_src[1][0, :] * tf.eye(dimensions)
-
-    print("Mus and cov are: ", mu.shape, cov.shape)
-
     # We will ignore the covariance for the
     # calculate of the plotting boundaries!
     quadratic_scale = 20
 
+    # mus = [tf.expand_dims(emb_src[0][i, :], axis=0) for i in range(src_components)]
+    mus = [emb_src[0][i, :] for i in range(src_components)]
+    covs = [emb_src[1][i, :] * tf.eye(dimensions) for i in range(src_components)]
+
+    # print("Mus and cov are: ", mu.shape, cov.shape)
+
     plot_contour3d_input2d(
-        pdf=lambda X: pdf_gaussian(X, mu, cov),
+        pdf=lambda X: pdf_gmm_diagional_covariance(X, mus, covs),
         x0_min=-1. * quadratic_scale,
         x0_max=1. * quadratic_scale,
         x1_min=-1. * quadratic_scale,
-        x1_max=1. * quadratic_scale
+        x1_max=1. * quadratic_scale,
+        ringcontour=True
     )
+
