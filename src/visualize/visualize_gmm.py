@@ -64,11 +64,11 @@ def plot_two_contour3d_input2d(
     _Z1 = _Z1.numpy()
     _Z2 = _Z2.numpy()
     # Let's not plot places that are nan!
-    mode = stats.mode(_Z1)
+    mode = stats.mode(_Z1.flatten())[0]
     print("Mode is: ", mode)
     # TODO: Pick it up from here!
     _Z1[_Z1 == mode] = np.nan
-    mode = stats.mode(_Z2)
+    mode = stats.mode(_Z2.flatten())[0]
     _Z2[_Z2 == mode] = np.nan
 
     print("Z is: ")
@@ -78,7 +78,8 @@ def plot_two_contour3d_input2d(
     # Plot the surface
     if ringcontour:
         ax.contourf(_X, _Y, _Z1,
-                    title="PDF1"
+                    title="PDF1",
+                    cmap=cm.coolwarm,
                     )
         ax.contourf(_X, _Y, _Z2,
                     title="PDF2"
@@ -253,5 +254,5 @@ if __name__ == "__main__":
         x0_max=1. * quadratic_scale,
         x1_min=-1. * quadratic_scale,
         x1_max=1. * quadratic_scale,
-        ringcontour=False
+        ringcontour=True
     )
