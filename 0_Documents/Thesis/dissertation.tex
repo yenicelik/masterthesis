@@ -159,7 +159,7 @@ This is our samples batch.
 \begin{equation}
 \nabla\phi \mathbb{E}_{q_\phi(z)}\left[ f_\theta(z) \right] 
 \iff 
-\nabla\phi \mathbb{E}_{\mathbf{N}_\epsilon | 0, 1)}\left[ \nabla_{\phi} f_\theta (\mu +  \sigma \epsilon) \right]
+\nabla\phi \mathbb{E}_{\mathbf{N} (\epsilon | 0, 1)}\left[ \nabla_{\phi} f_\theta (\mu +  \sigma \epsilon) \right]
 \end{equation}
 
 where we have simply rewritten z using the reparametrization trick.
@@ -303,6 +303,38 @@ are a statistical technique where a series of invertible transformations $f_t$ a
 As long as we can efficiently compute the Jacobian determinant of the transformation bijection $f_t$, we can both (1) evaluate the density of our data (by applying an inverse transformation and computing the density in the base distribution), and 
 (2) sample from our complex distribution (by sampling from the base distribution and applying the forward transformation)
 These can be used for classification and clustering \cite{normalising_flows},  [variational inference tasks \cite{iaf} such as image-generation \cite{nvp}], enriching the posterior (and prior!) \cite{variational_inference_using_normalized_flows}, and density estimation \cite{glow}.
+
+\subsubsection{Glow: Generative Flows with Invertible 1x1 Convolutions}
+
+We use 1x1 convolutional layers as a generalization of the permutation in sequential flows with lower triangular learnable rotation matrices.
+
+TODO: Convolution operators and reduction to permutation operators
+
+\begin{equation}
+\text{log} \left| \text{def} \left( \frac{d \text{conv2D}(h; W) }{dh} \right) \right| = h  w  
+\end{equation}
+
+% \text{log} = \dot \text{log}  \text{log}  = \dot \text{log} |\text{det} (W) |
+
+
+(read the paper a bit more before citing this, but cite this: https://arxiv.org/pdf/1901.08624.pdf) 
+
+
+\subsubsection{Flow++}
+
+
+
+The coupling layers can be described as
+
+\begin{align}
+y_1 &= x_1 
+y_2 &= x_2 \dot exp( a_\theta( x_1 ) ) + b_\theta(x_1)
+\end{align}
+
+where the functions $a_\theta$ and $b_\theta$ are learnable functions (possibly normalizing flows which ). 
+These have to be invertible affine transformations
+
+
 
 
 %\chapter{Related Work} 

@@ -8,6 +8,8 @@
 \contentsline {subsubsection}{Real NVP}{10}% 
 \contentsline {subsubsection}{Inverse AR Flow}{11}% 
 \contentsline {subsubsection}{Non-Linear Independent Components Estimation (NICE)}{11}% 
+\contentsline {subsubsection}{Glow: Generative Flows with Invertible 1x1 Convolutions}{12}% 
+\contentsline {subsubsection}{Flow++}{12}% 
 \contentsline {chapter}{\numberline {3}Related Work}{13}% 
 \contentsline {section}{\numberline {3.1}Unsupervised Biliingual Lexicon Matching}{13}% 
 \contentsline {chapter}{\numberline {4}Analysis of the current state of the art}{15}% 

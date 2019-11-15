@@ -4,6 +4,9 @@
 """
 import numpy as np
 import matplotlib
+
+from src.synthetic.generate_rotation_matrix import generate_rotation_matrix
+
 matplotlib.use('TkAgg')
 
 
@@ -227,10 +230,24 @@ if __name__ == "__main__":
         d=dimensions,
         components=src_components
     )
-    emb_tgt = generate_synthetic_embedding(
-        d=dimensions,
-        components=tgt_components
-    )
+
+    M = generate_rotation_matrix(src_dim=dimensions, tgt_dim=dimensions, orthogonal=True)
+
+    # Make the target embeddings a rotated version of the source embeddings
+    print(emb_src[0].shape)
+    print(emb_src[1].shape)
+    print(M.shape)
+    emb_tgt = (tf.tensordot(emb_src[0], M, axes=1), tf.tensordot(emb_src[1], M, axes=1))
+    tgt_components = 10
+
+    print(emb_tgt[0].shape)
+    print(emb_tgt[1].shape)
+    print(M.shape)
+
+    # emb_tgt = generate_synthetic_embedding(
+    #     d=dimensions,
+    #     components=tgt_components
+    # )
 
     #########################################
     # Visualize the first sampled Gaussian
