@@ -1,3 +1,10 @@
+"""
+    Any functions and operations that act on the
+    - mean of gaussian embeddings
+    - covariance of gaussian embeddings
+
+    that may generally be useful to numerically support, or where small mistakes can have big consequences
+"""
 
 import tensorflow as tf
 
