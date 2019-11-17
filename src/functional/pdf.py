@@ -61,21 +61,30 @@ def pdf_gmm_diagional_covariance(X, mus, covs, mixture_weights=None):
     # Generate all individual components first
     all_gaussians = []
     for mu, cov in zip(mus, covs):
+        print("Cov is: ", mu, cov)
         single_gaussian = tfd.MultivariateNormalFullCovariance(
             loc=mu,
             covariance_matrix=cov
         )
+        print("Single Gaussian is: ")
+        print(single_gaussian)
         all_gaussians.append(single_gaussian)
 
     assert len(mus) == len(all_gaussians), (len(mus), len(all_gaussians))
     assert len(all_gaussians) == len(mixture_weights), (len(all_gaussians), len(mixture_weights))
 
     print(all_gaussians)
+    print(mixture_weights)
+    print(len(all_gaussians))
+    print(len(mixture_weights))
 
+    print("All Gaussians are")
+    print(all_gaussians)
     gmm = tfd.Mixture(
-      cat=tfd.Categorical(probs=mixture_weights),
+      cat=tfd.Categorical(probs=[mixture_weights]),
       components=all_gaussians
     )
+    print(gmm)
 
     return gmm.prob(X)
 

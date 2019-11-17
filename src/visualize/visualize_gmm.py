@@ -5,8 +5,6 @@
 import numpy as np
 import matplotlib
 
-from src.synthetic.generate_rotation_matrix import generate_rotation_matrix
-
 matplotlib.use('TkAgg')
 
 
@@ -16,8 +14,9 @@ from scipy import stats
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 
-from src.functional.pdf import pdf_gaussian, pdf_gmm_diagional_covariance
-from src.synthetic.generate_embeddings import generate_synthetic_embedding
+from src.functional.pdf import pdf_gmm_diagional_covariance
+from src.synthetic.generate_embeddings import generate_synthetic_src_tgt_embedding
+
 
 def plot_two_contour3d_input2d(
         pdf1,
@@ -217,56 +216,19 @@ def plot_contour2d_input2d(
 
 
 if __name__ == "__main__":
-    print("Plotting Gaussian Mixutre Models GMMs using matplotlib")
+    print("Plotting Gaussian Mixture Models GMMs using matplotlib")
 
     import tensorflow as tf
 
     dimensions = 2
-
-    src_components = 10
-    tgt_components = 5
-
-    emb_src = generate_synthetic_embedding(
-        d=dimensions,
-        components=src_components
-    )
-
-    M = generate_rotation_matrix(src_dim=dimensions, tgt_dim=dimensions, orthogonal=True)
-
-    # Make the target embeddings a rotated version of the source embeddings
-    print(emb_src[0].shape)
-    print(emb_src[1].shape)
-    print(M.shape)
-    emb_tgt = (tf.tensordot(emb_src[0], M, axes=1), tf.tensordot(emb_src[1], M, axes=1))
-    tgt_components = 10
-
-    print(emb_tgt[0].shape)
-    print(emb_tgt[1].shape)
-    print(M.shape)
-
-    # emb_tgt = generate_synthetic_embedding(
-    #     d=dimensions,
-    #     components=tgt_components
-    # )
-
-    #########################################
-    # Visualize the first sampled Gaussian
-    #########################################
-
-    # We will ignore the covariance for the
-    # calculate of the plotting boundaries!
+    components = 3
     quadratic_scale = 20
 
-    # mus = [tf.expand_dims(emb_src[0][i, :], axis=0) for i in range(src_components)]
-    mus_src = [emb_src[0][i, :] for i in range(src_components)]
-    covs_src = [emb_src[1][i, :] * tf.eye(dimensions) for i in range(src_components)]
-
-    mus_tgt = [emb_tgt[0][i, :] for i in range(tgt_components)]
-    covs_tgt = [emb_tgt[1][i, :] * tf.eye(dimensions) for i in range(tgt_components)]
+    mus_src, cov_src, mus_tgt, cov_tgt = generate_synthetic_src_tgt_embedding(d=dimensions, components=components)
 
     plot_two_contour3d_input2d(
-        pdf1=lambda X: pdf_gmm_diagional_covariance(X, mus_src, covs_src),
-        pdf2=lambda X: pdf_gmm_diagional_covariance(X, mus_tgt, covs_tgt),
+        pdf1=lambda X: pdf_gmm_diagional_covariance(X, mus_src, cov_src),
+        pdf2=lambda X: pdf_gmm_diagional_covariance(X, mus_tgt, cov_tgt),
         x0_min=-1. * quadratic_scale,
         x0_max=1. * quadratic_scale,
         x1_min=-1. * quadratic_scale,
