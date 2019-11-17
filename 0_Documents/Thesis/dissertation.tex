@@ -588,13 +588,116 @@ The general goal of bilingual lexicon matching is to learn a shared embedding sp
 
 Most existing methods focus on minimizing the distance between the two token-datasets using some (variation) of Wassterstein, Jensen-Shannon divergence, etc.
 
+What are datasets that we can use for benchmarking
+
+\begin{itemize}
+\item MUSE dataset (as used in Zhou 2019 et al
+\item 
+\end{itemize}
+
 \section{Methods using GANs (and other stuff..)}
 
 \section{Methods using Normalising Flows}
 
 \subsection{Density Matching for Bilingual Word Embeddings (Zhou 2019)}
 
+Zhou et. al consider the problem by creating two smooth embedding spaces.
 
+For simplicity, I will refer to embedding space $\mathcal{X} \in \mathbf{R}^d$ as the source embeddings, and the embedding space $\mathcal{Y} \in \mathbf{R}^d$ as the target embeddings. 
+
+We denote $ x_i $ and $y_j$ as the individual words with respective embeddings $x \in \mathcal{X}$ and $y \in \mathcal{Y}$.
+
+--------
+
+The general approach of the authors is as follows:
+
+We learn two mapping functions $f_{xy} : \mathcal{X} \rightarrow \mathcal{Y}$, $f_{yx} : \mathcal{Y} \rightarrow \mathcal{X}$
+
+We maximize the density of data points in the source space. 
+We use a log-likelihood term in the loss-function.
+
+For monolingual embeddings, we define tractable density functions $p(x)$, $p(y)$.
+
+We use gaussian embeddings, where each single gaussian module represents a single word.
+
+\begin{equation}
+p(x) \approx p(y) \approx GMM
+\end{equation}
+
+This implies that for both $\forall x \in \mathcal{X}$ and $\forall y \in \mathcal{Y}$ we have
+
+\begin{equation}
+p(x) = \sum_{i \in {1, \ldots, N_x} } \pi(x_i) \tilde{p}(x|x_i)
+\end{equation}
+
+where the final probability term $$\tilde{p}(x|x_i) = \mathcal{N}(x | x_i, \sigma^2_x I) $$ describes the probability density of the single word-embedding, represented through a Gaussian in this case, and $N_x$ defines the total number of components / words in dictionary $\mathcal{C}$.
+
+To initiate the embeddings, the authors use the word2vec (WAS IT WORD2VEC) point-vector as the mean of the Gaussian distribution, and use a fixed variance term $\sigma^2$ for all Gaussians.
+
+Furthermore, instead of using a uniform prior over the mixture weights $\pi(x_i)$, the authors use the observation that frequencies may give bettern information, as as such initiate the priors as the relative frequencies of the words, i.e. $$ \pi(x_i) = \frac{ \text{freq} (x_i) }{\sum_j \text{freq} (x_j) } $$ .
+
+This implies that the experiment is not executed in a manner where the Gaussian Mixutres are carefully chose, but rather by augmenting and generalizing the word2vec point vectors to Gaussian distributions.
+This has the effect that the resulting probability space becomes smooth (rather than a discrete space of point-vectors) [CITE??? SMOOTHNESS]
+Another assumption made is that a gaussian distribution is best-able to capture this mixtures.
+
+
+
+--------
+
+Every training step obtains samples form the Gaussian mixture space.
+
+The density calculation can be defined by using volume-preserving invertible transformations. 
+Perhaps it could make sense to also apply convolutional operators?
+
+To stabilize the unsupervised training, the author employs the following methods.
+
+\begin{enumerate}
+\item back-translation-loss to train both directions (this is conceptually similar to the cyclic dependency in GANs.
+\item  the author uses a weakly loss. identical text-strings in both languages are mapped to similar places in the space. 
+\item frequency of the words is used as a prior to the GMM prior weights.
+\end{enumerate}
+
+The authors indicate robust training which is not strongly dependent on initialization
+
+
+------
+
+The training functions in such as a way as to increase the log-probability density.
+The general approach is:
+
+\begin{enumerate}
+\item A continuous vector $x$ is sampled from the GMM. 
+Specifically,
+\begin{equation}
+x_i \sim \pi(x_i), x \sim \tilde{p}(x|x_i) 
+\end{equation}
+\item We then apply $f_{xy}$ to get the inferred target embedding $y = f_{xy}(x)$.
+Specifically, we define the mapping operation as: 
+\begin{equation}
+f_{xy}(\cdot) = W_{xy} \cdot
+\end{equation}
+We choose $W$ as an invertible matrix, thus, the inverse function is defined as 
+\begin{equation}
+x = f(y) = W_{xy}^{-1} y
+\end{equation}
+setting the volume of this operation to $$ J(f^{-1}(x)) = W_{xy} $$ which is used for the log-density calculations.
+Specifically
+\begin{equation}
+\text{log} p(x; W_{xy}) = \text{log} p(y) + \text{log} \absdet{\text{det}(W_{xy})}
+\end{equation}
+\item We then maximize the log-likelihood, which equivalent to minimizing the expectation of the KL-divergence between the prior and modal distributions.
+\begin{equation}
+KL ( p(x) || p(x; W_{xy} )
+\end{equation}
+We arrive at the conditional unsupervised mapping-loss function of (incorporating the observation that each mixture represents a single word token)
+\begin{equation}
+\mathcal{L}_{xy} = \mathbf{E}{x \sim p(x)} \bracket{ \text{log} p(y) + \text{log} \absdet{ \text{det} (W_{xy})} }
+\end{equation}
+Where the first term is the log-density of the data, and the second term describes a regualizer (prior) over the sample model which we use for the mapping. 
+This equation corresponds to the normalising flow which is volume-preserving.
+\end{enumerate}
+
+The maximum log-likelihood is proportional to the minimum expectation of the KL-divergence between the prior and modal distribution. (DAFUQ IS THIS MODAL DISTRIBUTION)
 
 \section{Methods viewing this problem as an Optimal Transport (OT) Problem}
 
