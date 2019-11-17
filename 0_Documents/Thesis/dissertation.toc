@@ -2,17 +2,27 @@
 \contentsline {section}{\numberline {1.1}Scope of Work}{1}% 
 \contentsline {chapter}{\numberline {2}Background}{5}% 
 \contentsline {section}{\numberline {2.1}Gaussian Embeddings}{5}% 
-\contentsline {subsubsection}{Gaussian Embeddings}{5}% 
-\contentsline {section}{\numberline {2.2}Normalising Flows}{5}% 
-\contentsline {subsubsection}{Planar Flow}{10}% 
-\contentsline {subsubsection}{Real NVP}{10}% 
-\contentsline {subsubsection}{Inverse AR Flow}{11}% 
-\contentsline {subsubsection}{Non-Linear Independent Components Estimation (NICE)}{11}% 
-\contentsline {subsubsection}{Glow: Generative Flows with Invertible 1x1 Convolutions}{12}% 
-\contentsline {subsubsection}{Flow++}{12}% 
-\contentsline {chapter}{\numberline {3}Related Work}{13}% 
-\contentsline {section}{\numberline {3.1}Unsupervised Biliingual Lexicon Matching}{13}% 
-\contentsline {chapter}{\numberline {4}Analysis of the current state of the art}{15}% 
-\contentsline {chapter}{\numberline {5}Our Method}{17}% 
-\contentsline {chapter}{\numberline {6}Evaluation}{19}% 
-\contentsline {chapter}{\numberline {7}Conclusion}{21}% 
+\contentsline {subsubsection}{Word representations via Gaussian Embeddings}{6}% 
+\contentsline {paragraph}{Symmetric similarity: expected likelihood or probability product kernel}{6}% 
+\contentsline {paragraph}{Asymmetric divergence: KL-Divergence}{7}% 
+\contentsline {paragraph}{Uncertainty calculation:}{7}% 
+\contentsline {section}{\numberline {2.2}General random information}{8}% 
+\contentsline {section}{\numberline {2.3}Normalising Flows}{9}% 
+\contentsline {subsubsection}{Planar Flow}{16}% 
+\contentsline {subsubsection}{Real NVP (2017)}{16}% 
+\contentsline {subsubsection}{Inverse AR Flow (2017)}{17}% 
+\contentsline {subsubsection}{Non-Linear Independent Components Estimation (NICE)}{17}% 
+\contentsline {subsubsection}{Glow: Generative Flows with Invertible 1x1 Convolutions (2018)}{18}% 
+\contentsline {subsubsection}{Flow++ (2019)}{19}% 
+\contentsline {chapter}{\numberline {3}Related Work}{21}% 
+\contentsline {paragraph}{online data}{21}% 
+\contentsline {paragraph}{offline data}{21}% 
+\contentsline {section}{\numberline {3.1}Methods using GANs (and other stuff..)}{22}% 
+\contentsline {section}{\numberline {3.2}Methods using Normalising Flows}{22}% 
+\contentsline {subsection}{\numberline {3.2.1}Density Matching for Bilingual Word Embeddings (Zhou 2019)}{22}% 
+\contentsline {section}{\numberline {3.3}Methods viewing this problem as an Optimal Transport (OT) Problem}{22}% 
+\contentsline {subsection}{\numberline {3.3.1}Gromov-Wasserstein Alignment of Word Embedding Spaces}{22}% 
+\contentsline {chapter}{\numberline {4}Analysis of the current state of the art}{23}% 
+\contentsline {chapter}{\numberline {5}Our Method}{25}% 
+\contentsline {chapter}{\numberline {6}Evaluation}{27}% 
+\contentsline {chapter}{\numberline {7}Conclusion}{29}% 
