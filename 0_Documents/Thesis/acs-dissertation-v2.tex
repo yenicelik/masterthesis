@@ -1,0 +1,80 @@
+%% 
+%% ACS project dissertation template. 
+%% 
+%% Currently designed for printing two-sided, but if you prefer to 
+%% print single-sided just remove ",twoside,openright" from the 
+%% \documentclass[] line below. 
+%%
+%%
+%%   SMH, May 2010. 
+
+
+\documentclass[a4paper,12pt,twoside,openright]{report}
+
+
+%%
+%% EDIT THE BELOW TO CUSTOMIZE
+%%
+
+\def\authorname{Sarah J.\ Jones\xspace}
+\def\authorcollege{Wolfson College\xspace}
+\def\authoremail{Sarah.Jones@cl.cam.ac.uk}
+\def\dissertationtitle{Type-Safety for Embedded Systems}
+\def\wordcount{14,235}
+
+
+%\usepackage[dvips]{epsfig,graphics} 
+\usepackage{epsfig,graphicx,verbatim,parskip,tabularx,setspace,xspace}
+
+%% START OF DOCUMENT
+\begin{document}
+
+
+%% FRONTMATTER (TITLE PAGE, DECLARATION, ABSTRACT, ETC) 
+\pagestyle{empty}
+\singlespacing
+\input{titlepage}
+\onehalfspacing
+\input{declaration}
+\singlespacing
+\input{abstract}
+
+\pagenumbering{roman}
+\setcounter{page}{0}
+\pagestyle{plain}
+\tableofcontents
+\listoffigures
+\listoftables
+
+\onehalfspacing
+
+%% START OF MAIN TEXT 
+
+%\chapter{Introduction}
+\chapter{Title}
+\pagenumbering{arabic} 
+\setcounter{page}{1} 
+
+%\chapter{Background} 
+\chapter{Title} 
+
+%\chapter{Related Work} 
+\chapter{Title}
+
+%\chapter{Design and Implementation}
+\chapter{Title}
+
+%\chapter{Evaluation} 
+\chapter{Title}
+\
+%\chapter{Summary and Conclusions} 
+\chapter{Title}
+
+
+\appendix
+\singlespacing
+
+\bibliographystyle{unsrt} 
+%\bibliography{dissertation} 
+
+\end{document}
