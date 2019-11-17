@@ -3,13 +3,13 @@
 \contentsline {chapter}{\numberline {2}Background}{5}% 
 \contentsline {section}{\numberline {2.1}Gaussian Embeddings}{5}% 
 \contentsline {subsubsection}{Word representations via Gaussian Embeddings}{6}% 
-\contentsline {paragraph}{Symmetric similarity: expected likelihood or probability product kernel}{7}% 
+\contentsline {paragraph}{Symmetric similarity: expected likelihood or probability product kernel}{6}% 
 \contentsline {paragraph}{Asymmetric divergence: KL-Divergence}{7}% 
-\contentsline {paragraph}{Uncertainty calculation:}{8}% 
+\contentsline {paragraph}{Uncertainty calculation:}{7}% 
 \contentsline {section}{\numberline {2.2}General random information}{8}% 
-\contentsline {section}{\numberline {2.3}Normalising Flows}{10}% 
+\contentsline {section}{\numberline {2.3}Normalising Flows}{9}% 
 \contentsline {subsubsection}{Planar Flow}{16}% 
-\contentsline {subsubsection}{Real NVP (2017)}{17}% 
+\contentsline {subsubsection}{Real NVP (2017)}{16}% 
 \contentsline {subsubsection}{Inverse AR Flow (2017)}{17}% 
 \contentsline {subsubsection}{Non-Linear Independent Components Estimation (NICE)}{17}% 
 \contentsline {subsubsection}{Glow: Generative Flows with Invertible 1x1 Convolutions (2018)}{18}% 
