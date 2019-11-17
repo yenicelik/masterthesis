@@ -1,0 +1,623 @@
+%% 
+%% ACS project dissertation template. 
+%% 
+%% Currently designed for printing two-sided, but if you prefer to 
+%% print single-sided just remove ",twoside,openright" from the 
+%% \documentclass[] line below. 
+%%
+%%
+%%   SMH, May 2010. 
+
+
+\documentclass[a4paper,12pt,twoside,openright]{report}
+
+
+%%
+%% EDIT THE BELOW TO CUSTOMIZE
+%%
+
+\def\authorname{David Yenicelik \xspace}
+\def\authorcollege{ETH Zürich\xspace}
+\def\authoremail{yedavid@ethz.ch}
+\def\dissertationtitle{}
+\def\wordcount{14,235}
+
+
+%\usepackage[dvips]{epsfig,graphics} 
+\usepackage{epsfig,graphicx,verbatim,parskip,tabularx,setspace,xspace}
+\usepackage{amsmath, amsfonts}
+
+
+%% START OF DOCUMENT
+\begin{document}
+
+
+%% FRONTMATTER (TITLE PAGE, DECLARATION, ABSTRACT, ETC) 
+\pagestyle{empty}
+\singlespacing
+\input{titlepage}
+\onehalfspacing
+\input{declaration}
+\singlespacing
+\input{abstract}
+
+\pagenumbering{roman}
+\setcounter{page}{0}
+\pagestyle{plain}
+\tableofcontents
+\listoffigures
+\listoftables
+
+\onehalfspacing
+
+% Definition of macros
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bracket}[1]{\left[#1\right]}
+\newcommand{\absdet}[1]{\left|#1\right|}
+%% START OF MAIN TEXT 
+
+%\chapter{Introduction}
+\chapter{Introduction}
+\pagenumbering{arabic} 
+\setcounter{page}{1} 
+
+In Natural Language Processing (NLP), bilingual lexical induction (BLI) is a problem of inferring word-to-word mapping between two languages.
+While supervised BLI may be learned trivially from a dictionary, unsupervised BLI is highly non-trivial, and serves as a backbone to many unsupervised Neural Machine Translation (NMT) systems, without which the overall MT performance drastically drops \cite{dropping_perf1} \cite{dropping_perf2}.
+In addition to the unsupervised setting, words in a source language A often do not carry a one-to-one correspondence with words in a target language B.
+This further increases the difficulty of finding a (bijective) mapping between the two embedding spaces.
+
+\section{Scope of Work}
+
+
+Continuing where \cite{density_matching} left off, we want to investigate the performance of using normalising flows to model unsupervised lexicon matching between two probability distributions, which are defined by Gaussian emebddings, which have a one-to-one correspondence to tokens in the respective languages.
+We aim to use Gaussian embeddings for the robustness, and better integration into the probabilistic perspective.
+The method discussed in the paper also relies a lot on the (semi-)supervised loss component.
+We aim to investigate why this is the case, and would like to revise a method which is more robust in the fully unsupervised setting.\\
+
+\textbf{Minimal goals:} We propose the following steps on achieving this goal.
+
+
+\begin{enumerate}
+    \item Replicate the algorithms and models which can generate through Gaussian embedding \cite{gaussian_embedding}. Do one sanity check by doing a sanity check on one of (SimLex / WordSim)
+    \item Replicate "Density matching for bilingual word embedding" to setup a baseline normalising flow between vector-word-embeddings \cite{density_matching}.
+    \item Define loss between predicted and target embeddings (if change in definition is necessary)
+    \item Change the embeddings in point 2. to use Gaussian embeddings. Implement Loss functions found in point 3.
+\end{enumerate}
+
+\textbf{Extended goals:} If the above points provide good performance , we would like to expand on the below points.
+
+\begin{enumerate}
+    \item Implement a fully unsupervised extension by investigating the shortcomings of \cite{density_matching}.
+    \item Investigate "deeper" normalising flows than the linear flow in \cite{density_matching} as such \cite{flowpp} \cite{neuralsplineflow}.
+\end{enumerate}
+
+
+\textbf{Contingency Plan / Further extended goals:} Implementing the following points would allow for an applied perspective of this approach, showing that this methodology allows for more robust mapping, also outside the field of NLP.
+
+
+\begin{enumerate}
+    \item Train embeddings for job-systems ESCO and AUGOV using Skip-Gram or Co-Occurence-matrix based. Do a sanity check.
+    \item Train Gaussian embeddings for job-systems. Do a sanity check.
+    \item Generate a small validation dataset between the European- and Australian job-system.
+    \item Setup some baseline algorithms based on NLP, graph-matching, colinear-PCA for matching as a non-NLP benchmark environment. Compare against above-proposed methods.
+    \item Find a normlising flow model to transform one job system into another.
+\end{enumerate}
+
+
+%\chapter{Background} 
+\chapter{Background} 
+
+We provide a short introduction to the background work.
+
+
+\section{Gaussian Embeddings}
+
+The problem that Gaussian Embeddings try to resolve is to find a suitable embedding space for entities, such as word-tokens.
+
+In the context of NLP, the general goal is to map every word type $w$ that is included in some dictionary $\mathcal{D}$ in the latent space, such that $w$ is close to all the context words $c$ from another dictionary $\mathcal{C}$.
+This follws the (CITE THE RANDOM GUY) ASSUMPTION, which says that words in similar contexts have similar neighborhoods.
+
+In an unsupervised context, we observe a sequence of words ${t(w)_i}$ for each word-token $w_i$ and their contexts $c(w)_i$.
+
+We want to use some rank-based Energy, not absolute energy, such that we can make sure that neighboring words are pushed together, and two "random" words are pushed further away from each other.
+
+The above two problems can be regarded as finding an invertible transformation from one (embedding) space $\mathcal{X} \in \mathbf{R}^d$ into another $\mathcal{\hat{X}} \in \mathbf{R}^d$. 
+Normalising flows \cite{variational_inference_using_normalized_flows} \cite{nvp} have proven to be a powerful tool in modeling such relations.
+As such, the aim of this project is to find a model based on normalising flows which is able to find an an invertible mapping $f$ from $\mathcal{X}$ to $\mathcal{\hat{X}}$.
+To keep the discussion focused, this thesis deals with the problem of finding a model for bilingual lexicon matching.
+
+\subsubsection{Word representations via Gaussian Embeddings}
+
+Gaussian Embeddings have been first proposed in the context of words, although prior work has been adapted in embedding matrix-rows into a mean and standard deviation (CAN CITE THE PEOPLE IN THE PAPER 2007, 2008) .
+It is a continuous probabilistic relaxation of the otherwise common discrete point vectors.
+Each word is represented by a Gaussian distribution in high-dimensional space, allowing to better capture uncertainty and a representation and it's relationships.
+It can also express asymmetric relations more naturally than dot-products or cosine similarity, and enables for better-parametrized rule between decision boundaries.
+
+Fitting Gaussian Mixture Models on embeddings have been done in order to apply Fisher kernels to entire documents.
+
+Because this is an unsupervised learning task, we must use an energy function which is incorporated within a loss function that we try to minimize. 
+The energy function describes (dis-)similarity between two items.
+The authors propose the following energy functions to derive a Gaussian word-embedding.
+
+\begin{equation}
+L_m(w, c_p, c_n) = max(0, m - E_\theta(w, c_p) + E_\theta(w, c_n)
+\end{equation}
+
+Here, $w$ is the word we want to sample, $c_p$ is a "positive" context word, i.e. a word that co-occurs with the word $w$, and $c_n$ is a "negative" context word, i.e. a word that does not co-occur with the word $w$.
+Usually the negative context words is sampled randomly from the corpus.
+The loss function reminds of a hinge-loss in logistic regression.
+
+The authors propose two possible ways to learn the mean and variance of the Gaussian embeddings.
+They argue that the empirical covariance is not the most effective method of deriving the words as Gaussian embeddings.
+This does not allow for inclusion between ellipsoids 
+
+\paragraph{Symmetric similarity: expected likelihood or probability product kernel}
+
+We can use any kernel (which is symmetric by definition) to derive at an energy function.
+For two Gaussians $f(x)$, $g(x)$, the inner product is defined as:
+
+\begin{align}
+E_\theta(w, c) &= \int_{x \in \mathcal{R}^d} f(x)g(x) dx \\
+&= \int_{x \in \mathcal{R}^d} \mathcal{N}(x; \mu_w, \Sigma_w) \mathcal{N}(x; \mu_c, \Sigma_c) dx \\
+&= \mathcal{N}(0; \mu_w - \mu_c, \Sigma_w + \Sigma_c)
+\end{align}
+
+For numerical feasibility and easy of differentiation, we usually maximize the $\text{log} E_\theta(w, c)$ for a given dataset with $w \in \mathcal{W}, c \in \mathcal{C}$.
+We will not go further in what the specific gradient of this log-energy is.
+
+\paragraph{Asymmetric divergence: KL-Divergence}
+
+We can use more directional supervision to exploit directional supervision, such as a knowledge graph.
+
+Following energy-function is optimized:
+
+\begin{align}
+-E(w_i, c_j) & = D_{KL}(c_j || w_i) \\
+&= \int_{x \in \mathcal{R}^d} \mathcal{N}(x; \mu_{w_i}, \Sigma_{w_i}) \text{log} \frac{\mathcal{N}(x; \mu_{c_j}, \Sigma_{c_j})}{\mathcal{N}(x; \mu_{w_i}, \Sigma_{w_i})} dx \\
+&= \frac{1}{2}\left(\operatorname{tr}\left(\Sigma_{i}^{-1} \Sigma_{j}\right)+\left(\mu_{i}-\mu_{j}\right)^{\top} \Sigma_{i}^{-1}\left(\mu_{i}-\mu_{j}\right)-d-\log \frac{\operatorname{det}\left(\Sigma_{j}\right)}{\operatorname{det}\left(\Sigma_{i}\right)}\right)
+\end{align}
+
+Because of the loss function, this can entail information such as "y entails x" as a soft form of inclusion between two datasets (if KL divergence is used).
+If a symmetric loss function is used, then this would most likely lead to overlap (IS THIS TRUE...???)
+
+\paragraph{Uncertainty calculation:} In contrast to the empirical standard deviation as an uncertainty measure, we can now calculate the uncertainty of the inner product (i.e. the distribution $P(z=x^T y)$ using the following formula
+
+\begin{align}
+\mu_z = \mu_x^T \mu_y
+\Sigma_z = \mu_{x}^T \Sigma_{x} \mu_{x}+\mu_{y}^T \Sigma_{y} \mu_{y}+\operatorname{tr}\left(\Sigma_{x} \Sigma_{y}\right)
+\end{align}
+
+We then get an uncertainty bound, where $c$ denotes the number of standard deviations away from the mean.
+\begin{equation}
+\mu_{x}^{\top} \mu_{y} \pm c \sqrt{\mu_{x}^{\top} \Sigma_{x} \mu_{x}+\mu_{y}^{\top} \Sigma_{y} \mu_{y}+\operatorname{tr}\left(\Sigma_{x} \Sigma_{y}\right)}
+\end{equation}
+
+We can learn the parameters $\Sigma$ and $\mu$ for each of these embeddings using a simple gradient-based approach, where we set hard constraints on 
+
+\begin{align}
+& \norm{ \mu_i }_2  \leq C, \forall i \\
+& m I <  \Sigma_i < M I
+\end{align}
+
+The method shows competitive scores to the Skip-Gram model, although usually only with minor improvements depending on the benchmark-dataset.
+
+
+\section{General random information}
+
+For implicit generative models, we can measure the performance in two ways.
+
+Assuming we have two probability density distributions, the true data-distribution $p*$ and the approximate posterior $q_\theta$ whose goal is to mimick the original data distribution $p*$.
+
+One way is to apply the probability difference.
+
+\begin{equation}
+r_{\phi} = p* - q_\theta
+\end{equation}
+
+This in general, however is not very intuitive, and does not easily allow to differentiate between mutliple differences.
+Loss functions that make use of this logic in clude the Max-Mean discrepancy, or moment-matching loss functions.
+
+Another way it the probability ratio.
+This ratio is much more intuitive in that one can compare the performance of how different approximate posteriors match the true underlying data distributiion.
+
+\begin{equation}
+r_{\phi} = \frac{p*}{q_\theta}
+\end{equation}
+
+Examples include the f-diverence, class probability estimate and the Bregman divergence.
+
+---
+
+What do GANs usually do.
+We assume a simple vector $z$ sampled from a feasibly-inferable distribution $z$.
+
+\begin{align}
+z &~ p(z) \\
+x^{gan} = f_\phi(z)
+\end{align}
+
+In general, we try to minimze an energy function, using some sort of reward $R$ and action $a$ taken in some state $s$. 
+[THIS IS COMPLETE BULLSHIT]
+
+\begin{equation}
+\mathbf{E}_{\phi(a|s)} \bracket{R(s, a)} - KL \bracket{\pi_\theta(a|s) || p(a)}
+\end{equation}
+
+\section{Normalising Flows}
+
+In machine learning, we usually distinguish between fully observed models and latent variable models, where we have exclusively observed variables or both observed and unobserved variables.
+
+In general, a generative model can be described as 
+
+\begin{equation}
+p(x, z, \theta) = p(\theta) \sum_{i=1}^N p(x_i | z_i, \theta) \pi(z_i)
+\end{equation}
+
+And then the model is supplemented by a learning principle such as gradient-based learning (backpropagation), or structural learning (model selection using Monte-Carlo).
+In general, we want to estimate a probability density distribution by using a stochastic gradient estimator.
+
+\begin{align}
+\nabla_\phi E_{q_\phi(z)}  \left[ f_\theta(z) \right] &= \nabla \int q_\phi(z) f_\theta(z)dz \\
+&= \mathbf{E} \left[ \nabla f_\theta (g( \epsilon, \phi ) \right]
+\end{align}
+
+\begin{equation}
+q(z^\prime) = q(z) \left| \text{det} \frac{\delta f}{\delta z} \right|^{-1}
+\end{equation}
+
+We can now stack multiple bijective and invertible functions together to go from a complex distribution to a simple one (and vice-versa).
+
+(CITE REZENDE ET AL TUTORIAL ON DEEP GENERATIVE MODELS)
+
+\begin{equation}
+z_K = f_K \circ \ldots \circ f_2 \circ f_1(z_0)
+\end{equation}
+
+where the mass-preserving transformation of each function is
+
+\begin{equation}
+\text{log} q_K(z_k) = \text{log} q_0(z_0) - \sum_{k=1}^{K} \text{log det} \left| \frac{\delta f_k}{\delta z_k} \right|
+\end{equation}
+
+The loss function which we try to maximize as a product of this then becomes (through the use of expected stochastic gradients.
+
+\begin{equation}
+\mathcal{L} =  \mathbf{E}_{q_0}(z_0) \left[ \text{log} p(x, z_K) \right]- \mathbf{E}_{q_0}(z_0) \left[ \text{log} p(x, z_K) \right]
+\end{equation}
+
+%  
+
+Where we used the reparametrization trick in the second equality. We can then use gradient-estimates to miminize the respective log-likelihood.
+
+
+------
+
+The REINFORCE (reparametrization trick) has been used in reinforcement learning
+
+\begin{equation}
+\nabla_\theta \mathbf{E}_{x \approx p_\theta(x)} \left[ f(x) \right] \\
+\nabla_\theta p_\theta(x) = p_\theta(x) \nabla \nabla_\theta \text{log} p_\theta(x)
+\end{equation}
+
+
+-------
+
+Rich families of posteriors can be formed.
+
+Generally, if we have $N$ variables, then 3 possible posteriors are (1) the fully connected graph which describes correlations between all variables, (2) a structured approximation model and (3) a fully factored model.
+
+The posterior probabilities of these items respectively are:
+
+\begin{enumerate}
+\item $$ q^* (z | x) \propto p(x|z)p/z)$$
+\item $$ q(z) = \prod_k q_k(z_k | {z_j}_{j \neq k}  $$
+\item $$ q(z|x) = \prod_k q(z_k) $$
+\end{enumerate}
+
+(Rezende 2015) A simple distribution is transformed into a more complex one by applying a sequence of invertible transformations until a desired level of complexity is attained.\\
+
+In the above equation, the KL-divergence is the loss between the approximate posterior and the prior distribution (which acts as a regualizer). The second term, which is the expected log-likelihood is the reconstruction error.\\
+
+Inference with normalizing flows provides a tighter, modified variational lower bound with additional terms that only add terms with linear time complexity.\\
+
+in the asymptotic regime, this is able to recover the true posterioir distribution \\
+
+Approximate posterior distribution of the latent variables $q_\phi(z|x)$ 
+\begin{align}
+\text{log} p_{\theta}(x) 
+&= \text{log} \int{ p_{\theta}(x|z)p(z) dz } \\
+&= \text{log} \int{ \frac{q_{\theta}(z|x)}{q_{\theta}(z|x)}p_{\theta}(x|z) p(z) dz } \\
+&= \text{log} \int{ \frac{p(z)}{q_{\theta}(z|x)}p_{\theta}(x|z) q_{\theta}(z|x) dz } \\
+&= \mathbb{D}_{KL} \left[ q_{\phi}(z|x) || p(z) \right] + \mathbb{E}_q \left[ \text{log} p_{\theta}(x|z) \right] \\
+&\geq -\mathcal{F}(x)
+\end{align}
+TODO: WHERE DOES THE LAST $q_\theta(z|x)$ disappear to?
+where $-\mathbf{F}(x)$ is a free energy function, and where we used Jensen's inequality to obtain the final equation (through $log E_q\left[ \frac{p(x, z)}{q(z)} \right] \geq log E_q\left[ \text{log} \frac{p(x, z)}{q(z)} \right] $).
+$p_\theta(x|z)$ is a likelihood function and $p(z)$ is a prior over latent variables, and $q_\theta(z|x)$ is a (simple) model distribution with which we want to approximate $p(x|z)$.
+item We try to minimize this loss \\
+
+To train the model, we need to efficiently (1) compute the derivatives of the expected log-likelihood  $ \nabla \phi \mathbb{E}_{q_\phi(z)}\left[ p_\theta(x|z) \right]$ and (2) choose the richest, computationally-feasible approximate posterior distribution $q(\dot)$. \\
+
+Using Monte Carlo gradient estimation and inference networks, which (when used together), they call \textit{amortized variational inference}.
+TODO: TIMO SAID THAT THIS IS WRONGLY APPROXIMATING THE TRUE DISTRIBUTION? WHAT ABOUT PSI? \\
+
+For stochastic backpropagation, we make use of two techniques:
+
+\begin{itemize}
+\item Reparameterization: The latent variable is reparametrized in terms of a known base distribution and a differentiable transofmration.
+As an example, if $q_\phi(z)$ is a Gaussian distribution $\mathbf{N}(z| \mu, \sigma^2)$ with trainable parameters $\phi = {\mu, \sigma^2}$, then we can reparametrize the variable $z$ as 
+
+\begin{equation}
+	z \sim \mathbf{N}(z | \mu, \sigma^2) \iff z = \sigma + \sigma \epsilon, \epsilon \sim \mathbf{N}(0, 1)
+\end{equation}
+
+\item Backpropagation with Monte Carlo. We backpropagated w.r.t. the parameters $\phi$ of the variational distribution using a Monte Carlo apprxoimation. 
+This is our samples batch.
+
+\begin{equation}
+\nabla\phi \mathbb{E}_{q_\phi(z)}\left[ f_\theta(z) \right] 
+\iff 
+\nabla\phi \mathbb{E}_{\mathbf{N} (\epsilon | 0, 1)}\left[ \nabla_{\phi} f_\theta (\mu +  \sigma \epsilon) \right]
+\end{equation}
+
+where we have simply rewritten z using the reparametrization trick.
+
+\end{itemize}
+
+For continuous latent variables, it has the lowest variance among competing estimators [CITEEE].
+
+Normalizing flows are most often used in the context of inference network. 
+An inference network learns an inverse map from observations to latent variables.
+The simplest latent variable is a Gaussian distribution. \\
+
+Rezende 2015 propose a \textit{Deep Latent Gaussian Model}, which consists of a hierarchy of $L$ layers of Gaussian latent variables $z_l$ for layer $l$.
+
+\begin{equation}
+p(x, z_1, \ldots, z_L) = p(x | f_0(z_1)) \prod_{l=1}^{L} p(z_l | f_l(z_{l+1}))
+\end{equation}
+
+We induce priors over each latent variable $p(z_l) = \mathbf{N}(0, I)$, and the observatoin distribution $p_\theta(x|z)$ is any distribution that is conditioned on $z_1$ and is parametrized by a neural network. \\
+
+This model is very general, and captures includes other models, such as factor analysis and PCA; non-linear factor analyiss, and non-linear Gaussian belif networks as special cases (Rezende 2014, cited in Rezende 2015) \\
+
+We know that $\mathbf{D}_{KL}\left[ q || p\right] = 0$ is achived when $q_\phi(z|x) = p_\theta(z|x)$ (i.e. the approximate q matches the true posterior distribution). IS THIS THE ONLY TIME THIS CAN BE ACHIEVED? \\
+
+A normalising flow captures more flexibel distributions.
+
+Summary normalising flows:
+
+A normalizing flow is a set of basic rules for transofmration of densiities, considers an invertible, smooth mapping
+
+$$
+f : \mathbf{R}^d \rightarrow \mathbf{R}^d
+$$
+
+where the input dimensioinality $d_0$ and output dimensionalities  $d_L$ match.
+The inverse is denoted $f^{-1} = g$, i.e. the composition $g \circ f(z) = z$.
+When we want to transform a random variable $z^\prime = f(z)$, we receive the following distribution:
+
+
+%%\begin{equation}
+%%q(z^\prime) = q(z) \left| \text{ \frac{\delta %%f^{-1}}{\delta z^\prime} } \right| = q(z) \left| det \frac{\delta f}{\delta z}^{-1} \right|
+%%\end{equation}
+
+This stems from the Identity that the probability mass must be conversed amongst operations:
+
+\begin{equation}
+p_x(x) = \frac{p_z(z) V_Z}{V_X}
+\end{equation}
+
+\begin{align}
+	z^\prime &= f(z) \\
+	\frac{z^\prime}{ q(z^\prime) } &= \frac{f(z)}{ q(z) }
+\end{align}
+
+WHERE DOES THE PRIME COME FROM
+
+We can then construct arbitrarily complex densities by composing several simple maps and successively applying the above mass-preserving operation.
+
+\begin{equation}
+z_K = f_K \circ \ldots \circ f_2 \circ f_1 (z_0)
+\end{equation}
+
+We then apply the log-function to have tractable probability functions.
+
+Probability mass must be conserved.
+From the change of variable formula, we know that taking infinitesimal c:hanges toward the direction of the final probabiliity distribution, we get
+
+\begin{align}
+\int z^\prime q(z^\prime) dz^\prime &= \int f(z) q(z) dz \\
+q(z^\prime) &= q(z) \text{ln} \left| det \frac{\delta f(z)}{\delta z^\prime} \right|
+\end{align} \\
+
+There are different ways to use normalising flows:
+
+Although computing the above gradient is expensive ($O(n^3)$ complexity), we can use the Matrix determinant lemma, and construct out mapping matrices in a special way as follows
+(https://blog.evjang.com/2018/01/nf1.htm)\\
+
+\begin{align}
+det(A) & = det(L + V \cdot D \cdot V^T) \\
+		& = det(L) (1 + (VD^{\frac{1}{2}})^T (L^{-1} D^{\frac{1}{2}}V))
+\end{align}
+
+\begin{equation}
+W = PL (U + diag(s))
+\end{equation}
+Then the cost of computing $det(W)$ becomes $O(c)$ instead of $O(c^3)$.
+(CITING GLOW Glow : Generative Flow with Invertible 1 x 1 Convolutions)
+
+where we have used the Matrix Determiinant Lemma for the second equality, with $L$ is a lower triangular matrix, and $D$ is a diagonal matrix.
+
+
+subsection{Extensions on Normalising Flows}
+
+(https://www.shakirm.com/slides/DeepGenModelsTutorial.pdf)
+
+Ever since Normalising flows were proposed, a number of modified versions were presented by [CITE].
+
+Each one calculates the consecutive flow based on a different composition of the previous latent variables $z_k$.
+
+\subsubsection{Planar Flow}
+
+The planar flow is a simple sequential flow with invertible piecewise linear transformations.
+
+\begin{equation}
+z_k = z_{k-1} + uh (w^T z_{k-1} + b)
+\end{equation}
+
+\subsubsection{Real NVP (2017)}
+
+The input for each step is split into two parts.
+The intuition behind this is similar to a residual network, which includes logic that allows the gradient to flow back easier.
+
+\begin{align}
+y_{1:d} &= z_{k-1, 1:d} \\
+y_{d+1:D} &= t(z_{k-1, 1:d}) + z_{d+1:D} \odot \text{exp}(s(z_{k-1, 1:d}))
+\end{align}
+
+Here, $t$ and $s$ are arbitrary functions, such as deep neural networks or simple linear transforms.
+
+
+Provides a set of stably invertible and learnable transformations.
+
+
+This results in an exact log-likelihood calculation.
+
+In the paper, they for the networks $s$ and $t$, they use residual network with batchnorm and weight normalization.
+
+
+
+
+\subsubsection{Inverse AR Flow (2017)}
+
+According to the authors, this method scales well to high dimensional latent spaces.
+Each transformation inside the flow is based on an autoregressive neural network.
+
+At each timestep, all prior variables are taken into consideration.
+
+\begin{equation}
+z_k = \frac{z_{k-1} - \mu_k (z_{\lq k}, x) }{\sigma_k(z_{\lq k}, x)}
+\end{equation}
+
+\subsubsection{Non-Linear Independent Components Estimation (NICE)}
+
+Another volume-preserving flow is the NICE flow.
+First, we arbitrarily partition the latent vector into two components $z = (z_A, z_B)$.
+
+\begin{align}
+f(z)  &= (z_A, z_B + h_\lambda(z_A) ) \\
+g(z^\prime) &= (z^\prime_A, z^\prime_B + h_\lambda(z^\prime_A) )
+\end{align}
+
+Here, $h_\lambda$ can be chosen in such a way that $h$ is a deep neural network with parameters $\lambda$
+
+LOL, COULD WE JUST CREATE A NEW ONE WITH MORE PROPERTIES??
+
+
+Multiple
+
+Normalising flows \cite{variational_inference_using_normalized_flows}, \cite{normalising_flows} 
+are a statistical technique where a series of invertible transformations $f_t$ are applied to a simple distribution $z_0 \sim q_0(z)$, to yield increasingly complex distributions $z_t = f_t(z_{t-1})$, s.t. the last iterate $z_T$ has the desired and more flexible distribution.
+As long as we can efficiently compute the Jacobian determinant of the transformation bijection $f_t$, we can both (1) evaluate the density of our data (by applying an inverse transformation and computing the density in the base distribution), and 
+(2) sample from our complex distribution (by sampling from the base distribution and applying the forward transformation)
+These can be used for classification and clustering \cite{normalising_flows},  [variational inference tasks \cite{iaf} such as image-generation \cite{nvp}], enriching the posterior (and prior!) \cite{variational_inference_using_normalized_flows}, and density estimation \cite{glow}.
+
+\subsubsection{Glow: Generative Flows with Invertible 1x1 Convolutions (2018)}
+
+We use 1x1 convolutional layers as a generalization of the permutation in sequential flows with lower triangular learnable rotation matrices (assuming that the number of input and output channels are equivalent). 
+
+TODO: Convolution operators and reduction to permutation operators
+
+\begin{equation}
+\text{log} \left| \text{det} \left( \frac{d \text{conv2D}(h; W) }{dh} \right) \right| = h  \cdot  w \cdot \text{log} | \text{det} (W)  |
+\end{equation}
+
+% \text{log} = \dot \text{log}  \text{log}  = \dot \text{log} |\text{det} (W) |
+
+
+(read the paper a bit more before citing this, but cite this: https://arxiv.org/pdf/1901.08624.pdf) 
+
+The authors cite strong qualitative experimental results in generating faces, thus empirically proving that higher dimensional flows ($R^d$) are effective and learn a continuous latent space.
+
+
+\subsubsection{Flow++ (2019)}
+
+The Flow++ model describes three problems with existing methods.
+
+\begin{enumerate}
+\item uniform noise is a suboptimal dequantization which hurts training loss and generatlization (i.e. training points are mapped to discrete points in space which have the full probability mass)
+\item the current models are not expressive enough
+\item convolutional layers in coupling are not powerful enough
+\end{enumerate}
+
+The authors respectively propose three ways to
+
+\begin{enumerate}
+\item variational flow-based quantizatioin (WUT?)
+\item logistic mixture CDF coupling flows (WUT?)
+\item self-attention in conditioning of networks
+\end{enumerate}
+
+The coupling layers can be described as
+
+\begin{align}
+y_1 &= x_1 \\
+y_2 &= x_2 \cdot exp( a_\theta( x_1 ) ) + b_\theta(x_1)
+\end{align}
+
+where the functions $a_\theta$ and $b_\theta$ are learnable functions (possibly normalizing flows which ). 
+These have to be invertible affine transformations
+
+It is the first model which starts to close the gap between autoregressive models and flow-based models.
+
+
+
+%\chapter{Related Work} 
+\chapter{Related Work}
+
+This work deals with some summary on how unsupervised bilingual lexicon matching was achieved in past papers.
+
+I will give a short summary of papers sorted by year of appearance, and what additional contributions and observation were added since the last iteration.
+
+Some terminiology before we start
+
+\paragraph{online data} implies that some sort of parallel corpora is available
+\paragraph{offline data} implies that we use pre-trained monolingual embeddings to arrive at a toen-translation task
+
+The general goal of bilingual lexicon matching is to learn a shared embedding space where words possessing simiilar meanings are projected to nearby points.
+
+Most existing methods focus on minimizing the distance between the two token-datasets using some (variation) of Wassterstein, Jensen-Shannon divergence, etc.
+
+\section{Methods using GANs (and other stuff..)}
+
+\section{Methods using Normalising Flows}
+
+\subsection{Density Matching for Bilingual Word Embeddings (Zhou 2019)}
+
+
+
+\section{Methods viewing this problem as an Optimal Transport (OT) Problem}
+
+\subsection{Gromov-Wasserstein Alignment of Word Embedding Spaces}
+
+
+
+
+%\chapter{Design and Implementation}
+\chapter{Analysis of the current state of the art}
+
+%\chapter{Evaluation} 
+\chapter{Our Method}
+\
+%\chapter{Summary and Conclusions} 
+\chapter{Evaluation}
+
+\chapter{Conclusion}
+
+\appendix
+\singlespacing
+
+\bibliographystyle{unsrt} 
+%\bibliography{dissertation} 
+
+\end{document}
