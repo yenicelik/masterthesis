@@ -142,6 +142,8 @@ if __name__ == "__main__":
         x_samples = _sample_from_distribution()
         print("x_samples are: ", x_samples.shape)
         y_hat = dist.log_prob(x_samples)
+        print("after)")
+        print("y_hat samples are: ", y_hat)
         print("y_hat samples are: ", y_hat.shape)
         loss = -tf.reduce_mean(y_hat)
 

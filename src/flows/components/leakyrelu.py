@@ -19,12 +19,23 @@ class _LeakyReLU(tfb.Bijector):
     def _inverse(self, y):
         return tf.where(tf.greater_equal(y, 0), y, 1. / self.alpha * y)
 
-    def inverse_log_det_jacobian(self, y, event_ndims, name='inverse_log_det_jacobian', **kwargs):
+    def _inverse_log_det_jacobian(self, y):
+        # event_ndims = self._event_dims_tensor(y)
         I = tf.ones_like(y)
         J_inv = tf.where(tf.greater_equal(y, 0), I, 1.0 / self.alpha * I)
         # abs is actually redundant here, since this det Jacobian is > 0
         log_abs_det_J_inv = tf.math.log(tf.abs(J_inv))
-        return tf.reduce_sum(log_abs_det_J_inv, axis=event_ndims)
+        print("The three items are")
+        print(I)
+        print("B")
+        print(J_inv)
+        print("A")
+        print(log_abs_det_J_inv)
+        # TODO: Over which dimension do we reduce?
+        out = tf.reduce_sum(log_abs_det_J_inv, axis=1)
+        print("C")
+        print(out)
+        return out
 
 
 # TODO: Does this not exist in the default Bijector Class?
@@ -54,7 +65,8 @@ class LeakyReLULayer(tfb.Bijector):
                                  event_ndims,
                                  name='forward_log_det_jacobian',
                                  **kwargs):
-        self.bijector.forward_log_det_jacobian(x,
+        print("Q")
+        return self.bijector.forward_log_det_jacobian(x,
                                                event_ndims,
                                                name='forward_log_det_jacobian',
                                                **kwargs
@@ -65,7 +77,7 @@ class LeakyReLULayer(tfb.Bijector):
                                  event_ndims,
                                  name='inverse_log_det_jacobian',
                                  **kwargs):
-        self.bijector.inverse_log_det_jacobian(
+        return self.bijector.inverse_log_det_jacobian(
             y,
             event_ndims,
             name='inverse_log_det_jacobian',
