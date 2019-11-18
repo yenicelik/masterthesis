@@ -1,15 +1,16 @@
-
 import tensorflow as tf
 import tensorflow_probability as tfp
+
+from src.functional.initializers import glorot_uniform
 
 tfd = tfp.distributions
 tfb = tfp.bijectors
 
+
 # quite easy to interpret - multiplying by alpha causes a contraction in volume.
-class LeakyReLU(tfb.Bijector):
+class _LeakyReLU(tfb.Bijector):
     def __init__(self, alpha=0.5, validate_args=False, name="leaky_relu"):
-        super(LeakyReLU, self).__init__(
-            event_ndims=1, validate_args=validate_args, name=name)
+        super(_LeakyReLU, self).__init__(event_ndims=1, validate_args=validate_args, name=name)
         self.alpha = alpha
 
     def _forward(self, x):
@@ -25,3 +26,46 @@ class LeakyReLU(tfb.Bijector):
         # abs is actually redundant here, since this det Jacobian is > 0
         log_abs_det_J_inv = tf.log(tf.abs(J_inv))
         return tf.reduce_sum(log_abs_det_J_inv, axis=event_dims)
+
+
+# TODO: Does this not exist in the default Bijector Class?
+
+class LeakyReLULayer(tfb.Bijector):
+    """
+        Wrapper class around the LeakyReLU Bijector which encapsulates the variables as well.
+    """
+
+    def __init__(self):
+        self.initializer = glorot_uniform()
+
+        self.alpha = tf.abs(tf.Variable(self.initializer([]), name='alpha')) + 0.01
+        self.bijector = _LeakyReLU(alpha=self.alpha)
+
+    def forward(self, x, name='forward', **kwargs):
+        self.bijector.forward(x, name='forward', **kwargs)
+
+    def inverse(self, y, name='inverse', **kwargs):
+        self.bijector.forward(y, name='inverse', **kwargs)
+
+    def forward_log_det_jacobian(self,
+                                 x,
+                                 event_ndims,
+                                 name='forward_log_det_jacobian',
+                                 **kwargs):
+        self.bijector.forward_log_det_jacobian(x,
+                                               event_ndims,
+                                               name='forward_log_det_jacobian',
+                                               **kwargs
+                                               )
+
+    def inverse_log_det_jacobian(self,
+                                 y,
+                                 event_ndims,
+                                 name='inverse_log_det_jacobian',
+                                 **kwargs):
+        self.bijector.inverse_log_det_jacobian(
+            y,
+            event_ndims,
+            name='inverse_log_det_jacobian',
+            **kwargs
+        )

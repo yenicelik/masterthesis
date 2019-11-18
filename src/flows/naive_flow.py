@@ -5,8 +5,6 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 
-from src.flows.components.leakyrelu import LeakyReLU
-
 tfd = tfp.distributions
 tfb = tfp.bijectors
 
@@ -19,9 +17,10 @@ class NaiveFlow():
 
 if __name__ == "__main__":
     print("Checking if the above flow model works, and to what extent")
-    DTYPE = tf.float64
 
-    base_dist = tfd.MultivariateNormalDiag(loc=tf.zeros([2], DTYPE))
+    DTYPE = tf.float32
+
+    base_dist = tfd.MultivariateNormalDiag(loc=tf.zeros([2]))
 
 
     # 2d is the dimension, and r is the wutttt????TODO
@@ -30,24 +29,6 @@ if __name__ == "__main__":
     num_layers = 6
 
     variables = dict()
-
-    class tmpSingleLayer(tf.Module):
-
-        def __init__(self):
-            self.V = tf.Variable('V', [d, r], dtype=DTYPE)
-            self.shift = tf.Variable('shift', [d], dtype=DTYPE)
-            self.L = tf.Variable('L', [d * (d+1) / 2], dtype=DTYPE)
-
-            # Appending this to the list of bijectors
-            bijectors.append(tfb.Affine(
-                scale_tril=tfd.fill_triangular(self.L),
-                scale_perturb_factor=self.V,
-                shift=self.shift
-            ))
-
-            alpha = tf.abs(tf.Variable('alpha', [], dtype=DTYPE)) + 0.01
-            bijectors.append( LeakyReLU(alpha=alpha) )
-
 
     layers = []
     for i in range(num_layers):
@@ -59,8 +40,6 @@ if __name__ == "__main__":
 
     # Last layer is affine. Note that tfb.Chain takes a list of bijectors in the *reverse* order
     # that they are applied..
-
-    
 
     # dist = tfd.TransformedDistribution(
     #     distribution=base_dist,
