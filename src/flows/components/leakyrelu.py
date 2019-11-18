@@ -19,13 +19,12 @@ class _LeakyReLU(tfb.Bijector):
     def _inverse(self, y):
         return tf.where(tf.greater_equal(y, 0), y, 1. / self.alpha * y)
 
-    def _inverse_log_det_jacobian(self, y):
-        event_dims = self._event_dims_tensor(y)
+    def inverse_log_det_jacobian(self, y, event_ndims, name='inverse_log_det_jacobian', **kwargs):
         I = tf.ones_like(y)
         J_inv = tf.where(tf.greater_equal(y, 0), I, 1.0 / self.alpha * I)
         # abs is actually redundant here, since this det Jacobian is > 0
-        log_abs_det_J_inv = tf.log(tf.abs(J_inv))
-        return tf.reduce_sum(log_abs_det_J_inv, axis=event_dims)
+        log_abs_det_J_inv = tf.math.log(tf.abs(J_inv))
+        return tf.reduce_sum(log_abs_det_J_inv, axis=event_ndims)
 
 
 # TODO: Does this not exist in the default Bijector Class?
@@ -44,11 +43,11 @@ class LeakyReLULayer(tfb.Bijector):
         self.bijector = _LeakyReLU(alpha=self.alpha)
 
     # TODO: Should we overwrite _forward, or forward for all bijector classes
-    def forward(self, x, name='forward', **kwargs):
-        self.bijector.forward(x, name='forward', **kwargs)
+    def _forward(self, x, name='forward', **kwargs):
+        return self.bijector.forward(x, name='forward', **kwargs)
 
-    def inverse(self, y, name='inverse', **kwargs):
-        self.bijector.forward(y, name='inverse', **kwargs)
+    def _inverse(self, y, name='inverse', **kwargs):
+        return self.bijector.forward(y, name='inverse', **kwargs)
 
     def forward_log_det_jacobian(self,
                                  x,

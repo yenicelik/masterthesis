@@ -24,12 +24,12 @@ class AffineLayer(tfb.Bijector):
 
         # Appending this to the list of bijectors
         self.bijector = tfb.Affine(
-            scale_tril=tfd.fill_triangular((self.L,)),
+            scale_tril=tfp.math.fill_triangular((self.L,)),
             scale_perturb_factor=self.V,
             shift=self.shift
         )
 
-    def forward(self, x, name='forward', **kwargs):
+    def _forward(self, x, name='forward', **kwargs):
         """
             Just copy the
         :param x:
@@ -37,7 +37,30 @@ class AffineLayer(tfb.Bijector):
         :param kwargs:
         :return:
         """
+        # TODO: See in source code what the difference is to "forward"
         return self.bijector.forward(x, name=name, **kwargs)
 
-    def inverse(self, y, name='inverse', **kwargs):
+    def _inverse(self, y, name='inverse', **kwargs):
         return self.bijector.inverse(y, name=name, **kwargs)
+
+    def forward_log_det_jacobian(self,
+                               x,
+                               event_ndims,
+                               name='forward_log_det_jacobian',
+                               **kwargs):
+        return self.bijector.forward_min_event_ndims(
+            x,
+            event_ndims,
+            name='forward_log_det_jacobian',
+            **kwargs
+        )
+
+    def inverse_log_det_jacobian(self,
+                               y,
+                               event_ndims,
+                               name='inverse_log_det_jacobian',
+                               **kwargs):
+        return self.bijector.inverse_log_det_jacobian(y,
+                               event_ndims,
+                               name='inverse_log_det_jacobian',
+                               **kwargs)
