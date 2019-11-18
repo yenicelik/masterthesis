@@ -5,6 +5,9 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 
+from src.flows.components.affine import AffineLayer
+from src.flows.components.leakyrelu import LeakyReLULayer
+
 tfd = tfp.distributions
 tfb = tfp.bijectors
 
@@ -22,7 +25,6 @@ if __name__ == "__main__":
 
     base_dist = tfd.MultivariateNormalDiag(loc=tf.zeros([2]))
 
-
     # 2d is the dimension, and r is the wutttt????TODO
     d, r = 2, 2
     bijectors = []
@@ -33,7 +35,10 @@ if __name__ == "__main__":
     layers = []
     for i in range(num_layers):
         layers.append(
-            tmpSingleLayer()
+            AffineLayer(input_dim=d, r=r)
+        )
+        layers.append(
+            LeakyReLULayer()
         )
 
     mlp_bijector = tfb.Chain(list(reversed(bijectors[:-1])), name='2d_mlp_bijector')

@@ -9,8 +9,8 @@ tfb = tfp.bijectors
 
 # quite easy to interpret - multiplying by alpha causes a contraction in volume.
 class _LeakyReLU(tfb.Bijector):
-    def __init__(self, alpha=0.5, validate_args=False, name="leaky_relu"):
-        super(_LeakyReLU, self).__init__(event_ndims=1, validate_args=validate_args, name=name)
+    def __init__(self, alpha=0.5, forward_min_event_ndims=1, validate_args=False, name="_leaky_relu"):
+        super(_LeakyReLU, self).__init__(forward_min_event_ndims=forward_min_event_ndims, validate_args=validate_args, name=name)
         self.alpha = alpha
 
     def _forward(self, x):
@@ -29,18 +29,21 @@ class _LeakyReLU(tfb.Bijector):
 
 
 # TODO: Does this not exist in the default Bijector Class?
+# TODO JUST MERGE BOTH
 
 class LeakyReLULayer(tfb.Bijector):
     """
         Wrapper class around the LeakyReLU Bijector which encapsulates the variables as well.
     """
 
-    def __init__(self):
+    def __init__(self, validate_args=False, name="_leaky_relu"):
+        super(LeakyReLULayer, self).__init__(forward_min_event_ndims=1, validate_args=False, name="_leaky_relu")
         self.initializer = glorot_uniform()
 
         self.alpha = tf.abs(tf.Variable(self.initializer([]), name='alpha')) + 0.01
         self.bijector = _LeakyReLU(alpha=self.alpha)
 
+    # TODO: Should we overwrite _forward, or forward for all bijector classes
     def forward(self, x, name='forward', **kwargs):
         self.bijector.forward(x, name='forward', **kwargs)
 
