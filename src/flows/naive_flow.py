@@ -32,16 +32,22 @@ if __name__ == "__main__":
 
     variables = dict()
 
-    layers = []
     for i in range(num_layers):
-        layers.append(
+        bijectors.append(
             AffineLayer(input_dim=d, r=r)
         )
-        layers.append(
+        bijectors.append(
             LeakyReLULayer()
         )
 
-    mlp_bijector = tfb.Chain(list(reversed(bijectors[:-1])), name='2d_mlp_bijector')
+    # Leaves out the very last LeakyRelu...
+    mlp_bijector = tfb.Chain(list(reversed(bijectors[:-1])), name='mlp_bijector_2D')
+
+    # SANITY CHECK IF EVERYTHING WAS IMPLEMENTED PROPERLY (TO A CERTAIN EXTENT)
+    print("The bijector is: ")
+    print(mlp_bijector)
+    for x in bijectors:
+        print(x)
 
     # Last layer is affine. Note that tfb.Chain takes a list of bijectors in the *reverse* order
     # that they are applied..
