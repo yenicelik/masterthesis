@@ -7,7 +7,9 @@ tfb = tfp.bijectors
 from src.config import args
 from src.functional.initializers import glorot_uniform
 
-class AffineLayer(tfb.Bijector):
+# TODO: Replace this by a scale and by a shift operation, as affine doesn't seem compatible with tensorflow 2!
+
+class AffineLayer(tfb.Bijector, tf.Module):
     """
         Wrapper class around the Affine Bijector which encapsulates the variables as well.
     """
@@ -23,9 +25,10 @@ class AffineLayer(tfb.Bijector):
         self.L = tf.Variable(self.initializer([input_dim * (input_dim + 1) // 2]), name=f"{name}_L", dtype=args.dtype)
 
         # Appending this to the list of bijectors
-        self.bijector = tfb.Affine(
-            scale_tril=tfp.math.fill_triangular((self.L,)),
-            scale_perturb_factor=self.V,
+        self.bijector = tfb.AffineScalar(
+            # TODO: Turn back to "Affine"
+            # scale_tril=tfp.math.fill_triangular((self.L,)),
+            # scale_perturb_factor=self.V,
             shift=self.shift
         )
 
