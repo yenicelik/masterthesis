@@ -25,16 +25,8 @@ class _LeakyReLU(tfb.Bijector):
         J_inv = tf.where(tf.greater_equal(y, 0), I, 1.0 / self.alpha * I)
         # abs is actually redundant here, since this det Jacobian is > 0
         log_abs_det_J_inv = tf.math.log(tf.abs(J_inv))
-        print("The three items are")
-        print(I)
-        print("B")
-        print(J_inv)
-        print("A")
-        print(log_abs_det_J_inv)
         # TODO: Over which dimension do we reduce?
         out = tf.reduce_sum(log_abs_det_J_inv, axis=1)
-        print("C")
-        print(out)
         return out
 
 
@@ -47,10 +39,11 @@ class LeakyReLULayer(tfb.Bijector):
     """
 
     def __init__(self, validate_args=False, name="_leaky_relu"):
-        super(LeakyReLULayer, self).__init__(forward_min_event_ndims=1, validate_args=False, name="_leaky_relu")
+        super(LeakyReLULayer, self).__init__(forward_min_event_ndims=1, validate_args=validate_args, name="_leaky_relu")
         self.initializer = glorot_uniform()
 
-        self.alpha = tf.abs(tf.Variable(self.initializer([]), name='alpha')) + 0.01
+        self.alpha = tf.Variable(0.5, name="alpha", trainable=False)
+        self.alpha = tf.abs(self.alpha) + 0.01
         self.bijector = _LeakyReLU(alpha=self.alpha)
 
     # TODO: Should we overwrite _forward, or forward for all bijector classes
@@ -65,7 +58,6 @@ class LeakyReLULayer(tfb.Bijector):
                                  event_ndims,
                                  name='forward_log_det_jacobian',
                                  **kwargs):
-        print("Q")
         return self.bijector.forward_log_det_jacobian(x,
                                                event_ndims,
                                                name='forward_log_det_jacobian',

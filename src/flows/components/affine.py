@@ -18,9 +18,9 @@ class AffineLayer(tfb.Bijector):
         super(AffineLayer, self).__init__(forward_min_event_ndims=forward_min_event_ndims, validate_args=validate_args, name=name)
         self.initializer = glorot_uniform()
         # Use GLOROT UNIFORM
-        self.V = tf.Variable(self.initializer([input_dim, r]), name='V', dtype=args.dtype)
-        self.shift = tf.Variable(self.initializer([input_dim]), name='shift', dtype=args.dtype)
-        self.L = tf.Variable(self.initializer([input_dim * (input_dim + 1) // 2]), name='L', dtype=args.dtype)
+        self.V = tf.Variable(self.initializer([input_dim, r]), name=f"{name}_V", dtype=args.dtype)
+        self.shift = tf.Variable(self.initializer([input_dim]), name=f"{name}_shift", dtype=args.dtype)
+        self.L = tf.Variable(self.initializer([input_dim * (input_dim + 1) // 2]), name=f"{name}_L", dtype=args.dtype)
 
         # Appending this to the list of bijectors
         self.bijector = tfb.Affine(

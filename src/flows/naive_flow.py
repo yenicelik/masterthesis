@@ -41,13 +41,13 @@ if __name__ == "__main__":
         return x_samples
 
 
-    for i in range(2):
-        x_samples = _sample_from_distribution()
-        np_samples = x_samples.numpy()
-        plt.scatter(np_samples[:, 0], np_samples[:, 1], s=10, color='red')
-        plt.xlim([-5, 30])
-        plt.ylim([-10, 10])
-        plt.show()
+    # for i in range(2):
+    #     x_samples = _sample_from_distribution()
+    #     np_samples = x_samples.numpy()
+    #     plt.scatter(np_samples[:, 0], np_samples[:, 1], s=10, color='red')
+    #     plt.xlim([-5, 30])
+    #     plt.ylim([-10, 10])
+    #     plt.show()
 
     ######
 
@@ -62,11 +62,11 @@ if __name__ == "__main__":
 
     for i in range(num_layers):
         bijectors.append(
-            AffineLayer(input_dim=d, r=r)
+            AffineLayer(input_dim=d, r=r, name=f"affine_{i}")
         )
-        bijectors.append(
-            LeakyReLULayer()
-        )
+        # bijectors.append(
+        #     LeakyReLULayer()
+        # )
 
     # Leaves out the very last LeakyRelu...
     mlp_bijector = tfb.Chain(list(reversed(bijectors[:-1])), name='mlp_bijector_2D')
@@ -135,26 +135,64 @@ if __name__ == "__main__":
     NUM_STEPS = int(1e5)
     global_step = []
     np_losses = []
-    train_op = tf.optimizers.Adam(learning_rate=1e-3)
+    optimizer = tf.optimizers.Adam(learning_rate=1e-3)
+
+    # TODO: Figure out how to actively assign _trainable_ variables
+
+    variables = []
+    for x in bijectors:
+        variables.extend(list(x.trainable_variables))
+    # variables = [x.vari]
+    print("Variables are: ", variables)
+    print("Variables are: ", len(variables))
+
+    # Using an "unsupervised as supervised" approach
+
+    @tf.function
+    def loss_objective(x, y):
+        _loss = y.log_prob(x)
+        return -tf.reduce_mean(_loss)
+
+    @tf.function
+    def train_step(inputs):
+        with tf.GradientTape() as tape:
+            # TODO: Do I have to watch the gradients...
+            for var in variables:
+                tape.watch(var)
+            tape.watch(dist.trainable_variables)
+            tape.watch(inputs)
+            loss = loss_objective(inputs, dist)
+
+        gradients = tape.gradient(loss, variables)
+        print("Gradients are", gradients)
+        optimizer.apply_gradients(zip(gradients, variables))
+
+        return loss.numpy()
+
     for i in range(NUM_STEPS):
-
-        # Sample a new amount of data
         x_samples = _sample_from_distribution()
-        print("x_samples are: ", x_samples.shape)
-        y_hat = dist.log_prob(x_samples)
-        print("after)")
-        print("y_hat samples are: ", y_hat)
-        print("y_hat samples are: ", y_hat.shape)
-        loss = -tf.reduce_mean(y_hat)
-
-        print("Loss: ", loss)
-        train_op.minimize(loss)
+        loss = train_step(x_samples)
 
         if i % 1000 == 0:
             global_step.append(i)
-            np_losses.append(loss.numpy())
+            np_losses.append(loss)
         if i % int(1e4) == 0:
-            print(i, loss.numpy())
+            print(i, loss)
+
+        # Sample a new amount of data
+        # print("x_samples are: ", x_samples.shape)
+        # print("after)")
+        # print("y_hat samples are: ", y_hat)
+        # print("y_hat samples are: ", y_hat.shape)
+
+        # prediction = path1(x)
+        # loss = loss_fn_head1(prediction, y)
+        # Simultaneously optimize trunk and head1 weights.
+
+        # print("Loss: ", loss)
+        # train_op.minimize(loss, var_list=variables)
+
+    print("Training...")
 
     start = 10
     plt.plot(np_losses[start:])
