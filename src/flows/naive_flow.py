@@ -139,6 +139,22 @@ if __name__ == "__main__":
 
     # TODO: Figure out how to actively assign _trainable_ variables
 
+    # TODO: Create a new loss-model which allows for modular executioin...
+    class LossModel(tf.keras.models.Model):
+
+        def __init__(self, bijector_layer):
+            super().__init__()
+            self.model = bijector_layer
+
+        def call(self, *x):
+            return dict(
+                loss=tf.reduce_mean(
+                    self.model.model.log_prob(x)
+                )
+            )
+
+    # Just going to generate this ugly class...
+
     variables = []
     for x in bijectors:
         variables.extend(list(x.trainable_variables))
