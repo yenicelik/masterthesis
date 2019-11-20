@@ -9,11 +9,11 @@ if __name__ == "__main__":
 
     dimensions = 2
 
-    emb_src = generate_synthetic_embedding(
+    src_emb_mus, src_emb_sigmas = generate_synthetic_embedding(
         d=dimensions,
         components=10
     )
-    emb_tgt = generate_synthetic_embedding(
+    tgt_emb_mus, tgt_emb_sigmas = generate_synthetic_embedding(
         d=dimensions,
         components=10
     )
@@ -22,8 +22,8 @@ if __name__ == "__main__":
     # Visualize the first sampled Gaussian
     #########################################
 
-    mu = tf.expand_dims(emb_src[0][0, :], 0)
-    cov = emb_src[1][0, :] * tf.eye(dimensions)
+    mu = src_emb_mus[0]
+    cov = src_emb_sigmas[0]
 
     print("Mus and cov are: ", mu.shape, cov.shape)
 

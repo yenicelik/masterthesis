@@ -57,10 +57,10 @@ def generate_synthetic_embedding(d, components, spherical=True, maximum_variance
 
     # Finally, make the covariance matrix numerically stable for psd operations....
 
-    emb_mu = [tf.reshape(emb_mu[i, :], (1, -1)) for i in range(components)]
-    emb_sigma = [emb_sigma[i, :] * tf.eye(d) + (lam * tf.eye(d)) for i in range(components)]
+    emb_mus = [tf.reshape(emb_mu[i, :], (1, -1)) for i in range(components)]
+    emb_sigmas = [emb_sigma[i, :] * tf.eye(d) + (lam * tf.eye(d)) for i in range(components)]
 
-    return emb_mu, emb_sigma
+    return emb_mus, emb_sigmas
 
 def generate_synthetic_src_tgt_embedding(d, components, orthogonal_rotation_matrix=True):
     """
