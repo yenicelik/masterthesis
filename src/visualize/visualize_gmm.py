@@ -3,7 +3,6 @@
     Gaussian Mixture Model in matplotlib
 """
 import tensorflow as tf
-tf.compat.v1.enable_eager_execution()
 
 import numpy as np
 import matplotlib

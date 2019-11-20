@@ -68,6 +68,8 @@ def generate_synthetic_src_tgt_embedding(d, components, orthogonal_rotation_matr
         is perturbated by a function f (right now only a Rotation matrix W) is implemented!
     :return:
     """
+    tf.compat.v1.enable_eager_execution()
+
     mus_src, cov_src = generate_synthetic_embedding(d, components)
 
     M_rotation = generate_rotation_matrix(src_dim=d, tgt_dim=d, orthogonal=orthogonal_rotation_matrix)
@@ -78,6 +80,8 @@ def generate_synthetic_src_tgt_embedding(d, components, orthogonal_rotation_matr
 
     mus_tgt = [mean_multiplication(mus_src[i], M_rotation) for i in range(components)]
     cov_tgt = [covariance_multiplication(cov_src[i], M_rotation) for i in range(components)]
+
+    tf.compat.v1.disable_eager_execution()
 
     return mus_src, cov_src, mus_tgt, cov_tgt
 
