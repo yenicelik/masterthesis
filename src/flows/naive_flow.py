@@ -138,11 +138,6 @@ if __name__ == "__main__":
     np_losses = []
     optimizer = tf.train.AdamOptimizer(1e-3)
 
-    @tf.function
-    def _loss(dist, x_samples):
-        loss = -tf.reduce_mean(dist.log_prob(x_samples))
-        return loss
-
     # Now we have the trainstep caller and the Lossmodel
 
     variables = []
@@ -158,10 +153,13 @@ if __name__ == "__main__":
 
         with tf.GradientTape() as tape:
 
-            tape.watch(variables)
-
             x_samples = _sample_from_distribution()
-            loss = _loss(dist, x_samples)
+
+            tape.watch(variables)
+            # tape.watch(dist)
+            tape.watch(x_samples)
+
+            loss = -tf.reduce_mean(dist.log_prob(x_samples))
             # train_op.minimize(loss)
 
             grads = tape.gradient(loss, variables)

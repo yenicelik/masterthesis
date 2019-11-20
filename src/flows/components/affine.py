@@ -29,13 +29,14 @@ class AffineLayer(tfb.Bijector):
 
         # TODO: Turn back to "Affine"
         # Appending this to the list of bijectors
-        # self.bijector = tfb.Affine(
-        #     scale_tril=tfp.math.fill_triangular((self.L,)),
-        #     scale_perturb_factor=self.V,
-        #     shift=self.shift
-        # )
+        self.bijector = tfb.Affine(
+            scale_tril=tfp.math.fill_triangular((self.L,)),
+            scale_perturb_factor=self.V,
+            shift=self.shift
+        )
 
-        self.bijector = tfb.AffineScalar()
+        # self.shift = tf.Variable([10.], dtype=args.dtype)
+        # self.bijector = tfb.AffineScalar(shift=self.shift)
 
     def _forward(self, x, name='forward', **kwargs):
         """
