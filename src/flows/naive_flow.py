@@ -136,68 +136,14 @@ if __name__ == "__main__":
     NUM_STEPS = int(1e5)
     global_step = []
     np_losses = []
-    optimizer = tf.optimizers.Adam(learning_rate=1e-3)
+    optimizer = tf.train.AdamOptimizer(1e-3)
 
-    # TODO: Figure out how to actively assign _trainable_ variables
-
-    # TODO: Create a new loss-model which allows for modular executioin...
-    class LossModel(tf.keras.models.Model):
-
-        def __init__(self, bijector_layer):
-            super().__init__()
-            self.model = bijector_layer
-
-        def call(self, *x):
-            """
-                Applies the loss on the bijects
-                by calculating the overlap with the log-probability
-                with the sampled data (and then maximizing this..)
-            :param x:
-            :return:
-            """
-            return dict(
-                loss=-tf.reduce_mean(
-                    self.model.model.log_prob(x)
-                )
-            )
-
-    # Just going to generate this ugly class...
-    class TrainStepper():
-        def __init__(self, optimizer, model):
-            self.optimizer = optimizer
-            self.model = model
-            self._debug = False
-            self._tfcall = tf.function(self._call)
-            self.step = 0
-
-        def debug(self, value=None):
-            if value is None:
-                self._debug = not self._debug
-            else:
-                self._debug = value
-            print(f"debug={self.debug}")
-
-        def __call__(self, *data):
-            with tf.GradientTape() as tape:
-                d = self.model(*data)
-            print(self.model.trainable_variables)
-            # TODO: Gotta check if this works for FLOWS as well (i.e. chained bijectors...)
-            gradients = tape.gradient(d['loss'], self.model.trainable_variables)
-            _ = self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
-            return d
-
-        def train(self, data, epochs=1000, log_period=100):
-            for epoch in range(epochs):
-                d = self(*data)
-                if self.step % log_period == 0:
-                    print({k: v.numpy() for k, v in d.items()})
-                    for k, v in d.items():
-                        tf.summary.scalar(k, v, step=self.step)
+    @tf.function
+    def _loss(dist, x_samples):
+        loss = -tf.reduce_mean(dist.log_prob(x_samples))
+        return loss
 
     # Now we have the trainstep caller and the Lossmodel
-
-    # class MyModel(tf.keras.models.Model):
-
 
     variables = []
     for x in bijectors:
@@ -207,61 +153,27 @@ if __name__ == "__main__":
     print("Variables are: ", len(variables))
 
     # Using an "unsupervised as supervised" approach
-
-    # mylayer = MyLayer()
-    # lossmodel = LossModel(mylayer)
-    # optimizer = tf.optimizers.Adam(learning_rate=0.001)
-    # stepper = TrainStepper(optimizer=optimizer, model=lossmodel)
-    #
-    # stepper.train(x)
-
-    @tf.function
-    def loss_objective(x, y):
-        _loss = y.log_prob(x)
-        return -tf.reduce_mean(_loss)
-
-    @tf.function
-    def train_step(inputs):
-        with tf.GradientTape() as tape:
-            # TODO: Do I have to watch the gradients...
-            for var in variables:
-                tape.watch(var)
-            tape.watch(dist.trainable_variables)
-            tape.watch(variables)
-            tape.watch(inputs)
-            loss = loss_objective(inputs, dist)
-
-        gradients = tape.gradient(loss, variables)
-        print("Gradients are", gradients)
-        optimizer.apply_gradients(zip(gradients, variables))
-
-        return loss
-
-    # TODO: Affine was replaced and is not supported any longer!
-    # https://github.com/tensorflow/probability/issues/448
-
+    # TODO: Do I need a gradient-tape?
     for i in range(NUM_STEPS):
-        x_samples = _sample_from_distribution()
-        loss = train_step(x_samples)
+
+        with tf.GradientTape() as tape:
+
+            tape.watch(variables)
+
+            x_samples = _sample_from_distribution()
+            loss = _loss(dist, x_samples)
+            # train_op.minimize(loss)
+
+            grads = tape.gradient(loss, variables)
+            print("Gradients are: ")
+            print(grads)
+            optimizer.apply_gradients(zip(grads, variables))
 
         if i % 100 == 0:
             global_step.append(i)
             np_losses.append(loss)
         if i % int(1e4) == 0:
             print(i, loss)
-
-        # Sample a new amount of data
-        # print("x_samples are: ", x_samples.shape)
-        # print("after)")
-        # print("y_hat samples are: ", y_hat)
-        # print("y_hat samples are: ", y_hat.shape)
-
-        # prediction = path1(x)
-        # loss = loss_fn_head1(prediction, y)
-        # Simultaneously optimize trunk and head1 weights.
-
-        # print("Loss: ", loss)
-        # train_op.minimize(loss, var_list=variables)
 
     print("Training...")
 
