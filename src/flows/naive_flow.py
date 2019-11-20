@@ -3,15 +3,13 @@
     - https://github.com/ericjang/normalizing-flows-tutorial/blob/master/nf_part1_intro.ipynb
 """
 import tensorflow as tf
-tf.compat.v1.enable_eager_execution()
 import tensorflow_probability as tfp
 
 import numpy as np
 import matplotlib.pyplot as plt
+from tensorflow.python.keras.layers import LeakyReLU
 
 from src.config import args
-from src.flows.components.affine import AffineLayer
-from src.flows.components.leakyrelu import LeakyReLULayer
 
 tfd = tfp.distributions
 tfb = tfp.bijectors
@@ -61,13 +59,29 @@ if __name__ == "__main__":
 
     variables = dict()
 
+    # Build the chain..
+    d, r = 2, 2
+    bijectors = []
+    num_layers = 6
     for i in range(num_layers):
-        bijectors.append(
-            AffineLayer(input_dim=d, r=r, name=f"affine_{i}")
-        )
-        bijectors.append(
-            LeakyReLULayer()
-        )
+        with tf.variable_scope('bijector_%d' % i):
+            V = tf.get_variable('V', [d, r], dtype=DTYPE)  # factor loading
+            shift = tf.get_variable('shift', [d], dtype=DTYPE)  # affine shift
+            L = tf.get_variable('L', [d * (d + 1) / 2],
+                                dtype=DTYPE)  # lower triangular
+            bijectors.append(tfb.Affine(
+                scale_tril=tfd.fill_triangular(L),
+                scale_perturb_factor=V,
+                shift=shift,
+            ))
+            alpha = tf.abs(tf.get_variable('alpha', [], dtype=DTYPE)) + .01
+            bijectors.append(LeakyReLU(alpha=alpha))
+
+
+    # Last layer is affine. Note that tfb.Chain takes a list of bijectors in the *reverse* order
+    # that they are applied..
+    mlp_bijector = tfb.Chain(
+        list(reversed(bijectors[:-1])), name='2d_mlp_bijector')
 
     # Leaves out the very last LeakyRelu...
     mlp_bijector = tfb.Chain(list(reversed(bijectors[:-1])), name='mlp_bijector_2D')
@@ -136,7 +150,6 @@ if __name__ == "__main__":
     NUM_STEPS = int(1e5)
     global_step = []
     np_losses = []
-    optimizer = tf.train.AdamOptimizer(1e-3)
 
     # Now we have the trainstep caller and the Lossmodel
 
@@ -148,10 +161,10 @@ if __name__ == "__main__":
     print("Variables are: ", variables)
     print("Variables are: ", len(variables))
 
-    @tf.function
-    def _loss(dist, x_samples):
-        loss = -tf.reduce_mean(dist.log_prob(x_samples))
-        return loss
+
+    loss = -tf.reduce_mean(dist.log_prob(x_samples))
+    optimizer = tf.train.AdamOptimizer(1e-3).minimize(loss)
+
 
     # Using an "unsupervised as supervised" approach
     # TODO: Do I need a gradient-tape?
@@ -166,6 +179,11 @@ if __name__ == "__main__":
             # tape.watch(x_samples)
 
             loss = _loss(dist, x_samples)
+            print("Loss is: ", loss)
+
+            print("Variables are: ", variables)
+            grads = tape.gradient(loss, variables)
+            print("Gradients are")
 
             optimizer.minimize(loss)
 
@@ -175,7 +193,6 @@ if __name__ == "__main__":
 
             # optimizer.minimize(loss)
 
-            # grads = tape.gradient(loss, variables)
             # print("Gradients are: ")
             # print(grads)
             # optimizer.apply_gradients(zip(grads, variables))
