@@ -1,4 +1,5 @@
 import tensorflow as tf
+tf.enable_eager_execution()
 import tensorflow_probability as tfp
 
 from src.functional.initializers import glorot_uniform

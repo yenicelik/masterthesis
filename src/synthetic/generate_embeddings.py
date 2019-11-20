@@ -10,6 +10,7 @@
 
 import numpy as np
 import tensorflow as tf
+tf.enable_eager_execution()
 
 from src.config import args
 from src.functional.linalg import covariance_multiplication, mean_multiplication

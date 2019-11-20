@@ -2,6 +2,9 @@
     Visualizing a 2D (and possibly 3D)
     Gaussian Mixture Model in matplotlib
 """
+import tensorflow as tf
+tf.compat.v1.enable_eager_execution()
+
 import numpy as np
 import matplotlib
 
@@ -217,8 +220,6 @@ def plot_contour2d_input2d(
 
 if __name__ == "__main__":
     print("Plotting Gaussian Mixture Models GMMs using matplotlib")
-
-    import tensorflow as tf
 
     dimensions = 2
     components = 3

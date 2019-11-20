@@ -3,6 +3,7 @@
     - https://github.com/ericjang/normalizing-flows-tutorial/blob/master/nf_part1_intro.ipynb
 """
 import tensorflow as tf
+tf.compat.v1.enable_eager_execution()
 import tensorflow_probability as tfp
 
 import numpy as np
