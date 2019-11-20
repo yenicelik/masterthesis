@@ -97,6 +97,8 @@ if __name__ == "__main__":
         arr[i].set_ylim([-2, 2])
         arr[i].set_title(names[i])
 
+    plt.ylim([-10, 10])
+    plt.xlim([-10, 10])
     plt.show()
 
     loss = -tf.reduce_mean(dist.log_prob(x_samples))
@@ -137,6 +139,8 @@ if __name__ == "__main__":
         arr[i].set_title(names[i])
     plt.savefig('toy2d_flow.png', dpi=300)
 
+    plt.ylim([-10, 10])
+    plt.xlim([-10, 10])
     plt.show()
 
     print("Printing the final show..")

@@ -22,7 +22,7 @@ class LeakyReLU(tfb.Bijector):
         return tf.where(tf.greater_equal(y, 0), y, 1. / self.alpha * y)
 
     def _inverse_log_det_jacobian(self, y):
-        event_dims = self._event_dims_tensor(y)
+        event_dims = 1 # TODO: Is this correct?
         I = tf.ones_like(y)
         J_inv = tf.where(tf.greater_equal(y, 0), I, 1.0 / self.alpha * I)
         # abs is actually redundant here, since this det Jacobian is > 0
