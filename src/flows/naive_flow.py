@@ -140,12 +140,18 @@ if __name__ == "__main__":
 
     # Now we have the trainstep caller and the Lossmodel
 
-    variables = []
-    for x in bijectors:
-        variables.extend(list(x.trainable_variables))
+    # variables = []
+    # for x in bijectors:
+    #     variables.extend(list(x.variables))
     # variables = [x.vari]
+
     print("Variables are: ", variables)
     print("Variables are: ", len(variables))
+
+    @tf.function
+    def _loss(dist, x_samples):
+        loss = -tf.reduce_mean(dist.log_prob(x_samples))
+        return loss
 
     # Using an "unsupervised as supervised" approach
     # TODO: Do I need a gradient-tape?
@@ -155,17 +161,24 @@ if __name__ == "__main__":
 
             x_samples = _sample_from_distribution()
 
-            tape.watch(variables)
+            # tape.watch(variables)
             # tape.watch(dist)
-            tape.watch(x_samples)
+            # tape.watch(x_samples)
 
-            loss = -tf.reduce_mean(dist.log_prob(x_samples))
-            # train_op.minimize(loss)
+            loss = _loss(dist, x_samples)
 
-            grads = tape.gradient(loss, variables)
-            print("Gradients are: ")
-            print(grads)
-            optimizer.apply_gradients(zip(grads, variables))
+            optimizer.minimize(loss)
+
+            # TODO: Does this default the gradients every now and then?
+            # grads = optimizer.compute_gradients(loss)
+            # optimizer.apply_gradients()
+
+            # optimizer.minimize(loss)
+
+            # grads = tape.gradient(loss, variables)
+            # print("Gradients are: ")
+            # print(grads)
+            # optimizer.apply_gradients(zip(grads, variables))
 
         if i % 100 == 0:
             global_step.append(i)
