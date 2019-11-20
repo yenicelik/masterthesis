@@ -49,7 +49,7 @@ if __name__ == "__main__":
     #     plt.ylim([-10, 10])
     #     plt.show()
 
-    ######
+    #####
 
     DTYPE = tf.float32
 
@@ -64,9 +64,9 @@ if __name__ == "__main__":
         bijectors.append(
             AffineLayer(input_dim=d, r=r, name=f"affine_{i}")
         )
-        # bijectors.append(
-        #     LeakyReLULayer()
-        # )
+        bijectors.append(
+            LeakyReLULayer()
+        )
 
     # Leaves out the very last LeakyRelu...
     mlp_bijector = tfb.Chain(list(reversed(bijectors[:-1])), name='mlp_bijector_2D')
@@ -195,6 +195,9 @@ if __name__ == "__main__":
 
     # Now we have the trainstep caller and the Lossmodel
 
+    # class MyModel(tf.keras.models.Model):
+
+
     variables = []
     for x in bijectors:
         variables.extend(list(x.trainable_variables))
@@ -203,6 +206,13 @@ if __name__ == "__main__":
     print("Variables are: ", len(variables))
 
     # Using an "unsupervised as supervised" approach
+
+    # mylayer = MyLayer()
+    # lossmodel = LossModel(mylayer)
+    # optimizer = tf.optimizers.Adam(learning_rate=0.001)
+    # stepper = TrainStepper(optimizer=optimizer, model=lossmodel)
+    #
+    # stepper.train(x)
 
     @tf.function
     def loss_objective(x, y):

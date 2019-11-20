@@ -8,7 +8,7 @@ tfb = tfp.bijectors
 
 
 # quite easy to interpret - multiplying by alpha causes a contraction in volume.
-class _LeakyReLU(tfb.Bijector, tf.Module):
+class _LeakyReLU(tfb.Bijector):
     def __init__(self, alpha=0.5, forward_min_event_ndims=1, validate_args=False, name="_leaky_relu"):
         super(_LeakyReLU, self).__init__(forward_min_event_ndims=forward_min_event_ndims, validate_args=validate_args, name=name)
         self.alpha = alpha
@@ -33,7 +33,7 @@ class _LeakyReLU(tfb.Bijector, tf.Module):
 # TODO: Does this not exist in the default Bijector Class?
 # TODO JUST MERGE BOTH
 
-class LeakyReLULayer(tfb.Bijector, tf.Module):
+class LeakyReLULayer(tfb.Bijector):
     """
         Wrapper class around the LeakyReLU Bijector which encapsulates the variables as well.
     """

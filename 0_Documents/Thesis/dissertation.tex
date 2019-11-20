@@ -26,6 +26,7 @@
 %\usepackage[dvips]{epsfig,graphics} 
 \usepackage{epsfig,graphicx,verbatim,parskip,tabularx,setspace,xspace}
 \usepackage{amsmath, amsfonts}
+\usepackage{bbm}
 
 
 %% START OF DOCUMENT
@@ -700,6 +701,105 @@ The maximum log-likelihood is proportional to the minimum expectation of the KL-
 \section{Methods viewing this problem as an Optimal Transport (OT) Problem}
 
 \subsection{Gromov-Wasserstein Alignment of Word Embedding Spaces}
+
+The problem of aligning word embedding spaces can also be seen as an Optimal Transport (\textit{\textbf{OT}}) problem.
+
+Some work in using the Gromov-Wasserstein distance function has been proposed (CITE Jaakkola). 
+
+The authors argue that the supervised case is 
+
+\subsubsection{Supervised Case: Procrustes}
+
+Assuming we have
+
+$$
+T : \mathcal{X} \rightarrow \mathcal{Y}
+$$
+
+such that 
+
+$$
+T(x^(i)) \approx y^{j}
+$$
+
+where $w_j^y$ is a translation of $w_i^x$.
+
+Let $\mathbf{X}$ and $\mathbf{Y}$ be the matrices with the column-vectors describing the word-embeddings.
+
+We can then find $T$ by solving the equation
+
+\begin{equation}
+\text{min}_{T \in \mathcal{F}} \norm{X - T(Y)}_F^2
+\end{equation}
+
+THe quality of the resulting alignment depends on how well we can find $T$, as well as on the choice of the space $\mathcal{F}$.
+
+$T$ orthogonal matrix is a popoular choice, results iin the orthogonal Procrustes problem
+
+\begin{equation}
+\text{min}_{P \in O(n)} \norm{X - PY}_F^2
+\end{equation}
+
+with $O(n) = {P \in \mathbf{R}^{n x n} | P^T P = I}$.
+
+In this case, we can find a closed-form solution in terms of the SVD of PX and Y.
+Given an SVD of $U \Sigma V^T$ of $XY^T$, the solution is given by $P^* = UV^T$.
+
+Because the loss must be able to be measured, it only solves the supervised problem.
+
+
+\subsubsection{Unsupervised Maps: Optimal Transport}
+
+Optimal transport formalizes the problem of finding a minimum cost mapping between two point sets, viewed as discrete distributions.
+
+We assume two empirical delta-distributions over embeddings (which are as such equivalent to point-vectors).
+
+WHAT WAS THIS SYMBOL AGAIN WHICH LOOKS LIKE A V
+\begin{equation}
+\mu = \sum_{i=1}^n p_i \delta_{x^(i)}, v = \sum_{j=1}^m q_j \delta_{y^(i)}
+\end{equation}
+
+where $p_i$ and $q_j$ can be considered as the prior distributions, usually set to the uniform distribution or word-frequency.
+
+The transport problem is then realized as 
+
+% CHECK WHAT ROUTE IS...
+\begin{equation}
+\text{inf}_T  \lbrace c(x, T(x)) d \mu(x) | T \mu = v \rbrace
+\end{equation}
+%  d \mu(x) | T_{#} \mu = v
+
+where the cost is usually simply defined as $\norm{x - T(x)}$ and $T \mu = v$ implies that the source points must exactly map to the target points.
+
+We use Kantorovich's relaxed formulation, where the set of transportation plans is a polytope:
+
+%multiplication symbol is: 
+\begin{equation}
+\prod(p, q) = \lbrace \Gamma \in \mathbf{R}_+^{n \times m} | \Gamma \mathbbm{1}_n = p, \Gamma^T \mathbbm{1}_n = q \rbrace
+\end{equation}
+
+In the end, this is just a matrix-factorization problem of the type, including a regularization on the total entropy $H$ of the loss:
+
+\begin{equation}
+\text{min}_{\Gamma \in \prod(p, q)} \langle \Gamma, C \rangle - \lambda H(\gamma)
+\end{equation}
+
+The authors propose "Transport across unaligned spaces", addressing the need for vectors across two spaces.
+Instead of samples between two spaces, we now focus on the distance of the two spaces as a whole.
+
+
+Upsides:
+\begin{enumerate}
+\item Discrete Vectors
+\item Some formulation of "minimal" rotation
+\end{enumerate}
+
+Shortcoming:
+\begin{enumerate}
+\item An overall single rotation will most likely not solve this issue
+\end{enumerate}
+
+
 
 
 

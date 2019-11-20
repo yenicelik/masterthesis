@@ -9,7 +9,7 @@ from src.functional.initializers import glorot_uniform
 
 # TODO: Replace this by a scale and by a shift operation, as affine doesn't seem compatible with tensorflow 2!
 
-class AffineLayer(tfb.Bijector, tf.Module):
+class AffineLayer(tfb.Bijector):
     """
         Wrapper class around the Affine Bijector which encapsulates the variables as well.
     """
@@ -21,17 +21,29 @@ class AffineLayer(tfb.Bijector, tf.Module):
         self.initializer = glorot_uniform()
         # Use GLOROT UNIFORM
 
-        self.V = tf.Variable(self.initializer([input_dim, r]), name=f"{name}_V", dtype=args.dtype)
-        self.shift = tf.Variable(self.initializer([input_dim]), name=f"{name}_shift", dtype=args.dtype)
-        self.L = tf.Variable(self.initializer([input_dim * (input_dim + 1) // 2]), name=f"{name}_L", dtype=args.dtype)
+        # self.V = tf.Variable(self.initializer([input_dim, r]), name=f"{name}_V", dtype=args.dtype)
+        # self.shift = tf.Variable(self.initializer([input_dim]), name=f"{name}_shift", dtype=args.dtype)
+        # self.L = tf.Variable(self.initializer([input_dim * (input_dim + 1) // 2]), name=f"{name}_L", dtype=args.dtype)
+
+
+        # self.shift = tf.Variable([0.], dtype=args.dtype, name='shift')
+        # self.scale = tf.Variable([10.], dtype=args.dtype, name='scale')
+
+        # self.bijector = tfb.Exp()(tfb.AffineScalar(shift=self.shift, scale=self.scale))
+
+        self.shift = tf.Variable(self.initializer([input_dim]), dtype=args.dtype, name='shift')
+        self.scale = tf.Variable(self.initializer([input_dim]), dtype=args.dtype, name='scale')
+
+        self.bijector = tfb.AffineLinearOperator(shift=self.shift, scale=self.scale)
+
 
         # Appending this to the list of bijectors
-        self.bijector = tfb.AffineScalar(
-            # TODO: Turn back to "Affine"
-            # scale_tril=tfp.math.fill_triangular((self.L,)),
-            # scale_perturb_factor=self.V,
-            # shift=self.shift
-        )
+        # self.bijector = tfb.AffineScalar(
+        #  TODO: Turn back to "Affine"
+        # scale_tril=tfp.math.fill_triangular((self.L,)),
+        # scale_perturb_factor=self.V,
+        # shift=self.shift
+        # )
 
     def _forward(self, x, name='forward', **kwargs):
         """
