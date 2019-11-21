@@ -137,10 +137,10 @@ if __name__ == "__main__":
         arr[i].set_xlim([-2, 2])
         arr[i].set_ylim([-2, 2])
         arr[i].set_title(names[i])
-    plt.savefig('toy2d_flow.png', dpi=300)
 
     plt.ylim([-10, 10])
     plt.xlim([-10, 10])
+    plt.savefig('toy2d_flow.png', dpi=300)
     plt.show()
 
     print("Printing the final show..")
@@ -150,6 +150,5 @@ if __name__ == "__main__":
     arr[i].set_xlim([-2.5, 2.5])
     arr[i].set_ylim([-.5, .5])
     plt.savefig('toy2d_out.png', dpi=300)
-
     plt.show()
 

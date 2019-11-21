@@ -2,8 +2,6 @@
     Visualizing a 2D (and possibly 3D)
     Gaussian Mixture Model in matplotlib
 """
-import tensorflow as tf
-
 import numpy as np
 import matplotlib
 
@@ -50,11 +48,11 @@ def plot_two_contour3d_input2d(
 
     # Now evaluate the point at each gaussian mixture model...
     # Should refactor this function into visualizing any probability density!!
-    _Z1 = -tf.math.log(pdf1(_XX) + 1.e-3)
-    _Z2 = -tf.math.log(pdf2(_XX) + 1.e-3)
+    _Z1 = -np.log(pdf1(_XX) + 1.e-3)
+    _Z2 = -np.log(pdf2(_XX) + 1.e-3)
 
-    _Z1 = tf.reshape(_Z1, _X.shape)
-    _Z2 = tf.reshape(_Z2, _X.shape)
+    _Z1 = _Z1.reshape(_X.shape)
+    _Z2 = _Z2.reshape(_X.shape)
 
     assert np.count_nonzero(_Z1) > 0, _Z1
     assert np.count_nonzero(_Z2) > 0, _Z2
@@ -139,12 +137,12 @@ def plot_contour3d_input2d(
 
     # Now evaluate the point at each gaussian mixture model...
     # Should refactor this function into visualizing any probability density!!
-    _Z = -tf.math.log(pdf(_XX) + 1.e-3)
+    _Z = -np.log(pdf(_XX) + 1.e-3)
 
     print("Input Z is: ")
     print(_Z)
     print(_Z.shape)
-    _Z = tf.reshape(_Z, _X.shape)
+    _Z = _Z.reshape(_X.shape)
 
     assert np.count_nonzero(_Z) > 0, _Z
 
@@ -197,12 +195,12 @@ def plot_contour2d_input2d(
 
     # Now evaluate the point at each gaussian mixture model...
     # Should refactor this function into visualizing any probability density!!
-    _Z = -1. * tf.math.log(pdf(_XX))
+    _Z = -1. * np.log(pdf(_XX))
 
     print("Input Z is: ")
     print(_Z)
     print(_Z.shape)
-    _Z = tf.reshape(_Z, _X.shape)
+    _Z = _Z.reshape(_X.shape)
 
     assert np.count_nonzero(_Z) > 0, _Z
 
