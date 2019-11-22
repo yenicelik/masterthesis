@@ -27,6 +27,7 @@
 \usepackage{epsfig,graphicx,verbatim,parskip,tabularx,setspace,xspace}
 \usepackage{amsmath, amsfonts}
 \usepackage{bbm}
+\usepackage[ruled,vlined]{algorithm2e}
 
 
 %% START OF DOCUMENT
@@ -576,6 +577,9 @@ It is the first model which starts to close the gap between autoregressive model
 %\chapter{Related Work} 
 \chapter{Related Work}
 
+I focus on work which solely includes as input the bilingual word-embeddings.
+Because I want to devise an algorithm which can map from any "matrix column" to any other "matrix column" (i.e. token to token, or item to item), I will not include papers which take as input NLP sentences / corpora used to build the embeddings. 
+
 This work deals with some summary on how unsupervised bilingual lexicon matching was achieved in past papers.
 
 I will give a short summary of papers sorted by year of appearance, and what additional contributions and observation were added since the last iteration.
@@ -708,6 +712,23 @@ Some work in using the Gromov-Wasserstein distance function has been proposed (C
 
 The authors argue that the supervised case is 
 
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwResult{Write here the result }
+ initialization\;
+ \While{While condition}{
+  instructions\;
+  \eIf{condition}{
+   instructions1\;
+   instructions2\;
+   }{
+   instructions3\;
+  }
+ }
+ \caption{How to write algorithms}
+\end{algorithm}
+
+
 \subsubsection{Supervised Case: Procrustes}
 
 Assuming we have
@@ -801,14 +822,101 @@ Shortcoming:
 
 
 
+How do we now proceed with using the distances between two functions as the main information to map the two words.
 
+
+
+
+
+\subsection{Graph translation using normalizing flows}
+
+This follows from the observation that any document x token matrix can be modelled as a graph.
+
+
+
+\subsection{Using monolingual word-embeddings to map one to another}
+
+\subsubsection{Cross-lingual word-mappings (Artetxe 2018)}
+
+Extension of work for more distant language pairs for looking at tokens.
+
+Artetxe does the following series of oprations
+
+\begin{enumerate}
+\item Embedding normalization: Normalizes the length of the word-embeddings and then mean-center each dimension.
+\item Fully unsupervised initialization: Uses distances to measure similarity ($M_X=X^TX$ and $M_Y=Y^TY$). 
+Common alternatives include finding common letters and numerals across two words.
+Distances should be isometric up to some permutation. Main assumption: Distance between the two spaces must be equivalent, else unsupervised is not possible!
+Compute sorted($\sqrt{M_X}$, $\sqrt{M_Y}$ ).
+This didnt quite work, so we randomly keep some elements with probability $p$.
+This allows for easier matching because there are many ways to generate this..
+[This is basically like batch-sampling for training, no? This noise (if batchsize is chosen well), should be able to well-solve this].
+We only focus on the top 20000 words in each language for simplicity.
+Instead of kNN, we use the CLSL retrieval.
+Use bidirectional learning to avoid local optima where one word is not available in another language.
+\item Re-weighting [What??] by whitening the cross-correlation matrix. 
+Ultimately, this again also just performs on distances.
+$$ USV^T =  X^TDZ $$ looking at $ W_X = US^\frac{1}{2} $, then we whiten by $$ U^T (X^T X)^{\frac{1}{2}} U $$. 
+\end{enumerate}
+
+
+CSLS often used because of the "hubness" problem
+[Perhaps we can copy all these oprations in a probabilistic context with Wassterstein?]
+
+\subsubsection{Bilingual Lexicon Induction through Unsupervised Machine Translation (Artetxe 2019)}
+
+Uses machine translation to build a lexicon induction model.
+
+Input to algorithm:
+
+\begin{enumerate}
+\item Monolingual corpora fasttext through vecmap and the corpora used to train.
+\item 400'000 most common bigrams and 400'000 most common tri-grams.
+\item To find most similar pairs, instead of using kNN CLSL, proposed is
+$$
+	\phi(\bar{f} | \bar{e})=\frac{\exp (\cos (\bar{e}, \bar{f}) / \tau)}{\sum_{\bar{f}^{\prime}} \exp \left(\cos \left(\bar{e}, \bar{f}^{\prime}\right) / \tau\right)}
+$$
+to extract the top 100 sentences
+5-gram language model.
+\item The proposed method increases this by at least 10 percent points (P@1).
+\item underlying language model uses 2000 sentences from each monolingual corpora, a language modeling loss, and combines this with a cyclic consistency loss.
+\end{enumerate}
 
 
 %\chapter{Design and Implementation}
 \chapter{Analysis of the current state of the art}
 
+Include an analysis of all loss functions.
+
+Include a list of assumptions made.
+
+Include a list of observations made.
+
+Ablation study.
+
 %\chapter{Evaluation} 
 \chapter{Our Method}
+
+Ideas:
+
+\begin{enumerate}
+\item Generally, deviate more from first proposed paper.
+\item (like EM) two-step training where dictionary is learned and then the underlying soft probability distribution (using parametrized models)
+\item Instead of cross-correlation, look for some distance in the probability space which makes sense? Test multiple ones, and possibly arrive at a prior which is interesting
+\item order of phrasing is different in korean / turkish to german
+\item Enforce some sort of probability density on top?
+\item Go deeper perhaps?
+\item Generally collect a set of constraints and observations that seem to work, then combine them in a principled approach
+\item Normalising flows seem invertible. Can we not just use $f_{xy} = f_{yx}$.
+\item AutoML on normalising flows..?
+\item Leave out individual variables
+\item Jointly train both embedding and normalising flow
+\end{enumerate}
+
+\chapter{Further Work}
+
+Can be used for more unstructured data, like graphs.
+
 \
 %\chapter{Summary and Conclusions} 
 \chapter{Evaluation}
