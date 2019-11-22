@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     d, r = 2, 2
     bijectors = []
-    num_layers = 6
+    num_layers = 5 # Less layers, as this is a simple distribution
     for i in range(num_layers):
         with tf.variable_scope('bijector_%d' % i):
             V = tf.get_variable('V', [d, r], dtype=DTYPE)  # factor loading
@@ -93,12 +93,10 @@ if __name__ == "__main__":
         arr[i].scatter(X1[idx, 0], X1[idx, 1], s=10, color='blue')
         idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] > 0)
         arr[i].scatter(X1[idx, 0], X1[idx, 1], s=10, color='black')
-        arr[i].set_xlim([-2, 2])
-        arr[i].set_ylim([-2, 2])
+        arr[i].set_xlim([-10, 10])
+        arr[i].set_ylim([-10, 10])
         arr[i].set_title(names[i])
 
-    plt.ylim([-10, 10])
-    plt.xlim([-10, 10])
     plt.show()
 
     loss = -tf.reduce_mean(dist.log_prob(x_samples))
@@ -134,12 +132,10 @@ if __name__ == "__main__":
         arr[i].scatter(X1[idx, 0], X1[idx, 1], s=10, color='blue')
         idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] > 0)
         arr[i].scatter(X1[idx, 0], X1[idx, 1], s=10, color='black')
-        arr[i].set_xlim([-2, 2])
-        arr[i].set_ylim([-2, 2])
+        arr[i].set_xlim([-10, 10])
+        arr[i].set_ylim([-10, 10])
         arr[i].set_title(names[i])
 
-    plt.ylim([-10, 10])
-    plt.xlim([-10, 10])
     plt.savefig('toy2d_flow.png', dpi=300)
     plt.show()
 
@@ -147,8 +143,6 @@ if __name__ == "__main__":
 
     X1 = sess.run(dist.sample(4000))
     plt.scatter(X1[:, 0], X1[:, 1], color='red', s=2)
-    arr[i].set_xlim([-2.5, 2.5])
-    arr[i].set_ylim([-.5, .5])
     plt.savefig('toy2d_out.png', dpi=300)
     plt.show()
 
