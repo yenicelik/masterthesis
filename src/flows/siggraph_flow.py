@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     NP_DTYPE = np.float32
     MODEL = 'MAF'  # Which Normalizing Flow to use. 'NVP' or 'MAF' or 'IAF'
-    TARGET_DENSITY = 'SIGGRAPH'  # Which dataset to model. 'MOONS' or 'SIGGRAPH' or 'GAUSSIAN'
+    TARGET_DENSITY = 'MOONS'  # Which dataset to model. 'MOONS' or 'SIGGRAPH' or 'GAUSSIAN'
     USE_BATCHNORM = False
 
     # dataset-specific settings
@@ -71,6 +71,7 @@ if __name__ == "__main__":
         print(cov)
         X = np.random.multivariate_normal(mean, cov, 2000)
         xlim, ylim = [-2, 2], [-2, 2]
+
     plt.scatter(X[:, 0], X[:, 1], s=10, color='red')
     plt.xlim(xlim)
     plt.ylim(ylim)
@@ -100,11 +101,11 @@ if __name__ == "__main__":
         elif MODEL == 'MAF':
             bijectors.append(tfb.MaskedAutoregressiveFlow(
                 shift_and_log_scale_fn=tfb.masked_autoregressive_default_template(
-                    hidden_layers=[512, 512])))
+                    hidden_layers=[128, 128]))) # 512
         elif MODEL == 'IAF':
             bijectors.append(tfb.Invert(tfb.MaskedAutoregressiveFlow(
                 shift_and_log_scale_fn=tfb.masked_autoregressive_default_template(
-                    hidden_layers=[512, 512]))))
+                    hidden_layers=[128, 128])))) # 512
         if USE_BATCHNORM and i % 2 == 0:
             # BatchNorm helps to stabilize deep normalizing flows, esp. Real-NVP
             bijectors.append(BatchNormalization(name='batch_norm%d' % i)) # TODO: Perhaps have to change this... but should be fine in theory, no?
@@ -159,7 +160,7 @@ if __name__ == "__main__":
         if i % 1000 == 0:
             global_step.append(i)
             np_losses.append(np_loss)
-        if i % int(1e4) == 0:
+        if i % int(1e3) == 0:
             print(i, np_loss)
     start = 0
     plt.plot(np_losses[start:])
@@ -187,6 +188,7 @@ if __name__ == "__main__":
 
             i += 1
     plt.savefig('siggraph_trained.png', dpi=300)
+    plt.show()
 
     # plot the last one, scaled up
     idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] < 0)
@@ -200,5 +202,6 @@ if __name__ == "__main__":
     plt.xlim([-3, 3])
     plt.ylim([-.5, .5])
     plt.savefig('siggraph_out.png', dpi=300)
+    plt.show()
 
     print("Done!")

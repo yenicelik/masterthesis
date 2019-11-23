@@ -12,8 +12,9 @@ tfb = tfp.bijectors
 layers = tf.contrib.layers
 
 def net(x, out_size):
-    hidden_size = 128 # 512
-    return layers.stack(x, layers.fully_connected, [hidden_size, hidden_size, out_size]) # Very high size lol, should decrease this perhaps, eastman has less diimensions lol
+    hidden_size = 64 # 512
+    # , hidden_size
+    return layers.stack(x, layers.fully_connected, [hidden_size, out_size]) # Very high size lol, should decrease this perhaps, eastman has less diimensions lol
 
 class NVPCoupling(tfb.Bijector):
     """NVP affine coupling layer for 2D units.
