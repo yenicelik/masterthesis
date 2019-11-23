@@ -577,6 +577,96 @@ It is the first model which starts to close the gap between autoregressive model
 %\chapter{Related Work} 
 \chapter{Related Work}
 
+As outlined by (https://ruder.io/cross-lingual-embeddings/) the task of finding cross-lingual embedding models fall within one of the four categories:
+
+\begin{enumerate}
+\item Monolingual mapping: Here we train the embedding for each language separately, and the try to find a mapping from one space into another.
+The learned mapping is usually linear.
+\item Pseudo-cross-lingual: Here, a pseudo-language is created by mixing corpus from different languages.
+The cross-lingual context is used to learn the shared embedding space.
+[To what extent is this applicable?]
+\item Cross-lingual training: parallel corpus used to train combined embeddings. Similar words will be mapped close to each other in same embedding space.
+\item Joint optimization: Optimizing a combination of cross-lingual and monolingual losses.
+\end{enumerate}
+
+For parallel data, we can have different types of data:
+
+\begin{enumerate}
+\item Word-aligned data
+\item Sentence-aligned data
+\item Document aligned data
+\item Lexicon (translations between multiple language-tables)
+\item No parallel data (only monolingual resources)
+\end{enumerate}
+
+These are the ways to train word-embeddings (amongst others):
+
+\begin{itemize}
+\item word2vec variants
+\item skip-gram with negative sampling (SGNS)
+\item continuous bag-of-words (CBOW)
+\end{itemize}
+
+Learning a linear projection from monolingual embeddings and parallel data.
+
+Projection via CCA (Canonical component analysis).
+A transformative matrix is learned for each language, the mapped space is the same space across different languages.
+Using 80\% of projection vectors and using top k components generally yield highest performance.
+
+Normalisation and orthogonal transport.
+Product similarity measure (correlation) can be seen as Wasserstein distance (because it measures how much data points are away from each other) $c^Tc$.
+Vectors are normalised during training with unit vector.
+Because unit length, we can solve this by an orthogonal matrix.
+(Does any information go away? Maybe it's good to regualrize even further so that we know that the mapping is indeed possible?)
+
+Max-margin intrudercs.
+Linear least squares leads to the hubness problem. 
+Words tend to appear as nearest neighbors of many other words
+(-> perhaps some non-random sampling is best here? to move away).
+Use a ranking loss (sounds like optimal transport again...)
+Ranking loss is also used in wasserstein context.
+
+Alignment based projection:
+Count number of times each word in source language is aligned with each word in target language document / sentence.
+
+Adversarial autoencoder
+Autoencoder learns to re-create the embedding, while discriminator learns to maximize the projection
+
+Orthogonal transformation, normalisation, mean centering
+Relation between the constraints is not clear.
+Starting with basic optimization objective, they add regualizers and loss functions as intuitively make sense.
+-> Dot-products need to be maintained after the mapping (as much as possible) constraint ( i dont like )
+-> equal contribution to objective done by normaliizing the embedding..
+-> two randomly selected words should in general not be similar
+
+\paragraph{Pseudo-Cross-Label}
+Captures interactions between words in different languages.
+Mostly skipped because brain capacity...
+
+Joing training with 2 x 2000 dimensional input (one for each job-system)... can then translate each one in one latent space to another.
+How do we find parallel logic here, however..?
+
+
+(-> Perhaps it makes sense to draw all the literature in the context of wassetstein, to do a probabilistic and principled analysis from there on.)
+
+
+
+
+
+
+
+
+Observation (FRAGE: Frequency-Agnostic Word Representation): It is a feature that most-frequent words are embedded to different locations than non-most-embedded features.
+Xing et al argue there is a mismatch between the way it is learned, and the projection and loss-function.
+Tries to find a uniform theory across the three components.
+
+
+
+
+
+
+If we use monolingual resources only, the common approach is
+
 I focus on work which solely includes as input the bilingual word-embeddings.
 Because I want to devise an algorithm which can map from any "matrix column" to any other "matrix column" (i.e. token to token, or item to item), I will not include papers which take as input NLP sentences / corpora used to build the embeddings. 
 
@@ -600,7 +690,22 @@ What are datasets that we can use for benchmarking
 \item 
 \end{itemize}
 
+Instead of mapping one system into another, we can also allow for joint-training of the word-embeddings.
+
+(This resource is great!!!
+https://ruder.io/cross-lingual-embeddings/
+)
+
+
+
+
+
 \section{Methods using GANs (and other stuff..)}
+
+\subsection{MUSE Facebook}
+
+
+
 
 \section{Methods using Normalising Flows}
 
@@ -911,6 +1016,7 @@ Ideas:
 \item AutoML on normalising flows..?
 \item Leave out individual variables
 \item Jointly train both embedding and normalising flow
+\item After two possible ways of embeddings are learned, can we use the weights of the neural networ (i.e. word2vec") to find a mapping that goes from one space into another? (... yes, we should be able to using least squares projection...)
 \end{enumerate}
 
 \chapter{Further Work}

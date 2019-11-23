@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from src.config import args
-from src.flows.components.LeakyReLU import LeakyReLU
+from src.flows.custom_bijectors.LeakyReLU import LeakyReLU
 
 tfd = tfp.distributions
 tfb = tfp.bijectors
