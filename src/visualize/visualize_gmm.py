@@ -51,6 +51,11 @@ def plot_two_contour3d_input2d(
     _Z1 = -np.log(pdf1(_XX) + 1.e-3)
     _Z2 = -np.log(pdf2(_XX) + 1.e-3)
 
+    # Convert to np-array if it is not the case already
+    if not isinstance(_Z1, np.ndarray):
+        _Z1 = _Z1.numpy()
+        _Z2 = _Z2.numpy()
+
     _Z1 = _Z1.reshape(_X.shape)
     _Z2 = _Z2.reshape(_X.shape)
 
@@ -63,8 +68,6 @@ def plot_two_contour3d_input2d(
     else:
         ax = fig.add_subplot(111, projection='3d')
 
-    _Z1 = _Z1.numpy()
-    _Z2 = _Z2.numpy()
     # Let's not plot places that are nan!
     mode = stats.mode(_Z1.flatten())[0]
     print("Mode is: ", mode)

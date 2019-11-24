@@ -9,6 +9,7 @@
 # Can translate all this into tensorflow later, now should get numpy up and running
 
 import numpy as np
+import tensorflow as tf
 
 from src.config import args
 from src.functional.linalg import covariance_multiplication, mean_multiplication
@@ -55,8 +56,12 @@ def generate_synthetic_embedding(d, components, spherical=True, maximum_variance
 
     # Finally, make the covariance matrix numerically stable for psd operations....
 
+    # Conver to tensorflow tensor here...
     emb_mus = [emb_mu[i, :].reshape((1, -1)) for i in range(components)]
     emb_sigmas = [emb_sigma[i, :] * np.identity(d) + (lam * np.identity(d)) for i in range(components)]
+
+    emb_mus = [tf.convert_to_tensor(x, dtype=args.dtype) for x in emb_mus]
+    emb_sigmas = [tf.convert_to_tensor(x, dtype=args.dtype) for x in emb_sigmas]
 
     return emb_mus, emb_sigmas
 
@@ -73,6 +78,10 @@ def generate_synthetic_src_tgt_embedding(d, components, orthogonal_rotation_matr
     print("mus cov src are: ")
     print(mus_src)
     print(cov_src)
+
+    print("Type of the mus and rotation matrices are: ")
+    print(type(mus_src[0]), mus_src[0])
+    print(type(M_rotation), M_rotation)
 
     mus_tgt = [mean_multiplication(mus_src[i], M_rotation) for i in range(components)]
     cov_tgt = [covariance_multiplication(cov_src[i], M_rotation) for i in range(components)]

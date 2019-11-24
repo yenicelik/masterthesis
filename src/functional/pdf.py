@@ -52,7 +52,10 @@ def pdf_gmm_diagional_covariance(X, mus, covs, mixture_weights=None):
         # TODO: What is the initializtion with EM? Is is all have same weight, or is it uniform sampling
 
     assert len(mus) == len(covs), ("Length of means and covs", len(mus), len(covs))
-    assert tf.math.reduce_sum(mixture_weights).eval() == 1.0, ("Mixture weights do not sum up to 1!", tf.math.reduce_sum(mixture_weights).eval())
+    if True: # Check for eager!
+        assert tf.math.reduce_sum(mixture_weights).numpy() == 1.0, ("Mixture weights do not sum up to 1!", tf.math.reduce_sum(mixture_weights).numpy())
+    else:
+        assert tf.math.reduce_sum(mixture_weights).eval() == 1.0, ("Mixture weights do not sum up to 1!", tf.math.reduce_sum(mixture_weights).eval())
 
     # Assert matching batch types
     for i in range(len(mus)):
