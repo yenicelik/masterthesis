@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     NP_DTYPE = np.float32
     MODEL = 'MAF'  # Which Normalizing Flow to use. 'NVP' or 'MAF' or 'IAF'
-    TARGET_DENSITY = 'MOONS'  # Which dataset to model. 'MOONS' or 'SIGGRAPH' or 'GAUSSIAN'
+    TARGET_DENSITY = 'SIGGRAPH'  # Which dataset to model. 'MOONS' or 'SIGGRAPH' or 'GAUSSIAN'
     USE_BATCHNORM = False
 
     # dataset-specific settings
@@ -41,8 +41,8 @@ if __name__ == "__main__":
         },
         'MOONS': {
             'batch_size': 100,
-            'num_bijectors': 4,
-            'train_iters': 2e4
+            'num_bijectors': 8,
+            'train_iters': 5e4
         }
     }
 
@@ -101,7 +101,7 @@ if __name__ == "__main__":
         elif MODEL == 'MAF':
             bijectors.append(tfb.MaskedAutoregressiveFlow(
                 shift_and_log_scale_fn=tfb.masked_autoregressive_default_template(
-                    hidden_layers=[128, 128]))) # 512
+                    hidden_layers=[512, 512]))) # 512
         elif MODEL == 'IAF':
             bijectors.append(tfb.Invert(tfb.MaskedAutoregressiveFlow(
                 shift_and_log_scale_fn=tfb.masked_autoregressive_default_template(
@@ -151,6 +151,8 @@ if __name__ == "__main__":
     train_op = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
     sess.run(tf.global_variables_initializer())
+
+    # TODO: Train a bit, and then train more...
 
     NUM_STEPS = int(settings[TARGET_DENSITY]['train_iters'])
     global_step = []
