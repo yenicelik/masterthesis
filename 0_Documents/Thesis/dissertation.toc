@@ -15,14 +15,23 @@
 \contentsline {subsubsection}{Glow: Generative Flows with Invertible 1x1 Convolutions (2018)}{18}% 
 \contentsline {subsubsection}{Flow++ (2019)}{19}% 
 \contentsline {chapter}{\numberline {3}Related Work}{21}% 
-\contentsline {paragraph}{online data}{21}% 
-\contentsline {paragraph}{offline data}{21}% 
-\contentsline {section}{\numberline {3.1}Methods using GANs (and other stuff..)}{22}% 
-\contentsline {section}{\numberline {3.2}Methods using Normalising Flows}{22}% 
-\contentsline {subsection}{\numberline {3.2.1}Density Matching for Bilingual Word Embeddings (Zhou 2019)}{22}% 
-\contentsline {section}{\numberline {3.3}Methods viewing this problem as an Optimal Transport (OT) Problem}{25}% 
-\contentsline {subsection}{\numberline {3.3.1}Gromov-Wasserstein Alignment of Word Embedding Spaces}{25}% 
-\contentsline {chapter}{\numberline {4}Analysis of the current state of the art}{27}% 
-\contentsline {chapter}{\numberline {5}Our Method}{29}% 
-\contentsline {chapter}{\numberline {6}Evaluation}{31}% 
-\contentsline {chapter}{\numberline {7}Conclusion}{33}% 
+\contentsline {paragraph}{Pseudo-Cross-Label}{23}% 
+\contentsline {paragraph}{online data}{23}% 
+\contentsline {paragraph}{offline data}{24}% 
+\contentsline {section}{\numberline {3.1}Methods using GANs (and other stuff..)}{24}% 
+\contentsline {subsection}{\numberline {3.1.1}MUSE Facebook}{24}% 
+\contentsline {section}{\numberline {3.2}Methods using Normalising Flows}{26}% 
+\contentsline {subsection}{\numberline {3.2.1}Density Matching for Bilingual Word Embeddings (Zhou 2019)}{26}% 
+\contentsline {section}{\numberline {3.3}Methods viewing this problem as an Optimal Transport (OT) Problem}{30}% 
+\contentsline {subsection}{\numberline {3.3.1}Gromov-Wasserstein Alignment of Word Embedding Spaces}{30}% 
+\contentsline {subsubsection}{Supervised Case: Procrustes}{30}% 
+\contentsline {subsubsection}{Unsupervised Maps: Optimal Transport}{31}% 
+\contentsline {subsection}{\numberline {3.3.2}Graph translation using normalizing flows}{33}% 
+\contentsline {subsection}{\numberline {3.3.3}Using monolingual word-embeddings to map one to another}{33}% 
+\contentsline {subsubsection}{Cross-lingual word-mappings (Artetxe 2018)}{33}% 
+\contentsline {subsubsection}{Bilingual Lexicon Induction through Unsupervised Machine Translation (Artetxe 2019)}{34}% 
+\contentsline {chapter}{\numberline {4}Analysis of the current state of the art}{35}% 
+\contentsline {chapter}{\numberline {5}Our Method}{37}% 
+\contentsline {chapter}{\numberline {6}Further Work}{39}% 
+\contentsline {chapter}{\numberline {7}Evaluation}{41}% 
+\contentsline {chapter}{\numberline {8}Conclusion}{43}% 

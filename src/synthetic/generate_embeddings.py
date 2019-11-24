@@ -37,29 +37,33 @@ def generate_synthetic_embedding(d, components, spherical=True, maximum_variance
         maximum_variance = np.sqrt(d)
 
     if args.random_seed:
-        tf.random.set_seed(args.random_seed)
+        np.random.set_seed(args.random_seed)
 
-    emb_mu = tf.random.normal((components, d)) * d * 5
-    emb_sigma = tf.random.normal(
-        (components, d)) * d  # Can be unfolded column-wise because diagonal covariance matrices
-    emb_sigma = tf.math.abs(
-        emb_sigma)  # Making the covariance matrix psd! (cov matrix cannot define a negative eigenvalues)
+    emb_mu = np.random.rand(components, d) * d * 5
+    emb_sigma = np.random.rand(components, d) * d  # Can be unfolded column-wise because diagonal covariance matrices
+    emb_sigma = np.absolute(emb_sigma)  # Making the covariance matrix psd! (cov matrix cannot define a negative eigenvalues)
+
+    print("Matrices are of shape: ", emb_mu.shape, emb_sigma.shape)
 
     if spherical:
         # TODO:, how to make this spherical!
-        elementswise_norm = tf.norm(emb_mu, axis=1, ord=2, keepdims=True)
+        elementswise_norm = np.linalg.norm(emb_mu, ord=2, axis=1, keepdims=True)
         # print("elementwise norm: ", elementswise_norm)
-        # emb_mu = tf.math.divide(emb_mu, elementswise_norm)
-        # emb_sigma = tf.math.divide(emb_sigma, maximum_variance)
+        # emb_mu = np.divide(emb_mu, elementswise_norm)
+        # emb_sigma = np.divide(emb_sigma, maximum_variance)
 
     # Create a list from this..
 
     # Finally, make the covariance matrix numerically stable for psd operations....
 
-    emb_mu = [tf.reshape(emb_mu[i, :], (1, -1)) for i in range(components)]
-    emb_sigma = [emb_sigma[i, :] * tf.eye(d) + (lam * tf.eye(d)) for i in range(components)]
+    # Conver to tensorflow tensor here...
+    emb_mus = [emb_mu[i, :].reshape((1, -1)) for i in range(components)]
+    emb_sigmas = [emb_sigma[i, :] * np.identity(d) + (lam * np.identity(d)) for i in range(components)]
 
-    return emb_mu, emb_sigma
+    emb_mus = [tf.convert_to_tensor(x, dtype=args.dtype) for x in emb_mus]
+    emb_sigmas = [tf.convert_to_tensor(x, dtype=args.dtype) for x in emb_sigmas]
+
+    return emb_mus, emb_sigmas
 
 def generate_synthetic_src_tgt_embedding(d, components, orthogonal_rotation_matrix=True):
     """
@@ -74,6 +78,10 @@ def generate_synthetic_src_tgt_embedding(d, components, orthogonal_rotation_matr
     print("mus cov src are: ")
     print(mus_src)
     print(cov_src)
+
+    print("Type of the mus and rotation matrices are: ")
+    print(type(mus_src[0]), mus_src[0])
+    print(type(M_rotation), M_rotation)
 
     mus_tgt = [mean_multiplication(mus_src[i], M_rotation) for i in range(components)]
     cov_tgt = [covariance_multiplication(cov_src[i], M_rotation) for i in range(components)]

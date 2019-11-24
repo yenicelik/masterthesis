@@ -26,6 +26,8 @@
 %\usepackage[dvips]{epsfig,graphics} 
 \usepackage{epsfig,graphicx,verbatim,parskip,tabularx,setspace,xspace}
 \usepackage{amsmath, amsfonts}
+\usepackage{bbm}
+\usepackage[ruled,vlined]{algorithm2e}
 
 
 %% START OF DOCUMENT
@@ -575,6 +577,100 @@ It is the first model which starts to close the gap between autoregressive model
 %\chapter{Related Work} 
 \chapter{Related Work}
 
+As outlined by (https://ruder.io/cross-lingual-embeddings/) the task of finding cross-lingual embedding models fall within one of the four categories:
+
+\begin{enumerate}
+\item Monolingual mapping: Here we train the embedding for each language separately, and the try to find a mapping from one space into another.
+The learned mapping is usually linear.
+\item Pseudo-cross-lingual: Here, a pseudo-language is created by mixing corpus from different languages.
+The cross-lingual context is used to learn the shared embedding space.
+[To what extent is this applicable?]
+\item Cross-lingual training: parallel corpus used to train combined embeddings. Similar words will be mapped close to each other in same embedding space.
+\item Joint optimization: Optimizing a combination of cross-lingual and monolingual losses.
+\end{enumerate}
+
+For parallel data, we can have different types of data:
+
+\begin{enumerate}
+\item Word-aligned data
+\item Sentence-aligned data
+\item Document aligned data
+\item Lexicon (translations between multiple language-tables)
+\item No parallel data (only monolingual resources)
+\end{enumerate}
+
+These are the ways to train word-embeddings (amongst others):
+
+\begin{itemize}
+\item word2vec variants
+\item skip-gram with negative sampling (SGNS)
+\item continuous bag-of-words (CBOW)
+\item GloVe matrix factorization approach
+\end{itemize}
+
+Learning a linear projection from monolingual embeddings and parallel data.
+
+Projection via CCA (Canonical component analysis).
+A transformative matrix is learned for each language, the mapped space is the same space across different languages.
+Using 80\% of projection vectors and using top k components generally yield highest performance.
+
+Normalisation and orthogonal transport.
+Product similarity measure (correlation) can be seen as Wasserstein distance (because it measures how much data points are away from each other) $c^Tc$.
+Vectors are normalised during training with unit vector.
+Because unit length, we can solve this by an orthogonal matrix.
+(Does any information go away? Maybe it's good to regualrize even further so that we know that the mapping is indeed possible?)
+
+Max-margin intrudercs.
+Linear least squares leads to the hubness problem. 
+Words tend to appear as nearest neighbors of many other words
+(-> perhaps some non-random sampling is best here? to move away).
+Use a ranking loss (sounds like optimal transport again...)
+Ranking loss is also used in wasserstein context.
+
+Alignment based projection:
+Count number of times each word in source language is aligned with each word in target language document / sentence.
+
+Adversarial autoencoder
+Autoencoder learns to re-create the embedding, while discriminator learns to maximize the projection
+
+Orthogonal transformation, normalisation, mean centering
+Relation between the constraints is not clear.
+Starting with basic optimization objective, they add regualizers and loss functions as intuitively make sense.
+-> Dot-products need to be maintained after the mapping (as much as possible) constraint ( i dont like )
+-> equal contribution to objective done by normaliizing the embedding..
+-> two randomly selected words should in general not be similar
+
+\paragraph{Pseudo-Cross-Label}
+Captures interactions between words in different languages.
+Mostly skipped because brain capacity...
+
+Joing training with 2 x 2000 dimensional input (one for each job-system)... can then translate each one in one latent space to another.
+How do we find parallel logic here, however..?
+
+
+(-> Perhaps it makes sense to draw all the literature in the context of wassetstein, to do a probabilistic and principled analysis from there on.)
+
+
+
+
+
+
+
+
+Observation (FRAGE: Frequency-Agnostic Word Representation): It is a feature that most-frequent words are embedded to different locations than non-most-embedded features.
+Xing et al argue there is a mismatch between the way it is learned, and the projection and loss-function.
+Tries to find a uniform theory across the three components.
+
+
+
+
+
+
+If we use monolingual resources only, the common approach is
+
+I focus on work which solely includes as input the bilingual word-embeddings.
+Because I want to devise an algorithm which can map from any "matrix column" to any other "matrix column" (i.e. token to token, or item to item), I will not include papers which take as input NLP sentences / corpora used to build the embeddings. 
+
 This work deals with some summary on how unsupervised bilingual lexicon matching was achieved in past papers.
 
 I will give a short summary of papers sorted by year of appearance, and what additional contributions and observation were added since the last iteration.
@@ -595,7 +691,86 @@ What are datasets that we can use for benchmarking
 \item 
 \end{itemize}
 
+Instead of mapping one system into another, we can also allow for joint-training of the word-embeddings.
+
+(This resource is great!!!
+https://ruder.io/cross-lingual-embeddings/
+)
+
+
+
+
+
 \section{Methods using GANs (and other stuff..)}
+
+\subsection{MUSE Facebook}
+
+Mikolov et. al learn a mapping between the two sets of $Y$ and $X$:
+
+\begin{equation}
+W^{\star} = \text{argmin}_{W \in M_d(\mathbf{R})} \norm{WX - Y}_F
+\end{equation}
+
+Translation of any source token $s$ to a target token $t$ is defined as 
+
+$$
+t = \text{argmax}_t \text{cos} (Wx_s, y_t)
+$$
+
+(i.e. we just create a mapping between $x$ and $t$ using a linear interpolation matrix and take the maximal scalar product.
+
+
+Mikolov et al do not observe improved loss when using more advanced neural networks..
+
+Enforcing an orthogonality constraint, this boils down to the procrustes problem as given by
+
+\begin{equation}
+W^\star = \text{argmin}_{W \in O_d(\mathbf{R}) } \norm {WX - Y}_F = UV^T 
+\end{equation}
+
+where $U$ and $V^T$ respectively the left and right Eigenvectors of $YX^T$.
+
+We can create an adversarial unsupervised approach by taking random samples from 
+
+$ X = \{ x_1, \dots, x_n \} $ and $ Y = \{ y_1, \dots, y_m \} $
+
+where the discriminator has to detect which of the two datasets the sample stemmed from.
+The "generator" (not really a generator) $W$ is trained to prevent the discriminator from making accurate decisions.
+Specifically, this is modeled as a two-player game, where $WX$ and $Y$ should be as similar as possible.
+
+As such, the discriminator objective is: 
+
+\begin{align}
+\mathcal{L}_D(\theta_D | W) &= \\ 
+&= -\frac{1}{n} \sum_{i=1}^n \text{log} P_{\theta_D}  (\text{source} = 1 | W x ) \\ &-  \frac{1}{m} \sum_{i=1}^n \text{log} P_{\theta_D}  (\text{source} = 0 | W x )
+\end{align}
+
+and the generator objective is:
+
+\begin{align}
+\mathcal{L}_W(W|\theta_D) &= \\
+&= -\frac{1}{n} \sum_{i=1}^{n} \log P_{\theta_{D}}\left(\text { source }=0 | W x_{i}\right) \\ 
+&-  \frac{1}{m} \sum_{i=1}^{m} \log P_{\theta_{D}}\left(\text { source }=1 | y_{i}\right)
+\end{align}
+
+Here, the discriminator is trained on the labels whether the word came from the first embedding, or the second embedding.
+
+(-> Is there a mathematical way to simply this..?)
+
+The resulting rotation matrix is not on-par with supervised approaches.
+As such, the authors propose to make use of the frequencies as additional information.
+As such, we use the most common words as anchors.
+
+We then generate a dictionary from the two embeddings.
+Then we solve the procrustres to arrive at the final orthogonal matrix.
+
+Use of the CSLS
+
+
+
+
+
+
 
 \section{Methods using Normalising Flows}
 
@@ -701,14 +876,266 @@ The maximum log-likelihood is proportional to the minimum expectation of the KL-
 
 \subsection{Gromov-Wasserstein Alignment of Word Embedding Spaces}
 
+The problem of aligning word embedding spaces can also be seen as an Optimal Transport (\textit{\textbf{OT}}) problem.
+
+Some work in using the Gromov-Wasserstein distance function has been proposed (CITE Jaakkola). 
+
+The authors argue that the supervised case is 
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwResult{Write here the result }
+ initialization\;
+ \While{While condition}{
+  instructions\;
+  \eIf{condition}{
+   instructions1\;
+   instructions2\;
+   }{
+   instructions3\;
+  }
+ }
+ \caption{How to write algorithms}
+\end{algorithm}
+
+
+\subsubsection{Supervised Case: Procrustes}
+
+Assuming we have
+
+$$
+T : \mathcal{X} \rightarrow \mathcal{Y}
+$$
+
+such that 
+
+$$
+T(x^(i)) \approx y^{j}
+$$
+
+where $w_j^y$ is a translation of $w_i^x$.
+
+Let $\mathbf{X}$ and $\mathbf{Y}$ be the matrices with the column-vectors describing the word-embeddings.
+
+We can then find $T$ by solving the equation
+
+\begin{equation}
+\text{min}_{T \in \mathcal{F}} \norm{X - T(Y)}_F^2
+\end{equation}
+
+THe quality of the resulting alignment depends on how well we can find $T$, as well as on the choice of the space $\mathcal{F}$.
+
+$T$ orthogonal matrix is a popoular choice, results iin the orthogonal Procrustes problem
+
+\begin{equation}
+\text{min}_{P \in O(n)} \norm{X - PY}_F^2
+\end{equation}
+
+with $O(n) = {P \in \mathbf{R}^{n x n} | P^T P = I}$.
+
+In this case, we can find a closed-form solution in terms of the SVD of PX and Y.
+Given an SVD of $U \Sigma V^T$ of $XY^T$, the solution is given by $P^* = UV^T$.
+
+Because the loss must be able to be measured, it only solves the supervised problem.
+
+
+\subsubsection{Unsupervised Maps: Optimal Transport}
+
+Optimal transport formalizes the problem of finding a minimum cost mapping between two point sets, viewed as discrete distributions.
+
+We assume two empirical delta-distributions over embeddings (which are as such equivalent to point-vectors).
+
+WHAT WAS THIS SYMBOL AGAIN WHICH LOOKS LIKE A V
+\begin{equation}
+\mu = \sum_{i=1}^n p_i \delta_{x^(i)}, v = \sum_{j=1}^m q_j \delta_{y^(i)}
+\end{equation}
+
+where $p_i$ and $q_j$ can be considered as the prior distributions, usually set to the uniform distribution or word-frequency.
+
+The transport problem is then realized as 
+
+% CHECK WHAT ROUTE IS...
+\begin{equation}
+\text{inf}_T  \lbrace c(x, T(x)) d \mu(x) | T \mu = v \rbrace
+\end{equation}
+%  d \mu(x) | T_{#} \mu = v
+
+where the cost is usually simply defined as $\norm{x - T(x)}$ and $T \mu = v$ implies that the source points must exactly map to the target points.
+
+We use Kantorovich's relaxed formulation, where the set of transportation plans is a polytope:
+
+%multiplication symbol is: 
+\begin{equation}
+\prod(p, q) = \lbrace \Gamma \in \mathbf{R}_+^{n \times m} | \Gamma \mathbbm{1}_n = p, \Gamma^T \mathbbm{1}_n = q \rbrace
+\end{equation}
+
+In the end, this is just a matrix-factorization problem of the type, including a regularization on the total entropy $H$ of the loss:
+
+\begin{equation}
+\text{min}_{\Gamma \in \prod(p, q)} \langle \Gamma, C \rangle - \lambda H(\gamma)
+\end{equation}
+
+The authors propose "Transport across unaligned spaces", addressing the need for vectors across two spaces.
+Instead of samples between two spaces, we now focus on the distance of the two spaces as a whole.
+
+
+Upsides:
+\begin{enumerate}
+\item Discrete Vectors
+\item Some formulation of "minimal" rotation
+\end{enumerate}
+
+Shortcoming:
+\begin{enumerate}
+\item An overall single rotation will most likely not solve this issue
+\end{enumerate}
+
+
+
+How do we now proceed with using the distances between two functions as the main information to map the two words.
+
+
+\subsection{Graph translation using normalizing flows}
+
+This follows from the observation that any document x token matrix can be modelled as a graph.
+
+
+
+\subsection{Using monolingual word-embeddings to map one to another}
+
+\subsubsection{Cross-lingual word-mappings (Artetxe 2018)}
+
+Extension of work for more distant language pairs for looking at tokens.
+
+Artetxe does the following series of oprations
+
+\begin{enumerate}
+\item Embedding normalization: Normalizes the length of the word-embeddings and then mean-center each dimension.
+\item Fully unsupervised initialization: Uses distances to measure similarity ($M_X=X^TX$ and $M_Y=Y^TY$). 
+Common alternatives include finding common letters and numerals across two words.
+Distances should be isometric up to some permutation. Main assumption: Distance between the two spaces must be equivalent, else unsupervised is not possible!
+Compute sorted($\sqrt{M_X}$, $\sqrt{M_Y}$ ).
+This didnt quite work, so we randomly keep some elements with probability $p$.
+This allows for easier matching because there are many ways to generate this..
+[This is basically like batch-sampling for training, no? This noise (if batchsize is chosen well), should be able to well-solve this].
+We only focus on the top 20000 words in each language for simplicity.
+Instead of kNN, we use the CLSL retrieval.
+Use bidirectional learning to avoid local optima where one word is not available in another language.
+\item Re-weighting [What??] by whitening the cross-correlation matrix. 
+Ultimately, this again also just performs on distances.
+$$ USV^T =  X^TDZ $$ looking at $ W_X = US^\frac{1}{2} $, then we whiten by $$ U^T (X^T X)^{\frac{1}{2}} U $$. 
+\end{enumerate}
+
+
+CSLS often used because of the "hubness" problem
+[Perhaps we can copy all these oprations in a probabilistic context with Wassterstein?]
+
+\subsubsection{Bilingual Lexicon Induction through Unsupervised Machine Translation (Artetxe 2019)}
+
+Uses machine translation to build a lexicon induction model.
+
+Input to algorithm:
+
+\begin{enumerate}
+\item Monolingual corpora fasttext through vecmap and the corpora used to train.
+\item 400'000 most common bigrams and 400'000 most common tri-grams.
+\item To find most similar pairs, instead of using kNN CLSL, proposed is
+$$
+	\phi(\bar{f} | \bar{e})=\frac{\exp (\cos (\bar{e}, \bar{f}) / \tau)}{\sum_{\bar{f}^{\prime}} \exp \left(\cos \left(\bar{e}, \bar{f}^{\prime}\right) / \tau\right)}
+$$
+to extract the top 100 sentences
+5-gram language model.
+\item The proposed method increases this by at least 10 percent points (P@1).
+\item underlying language model uses 2000 sentences from each monolingual corpora, a language modeling loss, and combines this with a cyclic consistency loss.
+\end{enumerate}
+
+\section{Gaussian Embeddings and Token matching in other applications}
+
+\subsection{Creating Gaussian Embeddings to represent Graphs}
+(DEEP GAUSSIAN EMBEDDING OF GRAPHS: UNSUPERVISED INDUCTIVE LEARNING VIA RANKING)
+
+
 
 
 
 %\chapter{Design and Implementation}
 \chapter{Analysis of the current state of the art}
 
+For the problem statement to be
+- generalizable to other datasets
+- unsupervised (perhaps some [noisy] inference on starting points possible..)
+
+Some challenges that are faced are
+
+- Hubness problem (MUSE, and CSLS)
+
+(https://ruder.io/cross-lingual-embeddings/)
+
+Functional modeling may be difficult to model.
+It may be able to model the relationship between words well, but it will not be able to distinguish the context or actual usage of the word within a sentence.
+
+Word-order is completely ignored. [will probably ignore this aspect, simply because we dont want sequence-based approaches for generalizability]
+This may lead to different types of training.. 
+
+Compositionality:
+word-representations can not be generalized further to sentence-generation and document-generation. 
+Simply adding word-embeddings cannot result in a meaningful 
+
+Polysemy:
+a word may have multiple meanings.
+in a cross-lingual embedding space, this feeling is amplified.
+there's some work in multi-sense embedding.
+this should enable to capture more fine-grained embeddings embeddings.
+
+Feasability:
+Maybe not possible?
+
+Upadhyay et al. argue that the choice of data is more important than the actual algorithm.
+
+
+
+
+Include an analysis of all loss functions.
+
+Include a list of assumptions made.
+
+Include a list of observations made
+
+Ablation study.
+
+Unnormalized embeddings can modify training in that the loss function puts more weights to the high-occuring vectors.
+
+Maybe Mikolov 2013b did not do proper hyperparameter tuning to check if deeper layers improve this performance..?
+
+
+
 %\chapter{Evaluation} 
 \chapter{Our Method}
+
+Ideas:
+
+\begin{enumerate}
+\item Generally, deviate more from first proposed paper.
+\item (like EM) two-step training where dictionary is learned and then the underlying soft probability distribution (using parametrized models)
+\item Instead of cross-correlation, look for some distance in the probability space which makes sense? Test multiple ones, and possibly arrive at a prior which is interesting
+\item order of phrasing is different in korean / turkish to german
+\item Enforce some sort of probability density on top?
+\item Go deeper perhaps?
+\item Generally collect a set of constraints and observations that seem to work, then combine them in a principled approach
+\item Normalising flows seem invertible. Can we not just use $f_{xy} = f_{yx}$.
+\item AutoML on normalising flows..?
+\item Leave out individual variables
+\item Jointly train both embedding and normalising flow
+\item After two possible ways of embeddings are learned, can we use the weights of the neural networ (i.e. word2vec") to find a mapping that goes from one space into another? (... yes, we should be able to using least squares projection...)
+\item Work on generalizability of this on other datasets (such as ESCO to australia, or Amazon Austria to Amazon Germany)
+\item Regualizer that adds up to respect some corpus / frequency matrix properties...
+\item Hubness problem by enforcing a prior to the dataset s.t. the embeddings are uniformly distributed in space?
+\end{enumerate}
+
+\chapter{Further Work}
+
+Can be used for more unstructured data, like graphs.
+
 \
 %\chapter{Summary and Conclusions} 
 \chapter{Evaluation}

@@ -48,11 +48,16 @@ def plot_two_contour3d_input2d(
 
     # Now evaluate the point at each gaussian mixture model...
     # Should refactor this function into visualizing any probability density!!
-    _Z1 = -tf.math.log(pdf1(_XX) + 1.e-3)
-    _Z2 = -tf.math.log(pdf2(_XX) + 1.e-3)
+    _Z1 = -np.log(pdf1(_XX) + 1.e-3)
+    _Z2 = -np.log(pdf2(_XX) + 1.e-3)
 
-    _Z1 = tf.reshape(_Z1, _X.shape)
-    _Z2 = tf.reshape(_Z2, _X.shape)
+    # Convert to np-array if it is not the case already
+    if not isinstance(_Z1, np.ndarray):
+        _Z1 = _Z1.numpy()
+        _Z2 = _Z2.numpy()
+
+    _Z1 = _Z1.reshape(_X.shape)
+    _Z2 = _Z2.reshape(_X.shape)
 
     assert np.count_nonzero(_Z1) > 0, _Z1
     assert np.count_nonzero(_Z2) > 0, _Z2
@@ -63,8 +68,6 @@ def plot_two_contour3d_input2d(
     else:
         ax = fig.add_subplot(111, projection='3d')
 
-    _Z1 = _Z1.numpy()
-    _Z2 = _Z2.numpy()
     # Let's not plot places that are nan!
     mode = stats.mode(_Z1.flatten())[0]
     print("Mode is: ", mode)
@@ -137,12 +140,12 @@ def plot_contour3d_input2d(
 
     # Now evaluate the point at each gaussian mixture model...
     # Should refactor this function into visualizing any probability density!!
-    _Z = -tf.math.log(pdf(_XX) + 1.e-3)
+    _Z = -np.log(pdf(_XX) + 1.e-3)
 
     print("Input Z is: ")
     print(_Z)
     print(_Z.shape)
-    _Z = tf.reshape(_Z, _X.shape)
+    _Z = _Z.reshape(_X.shape)
 
     assert np.count_nonzero(_Z) > 0, _Z
 
@@ -195,12 +198,12 @@ def plot_contour2d_input2d(
 
     # Now evaluate the point at each gaussian mixture model...
     # Should refactor this function into visualizing any probability density!!
-    _Z = -1. * tf.math.log(pdf(_XX))
+    _Z = -1. * np.log(pdf(_XX))
 
     print("Input Z is: ")
     print(_Z)
     print(_Z.shape)
-    _Z = tf.reshape(_Z, _X.shape)
+    _Z = _Z.reshape(_X.shape)
 
     assert np.count_nonzero(_Z) > 0, _Z
 
@@ -217,8 +220,6 @@ def plot_contour2d_input2d(
 
 if __name__ == "__main__":
     print("Plotting Gaussian Mixture Models GMMs using matplotlib")
-
-    import tensorflow as tf
 
     dimensions = 2
     components = 3

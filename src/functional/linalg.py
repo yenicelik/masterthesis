@@ -16,6 +16,7 @@ def mean_multiplication(mean_matrix, rotation_matrix):
     :param roation_matrix:
     :return:
     """
+    # tf.enable_eager_execution()
     return tf.reshape(tf.matmul(mean_matrix, rotation_matrix), (1, -1))
 
 def covariance_multiplication(covariance_matrix, rotation_matrix):
@@ -28,4 +29,5 @@ def covariance_multiplication(covariance_matrix, rotation_matrix):
     :param rotation_matrix:
     :return:
     """
+    # tf.enable_eager_execution()
     return tf.matmul(rotation_matrix, tf.matmul(covariance_matrix, tf.transpose(rotation_matrix)))

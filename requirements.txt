@@ -1,6 +1,6 @@
 jupyter==1.0.0
 matplotlib==3.1.1
 numpy==1.17.2
-sklearn==0.17.0
-tensorflow==2.0.0
-tensorflow_probability==0.8.0
+tensorflow==1.14
+tensorflow_probability==0.7.0
+# scipy==0.17.0

@@ -11,11 +11,11 @@ if __name__ == "__main__":
     src_components = 10
     tgt_components = 5
 
-    emb_src = generate_synthetic_embedding(
+    src_emb_mus, src_emb_sigmas = generate_synthetic_embedding(
         d=dimensions,
         components=src_components
     )
-    emb_tgt = generate_synthetic_embedding(
+    tgt_emb_mus, tgt_emb_sigmas = generate_synthetic_embedding(
         d=dimensions,
         components=tgt_components
     )
@@ -28,17 +28,19 @@ if __name__ == "__main__":
     # calculate of the plotting boundaries!
     quadratic_scale = 20
 
-    # mus = [tf.expand_dims(emb_src[0][i, :], axis=0) for i in range(src_components)]
-    mus_src = [emb_src[0][i, :] for i in range(src_components)]
-    covs_src = [emb_src[1][i, :] * tf.eye(dimensions) for i in range(src_components)]
+    print("Source and sigma embeddings are: ")
 
-    mus_tgt = [emb_tgt[0][i, :] for i in range(src_components)]
-    covs_tgt = [emb_tgt[1][i, :] * tf.eye(dimensions) for i in range(src_components)]
+    # mus = [tf.expand_dims(emb_src[0][i, :], axis=0) for i in range(src_components)]
+    # mus_src = [src_emb_mu[i] for i in range(src_components)]
+    # covs_src = [src_emb_sigma[i] * tf.eye(dimensions) for i in range(src_components)]
+
+    # mus_tgt = [tgt_emb_mu[i] for i in range(src_components)]
+    # covs_tgt = [tgt_emb_sigma[i] * tf.eye(dimensions) for i in range(src_components)]
 
     # print("Mus and cov are: ", mu.shape, cov.shape)
 
     plot_contour3d_input2d(
-        pdf=lambda X: pdf_gmm_diagional_covariance(X, mus_src, covs_src),
+        pdf=lambda X: pdf_gmm_diagional_covariance(X, src_emb_mus, src_emb_sigmas),
         x0_min=-1. * quadratic_scale,
         x0_max=1. * quadratic_scale,
         x1_min=-1. * quadratic_scale,
