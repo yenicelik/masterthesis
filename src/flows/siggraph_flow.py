@@ -105,7 +105,7 @@ if __name__ == "__main__":
         elif MODEL == 'IAF':
             bijectors.append(tfb.Invert(tfb.MaskedAutoregressiveFlow(
                 shift_and_log_scale_fn=tfb.masked_autoregressive_default_template(
-                    hidden_layers=[128, 128])))) # 512
+                    hidden_layers=[512, 512])))) # 512
         if USE_BATCHNORM and i % 2 == 0:
             # BatchNorm helps to stabilize deep normalizing flows, esp. Real-NVP
             bijectors.append(BatchNormalization(name='batch_norm%d' % i)) # TODO: Perhaps have to change this... but should be fine in theory, no?
@@ -157,53 +157,55 @@ if __name__ == "__main__":
     NUM_STEPS = int(settings[TARGET_DENSITY]['train_iters'])
     global_step = []
     np_losses = []
-    for i in range(NUM_STEPS):
-        _, np_loss = sess.run([train_op, loss])
-        if i % 1000 == 0:
-            global_step.append(i)
-            np_losses.append(np_loss)
-        if i % int(1e3) == 0:
-            print(i, np_loss)
-    start = 0
-    plt.plot(np_losses[start:])
 
-    results = sess.run(samples)
-    X0 = results[0]
-    rows = 2
-    cols = int(len(results) / 2)
-    f, arr = plt.subplots(2, cols, figsize=(4 * (cols), 4 * rows))
-    i = 0
-    for r in range(rows):
-        for c in range(cols):
-            X1 = results[i]
-            idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] < 0)
-            arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='red')
-            idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] < 0)
-            arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='green')
-            idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] > 0)
-            arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='blue')
-            idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] > 0)
-            arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='black')
-            arr[r, c].set_xlim([-5, 5])
-            arr[r, c].set_ylim([-5, 5])
-            arr[r, c].set_title(names[i])
+    for _ in range(NUM_STEPS // 20000):
+        for i in range(20000):
+            _, np_loss = sess.run([train_op, loss])
+            if i % 1000 == 0:
+                global_step.append(i)
+                np_losses.append(np_loss)
+            if i % int(1e3) == 0:
+                print(i, np_loss)
+        start = 0
+        plt.plot(np_losses[start:])
 
-            i += 1
-    plt.savefig('siggraph_trained.png', dpi=300)
-    plt.show()
+        results = sess.run(samples)
+        X0 = results[0]
+        rows = 2
+        cols = int(len(results) / 2)
+        f, arr = plt.subplots(2, cols, figsize=(4 * (cols), 4 * rows))
+        i = 0
+        for r in range(rows):
+            for c in range(cols):
+                X1 = results[i]
+                idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] < 0)
+                arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='red')
+                idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] < 0)
+                arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='green')
+                idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] > 0)
+                arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='blue')
+                idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] > 0)
+                arr[r, c].scatter(X1[idx, 0], X1[idx, 1], s=10, color='black')
+                arr[r, c].set_xlim([-5, 5])
+                arr[r, c].set_ylim([-5, 5])
+                arr[r, c].set_title(names[i])
 
-    # plot the last one, scaled up
-    idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] < 0)
-    plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='red')
-    idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] < 0)
-    plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='green')
-    idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] > 0)
-    plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='blue')
-    idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] > 0)
-    plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='black')
-    plt.xlim([-3, 3])
-    plt.ylim([-.5, .5])
-    plt.savefig('siggraph_out.png', dpi=300)
-    plt.show()
+                i += 1
+        plt.savefig('siggraph_trained.png', dpi=300)
+        plt.show()
+
+        # plot the last one, scaled up
+        idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] < 0)
+        plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='red')
+        idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] < 0)
+        plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='green')
+        idx = np.logical_and(X0[:, 0] < 0, X0[:, 1] > 0)
+        plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='blue')
+        idx = np.logical_and(X0[:, 0] > 0, X0[:, 1] > 0)
+        plt.scatter(X1[idx, 0], X1[idx, 1], s=10, color='black')
+        plt.xlim([-3, 3])
+        plt.ylim([-.5, .5])
+        plt.savefig('siggraph_out.png', dpi=300)
+        plt.show()
 
     print("Done!")
