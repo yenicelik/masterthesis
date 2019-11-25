@@ -28,9 +28,9 @@ if __name__ == "__main__":
     sess = tf.InteractiveSession()
 
     NP_DTYPE = np.float32
-    MODEL = 'MAF'  # Which Normalizing Flow to use. 'NVP' or 'MAF' or 'IAF'
+    MODEL = 'NVP'  # Which Normalizing Flow to use. 'NVP' or 'MAF' or 'IAF'
     TARGET_DENSITY = 'SIGGRAPH'  # Which dataset to model. 'MOONS' or 'SIGGRAPH' or 'GAUSSIAN'
-    USE_BATCHNORM = False
+    USE_BATCHNORM = True
 
     # dataset-specific settings
     settings = {
