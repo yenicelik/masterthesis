@@ -701,9 +701,46 @@ https://ruder.io/cross-lingual-embeddings/
 
 
 
-\section{Methods using GANs (and other stuff..)}
+\section{Discrete Methods }
 
-\subsection{MUSE Facebook}
+\subsection{Loss in Translation}
+
+Finding a non-orthogonal mapping is more effective, especially with distance dictionaries
+
+Orthogonality preserves distances between word-pairs.
+
+Euclidean closest nearest neighbor is taken as the translation pair.
+
+Hubs are words that appear too frequently close to other words.
+This retrieval criterion suffers from the hubness problem.
+
+Removing the loss creates a discrepancy between inference and training.
+
+(-> Why should a loss-function be symmetric, not be symmetric?)
+
+(-> especially with chinese. perhaps the non-orthogonality captures the ambigious tokens..?)
+
+From the original problem of finding an orthogonal projection, we assimilate the auxiliary problem of
+
+the CSLS criterion looks as follows:
+
+\begin{equation}
+CSLS(x, y) = - 2 \text{cos}(x, y) + \frac{1}{k} \sum_{\mathbf{y}^{\prime} \in \mathcal{N}_{Y}(\mathbf{x})} \cos \left(\mathbf{x}, \mathbf{y}^{\prime}\right)+\frac{1}{k} \sum_{\mathbf{x}^{\prime} \in \mathcal{N}_{X}(\mathbf{y})} \cos \left(\mathbf{x}^{\prime}, \mathbf{y}\right)
+\end{equation}
+
+We then use the objective function of a relaxed 
+
+\begin{align} 
+\min _{\mathbf{W} \in \mathcal{O}_{d}} \frac{1}{n} & \sum_{i=1}^{n}-2 \mathbf{x}_{i}^{\top} \mathbf{W}^{\top} \mathbf{y}_{i} \\+& \frac{1}{k} \sum_{\mathbf{y}_{j} \in \mathcal{N}_{Y}\left(\mathbf{W} \mathbf{x}_{i}\right)} \mathbf{x}_{i}^{\top} \mathbf{W}^{\top} \mathbf{y}_{j} \\+& \frac{1}{k} \sum_{\mathbf{W} \mathbf{x}_{j} \in \mathcal{N}_{X}\left(\mathbf{y}_{i}\right)} \mathbf{x}_{j}^{\top} \mathbf{W}^{\top} \mathbf{y}_{i} 
+\end{align}
+
+The optimization is over a convex manifold.
+
+
+
+\subsection{MUSE Facebook using a Min-Max objective}
+
+CSLS used in the training objective directly instead of using it just during retrieval.
 
 Mikolov et. al learn a mapping between the two sets of $Y$ and $X$:
 
@@ -718,7 +755,6 @@ t = \text{argmax}_t \text{cos} (Wx_s, y_t)
 $$
 
 (i.e. we just create a mapping between $x$ and $t$ using a linear interpolation matrix and take the maximal scalar product.
-
 
 Mikolov et al do not observe improved loss when using more advanced neural networks..
 
@@ -765,6 +801,8 @@ We then generate a dictionary from the two embeddings.
 Then we solve the procrustres to arrive at the final orthogonal matrix.
 
 Use of the CSLS
+
+
 
 
 
@@ -1058,6 +1096,7 @@ to extract the top 100 sentences
 
 
 
+
 %\chapter{Design and Implementation}
 \chapter{Analysis of the current state of the art}
 
@@ -1130,6 +1169,7 @@ Ideas:
 \item Work on generalizability of this on other datasets (such as ESCO to australia, or Amazon Austria to Amazon Germany)
 \item Regualizer that adds up to respect some corpus / frequency matrix properties...
 \item Hubness problem by enforcing a prior to the dataset s.t. the embeddings are uniformly distributed in space?
+\item Probability density matching using optimal transport not on Euclidean space, but on a Riemann manifold / hyperbolic space?
 \end{enumerate}
 
 \chapter{Further Work}

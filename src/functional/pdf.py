@@ -9,7 +9,7 @@ tf.compat.v1.enable_eager_execution()
 import tensorflow_probability as tfp
 tfd = tfp.distributions
 
-def pdf_gaussian(X, mu, cov):
+def pdf_gaussian(mu, cov):
     """
         A discrete function which returns the
         probability density (pdf) at a given point X.
@@ -32,9 +32,9 @@ def pdf_gaussian(X, mu, cov):
         covariance_matrix=cov
     )
 
-    return gaussian.prob(X)
+    return gaussian
 
-def pdf_gmm_diagional_covariance(X, mus, covs, mixture_weights=None):
+def pdf_gmm_diagional_covariance(mus, covs, mixture_weights=None):
     """
         A discrete function which returns the
         probability density (pdf) at a given point X
@@ -90,5 +90,5 @@ def pdf_gmm_diagional_covariance(X, mus, covs, mixture_weights=None):
     )
     print(gmm)
 
-    return gmm.prob(X)
+    return gmm
 

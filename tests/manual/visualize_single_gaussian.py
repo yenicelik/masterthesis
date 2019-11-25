@@ -32,7 +32,7 @@ if __name__ == "__main__":
     quadratic_scale = 20
 
     plot_contour3d_input2d(
-        pdf=lambda X: pdf_gaussian(X, mu, cov),
+        pdf=lambda X: pdf_gaussian(mu, cov).prob(X),
         x0_min=-1. * quadratic_scale,
         x0_max=1. * quadratic_scale,
         x1_min=-1. * quadratic_scale,
