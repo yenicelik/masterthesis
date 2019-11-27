@@ -1146,7 +1146,17 @@ Unnormalized embeddings can modify training in that the loss function puts more 
 
 Maybe Mikolov 2013b did not do proper hyperparameter tuning to check if deeper layers improve this performance..?
 
+Definitely also look into this, [Analyzing the Limitations of Cross-lingual Word Embedding Mappings] seems to be an analysis of the difficulties etc. 
 
+Although perhaps a bit risky to cite, this also seems to be critical of current method. 
+Would really need to double-check sources [EMPIRICAL OBSERVATIONS ON THE INSTABILITY OF ALIGNING WORD VECTOR SPACES WITH GANS]
+
+Not sure if optimal transport is the solution. The i.e. counterexample on a 2-d space, where "one boot" (italy topology) and another boot are rotated by 180 degrees.
+Then optimal transport would find a wrong solution (because minimal transport!)...
+
+Wasserstein seems to work well, and any measure that incorporate intra-correlation (Artetxe), which can be seen as a generalization to wasserstein.
+However, optimal transport I'm a bit skeptic of. 
+Especially for distant measures it does not deliver nice results.
 
 %\chapter{Evaluation} 
 \chapter{Our Method}
