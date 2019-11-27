@@ -6,7 +6,6 @@
     The output of the tensor is translated to tensorflow (that's easier right now..).
 """
 import tensorflow as tf
-tf.enable_eager_execution()
 
 from src.config import args
 
