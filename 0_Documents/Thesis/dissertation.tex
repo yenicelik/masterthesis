@@ -111,6 +111,26 @@ We aim to investigate why this is the case, and would like to revise a method wh
 
 We provide a short introduction to the background work.
 
+\section{Word Embeddings}
+
+BERT conditions on the rest of the input sentence.
+
+BERT uses words, subwords and individual characters (in total 30'000) that are then used as tokens.
+
+Idea is to do the following:
+Concepts (and thus words), are represented across multiple contexts.
+We can create probabilistic word-embeddings by sampling from a corpus the context of a specific word.
+From multiple samples of the context-embedding-vector, we take the mean and stddev, or create a GMM if there are multimodal logic (we can check this multimodality by runniing some sort of rejection sampling algorithm).
+Then we have a probability density function (one for each language), and can map one into another.
+
+Perhaps we could split up too high-variance embeddings to multimodal embeddings, depending on their use-cases.
+
+This allows for interpretability in polysemy sentences.
+
+Not using more complex flows implies that the flow itself is not the bottleneck (they probably tried out other flows as well).
+
+
+
 
 \section{Gaussian Embeddings}
 
@@ -1180,6 +1200,15 @@ Ideas:
 \item Regualizer that adds up to respect some corpus / frequency matrix properties...
 \item Hubness problem by enforcing a prior to the dataset s.t. the embeddings are uniformly distributed in space?
 \item Probability density matching using optimal transport not on Euclidean space, but on a Riemann manifold / hyperbolic space?
+\end{enumerate}
+
+Other lines of work
+
+\begin{enumerate}
+\item Create thesaurus from language model
+\item for each word, create a sentence in the thesaurus through the language model
+\item iterate through a bunch of sentences. Make mean-variance from context-vectors to get uncertainty, and capture polysemy. dude, this is so smooth. -> i.e. we get word-embeddings from multiple documents.
+\item A
 \end{enumerate}
 
 \chapter{Further Work}
