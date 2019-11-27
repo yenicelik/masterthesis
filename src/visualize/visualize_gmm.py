@@ -5,7 +5,7 @@
 import numpy as np
 import matplotlib
 
-matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 
 
 import matplotlib.pyplot as plt
@@ -225,11 +225,11 @@ if __name__ == "__main__":
     components = 3
     quadratic_scale = 20
 
-    mus_src, cov_src, mus_tgt, cov_tgt = generate_synthetic_src_tgt_embedding(d=dimensions, components=components)
+    mus_src, cov_src, mus_tgt, cov_tgt, _ = generate_synthetic_src_tgt_embedding(d=dimensions, components=components)
 
     plot_two_contour3d_input2d(
-        pdf1=lambda X: pdf_gmm_diagional_covariance(X, mus_src, cov_src),
-        pdf2=lambda X: pdf_gmm_diagional_covariance(X, mus_tgt, cov_tgt),
+        pdf1=lambda X: pdf_gmm_diagional_covariance(mus_src, cov_src).prob(X),
+        pdf2=lambda X: pdf_gmm_diagional_covariance(mus_tgt, cov_tgt).prob(X),
         x0_min=-1. * quadratic_scale,
         x0_max=1. * quadratic_scale,
         x1_min=-1. * quadratic_scale,

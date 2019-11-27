@@ -86,7 +86,7 @@ def generate_synthetic_src_tgt_embedding(d, components, orthogonal_rotation_matr
     mus_tgt = [mean_multiplication(mus_src[i], M_rotation) for i in range(components)]
     cov_tgt = [covariance_multiplication(cov_src[i], M_rotation) for i in range(components)]
 
-    return mus_src, cov_src, mus_tgt, cov_tgt
+    return mus_src, cov_src, mus_tgt, cov_tgt, M_rotation
 
 if __name__ == "__main__":
     print("Generating the embedding")
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     dimensions = 2
     src_components = 10
 
-    mus_src, cov_src, mus_tgt, cov_tgt = generate_synthetic_src_tgt_embedding(d=dimensions, components=src_components)
+    mus_src, cov_src, mus_tgt, cov_tgt, _ = generate_synthetic_src_tgt_embedding(d=dimensions, components=src_components)
 
     print(mus_src)
     print(cov_src)

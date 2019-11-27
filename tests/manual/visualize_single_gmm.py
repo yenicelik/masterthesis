@@ -40,7 +40,7 @@ if __name__ == "__main__":
     # print("Mus and cov are: ", mu.shape, cov.shape)
 
     plot_contour3d_input2d(
-        pdf=lambda X: pdf_gmm_diagional_covariance(X, src_emb_mus, src_emb_sigmas),
+        pdf=lambda X: pdf_gmm_diagional_covariance(src_emb_mus, src_emb_sigmas).prob(X),
         x0_min=-1. * quadratic_scale,
         x0_max=1. * quadratic_scale,
         x1_min=-1. * quadratic_scale,

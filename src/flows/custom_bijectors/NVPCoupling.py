@@ -12,7 +12,7 @@ tfb = tfp.bijectors
 layers = tf.contrib.layers
 
 def net(x, out_size):
-    hidden_size = 64 # 512
+    hidden_size = 128 # 512
     # , hidden_size
     return layers.stack(x, layers.fully_connected, [hidden_size, out_size]) # Very high size lol, should decrease this perhaps, eastman has less diimensions lol
 
@@ -27,7 +27,7 @@ class NVPCoupling(tfb.Bijector):
         """
         # first d numbers decide scaling/shift factor for remaining D-d numbers.
         super(NVPCoupling, self).__init__(
-            event_ndims=1, validate_args=validate_args, name=name)
+            forward_min_event_ndims=1, validate_args=validate_args, name=name)
         self.D, self.d = D, d
         self.id = layer_id
         # create variables here
@@ -54,6 +54,6 @@ class NVPCoupling(tfb.Bijector):
         return tf.concat([yd, xD], axis=1)
 
     def _forward_log_det_jacobian(self, x):
-        event_dims = self._event_dims_tensor(x)
+        event_dims = 1 # self._event_dims_tensor(x)
         xd = x[:, :self.d]
         return tf.reduce_sum(self.s(xd), axis=event_dims)

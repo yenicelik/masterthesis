@@ -5,11 +5,10 @@
         - Gaussian Mixture Model
 """
 import tensorflow as tf
-tf.compat.v1.enable_eager_execution()
 import tensorflow_probability as tfp
 tfd = tfp.distributions
 
-def pdf_gaussian(X, mu, cov):
+def pdf_gaussian(mu, cov):
     """
         A discrete function which returns the
         probability density (pdf) at a given point X.
@@ -32,9 +31,9 @@ def pdf_gaussian(X, mu, cov):
         covariance_matrix=cov
     )
 
-    return gaussian.prob(X)
+    return gaussian
 
-def pdf_gmm_diagional_covariance(X, mus, covs, mixture_weights=None):
+def pdf_gmm_diagional_covariance(mus, covs, mixture_weights=None):
     """
         A discrete function which returns the
         probability density (pdf) at a given point X
@@ -48,11 +47,11 @@ def pdf_gmm_diagional_covariance(X, mus, covs, mixture_weights=None):
 
     if mixture_weights is None:
         # If mixture weights are None, then we can generate uniform mixture weights (uniform initialization)
-        mixture_weights = tf.ones((len(mus),)) / len(mus)
+        mixture_weights = [1. / len(mus) for _ in range(len(mus))] # tf.ones((len(mus),)) / len(mus)
         # TODO: What is the initializtion with EM? Is is all have same weight, or is it uniform sampling
 
     assert len(mus) == len(covs), ("Length of means and covs", len(mus), len(covs))
-    if True: # Check for eager!
+    if False: # Check for eager!
         assert tf.math.reduce_sum(mixture_weights).numpy() == 1.0, ("Mixture weights do not sum up to 1!", tf.math.reduce_sum(mixture_weights).numpy())
     else:
         assert tf.math.reduce_sum(mixture_weights).eval() == 1.0, ("Mixture weights do not sum up to 1!", tf.math.reduce_sum(mixture_weights).eval())
@@ -90,5 +89,5 @@ def pdf_gmm_diagional_covariance(X, mus, covs, mixture_weights=None):
     )
     print(gmm)
 
-    return gmm.prob(X)
+    return gmm
 
