@@ -29,7 +29,7 @@
 - Flow++ x
 - Inverse AR Flow 
 
-## Bilingual Token Matching
+## Bilingual Token Matching 
 
 All work using pre-trained embeddings
 
