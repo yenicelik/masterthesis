@@ -221,8 +221,50 @@ the cosine similarity between these vectors seem pretty well-done!
 -> Can also analyze only words that exist.
 
 
+\textbf{Artetxe bilingual token matching through unsupervised machine translation}
+
+- Input is cross-lignual word-embeddings
+- Build an unsupervised phrase-based statistical machine translation system
+- Derive phrase-based embeddings from input-word-embeddings by taking top 400'000 bigrams and 400'000 trigrams -> take arithmetic mean of word-embedding
+- score top 100 close phrases using softmax cosine similarity
+- generation of synthetic parallel corpus using this approach
+- Then use FastAlign to use parallel corpus to align words
+- 
 
 
+
+FROM (How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings)
+
+
+
+going down the drain of "geometry" of BERT and ELMo.
+
+could also go down the drain of bias (we would prefer to have uniform space over gender etc.)
+
+-> does projection into some subspace which has same metric properties perhaps not make it asitropic?
+
+pretty ok summary of what kind of properties we want from word-embeddings... (https://devopedia.org/word-embedding)
+
+
+Especially in Named Entity Recognition (NER), there is a lot of use for static word-embeddings.
+I guess this is because we need static embeddings which represent the individual clusters?
+
+-> Using pooling for some 
+
+-> Character level operation
+
+-> Perhaps make good sense to work towards a word-embeddings where different vectors are close to each other?
+
+-> perhaps find a metric space warping the vectors, s.t. an isotropic representation is achieved?
+
+-> Perhaps tokenization is a big problem, but perhaps other architecture..? but retraining is too difficult.. probably best to just stick to BERT? one way or the other, we need good word-embeddings derived from good language models to form a probabilistic prediction of the concept
+
+
+-> Could perhaps also try to make an adversarial autoencoder after the BERT layer (or continue training, s.t. a second loss is mimized as a downstream task?)
+
+-> Perhaps distilling with "correct" tokens? i.e. another network which copies BERT, but instead of outputting ##end, it outputs one of most frequent 20k words
+
+-> thesaurus using a (set of) words. a little like sentence-generation, but generating most-probable examples
 
 
 \section{Gaussian Embeddings}
@@ -1303,6 +1345,10 @@ Other lines of work
 \item iterate through a bunch of sentences. Make mean-variance from context-vectors to get uncertainty, and capture polysemy. dude, this is so smooth. -> i.e. we get word-embeddings from multiple documents.
 \item A
 \end{enumerate}
+
+After first meeting ideas:
+
+-> Perhaps it makes sense to put a prior on BERT or ELMo for distill-learning to regualizre it to a certain space..?
 
 \chapter{Further Work}
 
