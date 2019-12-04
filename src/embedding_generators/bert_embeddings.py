@@ -5,7 +5,7 @@
     # TODO: Later we can perhaps expand this to any language model
     (assuming we can generate embeddings with every language model)
 """
-import re
+import torch
 
 from src.language_models.model_wrappers.bert_wrapper import BertWrapper
 from src.resources.corpus import Corpus
@@ -45,6 +45,7 @@ class BertEmbedding:
         self.max_samples = 10
 
         self.wrapper = BertWrapper()
+        self.bert_layer = 5 # Which BERT layer to take the embeddings from
 
     def _sample_sentence_including_word_from_corpus(self, word):
         """
@@ -52,7 +53,8 @@ class BertEmbedding:
             Probably better ways to parse this
         :return:
         """
-        out = [x for x in self.corpus.sentences if word in x][:self.max_samples]
+        out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:self.max_samples]
+        # Must not allow any words that happen less than 5 times!
         assert len(out) == self.max_samples, ("Not enough examples found for this word!", out, word)
         return out
 
@@ -80,6 +82,21 @@ class BertEmbedding:
         print(sample_sentences)
 
         # 3. Run through language model, look at how the other paper reprocuded generating embeddings for word using BERT
+        for sentence in sample_sentences:
+            # We only sample per sentence, so it is always the same segment...
+            segments_ids = [0,] * len(sentence)
+            indexed_tokens = self.wrapper.tokenizer.convert_tokens_to_ids(sentence)
+
+            # print("segment ids and indexed tokens")
+            # print(segments_ids)
+            # print(indexed_tokens)
+
+            # Now convert to pytorch tensors..
+            tokens_tensor = torch.tensor([indexed_tokens])
+            segments_tensors = torch.tensor([segments_ids])
+
+            # Retrieve the embeddings at layer no 5
+            
 
         # Now query the embeddings for the predicted word (do we just mask that word..?)
 

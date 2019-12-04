@@ -30,7 +30,7 @@ class Corpus:
         # Is this processing enough? Do we need to add any additional for "David:" (the punctuation)
         data = data.split('.')
         data = [sentence.split(" ") for sentence in data]
-        data = [[x.replace("@!", "").replace("@", "") for x in sentence if (not x.startswith("@@")) and x != "" ] for sentence in data ]
+        data = [[x.replace("@!", "").replace("@", "") for x in sentence if (not x.startswith("@@")) and x != ""] for sentence in data ]
         data = [" ".join(sentence) + "." for sentence in data]
 
         # Now you can apply the tokenizer for the individual sentences...
