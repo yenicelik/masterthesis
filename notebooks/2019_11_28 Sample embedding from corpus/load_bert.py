@@ -15,3 +15,77 @@
     Perhaps ELMo is a better choice. BERT seems a bit too "masked". However, ELMo does not have embeddings for all languages...
 """
 
+# TODO: How about repetetive maximal marginal prediction to generate a thesaurus?
+# i.e.
+# 1. [MASK], [MASK], cat, [MASK], [MASK] -> generate argmax of probability
+# 2. [MASK], the, cat, [MASK], [MASK]
+# 3. [MASK], the, cat, ate, [MASK]
+# 4. [MASK], the, cat, ate, fish
+# 5. and, the, cat, ate, fish
+
+import torch
+from transformers import BertTokenizer, DistilBertModel
+
+
+class BertWrapper:
+
+    def _load_model(self):
+        """
+            Evaluate this function at load
+        :return:
+        """
+        # Let's not care about case right now..
+        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
+        # Run an example text through this:
+        text = "[CLS] Who was Jim Henson ? [SEP] Jim Henson was a puppeteer [SEP]"
+        tokenized_text = tokenizer.tokenize(text)
+
+        masked_index = 8
+        tokenized_text[masked_index] = '[MASK]'
+        assert tokenized_text == ['[CLS]', 'who', 'was', 'jim', 'henson', '?', '[SEP]', 'jim', '[MASK]', 'was', 'a',
+                                  'puppet', '##eer', '[SEP]']
+
+        # Make it computer-readable
+        indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
+        # Define which item corresponds to which sentence..
+        segments_ids = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1]
+
+        # Convert to pytorch tensors
+        tokens_tensor = torch.tensor([indexed_tokens])
+        segments_tensors = torch.tensor([segments_ids])
+
+        print("Loading bert model")
+
+        # now get the bert pre-trained weights
+        # Using Distilbert, as anything else will not really fit into memory lol
+        # Use fp16!
+        model = DistilBertModel.from_pretrained('bert-base-uncased')
+        model.eval()
+
+        # Should make this code modular lol
+        # # If you have a GPU, put everything on cuda
+        # tokens_tensor = tokens_tensor.to('cuda')
+        # segments_tensors = segments_tensors.to('cuda')
+        # model.to('cuda')
+
+        # Predict hidden states features for each layer
+        with torch.no_grad():
+            # See the models docstrings for the detail of the inputs
+            outputs = model(tokens_tensor, token_type_ids=segments_tensors)
+            # Transformers models always output tuples.
+            # See the models docstrings for the detail of all the outputs
+            # In our case, the first element is the hidden state of the last layer of the Bert model
+            encoded_layers = outputs[0]
+
+        # We have encoded our input sequence in a FloatTensor of shape (batch size, sequence length, model hidden dimension)
+        assert tuple(encoded_layers.shape) == (1, len(indexed_tokens), model.config.hidden_size)
+
+    def __init__(self):
+        self._load_model()
+
+if __name__ == "__main__":
+    print("Loadng the BERT model (distillbert)")
+
+    model = BertWrapper()
+
