@@ -4,11 +4,17 @@
 
     # TODO: Later we can perhaps expand this to any language model
     (assuming we can generate embeddings with every language model)
+
+    # What is the difference between BertMaskedModel and BertModel
+
+    Seems to be a good resource on how to extract word-embeddings
+        https://mccormickml.com/2019/05/14/BERT-word-embeddings-tutorial/#23-segment-id
 """
 import torch
 
 from src.language_models.model_wrappers.bert_wrapper import BertWrapper
 from src.resources.corpus import Corpus
+
 
 class BertEmbedding:
 
@@ -45,7 +51,7 @@ class BertEmbedding:
         self.max_samples = 10
 
         self.wrapper = BertWrapper()
-        self.bert_layer = 5 # Which BERT layer to take the embeddings from
+        self.bert_layer = 1  # Which BERT layer to take the embeddings from
 
     def _sample_sentence_including_word_from_corpus(self, word):
         """
@@ -77,15 +83,42 @@ class BertEmbedding:
         print(sample_sentences)
         print(len(sample_sentences))
 
+        # Tokenize the word, and find it in the array
+        tokenized_word = self.wrapper.tokenizer.tokenize(word)
+
+
         # 2. Tokenize the sentences
+        # Perhaps can be accelerated if needed
+        # word_idx = None
+        # window = None
+        # new_sample_sentences = []
+        # for sentence in sample_sentences:
+        #     for idx, x in enumerate(sample_sentences):
+        #         tokenized_word = self.wrapper.tokenizer.tokenize(x)
+        #         new_sample_sentences.append(tokenized_word)
+        #         print("X and word are: ", x, word)
+        #         if x == word:
+        #             word_idx = idx
+        #             window = len(tokenized_word)
+        #             print("Word and Window is: ", word_idx, window, word, tokenized_word)
+
+        # assert window
+        # assert word_idx
+        #
+        # sample_sentences = new_sample_sentences
+
         sample_sentences = [self.wrapper.tokenizer.tokenize(x) for x in sample_sentences]
         print(sample_sentences)
+
+        # Find the index at which the corresponding word occurs...
 
         # 3. Run through language model, look at how the other paper reprocuded generating embeddings for word using BERT
         for sentence in sample_sentences:
             # We only sample per sentence, so it is always the same segment...
-            segments_ids = [0,] * len(sentence)
+            segments_ids = [0, ] * len(sentence)
             indexed_tokens = self.wrapper.tokenizer.convert_tokens_to_ids(sentence)
+
+            # TODO: Do I have to include the token that I want to predict, or mask it out...
 
             # print("segment ids and indexed tokens")
             # print(segments_ids)
@@ -95,11 +128,22 @@ class BertEmbedding:
             tokens_tensor = torch.tensor([indexed_tokens])
             segments_tensors = torch.tensor([segments_ids])
 
-            # Retrieve the embeddings at layer no 5
-            
+            # Retrieve the embeddings at layer no `self.bert_layer`
+
+            # TODO: Somehow not all layers are returned... check this out lol
+            # Take the outputs of the forward body lol
+            outputs = self.wrapper.forward(
+                tokens_tensor=tokens_tensor,
+                segments_tensors=segments_tensors
+            )
+
+            # Pick the one with output at position MASK ...
+
+            # print("Outputs are: ", outputs)
 
         # Now query the embeddings for the predicted word (do we just mask that word..?)
 
+        # Now
 
 
 if __name__ == "__main__":

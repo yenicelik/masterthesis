@@ -27,7 +27,8 @@ class BertWrapper:
     def forward(self, tokens_tensor, segments_tensors):
         """
             Predicts the hidden states features for each layer
-        :return:
+        :return: torch Tensor with torch.Size([batch_size, sentence_length, hidden_size]),
+            i.e. Encoded layers are:  torch.Size([1, 48, 768])
         """
         # Project to CUDA if not projected yet
         if args.cuda:
@@ -36,14 +37,22 @@ class BertWrapper:
 
         with torch.no_grad():
             # See the models docstrings for the detail of the inputs
-            outputs = self.model(tokens_tensor, token_type_ids=segments_tensors)
+            encoded_layers, _ = self.model.forward(
+                input_ids=tokens_tensor,
+                # token_type_ids=segments_tensors
+            )
             # Transformers models always output tuples.
             # See the models docstrings for the detail of all the outputs
             # In our case, the first element is the hidden state of the last layer of the Bert model
-            encoded_layers = outputs[0]
+            # print("Outputs are: ", outputs)
+            # Indexing the 0th item, because this outputs word and sentence vectors
+            # Output shape of
+            # print("Encoded layers are: ", encoded_layers)
+            print("Encoded layers are: ", encoded_layers.shape)
+
+        return encoded_layers
 
         # Assert that all shapes conform with each other
-        assert tuple(encoded_layers.shape) == (1, len(indexed_tokens), self.model.config.hidden_size)
 
     def predict_token(self, tokens_tensor, segments_tensors):
         """
@@ -94,7 +103,9 @@ if __name__ == "__main__":
     tokens_tensor = torch.tensor([indexed_tokens])
     segments_tensors = torch.tensor([segments_ids])
 
-    model.forward(tokens_tensor=tokens_tensor, segments_tensors=segments_tensors)
+    output = model.forward(tokens_tensor=tokens_tensor, segments_tensors=segments_tensors)
+    encoded_layers = output[0]
+    assert tuple(encoded_layers.shape) == (1, len(indexed_tokens), self.model.config.hidden_size)
 
     predictions = model.predict_token(tokens_tensor=tokens_tensor, segments_tensors=segments_tensors)
 
