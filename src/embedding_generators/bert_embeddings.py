@@ -59,6 +59,7 @@ class BertEmbedding:
             Probably better ways to parse this
         :return:
         """
+        #
         out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:self.max_samples]
         # Must not allow any words that happen less than 5 times!
         assert len(out) == self.max_samples, ("Not enough examples found for this word!", out, word)
@@ -77,46 +78,40 @@ class BertEmbedding:
         word = word.lower()
 
         # 1. Sample k sentences that include this word w
-        print("Sample the sentences which are included in this corpus")
+        # print("Sample the sentences which are included in this corpus")
         sample_sentences = self._sample_sentence_including_word_from_corpus(word)
-        print("Sample sentences are: ")
-        print(sample_sentences)
-        print(len(sample_sentences))
+        # print("Sample sentences are: ")
+        # print(sample_sentences)
+        # print(len(sample_sentences))
 
         # Tokenize the word, and find it in the array
         tokenized_word = self.wrapper.tokenizer.tokenize(word)
-
+        tokenized_word_window = len(tokenized_word)
 
         # 2. Tokenize the sentences
-        # Perhaps can be accelerated if needed
-        # word_idx = None
-        # window = None
-        # new_sample_sentences = []
-        # for sentence in sample_sentences:
-        #     for idx, x in enumerate(sample_sentences):
-        #         tokenized_word = self.wrapper.tokenizer.tokenize(x)
-        #         new_sample_sentences.append(tokenized_word)
-        #         print("X and word are: ", x, word)
-        #         if x == word:
-        #             word_idx = idx
-        #             window = len(tokenized_word)
-        #             print("Word and Window is: ", word_idx, window, word, tokenized_word)
-
-        # assert window
-        # assert word_idx
-        #
-        # sample_sentences = new_sample_sentences
-
         sample_sentences = [self.wrapper.tokenizer.tokenize(x) for x in sample_sentences]
-        print(sample_sentences)
+        # print(sample_sentences)
 
-        # Find the index at which the corresponding word occurs...
+        # Collecting all embeddings within one array
+        # If the python liast is nested, it means that the word was split up into multiple tokens,
+        # and we can aggregate them somehow furthermore
+        embeddings = []
 
         # 3. Run through language model, look at how the other paper reprocuded generating embeddings for word using BERT
         for sentence in sample_sentences:
             # We only sample per sentence, so it is always the same segment...
             segments_ids = [0, ] * len(sentence)
             indexed_tokens = self.wrapper.tokenizer.convert_tokens_to_ids(sentence)
+
+            # Find all indecies of tokenized word within array
+            # For simplicity, taking the first occurence...
+            tokenized_word_idx = \
+            [x for x in range(len(sentence)) if sentence[x:x + tokenized_word_window] == tokenized_word][0]
+
+            # print("Tokenized word_idx is: ")
+            # print(tokenized_word_idx)
+            # print(tokenized_word)
+            # print(sentence)
 
             # TODO: Do I have to include the token that I want to predict, or mask it out...
 
@@ -136,20 +131,33 @@ class BertEmbedding:
                 tokens_tensor=tokens_tensor,
                 segments_tensors=segments_tensors
             )
+            # TODO: Revise the dimensions of the output depending on the window length
+            # TODO: For each token, retrieve on embedding (i.e. forloop this stuff as well)
+            word_embedding = outputs[0, tokenized_word_idx:tokenized_word_idx + tokenized_word_window, :]
+
+            assert word_embedding.shape == (1, 768), (word_embedding.shape, (1, 768))
 
             # Pick the one with output at position MASK ...
+            embeddings.append(word_embedding)
+
+            # print("Length of embeddings are: ", len(embeddings))
 
             # print("Outputs are: ", outputs)
-
         # Now query the embeddings for the predicted word (do we just mask that word..?)
 
-        # Now
+        # We return all the sampled embeddings
+        return embeddings
 
 
 if __name__ == "__main__":
     print("Starting to generate embeddings from the BERT model")
-    embeddings = BertEmbedding()
+    embeddings_model = BertEmbedding()
 
-    example_words = ["the", "heart", "bank"]
+    # I add spaces before and after, s.t. the word must occur within a sentence (and not at the beginning!)
+    # This is not fully unbiased, I gues...?
+    example_words = [" the ", " heart ", " bank "]
     for word in example_words:
-        embeddings.get_embedding(word)
+        print(word)
+        print([x.shape for x in embeddings_model.get_embedding(word)])
+
+    # Now do with the embeddings whatever you want to do lol

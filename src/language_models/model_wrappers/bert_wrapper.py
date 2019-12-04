@@ -41,14 +41,7 @@ class BertWrapper:
                 input_ids=tokens_tensor,
                 # token_type_ids=segments_tensors
             )
-            # Transformers models always output tuples.
-            # See the models docstrings for the detail of all the outputs
-            # In our case, the first element is the hidden state of the last layer of the Bert model
-            # print("Outputs are: ", outputs)
-            # Indexing the 0th item, because this outputs word and sentence vectors
-            # Output shape of
-            # print("Encoded layers are: ", encoded_layers)
-            print("Encoded layers are: ", encoded_layers.shape)
+            # print("Encoded layers are: ", encoded_layers.shape)
 
         return encoded_layers
 
@@ -65,8 +58,8 @@ class BertWrapper:
         with torch.no_grad():
             outputs = self.masekd_model(tokens_tensor, token_type_ids=segments_tensors)
             # Checking what the output is:
-            print("Outputs are: ")
-            print(outputs)
+            # print("Outputs are: ")
+            # print(outputs)
             predictions = outputs[0]
 
         # Not sure what the outputs for this are
