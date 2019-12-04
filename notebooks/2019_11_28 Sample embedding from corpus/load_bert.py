@@ -110,7 +110,6 @@ class BertWrapper:
     def __init__(self):
         self._load_model()
 
-
 if __name__ == "__main__":
     print("Loadng the BERT model (distillbert)")
 
