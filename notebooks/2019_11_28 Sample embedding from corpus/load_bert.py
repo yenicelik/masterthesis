@@ -24,7 +24,7 @@
 # 5. and, the, cat, ate, fish
 
 import torch
-from transformers import BertTokenizer, DistilBertModel
+from transformers import BertTokenizer, DistilBertModel, BertForMaskedLM, BertModel
 
 
 class BertWrapper:
@@ -43,8 +43,13 @@ class BertWrapper:
 
         masked_index = 8
         tokenized_text[masked_index] = '[MASK]'
-        assert tokenized_text == ['[CLS]', 'who', 'was', 'jim', 'henson', '?', '[SEP]', 'jim', '[MASK]', 'was', 'a',
-                                  'puppet', '##eer', '[SEP]']
+        predicted_tokenized_sentence = ['[CLS]', 'who', 'was', 'jim', 'henson', '?', '[SEP]', 'jim', '[MASK]', 'was',
+                                        'a',
+                                        'puppet', '##eer', '[SEP]']
+        if tokenized_text != predicted_tokenized_sentence:
+            for x, y in zip(tokenized_text, predicted_tokenized_sentence):
+                print(x, y)
+            assert False
 
         # Make it computer-readable
         indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
@@ -60,7 +65,8 @@ class BertWrapper:
         # now get the bert pre-trained weights
         # Using Distilbert, as anything else will not really fit into memory lol
         # Use fp16!
-        model = DistilBertModel.from_pretrained('bert-base-uncased')
+        # model = DistilBertModel.from_pretrained('distilbert-base-uncased')
+        model = BertModel.from_pretrained('bert-base-uncased')
         model.eval()
 
         # Should make this code modular lol
@@ -81,11 +87,31 @@ class BertWrapper:
         # We have encoded our input sequence in a FloatTensor of shape (batch size, sequence length, model hidden dimension)
         assert tuple(encoded_layers.shape) == (1, len(indexed_tokens), model.config.hidden_size)
 
+        # We now predict the next token lol
+        model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+        model.eval()
+
+        # If you have a GPU, put everything on cuda
+        # tokens_tensor = tokens_tensor.to('cuda')
+        # segments_tensors = segments_tensors.to('cuda')
+        # model.to('cuda')
+
+        # Predict all tokens
+        with torch.no_grad():
+            outputs = model(tokens_tensor, token_type_ids=segments_tensors)
+            predictions = outputs[0]
+
+        # confirm we were able to predict 'henson'
+        predicted_index = torch.argmax(predictions[0, masked_index]).item()
+        predicted_token = tokenizer.convert_ids_to_tokens([predicted_index])[0]
+        print("Predicted token is: ", predicted_token)
+        assert predicted_token == 'henson'
+
     def __init__(self):
         self._load_model()
+
 
 if __name__ == "__main__":
     print("Loadng the BERT model (distillbert)")
 
     model = BertWrapper()
-
