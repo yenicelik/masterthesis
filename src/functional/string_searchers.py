@@ -5,6 +5,13 @@
       (although numpy and string ehhh)
 """
 
-def find_word_position_within_bert_tokenized(word, sentence_arr):
-    print("Word is: ")
-    pass
+def find_all_indecies_subarray(subarray, array):
+    """
+        Finds all indecies where `subarray` is included in `array`
+    :param arr1:
+    :param arr2:
+    :return:
+    """
+    window_size = len(subarray)
+    subarray_idx = [x for x in range(len(array)) if array[x:x + window_size] == subarray]
+    return subarray_idx
