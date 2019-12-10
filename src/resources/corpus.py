@@ -1,5 +1,6 @@
 
 import os
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,10 +29,17 @@ class Corpus:
             data = f.read().replace('\n', '')
 
         # Is this processing enough? Do we need to add any additional for "David:" (the punctuation)
+        data = data.replace(';', '.').replace(' - ', '.').replace('?', '.').replace('!', '.')
         data = data.split('.')
+        # data = re.findall(r"[\w']+", data)
+        # data = re.split('; |. |? |! |- ', data)
         data = [sentence.split(" ") for sentence in data]
         data = [[x.replace("@!", "").replace("@", "").replace("#", "") for x in sentence if (not x.startswith("@@")) and x != ""] for sentence in data ]
+        data = [x for x in data if x != []]
         data = [" ".join(sentence) + "." for sentence in data]
+
+        # Still returning this sample: [CLS] Not without more information           of the person who hacked into the foundation 's bank account , but -- .
+        # Which is strongly incorrect I believe!
 
         # Now you can apply the tokenizer for the individual sentences...
         print("Number of sentences are: ", len(data))

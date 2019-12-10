@@ -61,7 +61,7 @@ class BertEmbedding:
         assert len(out) == self.max_samples, ("Not enough examples found for this word!", out, word)
         return out
 
-    def get_embedding(self, word):
+    def get_embedding(self, word, sample_sentences=None):
         """
             For a given word (or concept), we want to generate an embedding.
             The question is also, do we generate probabilistic embeddings or static ones (by pooling..?)
@@ -74,7 +74,8 @@ class BertEmbedding:
         word = word.lower()
 
         # 1. Sample k sentences that include this word w
-        sample_sentences = self._sample_sentence_including_word_from_corpus(word)
+        if sample_sentences is None:
+            sample_sentences = self._sample_sentence_including_word_from_corpus(word)
         tokenized_word = self.wrapper.tokenizer.tokenize(word)
         tokenized_word_window = len(tokenized_word)
 
@@ -124,7 +125,7 @@ if __name__ == "__main__":
 
     # I add spaces before and after, s.t. the word must occur within a sentence (and not at the beginning!)
     # This is not fully unbiased, I gues...?
-    example_words = [" the ", " heart ", " bank "]
+    example_words = [" bank "]
     for word in example_words:
         print(word)
         print([x.shape for x in embeddings_model.get_embedding(word)])
