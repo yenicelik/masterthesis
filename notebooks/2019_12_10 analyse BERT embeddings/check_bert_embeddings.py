@@ -70,7 +70,7 @@ def save_embedding_to_tsv(tuples, identifier):
     df.to_csv(identifier + "{}_labels.tsv".format(len(sentences)), header=True, sep="\t")
     np.savetxt(fname=identifier + "{}_values.tsv".format(len(sentences)), X=embeddings_matrix, delimiter="\t")
 
-def cluster_embeddings():
+def cluster_embeddings(tuples):
     """
         Taking the embeddings, we cluster them (using non-parameteric algortihms!)
         using different clustering algorithms.
@@ -80,6 +80,22 @@ def cluster_embeddings():
     """
     # The first clustering algorithm will consists of simple
     # TODO: Perhaps best to use the silhouette plot for choosing the optimal numebr of clusters...
+    embedding_matrix = np.concatenate([x.reshape(1, -1) for x in tuples], axis=0)
+    print("Embeddings matrix is: ", embedding_matrix.shape)
+
+    # TODO: Find a good way to evaluate how many clusters one meaning is in
+
+    # perhaps run k-means a few times, and just output the total error? mean and stddev...
+    for k in [1, 2, 3, 5, 7, 9, 11, 13]: # , 40, 100, 200 # Do ablation study later on, which items have the highest loss..
+        # Let's go up until 10 clusters maximum..
+
+        print("Testing clusters... ", k)
+
+        for i in range(100):
+            # Cluster the matrix into different items
+            # output the prediction error
+            pass
+
 
 if __name__ == "__main__":
     print("Sampling random sentences from the corpus, and their respective BERT embeddings")
