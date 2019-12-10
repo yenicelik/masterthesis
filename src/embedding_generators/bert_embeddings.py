@@ -58,7 +58,8 @@ class BertEmbedding:
         #
         out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:self.max_samples]
         # Must not allow any words that happen less than 5 times!
-        assert len(out) == self.max_samples, ("Not enough examples found for this word!", out, word)
+        assert len(out) <= self.max_samples, ("Something went weirdly wrong!", out, word)
+        assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
         return out
 
     def get_embedding(self, word, sample_sentences=None):

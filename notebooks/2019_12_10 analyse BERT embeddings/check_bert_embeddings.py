@@ -6,7 +6,11 @@
     or if we have a wide-stretched distribution
 """
 import pandas as pd
+import numpy as np
+
+from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
+from src.knowledge_graphs.wordnet import WordNetDataset
 
 
 def get_bert_embeddings_and_sentences(model):
@@ -38,7 +42,7 @@ def get_bert_embeddings_and_sentences(model):
 
     return out
 
-def save_embedding_to_tsv(tuples):
+def save_embedding_to_tsv(tuples, identifier):
     """
         Saving the embeddings and sampled sentence into a format that we can easily upload to tensorboard
     :param tuples: is a list of tuples (sentence, embeddings),
@@ -48,25 +52,55 @@ def save_embedding_to_tsv(tuples):
     sentences = [x[0] for x in tuples]
     embeddings = [x[1] for x in tuples]
 
+    embeddings = [x.reshape(1, -1) for x in embeddings]
+
+    embeddings_matrix = np.concatenate(embeddings, axis=0)
+    print("Embeddings matrix has shape: ", embeddings_matrix.shape)
+
     df = pd.DataFrame(data={
-        "sentences": sentences,
-        "embeddings": embeddings
+        "sentences": sentences
     })
 
     print(df.head())
 
+    # TODO: Handle an experiment-creator for this, which reads and writes to a opened directory..
 
+    assert len(df) == embeddings_matrix.shape[0], ("Shapes do not conform somehow!", len(df), embeddings_matrix.shape)
+
+    df.to_csv(identifier + "{}_labels.tsv".format(len(sentences)), header=True, sep="\t")
+    np.savetxt(fname=identifier + "{}_values.tsv".format(len(sentences)), X=embeddings_matrix, delimiter="\t")
+
+def cluster_embeddings():
+    """
+        Taking the embeddings, we cluster them (using non-parameteric algortihms!)
+        using different clustering algorithms.
+
+        We then return whatever we have
+    :return:
+    """
+    # The first clustering algorithm will consists of simple
+    # TODO: Perhaps best to use the silhouette plot for choosing the optimal numebr of clusters...
 
 if __name__ == "__main__":
     print("Sampling random sentences from the corpus, and their respective BERT embeddings")
 
-    # The word to be analysed
-    tgt_word = " bank " # we add the space before and after for the sake of
-    # other target words could include " table ", " subject ", " key ", " pupil "
-
     # Make sure that the respective word does not get tokenized into more tokens!
     lang_model = BertEmbedding()
+    wordnet_model = WordNetDataset()
 
-    tuples = get_bert_embeddings_and_sentences(model=lang_model)
-    save_embedding_to_tsv(tuples)
+    # Check out different types of polysemy?
 
+    # The word to be analysed
+    polysemous_words = [" bank ", " table ", " subject ", " key ", " pupil ", " book ", " mouse "]
+
+    for tgt_word in polysemous_words:
+        # tgt_word = " bank " # we add the space before and after for the sake of
+
+        number_of_senses = wordnet_model.get_number_of_senses(tgt_word)
+
+        tuples = get_bert_embeddings_and_sentences(model=lang_model)
+
+
+        print("Number of senses are: ", np.exp(number_of_senses))
+
+        save_embedding_to_tsv(tuples, identifier=tgt_word + "_")
