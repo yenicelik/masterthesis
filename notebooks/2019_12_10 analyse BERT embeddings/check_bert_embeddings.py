@@ -4,17 +4,25 @@
 
     Figure out perhaps ways to determine if we have a multimodal distribution,
     or if we have a wide-stretched distribution
+
+    -> newspaper dataset is biased w.r.t. financial news (bank..)
+
+    -> Could perhaps do the orthogonal matchin pursuit to sample different meanings indeed (or find different such metrics..)
 """
 import time
 
 import pandas as pd
 import numpy as np
+import umap
+import sklearn
 from sklearn.cluster import AffinityPropagation, MeanShift, DBSCAN
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import normalize
 
 from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.knowledge_graphs.wordnet import WordNetDataset
+
 
 # TODO: Should probably implement logging instead of this, and just rewrite logging to write to stdout...
 def get_bert_embeddings_and_sentences(model, tgt_word):
@@ -53,6 +61,7 @@ def get_bert_embeddings_and_sentences(model, tgt_word):
 
     return out
 
+
 def save_embedding_to_tsv(tuples, identifier, cluster_labels=None, ):
     """
         Saving the embeddings and sampled sentence into a format that we can easily upload to tensorboard
@@ -68,11 +77,10 @@ def save_embedding_to_tsv(tuples, identifier, cluster_labels=None, ):
     embeddings_matrix = np.concatenate(embeddings, axis=0)
     print("Embeddings matrix has shape: ", embeddings_matrix.shape)
 
-    if cluster_labels:
+    if cluster_labels is not None:
         df = pd.DataFrame(data={
             "sentences": sentences,
             "clusters": cluster_labels
-
         })
     else:
         df = pd.DataFrame(data={
@@ -87,7 +95,6 @@ def save_embedding_to_tsv(tuples, identifier, cluster_labels=None, ):
 
     df.to_csv(identifier + "{}_labels.tsv".format(len(sentences)), header=True, sep="\t")
     np.savetxt(fname=identifier + "{}_values.tsv".format(len(sentences)), X=embeddings_matrix, delimiter="\t")
-
 
 
 def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
@@ -110,11 +117,23 @@ def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
     # To make better sense in high-dimensional space with euclidean distance, perhaps project to a lower-dimension
     # keeping 200 out of 800 dimensions sounds like a good-enough capturing
     if pca:
-        pca_model = PCA(n_components=100, whiten=True)
+        # Apply UMAP dimensionality reduction or so?
+        # Do I need to normalize vectors first..?
+        # Using a non-parametric clustering and manifold projection!
+        # embedding_matrix = umap.UMAP(n_components=100).fit_transform(embedding_matrix)
+
+        pca_model = PCA(n_components=min(100, embedding_matrix.shape[0]), whiten=True)
+        # Center the data
+        embedding_matrix = embedding_matrix - np.mean(embedding_matrix, axis=0).reshape(1, -1)
+
         embedding_matrix = pca_model.fit_transform(embedding_matrix)
         captured_variance = pca_model.explained_variance_ratio_
         print("Explained variance ratio is: ", np.sum(captured_variance))
         print("Embeddings matrix after PCA is: ", embedding_matrix.shape)
+        # Normalize the vectors afterwarsd, s.t. we can more easily apply clustering...
+        embedding_matrix = normalize(embedding_matrix)
+
+    # Project to another manifold, such as UMAP?
 
     # -> perhaps it makes more sense to go directly to implement the chinese whispers algorithm...
 
@@ -142,11 +161,16 @@ def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
         print("affinity_propagation")
         # max_iter=500
         # preference=-100
-        cluster_model = AffinityPropagation() # Was manually chosen using the word " set " and wordnet number of synsets as reference...
+        # Create correlation for non-euclidean, pre-computed, cosine logic
+
+        # Implement the chinese whisper algorithms..
+
+        # embedding_matrix = np.dot(embedding_matrix, embedding_matrix.T)
+        cluster_model = AffinityPropagation(preference=0)  # Was manually chosen using the word " set " and wordnet number of synsets as reference...
 
     elif method == "dbscan":
         print("dbscan")
-        cluster_model = DBSCAN()
+        cluster_model = DBSCAN(metric='cosine')
 
     else:
         assert False, ("This is not supposed to happen", method)
@@ -164,7 +188,6 @@ def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
     return n_clusters_, labels
 
 
-
 if __name__ == "__main__":
     print("Sampling random sentences from the corpus, and their respective BERT embeddings")
 
@@ -175,22 +198,19 @@ if __name__ == "__main__":
     # Check out different types of polysemy?
 
     # The word to be analysed
-    polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " pupil ", " book ", " mouse "]
+    polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
 
     for tgt_word in polysemous_words:
         # tgt_word = " bank " # we add the space before and after for the sake of
 
-        print("Getting number of senses...")
         number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
         print("Getting embeddings from BERT")
         tuples = get_bert_embeddings_and_sentences(model=lang_model, tgt_word=tgt_word)
 
         print("Clustering embeddings...")
+        # cluster_labels = None
         n_clusters, cluster_labels = cluster_embeddings(tuples)
         print("Number of clusters, wordnet senses, sentences: ", tgt_word, n_clusters, number_of_senses, len(tuples))
-
-        exit(0)
-
 
         save_embedding_to_tsv(tuples, cluster_labels=cluster_labels, identifier=tgt_word + "_")
