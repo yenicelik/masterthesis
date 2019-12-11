@@ -7,6 +7,8 @@
     Seems to be a good resource on how to extract word-embeddings
         https://mccormickml.com/2019/05/14/BERT-word-embeddings-tutorial/#23-segment-id
 """
+import time
+
 import torch
 
 from src.config import args
@@ -56,9 +58,8 @@ class BertEmbedding:
         :return:
         """
         #
-        out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:self.max_samples]
+        out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:args.max_samples]
         # Must not allow any words that happen less than 5 times!
-        assert len(out) <= self.max_samples, ("Something went weirdly wrong!", out, word)
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
         return out
 
@@ -88,8 +89,11 @@ class BertEmbedding:
         # and we can aggregate them somehow furthermore
         embeddings = []
 
+
         # 3. Run through language model, look at how the other paper reprocuded generating embeddings for word using BERT
         for sentence in sample_sentences:
+            start_time = time.time()
+
             # We only sample per sentence, so it is always the same segment...
             segments_ids = [0, ] * len(sentence)
             indexed_tokens = self.wrapper.tokenizer.convert_tokens_to_ids(sentence)
@@ -116,6 +120,9 @@ class BertEmbedding:
 
             assert word_embedding.shape == (1, 768), (word_embedding.shape, (1, 768))
             embeddings.append(word_embedding)
+
+            if args.verbose >= 2:
+                print("One sentence-embedding-etrieval from BERT takes: ", time.time() - start_time)
 
         return embeddings
 

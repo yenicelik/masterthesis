@@ -20,4 +20,4 @@ class WordNetDataset:
         :return:
         """
         out = wn.synsets(word)
-        return np.log(len(out)), out
+        return len(out), out
