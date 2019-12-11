@@ -166,7 +166,7 @@ def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
         # Implement the chinese whisper algorithms..
 
         # embedding_matrix = np.dot(embedding_matrix, embedding_matrix.T)
-        cluster_model = AffinityPropagation(preference=0)  # Was manually chosen using the word " set " and wordnet number of synsets as reference...
+        cluster_model = AffinityPropagation(preference=-3, max_iter=2000)  # Was manually chosen using the word " set " and wordnet number of synsets as reference...
 
     elif method == "dbscan":
         print("dbscan")
