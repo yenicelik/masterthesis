@@ -21,6 +21,7 @@ from sklearn.preprocessing import normalize
 
 from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
+from src.graph_clustering.vectorspace_to_graph import ChineseWhispersClustering
 from src.knowledge_graphs.wordnet import WordNetDataset
 
 
@@ -97,7 +98,7 @@ def save_embedding_to_tsv(tuples, identifier, cluster_labels=None, ):
     np.savetxt(fname=identifier + "{}_values.tsv".format(len(sentences)), X=embeddings_matrix, delimiter="\t")
 
 
-def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
+def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
     """
         Taking the embeddings, we cluster them (using non-parameteric algortihms!)
         using different clustering algorithms.
@@ -106,7 +107,12 @@ def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
     :return:
     """
 
-    assert method in ("affinity_propagation", "mean_shift", "dbscan")
+    assert method in (
+        "affinity_propagation",
+        "mean_shift",
+        "dbscan",
+        "chinese_whispers"
+    )
 
     # The first clustering algorithm will consists of simple
     # TODO: Perhaps best to use the silhouette plot for choosing the optimal numebr of clusters...
@@ -172,6 +178,10 @@ def cluster_embeddings(tuples, method="affinity_propagation", pca=True):
         print("dbscan")
         cluster_model = DBSCAN(metric='cosine')
 
+    elif method == "chinese_whispers":
+        print("chinese whispers")
+        cluster_model = ChineseWhispersClustering()
+
     else:
         assert False, ("This is not supposed to happen", method)
 
@@ -200,6 +210,8 @@ if __name__ == "__main__":
     # The word to be analysed
     polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
 
+    method="chinese_whispers"
+
     for tgt_word in polysemous_words:
         # tgt_word = " bank " # we add the space before and after for the sake of
 
@@ -210,7 +222,7 @@ if __name__ == "__main__":
 
         print("Clustering embeddings...")
         # cluster_labels = None
-        n_clusters, cluster_labels = cluster_embeddings(tuples)
+        n_clusters, cluster_labels = cluster_embeddings(tuples, method=method)
         print("Number of clusters, wordnet senses, sentences: ", tgt_word, n_clusters, number_of_senses, len(tuples))
 
-        save_embedding_to_tsv(tuples, cluster_labels=cluster_labels, identifier=tgt_word + "_")
+        save_embedding_to_tsv(tuples, cluster_labels=cluster_labels, identifier=tgt_word + "_" + method + "_")
