@@ -180,7 +180,7 @@ def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
 
     elif method == "chinese_whispers":
         print("chinese whispers")
-        cluster_model = ChineseWhispersClustering()
+        cluster_model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=10)
 
     else:
         assert False, ("This is not supposed to happen", method)

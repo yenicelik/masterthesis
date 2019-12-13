@@ -145,7 +145,7 @@ class ChineseWhispersClustering:
 
         # Apply the chinese whispers algorithm...
         # TODO: Figure out if this works well with the bert embeddings..
-        chinese_whispers(graph, iterations=50)
+        chinese_whispers(graph, iterations=30) # iterations might depend on the number of clusters...
         print('Cluster ID\tCluster Elements\n')
 
         print("Clustered items are: ")
@@ -195,7 +195,7 @@ if __name__ == "__main__":
 
     # Now apply the chinese whistering algorith..
 
-    model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=30)
+    model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=10)
 
     model.fit(a)
 
