@@ -63,7 +63,7 @@ def get_bert_embeddings_and_sentences(model, tgt_word):
     return out
 
 
-def save_embedding_to_tsv(tuples, identifier, cluster_labels=None, ):
+def save_embedding_to_tsv(tuples, identifier, cluster_labels=None):
     """
         Saving the embeddings and sampled sentence into a format that we can easily upload to tensorboard
     :param tuples: is a list of tuples (sentence, embeddings),
