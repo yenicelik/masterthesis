@@ -25,6 +25,23 @@ from src.graph_clustering.vectorspace_to_graph import ChineseWhispersClustering
 from src.knowledge_graphs.wordnet import WordNetDataset
 
 
+# Try following:
+# Consider only top 200 hubs
+# Do chinese whispers amongst hubs
+# go back, find whatever the hubs are closest to
+# and consider these items
+
+# what about affinity clustering? Is it not the same principle in the end..?
+# Should we test out affinity cluster with a much higher sample-size?
+
+# Try out graph partitioning methods
+
+# Instead of graph-based clustering, do we apply probabilistic-based-clustering perhaps?
+
+# LDA extract the number of topics
+
+# Use random walk?
+
 # TODO: Should probably implement logging instead of this, and just rewrite logging to write to stdout...
 def get_bert_embeddings_and_sentences(model, tgt_word):
     """
@@ -180,16 +197,24 @@ def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
 
     elif method == "chinese_whispers":
         print("chinese whispers")
-        cluster_model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=10)
+        cluster_model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=int(args.max_samples * 0.3) )
+
+        # TODO: Do EGO clustering based on multiple hubs. Identify the hubs, and then apply EGO clustering...
 
     else:
         assert False, ("This is not supposed to happen", method)
 
     labels = cluster_model.fit_predict(embedding_matrix)
+    # Take out samples which are hubs
+    if method == "chinese_whispers":
+        embedding_matrix = embedding_matrix[cluster_model.hub_mask_, :]
     print(np.unique(labels))
     n_clusters_ = len(np.unique(labels))
 
     print("Took so many seconds: ", time.time() - start_time)
+
+    # Cluster and then merge
+    # This would be similar to affinity propagation, no?
 
     # Apply some sort of hyperparameter selection to match the wordnet number of definition
 

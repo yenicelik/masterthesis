@@ -8,6 +8,8 @@
     (look at individual words and their contexts, not at different words instead)
 
     # There is no
+
+    -> Thresholds taken from `L 2 F/INESC-ID at SemEval-2019 Task 2: Unsupervised Lexical Semantic Frame Induction using Contextualized Word Representations`
 """
 from operator import itemgetter
 
@@ -23,6 +25,10 @@ from chinese_whispers import chinese_whispers, aggregate_clusters
 # TODO: Remove the items with highest degree (degree which is more than median
 # Then run the chinese whispers...
 # The authors in the other peaper do this with EGO clustering.
+
+# -> Now we don't have ego networks. that means we would need to find some other kind of ego.
+# this could be a hub, for example..., and we could apply this iteratively repeatedly.
+
 
 class ChineseWhispersClustering:
 
@@ -57,8 +63,17 @@ class ChineseWhispersClustering:
         # Remove all edges which have more than 1/4 of the median weight
         # Take the 75th percentile, and put all edges that are below this to 0
         # 0.75 is a hyperparameter..
-        percentile = 0.75
-        cutoff_value = np.sort(cos.flatten())[int(len(cos.flatten()) * percentile)]
+
+        # The cutoff is defined by the mean, plus some standard deviation divided by two
+        # This was most effective for verb-clustering
+        # cutoff_value = ( np.mean(cos) + np.std(cos) ) / 2.
+
+        # This was most effective for argument clustering
+        # Because we don't calculate by distance, but rather by similar, so we make "plus"
+        cutoff_value = np.mean(cos) - 1.5 * np.std(cos)
+
+        # percentile = 0.75
+        # cutoff_value = np.sort(cos.flatten())[int(len(cos.flatten()) * percentile)]
 
         print("Cutoff value is: ")
         print(np.median(cos), cutoff_value)
@@ -74,15 +89,39 @@ class ChineseWhispersClustering:
         # This means removing all nodes whose edge-weights are too high!
         summed_weights = np.sum(cos, axis=1)
         print("Summed weights are", summed_weights)
-        sorted_summed_weights = np.argsort(summed_weights)[-self.remove_hub_number_:]
-        print("Summed weights are", summed_weights[sorted_summed_weights])
+        self.hubs_ = np.argsort(summed_weights)[-self.remove_hub_number_:]
+        print("Summed weights are", summed_weights[self.hubs_])
 
         # include_index = set(sorted_summed_weights)
         # mask = np.array([])
 
+        # Cannot just take them out, no..? These needs clusters as well!
         # Completely remove these from the hubs from the matrix
-        cos = cos[~sorted_summed_weights, :]
-        cos = cos[:, ~sorted_summed_weights]
+
+        self.hubs_ = set(self.hubs_)
+        self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if x not in self.hubs_]
+
+        # hub_mask = np.empty_like(cos, dtype=np.bool)
+        # hub_mask[:] = True
+        # hub_mask[self.hubs_, :] = False
+        # hub_mask[:, self.hubs_] = False
+        # print("Hub mask is: ")
+
+        # print("Self. hubs are: ")
+        # print(hub_mask)
+        # print(hub_mask.shape)
+        # print(cos.shape)
+
+        cos = cos[self.hub_mask_, :]
+        cos = cos[:, self.hub_mask_]
+
+        print(cos)
+        print(cos.shape)
+
+        # Randomly sample a subgraph 100 times
+        # Put weight of this, and take the cliques of this graph..
+
+        # Must mark these items as "hubs", and remove these from classification
 
         print("Cos shape is: ", cos.shape)
 
@@ -143,6 +182,9 @@ class ChineseWhispersClustering:
 
         plt.show()
 
+        # Perhaps take only the hubs..? i.e. representative items..
+        # Make all the weight "flow" into the hubs, and drop the rest...
+
         # Apply the chinese whispers algorithm...
         # TODO: Figure out if this works well with the bert embeddings..
         chinese_whispers(graph, iterations=30) # iterations might depend on the number of clusters...
@@ -153,6 +195,8 @@ class ChineseWhispersClustering:
         self.cluster_ = [x[0] for x in out]
 
         print("Self cluster is: ", self.cluster_)
+
+        # TODO: This should be the same size as the number of samples
 
         # TODO: Check size of this!!
         self.cluster_ = np.asarray(self.cluster_)
@@ -193,9 +237,11 @@ if __name__ == "__main__":
 
     a = np.random.random((100, 50))
 
+    # Generate a different kind of matrix...
+
     # Now apply the chinese whistering algorith..
 
-    model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=10)
+    model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=50)
 
     model.fit(a)
 
