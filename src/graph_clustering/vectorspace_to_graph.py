@@ -57,30 +57,14 @@ class ChineseWhispersClustering:
         # 1. compute v’s top n nearest neighbors (by some word- similarity notion)
         ######
 
-        # For each sample
-        # Take closest items, and put rest to 0!
-        # Closest items are (closest to 1!)
-
-        # Remove all edges which have more than 1/4 of the median weight
-        # Take the 75th percentile, and put all edges that are below this to 0
-        # 0.75 is a hyperparameter..
-
         # The cutoff is defined by the mean, plus some standard deviation divided by two
-        # This was most effective for verb-clustering
-
-        # This was most effective for argument clustering
-        # Because we don't calculate by distance, but rather by similar, so we make "plus"
-        # cutoff_value = ( np.mean(cos) + np.std(cos) ) / 2.
+        # This was most effective for argument-clustering
         cutoff_value = np.mean(cos) + 1.5 * np.std(cos)
-
-        print("Cutoff value is: ")
-        print(np.median(cos), cutoff_value)
 
         # Put all non-medians to zero
         cos[cos < cutoff_value] = 0.
-        print("Counting nonzeros..", np.count_nonzero(cos))
 
-
+        # The following uncommented lines could also be a good way to get rid of hubs
         # if self.top_nearest_neighbors_:
         #     nearest_neighbors = nearest_neighbors[:, :-self.top_nearest_neighbors_]
 
@@ -91,36 +75,10 @@ class ChineseWhispersClustering:
         self.hubs_ = np.argsort(summed_weights)[-self.remove_hub_number_:]
         print("Summed weights are", summed_weights[self.hubs_])
 
-        # include_index = set(sorted_summed_weights)
-        # mask = np.array([])
-
-        # Cannot just take them out, no..? These needs clusters as well!
-        # Completely remove these from the hubs from the matrix
-
         self.hubs_set = set(self.hubs_)
         self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if x not in self.hubs_set]
         cos_hat = cos[self.hub_mask_, :]
         cos_hat = cos_hat[:, self.hub_mask_]
-
-        # Calculate the items which are closest to the hubs...
-        hub_nearest_neighbor = np.argmax(cos, axis=1)[self.hub_mask_]
-        print("hub nearest neighbors are: ")
-        print(hub_nearest_neighbor)
-
-        print("Calculated the hub nearest neighbors...")
-
-        print(cos)
-        print(cos.shape)
-
-        # Randomly sample a subgraph 100 times
-        # Put weight of this, and take the cliques of this graph..
-
-        # Must mark these items as "hubs", and remove these from classification
-
-        print("Cos shape is: ", cos.shape)
-
-
-
 
         ######
         # 2. compute a similarity score between every pairwise combination of nearest neighbors, which renders a fully connected similarity graph
@@ -137,13 +95,6 @@ class ChineseWhispersClustering:
         print(cos_hat)
         print(cos_hat.shape)
         print(np.count_nonzero(out))
-
-        # TODO: Think again how many entries we need to have matching
-
-        # assert np.count_nonzero(out) // 2 == self.top_nearest_neighbors_ * X.shape[0], (
-        #     "More nearest neighbors were recorded than desired",
-        #     np.count_nonzero(out) // 2, self.top_nearest_neighbors_ * X.shape[0]
-        # )
 
         # Now turn into a graph!
         graph = nx.to_networkx_graph(out, create_using=nx.DiGraph)
@@ -198,9 +149,37 @@ class ChineseWhispersClustering:
 
         # For each of the hubs, find the *single* closest point, and assign them with a cluster that is closest to them
 
+        exit(0)
+
+        # TODO: Find the easiest mechanism which extracts these the indecies for the hubs
         # Assign the hubs to the closest point
         print("Hubs mask is: ", self.hub_mask_)
-        correlation_hub_rest = cosine_similarity(X[self.hubs_], X[self.hub_mask_])
+        # correlation_hub_rest = cosine_similarity(X[self.hubs_], X)
+        cos[:, self.hubs_] = -1 * np.inf # Make all hubs infinitely away from everything else, s.t. these will not be chosen as neighbors
+        # Assuming this returns the cosine similarity!!!
+        hub_nearest_neighbor = np.argmax(cos, axis=1)
+        # hub_nearest_neighbor_without_hubs = np.zeros()
+        for i in range(hub_nearest_neighbor.shape[0]):
+
+
+
+
+
+        # Calculate the items which are closest to the hubs...
+        hub_nearest_neighbor = np.argmax(correlation_hub_rest, axis=1)[self.hub_mask_]
+        print("Hub nearest neighbors are: ")
+        print(hub_nearest_neighbor)
+
+        print("Calculated the hub nearest neighbors...")
+        print(cos)
+        print(cos.shape)
+
+        # Randomly sample a subgraph 100 times
+        # Put weight of this, and take the cliques of this graph..
+
+        # Must mark these items as "hubs", and remove these from classification
+
+        print("Cos shape is: ", cos.shape)
 
         nearest_neighbors = np.argmax(correlation_hub_rest, axis=1)
         print("Total number of nearest neighbors: ", nearest_neighbors.shape)
