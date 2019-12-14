@@ -205,9 +205,11 @@ def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
         assert False, ("This is not supposed to happen", method)
 
     labels = cluster_model.fit_predict(embedding_matrix)
+
     # Take out samples which are hubs
-    if method == "chinese_whispers":
-        embedding_matrix = embedding_matrix[cluster_model.hub_mask_, :]
+    # if method == "chinese_whispers":
+    #     embedding_matrix = embedding_matrix[cluster_model.hub_mask_, :]
+
     print(np.unique(labels))
     n_clusters_ = len(np.unique(labels))
 

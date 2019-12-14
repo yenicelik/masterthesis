@@ -97,10 +97,17 @@ class ChineseWhispersClustering:
         # Cannot just take them out, no..? These needs clusters as well!
         # Completely remove these from the hubs from the matrix
 
-        self.hubs_ = set(self.hubs_)
-        self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if x not in self.hubs_]
-        cos = cos[self.hub_mask_, :]
-        cos = cos[:, self.hub_mask_]
+        self.hubs_set = set(self.hubs_)
+        self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if x not in self.hubs_set]
+        cos_hat = cos[self.hub_mask_, :]
+        cos_hat = cos_hat[:, self.hub_mask_]
+
+        # Calculate the items which are closest to the hubs...
+        hub_nearest_neighbor = np.argmax(cos, axis=1)[self.hub_mask_]
+        print("hub nearest neighbors are: ")
+        print(hub_nearest_neighbor)
+
+        print("Calculated the hub nearest neighbors...")
 
         print(cos)
         print(cos.shape)
@@ -112,7 +119,7 @@ class ChineseWhispersClustering:
 
         print("Cos shape is: ", cos.shape)
 
-        out = np.zeros_like(cos)
+
 
 
         ######
@@ -122,18 +129,13 @@ class ChineseWhispersClustering:
         # Not sure if I shold remove all other ones..
 
         # Put all diagonal elements to zero ...
-        cos[np.nonzero(np.identity(cos.shape[0]))] = 0.
+        cos_hat[np.nonzero(np.identity(cos_hat.shape[0]))] = 0.
 
-        nearest_neighbors = np.argsort(cos, axis=1)
-        print("Total number of nearest neighbors: ", nearest_neighbors.shape)
-        # Put whatever index is a top-nearest-neighbor to be this
-        out[nearest_neighbors] = cos[nearest_neighbors]
 
-        out = cos
-
+        out = cos_hat
         print(out)
-        print(cos)
-        print(cos.shape)
+        print(cos_hat)
+        print(cos_hat.shape)
         print(np.count_nonzero(out))
 
         # TODO: Think again how many entries we need to have matching
@@ -150,22 +152,6 @@ class ChineseWhispersClustering:
         print(graph)
 
         draw(graph, node_size=10)
-
-        # Creating the EGO network...
-
-        # node_and_degree = graph.degree()
-        # (largest_hub, degree) = sorted(node_and_degree.items(), key=itemgetter(1))[-1]
-        # # Create ego graph of main hub
-        # hub_ego = nx.ego_graph(graph, largest_hub)
-        # # Draw graph
-        # pos = nx.spring_layout(hub_ego)
-        # nx.draw(hub_ego, pos, node_color='b', node_size=50, with_labels=False)
-        # # Draw ego as large and red
-        # nx.draw_networkx_nodes(hub_ego, pos, nodelist=[largest_hub], node_size=300, node_color='r')
-        # # plt.savefig('ego_graph.png')
-        # plt.show()
-        #
-        # exit(0)
 
         plt.show()
 
@@ -192,7 +178,12 @@ class ChineseWhispersClustering:
         print(self.cluster_)
         print(self.cluster_.shape)
 
+        # TODO: Need to double check if sorting of .items() corresponds to the ordering of the nodes
+        cluster_assignments = dict()
+
         for label, cluster in sorted(aggregate_clusters(graph).items(), key=lambda e: len(e[1]), reverse=True):
+            for nodeid in cluster:
+                cluster_assignments[nodeid] = label
             print('{}\t{}\n'.format(label, cluster))
 
         colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
@@ -201,10 +192,51 @@ class ChineseWhispersClustering:
 
         plt.show()
 
+        print("what we're outputting is: ")
+        print(out)
+        # print(out.shape)
+
+        # For each of the hubs, find the *single* closest point, and assign them with a cluster that is closest to them
+
+        # Assign the hubs to the closest point
+        print("Hubs mask is: ", self.hub_mask_)
+        correlation_hub_rest = cosine_similarity(X[self.hubs_], X[self.hub_mask_])
+
+        nearest_neighbors = np.argmax(correlation_hub_rest, axis=1)
+        print("Total number of nearest neighbors: ", nearest_neighbors.shape)
+        # Must make nearest neighbor AFTER they are removed!!!!
+        # Put whatever index is a top-nearest-neighbor to be this
+        print("Nearest neighbors")
+        # out[nearest_neighbors] = cos_hat[nearest_neighbors]
+
+        # TODO: Make sure neighborhoods are propery taken out...
+
+
+
+        # hub_nearest_neighbor = np.argmax(cos, axis=1)[self.hub_mask_]
+        print("Self hubs are")
+        print(self.hubs_set)
+
+        for hub in self.hubs_set:
+            print("Hub is: ", hub)
+            print(cluster_assignments[hub])
+            print("Initial hubkey is: ", cluster_assignments[hub] if hub in cluster_assignments else None)
+            print("Hub number is: ", hub)
+            print("Hubs nearest neighbor is: ")
+            print(hub_nearest_neighbor[hub])
+            cluster_assignments[hub] = cluster_assignments[hub_nearest_neighbor[hub]]
+
+        # Take out the hubs ...
+        # hubs correspond to items with ambigious meanings.. (i.e. between two contexts..!)
+        cluster_assignments = list(sorted(cluster_assignments))
+        print("Out length is: ", cluster_assignments)
+        cluster_assignments = np.asarray(cluster_assignments)
+
         # Return a list [n_samples, ]
         # which returns which cluster each datapoint belongs to
+        # Removing the hubs is like temporarily creating an ego-network
 
-        return out
+        return cluster_assignments
 
     def predict(self, X=None, y=None):
         """
