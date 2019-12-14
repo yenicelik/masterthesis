@@ -51,6 +51,7 @@ class ChineseWhispersClustering:
         """
         # calculate cosine similarity
         cos = cosine_similarity(X, X)
+        # cos[np.nonzero(np.identity(cos.shape[0]))] = 0.
 
         #####
         # 1. compute v’s top n nearest neighbors (by some word- similarity notion)
@@ -66,20 +67,18 @@ class ChineseWhispersClustering:
 
         # The cutoff is defined by the mean, plus some standard deviation divided by two
         # This was most effective for verb-clustering
-        # cutoff_value = ( np.mean(cos) + np.std(cos) ) / 2.
 
         # This was most effective for argument clustering
         # Because we don't calculate by distance, but rather by similar, so we make "plus"
-        cutoff_value = np.mean(cos) - 1.5 * np.std(cos)
-
-        # percentile = 0.75
-        # cutoff_value = np.sort(cos.flatten())[int(len(cos.flatten()) * percentile)]
+        # cutoff_value = ( np.mean(cos) + np.std(cos) ) / 2.
+        cutoff_value = np.mean(cos) + 1.5 * np.std(cos)
 
         print("Cutoff value is: ")
         print(np.median(cos), cutoff_value)
 
         # Put all non-medians to zero
         cos[cos < cutoff_value] = 0.
+        print("Counting nonzeros..", np.count_nonzero(cos))
 
 
         # if self.top_nearest_neighbors_:
@@ -100,18 +99,6 @@ class ChineseWhispersClustering:
 
         self.hubs_ = set(self.hubs_)
         self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if x not in self.hubs_]
-
-        # hub_mask = np.empty_like(cos, dtype=np.bool)
-        # hub_mask[:] = True
-        # hub_mask[self.hubs_, :] = False
-        # hub_mask[:, self.hubs_] = False
-        # print("Hub mask is: ")
-
-        # print("Self. hubs are: ")
-        # print(hub_mask)
-        # print(hub_mask.shape)
-        # print(cos.shape)
-
         cos = cos[self.hub_mask_, :]
         cos = cos[:, self.hub_mask_]
 
@@ -187,7 +174,7 @@ class ChineseWhispersClustering:
 
         # Apply the chinese whispers algorithm...
         # TODO: Figure out if this works well with the bert embeddings..
-        chinese_whispers(graph, iterations=30) # iterations might depend on the number of clusters...
+        chinese_whispers(graph, iterations=30, seed=1337) # iterations might depend on the number of clusters...
         print('Cluster ID\tCluster Elements\n')
 
         print("Clustered items are: ")
@@ -210,7 +197,7 @@ class ChineseWhispersClustering:
 
         colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
 
-        nx.draw_networkx(graph, cmap=plt.get_cmap('jet'), node_color=colors, font_color='white', node_size=10)
+        nx.draw_networkx(graph, node_color=colors, node_size=10) # font_color='white', # cmap=plt.get_cmap('jet'),
 
         plt.show()
 
