@@ -39,22 +39,47 @@ def create_adjacency_matrix(X):
     :return:
     """
 
-    def _cutoff_function(matr):
-        """
-            This was most effective for argument-clustering [1]
-        """
-        # Going even higher with this makes sense, in that it is 1.5 for global BERT emebddings.
-        # Context embeddings are closer, so it should be hierh most likely
-        # Ah no ,but the distributon is taken from context-sampled distributions..
-        return np.mean(matr) - 1.9 * np.std(matr)
-
-    cor = 1. - cosine_similarity(X, X)
-    cor[cor > _cutoff_function(cor)] = 0.
-    # This line makes a tremendous difference!
-    cor[np.nonzero(np.identity(cor.shape[0]))] = 0.  # Was previously below the cutoff calculation..
+    # Too much hyperparameter tuning. Let's use something simpler!
+    # def _cutoff_function(matr):
+    #     """
+    #         This was most effective for argument-clustering [1]
+    #     """
+    #     # Going even higher with this makes sense, in that it is 1.5 for global BERT emebddings.
+    #     # Context embeddings are closer, so it should be hierh most likely
+    #     # Ah no ,but the distributon is taken from context-sampled distributions..
+    #     return np.mean(matr) - 1.9 * np.std(matr)
+    #
+    # cor = 1. - cosine_similarity(X, X)
+    # cor[cor > _cutoff_function(cor)] = 0.
+    # # This line makes a tremendous difference!
+    # cor[np.nonzero(np.identity(cor.shape[0]))] = 0.  # Was previously below the cutoff calculation..
 
     # if self.top_nearest_neighbors_:
     #     nearest_neighbors = nearest_neighbors[:, :-self.top_nearest_neighbors_]
+
+    # Create a simple "take n closest items" graph-creation logic
+    n = 10 # Take 50 closest items!
+    cor = cosine_similarity(X, X)
+
+    print(np.max(cor), np.count_nonzero(cor))
+
+    # Just take top 1000 edges in total.
+    # Some items are not supposed to be conntected
+    # i.e. the above method just connects them forcefully in that case (even if they're far away!)
+
+    opposite_of_top_neighbors = np.argsort(cor, axis=1)[:, ::-1][:, :n]
+    print(opposite_of_top_neighbors)
+    out = np.zeros_like(cor)
+    print("dist", np.count_nonzero(cor), np.count_nonzero(opposite_of_top_neighbors))
+
+    for i in range(opposite_of_top_neighbors.shape[0]):
+
+        # Put opposite of top neighbors all to 0!
+        out[i, opposite_of_top_neighbors[i]] = cor[i, opposite_of_top_neighbors[i]]
+
+    print(np.max(out), np.count_nonzero(out))
+
+    exit(0)
 
     return cor
 
@@ -220,7 +245,7 @@ class ChineseWhispersClustering:
 if __name__ == "__main__":
     print("Emulating the chinese whispers algorithm")
 
-    a = np.random.random((100, 50))
+    a = np.random.random((200, 50))
 
     # Generate a different kind of matrix...
 
