@@ -199,16 +199,10 @@ def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
         print("chinese whispers")
         cluster_model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=int(args.max_samples * 0.3) )
 
-        # TODO: Do EGO clustering based on multiple hubs. Identify the hubs, and then apply EGO clustering...
-
     else:
         assert False, ("This is not supposed to happen", method)
 
     labels = cluster_model.fit_predict(embedding_matrix)
-
-    # Take out samples which are hubs
-    # if method == "chinese_whispers":
-    #     embedding_matrix = embedding_matrix[cluster_model.hub_mask_, :]
 
     print(np.unique(labels))
     n_clusters_ = len(np.unique(labels))

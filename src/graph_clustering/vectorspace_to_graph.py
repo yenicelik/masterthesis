@@ -17,10 +17,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from networkx import draw, draw_networkx_edges
 
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_similarity, cosine_distances
 
 import networkx as nx
 from chinese_whispers import chinese_whispers, aggregate_clusters
+
 
 # TODO: Remove the items with highest degree (degree which is more than median
 # Then run the chinese whispers...
@@ -42,17 +43,18 @@ def create_adjacency_matrix(X):
         """
             This was most effective for argument-clustering [1]
         """
-        return np.mean(matr) + 1.5 * np.std(matr)
+        return np.mean(matr) - 1.5 * np.std(matr)
 
-    cor = cosine_similarity(X, X)
-    cor[cor < _cutoff_function(cor)] = 0.
+    cor = 1. - cosine_similarity(X, X)
+    cor[cor > _cutoff_function(cor)] = 0.
     # This line makes a tremendous difference!
-    cor[np.nonzero(np.identity(cor.shape[0]))] = 0. # Was previously below the cutoff calculation..
+    cor[np.nonzero(np.identity(cor.shape[0]))] = 0.  # Was previously below the cutoff calculation..
 
     # if self.top_nearest_neighbors_:
     #     nearest_neighbors = nearest_neighbors[:, :-self.top_nearest_neighbors_]
 
     return cor
+
 
 def identify_hubs(cor):
     """
@@ -60,20 +62,27 @@ def identify_hubs(cor):
     :param cor: correlation matrix
     :return:
     """
-    node_degrees = np.sum(cor > 0, axis=1) # Previously, this was weighted
+    node_degrees = np.sum(cor > 0, axis=1)  # Previously, this was weighted
 
     # TODO: Remove less hubs perhaps..?
     def _nodedegree_cutoff_function(matr):
         """
             This was most effective for argument-clustering [1]
         """
-        return np.mean(matr) + 1.5 * np.std(matr)
+        # Wut, we need to calculate the degree! dafuq am i doing here
+        # Calculate the distribution of degrees
+        # Remove too highly-connected nodes
+        # TODO: This should probably not be a variable threshold, but should just cutoff certain cosine items which are not too close..?
+        return np.mean(matr) + 5 * np.std(matr)
+
+    # Apply your previous cutoff logic, that seems to have worked better..
 
     # Mark all nodes whose degree is 2 standard deviations outside
     hubs = node_degrees > _nodedegree_cutoff_function(node_degrees)
 
     # Identify whatever items are hubs.
     return hubs
+
 
 def _identify_hubs_nearest_neighbors(X, hubs, hub_indecies):
     """
@@ -93,15 +102,13 @@ def _identify_hubs_nearest_neighbors(X, hubs, hub_indecies):
     # Want to take the most similar items, i.e. biggest cosine similarity, so ::-1
     nearest_neighbors = np.argsort(local_correlation, axis=1)[:, ::-1]
     for idx, hub in enumerate(hub_indecies):
-        print("Looking how we can replace hub ", hub)
         for neighbor in nearest_neighbors[idx]:
-            print("Neighbor is: ", neighbor, hub_indecies)
             if neighbor not in hub_indecies:
-                print("Picking neighbor: ", neighbor)
                 overwrite_hub_by_dictionary[hub] = neighbor
                 break
 
     return overwrite_hub_by_dictionary
+
 
 def run_chinese_whispers(cor):
     """
@@ -121,16 +128,20 @@ def run_chinese_whispers(cor):
     # Now run the chinese whispers algorithm
     chinese_whispers(graph, iterations=30, seed=1337)  # iterations might depend on the number of clusters...
 
+    # TODO: Make sure labels are same as rows of matrix!
+
     # Exctracting the individual clusters..
-    cluster_assignments = dict()
-    for label, cluster in sorted(aggregate_clusters(graph).items(), key=lambda e: len(e[1]), reverse=True):
+    cluster_assignments = np.zeros((cor.shape[0],))
+    # cluster_assignments = dict()
+    for cluster_label, cluster in sorted(aggregate_clusters(graph).items(), key=lambda e: len(e[1]), reverse=True):
         for nodeid in cluster:
-            cluster_assignments[nodeid] = label
-        print('{}\t{}\n'.format(label, cluster))
+            cluster_assignments[nodeid] = cluster_label
+        print('{}\t{}\n'.format(cluster_label, cluster))
 
     # Print out the graph:
     colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
-    nx.draw_networkx(graph, node_color=colors, node_size=10)  # font_color='white', # cmap=plt.get_cmap('jet'),
+    nx.draw_networkx(graph, cmap=plt.jet(), node_color=colors, node_size=10,
+                     with_labels=False)  # font_color='white', # cmap=plt.get_cmap('jet'),
     plt.show()
 
     return cluster_assignments
@@ -175,8 +186,7 @@ class ChineseWhispersClustering:
 
         clusters = run_chinese_whispers(cos_hat)
 
-        print("Clusters are: ", clusters)
-        backproject_cluster = np.zeros((X.shape[0], ))
+        backproject_cluster = np.zeros((X.shape[0],))
         for idx, node_cluster in enumerate(clusters):
             backproject_cluster[prehub2posthub[idx]] = node_cluster
 
@@ -185,7 +195,10 @@ class ChineseWhispersClustering:
             backproject_cluster[hub_node] = overwrite_hub_by_dictionary[hub_node]
 
         # After all the clustering is done, now we need to re-insert the hubs...
-        assert X.shape[0] == len(backproject_cluster), ("Dont conform!", backproject_cluster, X.shape, len(backproject_cluster))
+        assert X.shape[0] == len(backproject_cluster), (
+        "Dont conform!", backproject_cluster, X.shape, len(backproject_cluster))
+
+        # TODO: There is a bug in the way clusters are converted to the array (from dict to continuous array..
 
         self.cluster_ = backproject_cluster
 
@@ -203,6 +216,7 @@ class ChineseWhispersClustering:
     def fit_predict(self, X, y=None):
         self.fit(X, y)
         return self.predict(X, y)
+
 
 if __name__ == "__main__":
     print("Emulating the chinese whispers algorithm")
