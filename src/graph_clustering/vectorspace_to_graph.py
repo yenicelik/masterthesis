@@ -182,35 +182,21 @@ class ChineseWhispersClustering:
 
         clusters = run_chinese_whispers(cos_hat)
 
-        print("Overwriting dictioanry")
-        print(overwrite_hub_by_dictionary)
-        print("Orignal dictionary")
-        print(prehub2posthub)
-
         print("Clusters are: ", clusters)
         backproject_cluster = np.zeros((X.shape[0], ))
         for idx, node_cluster in enumerate(clusters):
             backproject_cluster[prehub2posthub[idx]] = node_cluster
 
-        print("Clusters are: ", backproject_cluster)
-        print("Nonzero items are: ", np.nonzero(backproject_cluster == 0))
-
-        print("len clusters vs ", len(clusters), backproject_cluster.shape)
-
         # Now add all neighbors
-        for hub_node in np.nonzero(backproject_cluster == 0)[0]:
-            print("replacing by closest for: ", hub_node)
+        for hub_node in overwrite_hub_by_dictionary.keys():
             backproject_cluster[hub_node] = overwrite_hub_by_dictionary[hub_node]
 
-        exit(0)
-
-        print("Clusters are: ", backproject_cluster)
-
         # After all the clustering is done, now we need to re-insert the hubs...
+        assert X.shape[0] == len(backproject_cluster), ("Dont conform!", backproject_cluster, X.shape, len(backproject_cluster))
 
-        assert X.shape[0] == len(clusters), ("Dont conform!", clusters, X.shape, len(clusters))
+        self.cluster_ = backproject_cluster
 
-        return backproject_cluster
+        return self.cluster_
 
     def predict(self, X=None, y=None):
         """
