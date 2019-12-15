@@ -13,8 +13,6 @@
 
     [1] L 2 F/INESC-ID at SemEval-2019 Task 2: Unsupervised Lexical Semantic Frame Induction using Contextualized Word Representations
 """
-from operator import itemgetter
-
 import numpy as np
 import matplotlib.pyplot as plt
 from networkx import draw, draw_networkx_edges
@@ -46,15 +44,15 @@ def create_adjacency_matrix(X):
         """
         return np.mean(matr) + 1.5 * np.std(matr)
 
-    cos = cosine_similarity(X, X)
-    cos[cos < _cutoff_function(cos)] = 0.
+    cor = cosine_similarity(X, X)
+    cor[cor < _cutoff_function(cor)] = 0.
     # This line makes a tremendous difference!
-    cos[np.nonzero(np.identity(cos.shape[0]))] = 0. # Was previously below the cutoff calculation..
+    cor[np.nonzero(np.identity(cor.shape[0]))] = 0. # Was previously below the cutoff calculation..
 
     # if self.top_nearest_neighbors_:
     #     nearest_neighbors = nearest_neighbors[:, :-self.top_nearest_neighbors_]
 
-    return cos
+    return cor
 
 def identify_hubs(cor):
     """
@@ -64,6 +62,7 @@ def identify_hubs(cor):
     """
     node_degrees = np.sum(cor > 0, axis=1) # Previously, this was weighted
 
+    # TODO: Remove less hubs perhaps..?
     def _nodedegree_cutoff_function(matr):
         """
             This was most effective for argument-clustering [1]
@@ -79,6 +78,34 @@ def identify_hubs(cor):
 
     # Identify whatever items are hubs.
     return hubs
+
+def _identify_hubs_nearest_neighbors(X, hubs, hub_indecies):
+    """
+        Identifies the nodes which are closest to the hubs.
+        The idea is that
+            - hubs are taken out before clustering
+            - chinese whispers clustering is applied
+            - hubs are assigned the same cluster, which their closest point has.
+        This makes the chinese whispers algorithm more stable.
+        This is because the hubs otherwise accumulate all clusters,
+        which merely resluts in one big cluster
+    :return:
+    """
+    overwrite_hub_by_dictionary = dict()
+
+    local_correlation = cosine_similarity(X[hubs, :], X)
+    # Want to take the most similar items, i.e. biggest cosine similarity, so ::-1
+    nearest_neighbors = np.argsort(local_correlation, axis=1)[:, ::-1]
+    for idx, hub in enumerate(hub_indecies):
+        print("Looking how we can replace hub ", hub)
+        for neighbor in nearest_neighbors[idx]:
+            print("Neighbor is: ", neighbor, hub_indecies)
+            if neighbor not in hub_indecies:
+                print("Picking neighbor: ", neighbor)
+                overwrite_hub_by_dictionary[hub] = neighbor
+                break
+
+    return overwrite_hub_by_dictionary
 
 def run_chinese_whispers(cor):
     """
@@ -135,109 +162,55 @@ class ChineseWhispersClustering:
 
         hubs = identify_hubs(cos)
         hub_indecies = np.nonzero(hubs)[0].tolist()
+        common_indecies = np.nonzero(~hubs)[0].tolist()
+        prehub2posthub = dict((idx, node) for idx, node in enumerate(common_indecies))
 
         # Zero out all hubs within the correlation matrix.
         # Overwrite the hubs with their closest rows
 
+        overwrite_hub_by_dictionary = dict()
         if any(hub_indecies):
+            overwrite_hub_by_dictionary = _identify_hubs_nearest_neighbors(
+                X=X,
+                hubs=hubs,
+                hub_indecies=hub_indecies
+            )
 
-            local_correlation = cosine_similarity(X[hubs, :], X)
-            # Want to take the most similar items, i.e. biggest cosine similarity, so ::-1
-            nearest_neighbors = np.argsort(local_correlation, axis=1)[:, ::-1]
-            for idx, hub in enumerate(hub_indecies):
-                print("Looking how we can replace hub ", hub)
-                for neighbor in nearest_neighbors[idx]:
-                    print("Neighbor is: ", neighbor, hub_indecies)
-                    if neighbor not in hub_indecies:
-                        print("Picking neighbor: ", neighbor)
-                        cos[hub] = cos[neighbor]
-                        # TODO: Is this correct, actually...?
-                        # Shouldn't we re-assign at X, and re-calculate the correlation matrix..?
-                        # I think we should really remove the hubs, and put them back in at the very end..
-                        break
+        # Replace cos with hub-masked cos
+        cos_hat = cos[~hubs, :]
+        cos_hat = cos_hat[:, ~hubs]
 
-        # We could also take out these hubs
-        # And then add these hubs at the very end.
-        # This will require a translation dictionary with
-        # (idx of matrix incl. hubs -> idx of matrix ecl. hubs)
-        # And then auxiliarly adding hubs back in
+        clusters = run_chinese_whispers(cos_hat)
 
-        print("Replaced hubs with their closest neighbor...")
-        print("Will now apply the clustering algorithm")
-
-        print(cos.shape)
-
-        clusters = run_chinese_whispers(cos)
+        print("Overwriting dictioanry")
+        print(overwrite_hub_by_dictionary)
+        print("Orignal dictionary")
+        print(prehub2posthub)
 
         print("Clusters are: ", clusters)
+        backproject_cluster = np.zeros((X.shape[0], ))
+        for idx, node_cluster in enumerate(clusters):
+            backproject_cluster[prehub2posthub[idx]] = node_cluster
 
-        assert X.shape[0] == len(clusters), ("Dont conform!", clusters, X.shape, len(clusters))
+        print("Clusters are: ", backproject_cluster)
+        print("Nonzero items are: ", np.nonzero(backproject_cluster == 0))
 
-        # TODO: Now add the nodes which were previously removed
+        print("len clusters vs ", len(clusters), backproject_cluster.shape)
+
+        # Now add all neighbors
+        for hub_node in np.nonzero(backproject_cluster == 0)[0]:
+            print("replacing by closest for: ", hub_node)
+            backproject_cluster[hub_node] = overwrite_hub_by_dictionary[hub_node]
 
         exit(0)
 
-        # TODO: Find the easiest mechanism which extracts these the indecies for the hubs
-        # Assign the hubs to the closest point
-        print("Hubs mask is: ", self.hub_mask_)
-        # correlation_hub_rest = cosine_similarity(X[self.hubs_], X)
-        cos[:, self.hubs_] = -1 * np.inf # Make all hubs infinitely away from everything else, s.t. these will not be chosen as neighbors
-        # Assuming this returns the cosine similarity!!!
-        hub_nearest_neighbor = np.argmax(cos, axis=1)
-        # hub_nearest_neighbor_without_hubs = np.zeros()
-        # for i in range(hub_nearest_neighbor.shape[0]):
+        print("Clusters are: ", backproject_cluster)
 
-        # Calculate the items which are closest to the hubs...
-        hub_nearest_neighbor = np.argmax(correlation_hub_rest, axis=1)[self.hub_mask_]
-        print("Hub nearest neighbors are: ")
-        print(hub_nearest_neighbor)
+        # After all the clustering is done, now we need to re-insert the hubs...
 
-        print("Calculated the hub nearest neighbors...")
-        print(cos)
-        print(cos.shape)
+        assert X.shape[0] == len(clusters), ("Dont conform!", clusters, X.shape, len(clusters))
 
-        # Randomly sample a subgraph 100 times
-        # Put weight of this, and take the cliques of this graph..
-
-        # Must mark these items as "hubs", and remove these from classification
-
-        print("Cos shape is: ", cos.shape)
-
-        nearest_neighbors = np.argmax(correlation_hub_rest, axis=1)
-        print("Total number of nearest neighbors: ", nearest_neighbors.shape)
-        # Must make nearest neighbor AFTER they are removed!!!!
-        # Put whatever index is a top-nearest-neighbor to be this
-        print("Nearest neighbors")
-        # out[nearest_neighbors] = cos_hat[nearest_neighbors]
-
-        # TODO: Make sure neighborhoods are propery taken out...
-
-
-
-        # hub_nearest_neighbor = np.argmax(cos, axis=1)[self.hub_mask_]
-        print("Self hubs are")
-        print(self.hubs_set)
-
-        for hub in self.hubs_set:
-            print("Hub is: ", hub)
-            print(cluster_assignments[hub])
-            print("Initial hubkey is: ", cluster_assignments[hub] if hub in cluster_assignments else None)
-            print("Hub number is: ", hub)
-            print("Hubs nearest neighbor is: ")
-            print(hub_nearest_neighbor[hub])
-            cluster_assignments[hub] = cluster_assignments[hub_nearest_neighbor[hub]]
-
-        # Take out the hubs ...
-        # hubs correspond to items with ambigious meanings.. (i.e. between two contexts..!)
-        cluster_assignments = list(sorted(cluster_assignments))
-        print("Out length is: ", cluster_assignments)
-        cluster_assignments = np.asarray(cluster_assignments)
-
-        # Return a list [n_samples, ]
-        # which returns which cluster each datapoint belongs to
-        # Removing the hubs is like temporarily creating an ego-network
-
-        return cluster_assignments
+        return backproject_cluster
 
     def predict(self, X=None, y=None):
         """
