@@ -10,6 +10,8 @@
     # There is no
 
     -> Thresholds taken from `L 2 F/INESC-ID at SemEval-2019 Task 2: Unsupervised Lexical Semantic Frame Induction using Contextualized Word Representations`
+
+    [1] L 2 F/INESC-ID at SemEval-2019 Task 2: Unsupervised Lexical Semantic Frame Induction using Contextualized Word Representations
 """
 from operator import itemgetter
 
@@ -29,6 +31,87 @@ from chinese_whispers import chinese_whispers, aggregate_clusters
 # -> Now we don't have ego networks. that means we would need to find some other kind of ego.
 # this could be a hub, for example..., and we could apply this iteratively repeatedly.
 
+def create_adjacency_matrix(X):
+    """
+        From the full embeddings matrix X, creates a graph adjacency matrix:
+        - using cosine similarity
+        - taking out all values below a certain threhsold, as defined by the weight-distribution
+    :param X:
+    :return:
+    """
+
+    def _cutoff_function(matr):
+        """
+            This was most effective for argument-clustering [1]
+        """
+        return np.mean(matr) + 1.5 * np.std(matr)
+
+    cos = cosine_similarity(X, X)
+    cos[cos < _cutoff_function(cos)] = 0.
+    # This line makes a tremendous difference!
+    cos[np.nonzero(np.identity(cos.shape[0]))] = 0. # Was previously below the cutoff calculation..
+
+    # if self.top_nearest_neighbors_:
+    #     nearest_neighbors = nearest_neighbors[:, :-self.top_nearest_neighbors_]
+
+    return cos
+
+def identify_hubs(cor):
+    """
+        Within the correlation matrix, we identify certain hubs.
+    :param cor: correlation matrix
+    :return:
+    """
+    node_degrees = np.sum(cor > 0, axis=1) # Previously, this was weighted
+
+    def _nodedegree_cutoff_function(matr):
+        """
+            This was most effective for argument-clustering [1]
+        """
+        return np.mean(matr) + 2 * np.std(matr)
+
+    # Mark all nodes whose degree is 2 standard deviations outside
+    hubs = node_degrees > _nodedegree_cutoff_function(node_degrees)
+
+    print("Hubs shape is: ", hubs)
+    print("Hubs shape is: ", hubs.shape)
+
+
+    # Identify whatever items are hubs.
+    return hubs
+
+def run_chinese_whispers(cor):
+    """
+        The core part of this algorithm, which runs the chinese whispers algorithm#
+    :param cor: the adjacency matrix
+    :return:
+    """
+    print("So many edges in the graph: ", np.count_nonzero(cor))
+
+    graph = nx.to_networkx_graph(cor, create_using=nx.DiGraph)
+    print("Graph is: ", graph)
+    draw(graph, node_size=10)
+    plt.show()
+
+    # We could run this a few times, until the silhouette score is best
+
+    # Now run the chinese whispers algorithm
+    chinese_whispers(graph, iterations=30, seed=1337)  # iterations might depend on the number of clusters...
+
+    # Exctracting the individual clusters..
+    cluster_assignments = dict()
+    for label, cluster in sorted(aggregate_clusters(graph).items(), key=lambda e: len(e[1]), reverse=True):
+        for nodeid in cluster:
+            cluster_assignments[nodeid] = label
+        print('{}\t{}\n'.format(label, cluster))
+
+    # Print out the graph:
+    colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
+    nx.draw_networkx(graph, node_color=colors, node_size=10)  # font_color='white', # cmap=plt.get_cmap('jet'),
+    plt.show()
+
+    return cluster_assignments
+
 
 class ChineseWhispersClustering:
 
@@ -36,8 +119,6 @@ class ChineseWhispersClustering:
         """
         :param top_nearest_neighbors: The number of nearest neighbors to keep
         """
-        # TODO: Not sure if we're supposed to prune the fully connected graph, and set all to zeroo
-        # TODO: Currently, its a bipartite graph i believe. make this to a adjacency-matrix graph (to be interpreted by networkx)
         self.top_nearest_neighbors_ = top_nearest_neighbors
         self.remove_hub_number_ = remove_hub_number
 
@@ -49,105 +130,50 @@ class ChineseWhispersClustering:
         :param X:
         :return:
         """
-        # calculate cosine similarity
-        cos = cosine_similarity(X, X)
-        # cos[np.nonzero(np.identity(cos.shape[0]))] = 0.
 
-        #####
-        # 1. compute v’s top n nearest neighbors (by some word- similarity notion)
-        ######
+        cos = create_adjacency_matrix(X)
 
-        # The cutoff is defined by the mean, plus some standard deviation divided by two
-        # This was most effective for argument-clustering
-        cutoff_value = np.mean(cos) + 1.5 * np.std(cos)
+        hubs = identify_hubs(cos)
+        hub_indecies = np.nonzero(hubs)[0].tolist()
 
-        # Put all non-medians to zero
-        cos[cos < cutoff_value] = 0.
+        # Zero out all hubs within the correlation matrix.
+        # Overwrite the hubs with their closest rows
 
-        # The following uncommented lines could also be a good way to get rid of hubs
-        # if self.top_nearest_neighbors_:
-        #     nearest_neighbors = nearest_neighbors[:, :-self.top_nearest_neighbors_]
+        if any(hub_indecies):
 
-        # Remove all hubs!
-        # This means removing all nodes whose edge-weights are too high!
-        summed_weights = np.sum(cos, axis=1)
-        print("Summed weights are", summed_weights)
-        self.hubs_ = np.argsort(summed_weights)[-self.remove_hub_number_:]
-        print("Summed weights are", summed_weights[self.hubs_])
+            local_correlation = cosine_similarity(X[hubs, :], X)
+            # Want to take the most similar items, i.e. biggest cosine similarity, so ::-1
+            nearest_neighbors = np.argsort(local_correlation, axis=1)[:, ::-1]
+            for idx, hub in enumerate(hub_indecies):
+                print("Looking how we can replace hub ", hub)
+                for neighbor in nearest_neighbors[idx]:
+                    print("Neighbor is: ", neighbor, hub_indecies)
+                    if neighbor not in hub_indecies:
+                        print("Picking neighbor: ", neighbor)
+                        cos[hub] = cos[neighbor]
+                        # TODO: Is this correct, actually...?
+                        # Shouldn't we re-assign at X, and re-calculate the correlation matrix..?
+                        # I think we should really remove the hubs, and put them back in at the very end..
+                        break
 
-        self.hubs_set = set(self.hubs_)
-        self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if x not in self.hubs_set]
-        cos_hat = cos[self.hub_mask_, :]
-        cos_hat = cos_hat[:, self.hub_mask_]
+        # We could also take out these hubs
+        # And then add these hubs at the very end.
+        # This will require a translation dictionary with
+        # (idx of matrix incl. hubs -> idx of matrix ecl. hubs)
+        # And then auxiliarly adding hubs back in
 
-        ######
-        # 2. compute a similarity score between every pairwise combination of nearest neighbors, which renders a fully connected similarity graph
-        ######
+        print("Replaced hubs with their closest neighbor...")
+        print("Will now apply the clustering algorithm")
 
-        # Not sure if I shold remove all other ones..
+        print(cos.shape)
 
-        # Put all diagonal elements to zero ...
-        cos_hat[np.nonzero(np.identity(cos_hat.shape[0]))] = 0.
+        clusters = run_chinese_whispers(cos)
 
+        print("Clusters are: ", clusters)
 
-        out = cos_hat
-        print(out)
-        print(cos_hat)
-        print(cos_hat.shape)
-        print(np.count_nonzero(out))
+        assert X.shape[0] == len(clusters), ("Dont conform!", clusters, X.shape, len(clusters))
 
-        # Now turn into a graph!
-        graph = nx.to_networkx_graph(out, create_using=nx.DiGraph)
-
-        print("Graph is: ")
-        print(graph)
-
-        draw(graph, node_size=10)
-
-        plt.show()
-
-        # Perhaps take only the hubs..? i.e. representative items..
-        # Make all the weight "flow" into the hubs, and drop the rest...
-
-        # Apply the chinese whispers algorithm...
-        # TODO: Figure out if this works well with the bert embeddings..
-        chinese_whispers(graph, iterations=30, seed=1337) # iterations might depend on the number of clusters...
-        print('Cluster ID\tCluster Elements\n')
-
-        print("Clustered items are: ")
-        out = list(sorted(aggregate_clusters(graph).items(), key=lambda e: len(e[1]), reverse=True))
-        self.cluster_ = [x[0] for x in out]
-
-        print("Self cluster is: ", self.cluster_)
-
-        # TODO: This should be the same size as the number of samples
-
-        # TODO: Check size of this!!
-        self.cluster_ = np.asarray(self.cluster_)
-
-        print("Clusters are: ")
-        print(self.cluster_)
-        print(self.cluster_.shape)
-
-        # TODO: Need to double check if sorting of .items() corresponds to the ordering of the nodes
-        cluster_assignments = dict()
-
-        for label, cluster in sorted(aggregate_clusters(graph).items(), key=lambda e: len(e[1]), reverse=True):
-            for nodeid in cluster:
-                cluster_assignments[nodeid] = label
-            print('{}\t{}\n'.format(label, cluster))
-
-        colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
-
-        nx.draw_networkx(graph, node_color=colors, node_size=10) # font_color='white', # cmap=plt.get_cmap('jet'),
-
-        plt.show()
-
-        print("what we're outputting is: ")
-        print(out)
-        # print(out.shape)
-
-        # For each of the hubs, find the *single* closest point, and assign them with a cluster that is closest to them
+        # TODO: Now add the nodes which were previously removed
 
         exit(0)
 
@@ -159,11 +185,7 @@ class ChineseWhispersClustering:
         # Assuming this returns the cosine similarity!!!
         hub_nearest_neighbor = np.argmax(cos, axis=1)
         # hub_nearest_neighbor_without_hubs = np.zeros()
-        for i in range(hub_nearest_neighbor.shape[0]):
-
-
-
-
+        # for i in range(hub_nearest_neighbor.shape[0]):
 
         # Calculate the items which are closest to the hubs...
         hub_nearest_neighbor = np.argmax(correlation_hub_rest, axis=1)[self.hub_mask_]
