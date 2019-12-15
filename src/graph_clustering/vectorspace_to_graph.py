@@ -67,14 +67,10 @@ def identify_hubs(cor):
         """
             This was most effective for argument-clustering [1]
         """
-        return np.mean(matr) + 2 * np.std(matr)
+        return np.mean(matr) + 1.5 * np.std(matr)
 
     # Mark all nodes whose degree is 2 standard deviations outside
     hubs = node_degrees > _nodedegree_cutoff_function(node_degrees)
-
-    print("Hubs shape is: ", hubs)
-    print("Hubs shape is: ", hubs.shape)
-
 
     # Identify whatever items are hubs.
     return hubs
@@ -164,9 +160,6 @@ class ChineseWhispersClustering:
         hub_indecies = np.nonzero(hubs)[0].tolist()
         common_indecies = np.nonzero(~hubs)[0].tolist()
         prehub2posthub = dict((idx, node) for idx, node in enumerate(common_indecies))
-
-        # Zero out all hubs within the correlation matrix.
-        # Overwrite the hubs with their closest rows
 
         overwrite_hub_by_dictionary = dict()
         if any(hub_indecies):
