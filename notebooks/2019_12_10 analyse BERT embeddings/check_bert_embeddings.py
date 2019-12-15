@@ -247,3 +247,8 @@ if __name__ == "__main__":
         print("Number of clusters, wordnet senses, sentences: ", tgt_word, n_clusters, number_of_senses, len(tuples))
 
         save_embedding_to_tsv(tuples, cluster_labels=cluster_labels, identifier=tgt_word + "_" + method + "_")
+
+        # Now use this clustering to sample contexts
+        # Ignore clusters which have less than 1% samples...
+        #
+

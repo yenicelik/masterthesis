@@ -43,7 +43,10 @@ def create_adjacency_matrix(X):
         """
             This was most effective for argument-clustering [1]
         """
-        return np.mean(matr) - 1.5 * np.std(matr)
+        # Going even higher with this makes sense, in that it is 1.5 for global BERT emebddings.
+        # Context embeddings are closer, so it should be hierh most likely
+        # Ah no ,but the distributon is taken from context-sampled distributions..
+        return np.mean(matr) - 1.9 * np.std(matr)
 
     cor = 1. - cosine_similarity(X, X)
     cor[cor > _cutoff_function(cor)] = 0.
@@ -62,17 +65,13 @@ def identify_hubs(cor):
     :param cor: correlation matrix
     :return:
     """
-    node_degrees = np.sum(cor > 0, axis=1)  # Previously, this was weighted
+    node_degrees = np.sum(cor, axis=1)  # Previously, this was weighted
 
     # TODO: Remove less hubs perhaps..?
     def _nodedegree_cutoff_function(matr):
         """
             This was most effective for argument-clustering [1]
         """
-        # Wut, we need to calculate the degree! dafuq am i doing here
-        # Calculate the distribution of degrees
-        # Remove too highly-connected nodes
-        # TODO: This should probably not be a variable threshold, but should just cutoff certain cosine items which are not too close..?
         return np.mean(matr) + 5 * np.std(matr)
 
     # Apply your previous cutoff logic, that seems to have worked better..
