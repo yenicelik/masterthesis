@@ -58,19 +58,19 @@ def create_adjacency_matrix(X):
     #     nearest_neighbors = nearest_neighbors[:, :-self.top_nearest_neighbors_]
 
     # Create a simple "take n closest items" graph-creation logic
-    n = 10 # Take 50 closest items!
+    n = 20 # Take 50 closest items!
     cor = cosine_similarity(X, X)
 
-    print(np.max(cor), np.count_nonzero(cor))
+    # print(np.max(cor), np.count_nonzero(cor))
 
     # Just take top 1000 edges in total.
-    # Some items are not supposed to be conntected
+    # Some items are not supposed to be connected
     # i.e. the above method just connects them forcefully in that case (even if they're far away!)
 
     opposite_of_top_neighbors = np.argsort(cor, axis=1)[:, ::-1][:, :n]
-    print(opposite_of_top_neighbors)
+    # print(opposite_of_top_neighbors)
     out = np.zeros_like(cor)
-    print("dist", np.count_nonzero(cor), np.count_nonzero(opposite_of_top_neighbors))
+    # print("dist", np.count_nonzero(cor), np.count_nonzero(opposite_of_top_neighbors))
 
     for i in range(opposite_of_top_neighbors.shape[0]):
 
@@ -78,8 +78,6 @@ def create_adjacency_matrix(X):
         out[i, opposite_of_top_neighbors[i]] = cor[i, opposite_of_top_neighbors[i]]
 
     print(np.max(out), np.count_nonzero(out))
-
-    exit(0)
 
     return cor
 
@@ -150,7 +148,7 @@ def run_chinese_whispers(cor):
     # We could run this a few times, until the silhouette score is best
 
     # Now run the chinese whispers algorithm
-    chinese_whispers(graph, iterations=30, seed=1337)  # iterations might depend on the number of clusters...
+    chinese_whispers(graph, iterations=40, seed=1337)  # iterations might depend on the number of clusters...
 
     # TODO: Make sure labels are same as rows of matrix!
 
@@ -177,8 +175,8 @@ class ChineseWhispersClustering:
         """
         :param top_nearest_neighbors: The number of nearest neighbors to keep
         """
-        self.top_nearest_neighbors_ = top_nearest_neighbors
-        self.remove_hub_number_ = remove_hub_number
+        # self.top_nearest_neighbors_ = top_nearest_neighbors
+        # self.remove_hub_number_ = remove_hub_number
 
     def fit(self, X, y=None):
         """
@@ -245,7 +243,7 @@ class ChineseWhispersClustering:
 if __name__ == "__main__":
     print("Emulating the chinese whispers algorithm")
 
-    a = np.random.random((200, 50))
+    a = np.random.random((100, 50))
 
     # Generate a different kind of matrix...
 
