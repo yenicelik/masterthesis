@@ -22,7 +22,7 @@ class Corpus:
         self.data = self._load_corpus()
 
     def _load_corpus(self):
-        """
+        """^
             Creates a python list.
             Each element of the list is a
         :return:

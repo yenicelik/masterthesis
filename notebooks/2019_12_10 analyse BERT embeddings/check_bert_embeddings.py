@@ -24,7 +24,6 @@ from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.graph_clustering.vectorspace_to_graph import ChineseWhispersClustering
 from src.knowledge_graphs.wordnet import WordNetDataset
 
-
 # Try following:
 # Consider only top 200 hubs
 # Do chinese whispers amongst hubs
