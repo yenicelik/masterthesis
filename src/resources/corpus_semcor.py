@@ -20,6 +20,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from src.config import args
+
 def _get_all_top_words(n=5000):
     filepath = os.getenv('TOP_20000_EN')
     with open(filepath, 'r') as fp:
@@ -28,7 +30,59 @@ def _get_all_top_words(n=5000):
     out = set(out)
     return out
 
+
 class CorpusSemCor:
+
+    def _sample_sentence_including_word_from_corpus(self, word):
+        """
+        :param word: The word for which we want to find example words
+        :return:
+        """
+
+        # TODO: The stemmed option should be a variable!
+        # Behavior will change based on stemming ...
+
+        # Should I stem retrieve from stemmed dictionary before feeding in?
+        # for these ...?
+        word = word.replace(" ", "")
+        stemmed_word = self.stemmer.stem(word)
+        print("Stemmed word", stemmed_word)
+
+        out = []  # Will cover a list of sentences which contain the respective word
+        out_idx = []  # Will cover a list of which cluster the given sentence belongs to
+
+        # These sentences are not word-delimited!!!
+        for i in range(len(self.data)):
+            # Iterate through all sentences
+            query_sentence = [self.stemmer.stem(x) for x in self.data[i]]
+            try:
+                idx = query_sentence.index(stemmed_word)
+            except:
+                continue
+
+            synset_id = self.data_wordnet_ids[i][idx]
+            output_sentence = " ".join(self.data[i])
+            print("Query sentence")
+            print(query_sentence)
+            print("Output sentence")
+            print(output_sentence)
+
+            out.append(
+                "[CLS] " + output_sentence
+            )
+            out_idx.append(synset_id)
+
+        # Keep only top samples
+        out = out[:args.max_samples]
+        out_idx = out_idx[:args.max_samples]
+
+        print("Number of sample sentences found", len(out))
+
+        # out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:args.max_samples]
+        # Must not allow any words that happen less than 5 times!
+        assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
+        # Perhaps best not to simply change the function signature, but to make it an attribute
+        return out, out_idx
 
     @property
     def sentences(self):
@@ -41,6 +95,7 @@ class CorpusSemCor:
     def __init__(self):
 
         print("Starting corpus")
+        self.stemmer = PorterStemmer()
 
         self.folderpath = os.getenv("SEMCOR_CORPUS")
 
@@ -51,10 +106,9 @@ class CorpusSemCor:
     def xml2arrays(self, filepath):
         print("Turning the filepath to ")
 
-    def _load_corpus(self, visualize_distributions=False):
+    def _load_corpus(self, visualize_distributions=False, verbose=False):
 
         most_common_words = _get_all_top_words()
-        stemmer = PorterStemmer()
 
         start_time = time.time()
 
@@ -121,13 +175,14 @@ class CorpusSemCor:
               ::-1])
 
         assert len(data) == len(data_wordnet_ids), (
-        "Number of wordnet ids and data do not match up ", len(data), len(data_wordnet_ids))
+            "Number of wordnet ids and data do not match up ", len(data), len(data_wordnet_ids))
 
         # TODO: The following prunes "9;2" and "9;1", whatever this means. look it up!
         # This will prune the set of all possible synsets
 
         # Create a distribution over the number of senses
-        sense_id_distribution = [int(x[1]) for x in max_number_senses if (x[1] is not None) and (len(x[1]) <= 2)]  # Take logarithm because otherwise we see mostly 1s ...
+        sense_id_distribution = [int(x[1]) for x in max_number_senses if (x[1] is not None) and (
+                    len(x[1]) <= 2)]  # Take logarithm because otherwise we see mostly 1s ...
 
         # calculate histogram and write it out
 
@@ -137,37 +192,41 @@ class CorpusSemCor:
         # Filter most "varied" occurrenses...
 
         # Only keep top 1000 english words
-        unique_word_pairs = set([(x[0].lower(), x[1]) for x in max_number_senses if (x[1] is not None) and (len(x[1]) <= 2) and (x[0] in most_common_words)])  # Take logarithm because otherwise we see mostly 1s ...
+        unique_word_pairs = set([(x[0].lower(), x[1]) for x in max_number_senses if
+                                 (x[1] is not None) and (len(x[1]) <= 2) and (x[
+                                                                                  0] in most_common_words)])  # Take logarithm because otherwise we see mostly 1s ...
 
-        print("Queryable words in dictioanry are")
-        print(unique_word_pairs)
+        if verbose:
+            print("Queryable words in dictioanry are")
+            print(unique_word_pairs)
 
         unique_words = set([x[0] for x in unique_word_pairs])
         # Include only items which have more than one item
-        print("Queryable concepts are")
-        print(unique_words)
+        if verbose:
+            print("Queryable concepts are")
+            print(unique_words)
 
-        global_meaning_occurence = [stemmer.stem(x[0]) for x in unique_word_pairs]
+        global_meaning_occurence = [self.stemmer.stem(x[0]) for x in unique_word_pairs]
 
         # Look for the corresponding wordnet meanings ...
 
         # get a counter, and check which words are most varied in this corpus (w.r.t. semantic meaning)
-        print("Global meanings are")
-        c = Counter(global_meaning_occurence)
-        for word, semcor_senses in c.most_common():
-            no_wordnet_meanings = len(wn.synsets(word))
-            ratio = (semcor_senses + 1) / float(no_wordnet_meanings + 1)
-            if ratio > 1.1:
-                continue
-            if ratio < 0.9:
-                continue
-            print("--- {:.2f}, {}, {}, {} ---".format(
-                ratio,
-                semcor_senses,
-                no_wordnet_meanings,
-                word
-            ))
-
+        if verbose:
+            print("Global meanings are")
+            c = Counter(global_meaning_occurence)
+            for word, semcor_senses in c.most_common():
+                no_wordnet_meanings = len(wn.synsets(word))
+                ratio = (semcor_senses + 1) / float(no_wordnet_meanings + 1)
+                if ratio > 1.1:
+                    continue
+                if ratio < 0.9:
+                    continue
+                print("--- {:.2f}, {}, {}, {} ---".format(
+                    ratio,
+                    semcor_senses,
+                    no_wordnet_meanings,
+                    word
+                ))
 
         # Filter our unique words which are not in the top 20'000 english words
         # Create a collections dict
@@ -177,15 +236,14 @@ class CorpusSemCor:
             mean_number_of_wordset_senses = [x / 2. for x in mean_number_of_wordset_senses]
             plt.hist(mean_number_of_wordset_senses, bins=70, range=[0, 70], log=True,
                      label="log distribution of mean synset lengths")
-            plt.hist(sense_id_distribution, bins=70, range=[0, 70], log=True, label="log distribution of corpus synset id")
+            plt.hist(sense_id_distribution, bins=70, range=[0, 70], log=True,
+                     label="log distribution of corpus synset id")
             plt.legend()
             plt.xlabel("Log Frequency")
             plt.show()
 
         # There is a left-skew of the data
         # This is probably an effect that the first few meanings of wordnet cover the more common terms (i.e. distribution of language)
-
-        exit(0)
 
         # Now do a bunch of stuff
         # Now you can apply the tokenizer for the individual sentences...
@@ -198,4 +256,7 @@ if __name__ == "__main__":
     print("Loading example corpus!")
     # _get_all_top_words()
     corpus = CorpusSemCor()
-
+    print("\n\n\n\n\n")
+    corpus._sample_sentence_including_word_from_corpus('central')
+    print("\n\n\n\n\n")
+    corpus._sample_sentence_including_word_from_corpus('have')
