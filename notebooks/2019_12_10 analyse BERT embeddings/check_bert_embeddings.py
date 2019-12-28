@@ -42,7 +42,10 @@ from src.knowledge_graphs.wordnet import WordNetDataset
 # Use random walk?
 
 # TODO: Should probably implement logging instead of this, and just rewrite logging to write to stdout...
-def get_bert_embeddings_and_sentences(model, tgt_word):
+from src.resources.corpus import Corpus
+
+
+def get_bert_embeddings_and_sentences(model, corpus, tgt_word):
     """
     :param model: A language model, which implements both the
         `_sample_sentence_including_word_from_corpus` and the
@@ -55,7 +58,7 @@ def get_bert_embeddings_and_sentences(model, tgt_word):
 
     if args.verbose >= 1:
         print("Retrieving example sentences from corpus")
-    sampled_sentences, _ = model._sample_sentence_including_word_from_corpus(word=tgt_word)
+    sampled_sentences, cluster_labels = corpus.sample_sentence_including_word_from_corpus(word=tgt_word)
 
     if args.verbose >= 1:
         print("Retrieving sampled embeddings from BERT")
@@ -76,7 +79,7 @@ def get_bert_embeddings_and_sentences(model, tgt_word):
             (sentence, embedding, cluster_labels)
         )
 
-    return out
+    return out, cluster_labels
 
 
 def save_embedding_to_tsv(tuples, identifier, predicted_cluster_labels=None):
@@ -117,7 +120,7 @@ def save_embedding_to_tsv(tuples, identifier, predicted_cluster_labels=None):
     np.savetxt(fname=identifier + "{}_values.tsv".format(len(sentences)), X=embeddings_matrix, delimiter="\t")
 
 
-def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
+def cluster_embeddings(tuples, method="dbscan", pca=True):
     """
         Taking the embeddings, we cluster them (using non-parameteric algortihms!)
         using different clustering algorithms.
@@ -225,24 +228,26 @@ if __name__ == "__main__":
     print("Sampling random sentences from the corpus, and their respective BERT embeddings")
 
     # Make sure that the respective word does not get tokenized into more tokens!
-    lang_model = BertEmbedding()
+    corpus = Corpus()
+    lang_model = BertEmbedding(corpus=corpus)
     wordnet_model = WordNetDataset()
 
     # Check out different types of polysemy?
 
     # The word to be analysed
-    # polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
-    polysemous_words = [" have ", " test ", " limit ", " concern ", " central ", " pizza "]
+    polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
+    # polysemous_words = [" have ", " test ", " limit ", " concern ", " central ", " pizza "]
 
-    method="chinese_whispers"
+    method = "dbscan"
 
     for tgt_word in polysemous_words:
+        print("Looking at word ", tgt_word)
         # tgt_word = " bank " # we add the space before and after for the sake of
 
         number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
         print("Getting embeddings from BERT")
-        tuples = get_bert_embeddings_and_sentences(model=lang_model, tgt_word=tgt_word)
+        tuples = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
         print("Clustering embeddings...")
         # cluster_labels = None
