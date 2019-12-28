@@ -51,7 +51,7 @@ class BertEmbedding:
         self.wrapper = BertWrapper()
         self.bert_layer = 1  # Which BERT layer to take the embeddings from
 
-    def get_embedding(self, word, sample_sentences=None):
+    def get_embedding(self, word, sample_sentences=None, cluster_labels=None):
         """
             For a given word (or concept), we want to generate an embedding.
             The question is also, do we generate probabilistic embeddings or static ones (by pooling..?)
@@ -64,8 +64,10 @@ class BertEmbedding:
         word = word.lower()
 
         # 1. Sample k sentences that include this word w
-        if sample_sentences is None:
+        if sample_sentences is None and cluster_labels is None:
             sample_sentences, cluster_labels = self.corpus.sample_sentence_including_word_from_corpus(word)
+        if sample_sentences is None or cluster_labels is None:
+            assert False, ("You have specified sample sentences, but no true underlying cluster labels. Be sure this is what you want!", cluster_labels)
         tokenized_word = self.wrapper.tokenizer.tokenize(word)
         tokenized_word_window = len(tokenized_word)
 
@@ -129,6 +131,9 @@ if __name__ == "__main__":
     example_words = [" bank "]
     for word in example_words:
         print(word)
-        print([x.shape for x, _ in embeddings_model.get_embedding(word)])
+        embeddings, _ = embeddings_model.get_embedding(word)
+        # print(type(embeddings))
+        # print(len(embeddings))
+        print([x[0].shape for x in embeddings])
 
     # Now do with the embeddings whatever you want to do lol

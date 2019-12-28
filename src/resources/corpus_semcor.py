@@ -46,6 +46,7 @@ class CorpusSemCor:
         # for these ...?
         word = word.replace(" ", "")
         stemmed_word = self.stemmer.stem(word)
+        # pad front and back by a " "
         print("Stemmed word", stemmed_word)
 
         out = []  # Will cover a list of sentences which contain the respective word

@@ -12,9 +12,9 @@ def find_all_indecies_subarray(subarray, array, corpus=None):
     :param arr2:
     :return:
     """
-    # if corpus.stemmer is not None:
-    #     array = [corpus.stemmer.stem(x) for x in array]
-    #     subarray = [corpus.stemmer.stem(x) for x in subarray]
+    if corpus.stemmer is not None:
+        array = [corpus.stemmer.stem(x) for x in array]
+        subarray = [corpus.stemmer.stem(x) for x in subarray]
     # print(subarray)
     # print(array)
     window_size = len(subarray)

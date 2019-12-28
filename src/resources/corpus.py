@@ -20,7 +20,6 @@ class Corpus:
         # Find all words, together with their respective synset id ...
         # -> Could best parallelize this ...
         # Strip word of all whitespaces
-        word = word.replace(" ", "")
         out = ["[CLS] " + x for x in self.data if word in x][:args.max_samples]
         # Must not allow any words that happen less than 5 times!
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
@@ -30,6 +29,8 @@ class Corpus:
     @property
     def sentences(self):
         # Tokenize sentences ...
+        # need to be tokenized by the BERT tokenizer ...
+        # no, shouldn't be tokenized by BERT tokenizer ...
         return self.data
 
     def __init__(self):
