@@ -51,40 +51,6 @@ class BertEmbedding:
         self.wrapper = BertWrapper()
         self.bert_layer = 1  # Which BERT layer to take the embeddings from
 
-    def _sample_sentence_including_word_from_corpus(self, word):
-        """
-            The Corpus is some corpus that
-            Probably better ways to parse this
-        :return:
-        """
-        # Find all words, together with their respective synset id ...
-        # -> Could best parallelize this ...
-        # Strip word of all whitespaces
-        out = []
-        out_idx = []
-        word = word.replace(" ", "")
-        # We assume that self.corpus is a list of lists of words (not a list of sentences!)
-        for i in range(len(self.corpus.sentences)):
-            # Need to join the sentences ...
-            idx = self.corpus.sentences[i].find(word)
-            if idx == -1:
-                continue
-            synset_id = self.corpus.synset_ids[i][idx]
-            out.append(
-                "[CLS] " + self.corpus.sentences[i]
-            )
-            out_idx.append(synset_id)
-
-        # Keep only top samples
-        out = out[:args.max_samples]
-        out_idx = out_idx[:args.max_samples]
-
-        # out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:args.max_samples]
-        # Must not allow any words that happen less than 5 times!
-        assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
-        # Perhaps best not to simply change the function signature, but to make it an attribute
-        return out, out_idx
-
     def get_embedding(self, word, sample_sentences=None):
         """
             For a given word (or concept), we want to generate an embedding.
@@ -99,7 +65,7 @@ class BertEmbedding:
 
         # 1. Sample k sentences that include this word w
         if sample_sentences is None:
-            sample_sentences, _ = self._sample_sentence_including_word_from_corpus(word)
+            sample_sentences, cluster_labels = self.corpus.sample_sentence_including_word_from_corpus(word)
         tokenized_word = self.wrapper.tokenizer.tokenize(word)
         tokenized_word_window = len(tokenized_word)
 
@@ -146,7 +112,8 @@ class BertEmbedding:
             if args.verbose >= 2:
                 print("One sentence-embedding-etrieval from BERT takes: ", time.time() - start_time)
 
-        return embeddings
+            # Perhaps return a dictionary instead ...
+        return embeddings, cluster_labels
 
 
 if __name__ == "__main__":
@@ -158,6 +125,6 @@ if __name__ == "__main__":
     example_words = [" bank "]
     for word in example_words:
         print(word)
-        print([x.shape for x in embeddings_model.get_embedding(word)])
+        print([x.shape for x, _ in embeddings_model.get_embedding(word)])
 
     # Now do with the embeddings whatever you want to do lol

@@ -4,7 +4,6 @@
     These are all the words for which we have ids
 
 """
-import math
 import os
 import time
 from collections import Counter
@@ -22,6 +21,7 @@ load_dotenv()
 
 from src.config import args
 
+
 def _get_all_top_words(n=5000):
     filepath = os.getenv('TOP_20000_EN')
     with open(filepath, 'r') as fp:
@@ -33,7 +33,7 @@ def _get_all_top_words(n=5000):
 
 class CorpusSemCor:
 
-    def _sample_sentence_including_word_from_corpus(self, word):
+    def sample_sentence_including_word_from_corpus(self, word):
         """
         :param word: The word for which we want to find example words
         :return:
@@ -66,6 +66,12 @@ class CorpusSemCor:
             print(query_sentence)
             print("Output sentence")
             print(output_sentence)
+
+            # replace all "_" by " "
+            output_sentence = output_sentence.replace("_", " ")
+
+            # also remove all special characters
+            output_sentence = output_sentence.replace("`", "").replace("'", "")
 
             out.append(
                 "[CLS] " + output_sentence
@@ -182,7 +188,7 @@ class CorpusSemCor:
 
         # Create a distribution over the number of senses
         sense_id_distribution = [int(x[1]) for x in max_number_senses if (x[1] is not None) and (
-                    len(x[1]) <= 2)]  # Take logarithm because otherwise we see mostly 1s ...
+                len(x[1]) <= 2)]  # Take logarithm because otherwise we see mostly 1s ...
 
         # calculate histogram and write it out
 
@@ -193,8 +199,7 @@ class CorpusSemCor:
 
         # Only keep top 1000 english words
         unique_word_pairs = set([(x[0].lower(), x[1]) for x in max_number_senses if
-                                 (x[1] is not None) and (len(x[1]) <= 2) and (x[
-                                                                                  0] in most_common_words)])  # Take logarithm because otherwise we see mostly 1s ...
+                                 (x[1] is not None) and (len(x[1]) <= 2) and (x[0] in most_common_words)])  # Take logarithm because otherwise we see mostly 1s ...
 
         if verbose:
             print("Queryable words in dictioanry are")

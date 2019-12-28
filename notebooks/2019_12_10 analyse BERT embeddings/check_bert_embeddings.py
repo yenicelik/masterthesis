@@ -59,7 +59,7 @@ def get_bert_embeddings_and_sentences(model, tgt_word):
 
     if args.verbose >= 1:
         print("Retrieving sampled embeddings from BERT")
-    sampled_embeddings = model.get_embedding(
+    sampled_embeddings, cluster_labels = model.get_embedding(
         word=tgt_word,
         sample_sentences=sampled_sentences
     )
@@ -73,13 +73,13 @@ def get_bert_embeddings_and_sentences(model, tgt_word):
         if args.verbose >= 2:
             print(embedding.shape)
         out.append(
-            (sentence, embedding)
+            (sentence, embedding, cluster_labels)
         )
 
     return out
 
 
-def save_embedding_to_tsv(tuples, identifier, cluster_labels=None):
+def save_embedding_to_tsv(tuples, identifier, predicted_cluster_labels=None):
     """
         Saving the embeddings and sampled sentence into a format that we can easily upload to tensorboard
     :param tuples: is a list of tuples (sentence, embeddings),
@@ -88,20 +88,23 @@ def save_embedding_to_tsv(tuples, identifier, cluster_labels=None):
     """
     sentences = [x[0] for x in tuples]
     embeddings = [x[1] for x in tuples]
+    true_cluster_labels = [x[2] for x in tuples]
 
     embeddings = [x.reshape(1, -1) for x in embeddings]
 
     embeddings_matrix = np.concatenate(embeddings, axis=0)
     print("Embeddings matrix has shape: ", embeddings_matrix.shape)
 
-    if cluster_labels is not None:
+    if predicted_cluster_labels is not None:
         df = pd.DataFrame(data={
             "sentences": sentences,
-            "clusters": cluster_labels
+            "clusters": predicted_cluster_labels,
+            "true_labels": true_cluster_labels
         })
     else:
         df = pd.DataFrame(data={
-            "sentences": sentences
+            "sentences": sentences,
+            "true_labels": true_cluster_labels
         })
 
     print(df.head())
@@ -228,7 +231,8 @@ if __name__ == "__main__":
     # Check out different types of polysemy?
 
     # The word to be analysed
-    polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
+    # polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
+    polysemous_words = [" have ", " test ", " limit ", " concern ", " central ", " pizza "]
 
     method="chinese_whispers"
 
@@ -245,9 +249,13 @@ if __name__ == "__main__":
         n_clusters, cluster_labels = cluster_embeddings(tuples, method=method)
         print("Number of clusters, wordnet senses, sentences: ", tgt_word, n_clusters, number_of_senses, len(tuples))
 
-        save_embedding_to_tsv(tuples, cluster_labels=cluster_labels, identifier=tgt_word + "_" + method + "_")
+        save_embedding_to_tsv(tuples, predicted_cluster_labels=cluster_labels, identifier=tgt_word + "_" + method + "_")
 
         # Now use this clustering to sample contexts
         # Ignore clusters which have less than 1% samples...
         #
+
+
+    # TODO: Figure out how well one clustering matches another
+    # (i.e. find a sklearn function or so!)
 
