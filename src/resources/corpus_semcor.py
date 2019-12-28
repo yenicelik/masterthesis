@@ -1,9 +1,16 @@
 """
-    IMplements any logic which takes in and processes SemCor logic
+    Implements any logic which takes in and processes SemCor logic
+
+    These are all the words for which we have ids
+
 """
 import math
 import os
 import time
+from collections import Counter
+
+from nltk.stem import PorterStemmer
+
 import matplotlib.pyplot as plt
 
 import xml.etree.ElementTree as ET
@@ -13,15 +20,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+def _get_all_top_words(n=5000):
+    filepath = os.getenv('TOP_20000_EN')
+    with open(filepath, 'r') as fp:
+        out = fp.read()
+    out = out.split()[:n]
+    out = set(out)
+    return out
 
 class CorpusSemCor:
 
     @property
     def sentences(self):
-        # Make two nested lists
-        # One captures the words
-        # One captures the WordNet ids
         return self.data
+
+    @property
+    def synset_ids(self):
+        return self.data_wordnet_ids
 
     def __init__(self):
 
@@ -31,10 +46,15 @@ class CorpusSemCor:
 
         self.data, self.data_wordnet_ids = self._load_corpus()
 
+        print(type(self.data), type(self.data_wordnet_ids))
+
     def xml2arrays(self, filepath):
         print("Turning the filepath to ")
 
-    def _load_corpus(self):
+    def _load_corpus(self, visualize_distributions=False):
+
+        most_common_words = _get_all_top_words()
+        stemmer = PorterStemmer()
 
         start_time = time.time()
 
@@ -104,24 +124,68 @@ class CorpusSemCor:
         "Number of wordnet ids and data do not match up ", len(data), len(data_wordnet_ids))
 
         # TODO: The following prunes "9;2" and "9;1", whatever this means. look it up!
+        # This will prune the set of all possible synsets
 
         # Create a distribution over the number of senses
         sense_id_distribution = [int(x[1]) for x in max_number_senses if (x[1] is not None) and (len(x[1]) <= 2)]  # Take logarithm because otherwise we see mostly 1s ...
 
         # calculate histogram and write it out
 
-        # Distribution of synsets
+        # Finally, find all words for which we can query the corpus with multiple meanings ...
+        # We discard and wordnet id's including semicolons for easier processing...
 
-        mean_number_of_wordset_senses = [x / 2. for x in mean_number_of_wordset_senses]
-        plt.hist(mean_number_of_wordset_senses, bins=70, range=[0, 70], log=True,
-                 label="log distribution of mean synset lengths")
-        plt.hist(sense_id_distribution, bins=70, range=[0, 70], log=True, label="log distribution of corpus synset id")
-        plt.legend()
-        plt.xlabel("Log Frequency")
-        plt.show()
+        # Filter most "varied" occurrenses...
+
+        # Only keep top 1000 english words
+        unique_word_pairs = set([(x[0].lower(), x[1]) for x in max_number_senses if (x[1] is not None) and (len(x[1]) <= 2) and (x[0] in most_common_words)])  # Take logarithm because otherwise we see mostly 1s ...
+
+        print("Queryable words in dictioanry are")
+        print(unique_word_pairs)
+
+        unique_words = set([x[0] for x in unique_word_pairs])
+        # Include only items which have more than one item
+        print("Queryable concepts are")
+        print(unique_words)
+
+        global_meaning_occurence = [stemmer.stem(x[0]) for x in unique_word_pairs]
+
+        # Look for the corresponding wordnet meanings ...
+
+        # get a counter, and check which words are most varied in this corpus (w.r.t. semantic meaning)
+        print("Global meanings are")
+        c = Counter(global_meaning_occurence)
+        for word, semcor_senses in c.most_common():
+            no_wordnet_meanings = len(wn.synsets(word))
+            ratio = (semcor_senses + 1) / float(no_wordnet_meanings + 1)
+            if ratio > 1.1:
+                continue
+            if ratio < 0.9:
+                continue
+            print("--- {:.2f}, {}, {}, {} ---".format(
+                ratio,
+                semcor_senses,
+                no_wordnet_meanings,
+                word
+            ))
+
+
+        # Filter our unique words which are not in the top 20'000 english words
+        # Create a collections dict
+
+        if visualize_distributions:
+            # Distribution of synsets
+            mean_number_of_wordset_senses = [x / 2. for x in mean_number_of_wordset_senses]
+            plt.hist(mean_number_of_wordset_senses, bins=70, range=[0, 70], log=True,
+                     label="log distribution of mean synset lengths")
+            plt.hist(sense_id_distribution, bins=70, range=[0, 70], log=True, label="log distribution of corpus synset id")
+            plt.legend()
+            plt.xlabel("Log Frequency")
+            plt.show()
 
         # There is a left-skew of the data
         # This is probably an effect that the first few meanings of wordnet cover the more common terms (i.e. distribution of language)
+
+        exit(0)
 
         # Now do a bunch of stuff
         # Now you can apply the tokenizer for the individual sentences...
@@ -132,4 +196,6 @@ class CorpusSemCor:
 
 if __name__ == "__main__":
     print("Loading example corpus!")
+    # _get_all_top_words()
     corpus = CorpusSemCor()
+

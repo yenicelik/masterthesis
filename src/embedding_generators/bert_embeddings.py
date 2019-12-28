@@ -57,11 +57,33 @@ class BertEmbedding:
             Probably better ways to parse this
         :return:
         """
-        #
-        out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:args.max_samples]
+        # Find all words, together with their respective synset id ...
+        # -> Could best parallelize this ...
+        # Strip word of all whitespaces
+        out = []
+        out_idx = []
+        word = word.replace(" ", "")
+        # We assume that self.corpus is a list of lists of words (not a list of sentences!)
+        for i in range(len(self.corpus.sentences)):
+            # Need to join the sentences ...
+            idx = self.corpus.sentences[i].find(word)
+            if idx == -1:
+                continue
+            synset_id = self.corpus.synset_ids[i][idx]
+            out.append(
+                "[CLS] " + self.corpus.sentences[i]
+            )
+            out_idx.append(synset_id)
+
+        # Keep only top samples
+        out = out[:args.max_samples]
+        out_idx = out_idx[:args.max_samples]
+
+        # out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:args.max_samples]
         # Must not allow any words that happen less than 5 times!
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
-        return out
+        # Perhaps best not to simply change the function signature, but to make it an attribute
+        return out, out_idx
 
     def get_embedding(self, word, sample_sentences=None):
         """
@@ -77,7 +99,7 @@ class BertEmbedding:
 
         # 1. Sample k sentences that include this word w
         if sample_sentences is None:
-            sample_sentences = self._sample_sentence_including_word_from_corpus(word)
+            sample_sentences, _ = self._sample_sentence_including_word_from_corpus(word)
         tokenized_word = self.wrapper.tokenizer.tokenize(word)
         tokenized_word_window = len(tokenized_word)
 

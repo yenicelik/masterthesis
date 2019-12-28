@@ -55,7 +55,7 @@ def get_bert_embeddings_and_sentences(model, tgt_word):
 
     if args.verbose >= 1:
         print("Retrieving example sentences from corpus")
-    sampled_sentences = model._sample_sentence_including_word_from_corpus(word=tgt_word)
+    sampled_sentences, _ = model._sample_sentence_including_word_from_corpus(word=tgt_word)
 
     if args.verbose >= 1:
         print("Retrieving sampled embeddings from BERT")
