@@ -44,8 +44,8 @@ class BertEmbedding:
         """
         pass
 
-    def __init__(self):
-        self.corpus = Corpus()
+    def __init__(self, corpus):
+        self.corpus = corpus
         self.max_samples = args.max_samples
 
         self.wrapper = BertWrapper()
@@ -88,7 +88,10 @@ class BertEmbedding:
 
             # Find all indecies of tokenized word within array
             # For simplicity, taking the first occurence...
-            tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence)[0]
+            print("Sentence and tokenized word is")
+            print(tokenized_word)
+            print(sentence)
+            tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, self.corpus)[0]
 
             # Now convert to pytorch tensors..
             tokens_tensor = torch.tensor([indexed_tokens])
@@ -118,10 +121,11 @@ class BertEmbedding:
 
 if __name__ == "__main__":
     print("Starting to generate embeddings from the BERT model")
-    embeddings_model = BertEmbedding()
+    corpus = Corpus()
+    embeddings_model = BertEmbedding(corpus)
 
     # I add spaces before and after, s.t. the word must occur within a sentence (and not at the beginning!)
-    # This is not fully unbiased, I gues...?
+    # This is not fully unbiased, I guess...?
     example_words = [" bank "]
     for word in example_words:
         print(word)

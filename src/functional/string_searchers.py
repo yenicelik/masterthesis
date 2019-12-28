@@ -5,13 +5,18 @@
       (although numpy and string ehhh)
 """
 
-def find_all_indecies_subarray(subarray, array):
+def find_all_indecies_subarray(subarray, array, corpus=None):
     """
         Finds all indecies where `subarray` is included in `array`
     :param arr1:
     :param arr2:
     :return:
     """
+    # if corpus.stemmer is not None:
+    #     array = [corpus.stemmer.stem(x) for x in array]
+    #     subarray = [corpus.stemmer.stem(x) for x in subarray]
+    # print(subarray)
+    # print(array)
     window_size = len(subarray)
     subarray_idx = [x for x in range(len(array)) if array[x:x + window_size] == subarray]
     return subarray_idx

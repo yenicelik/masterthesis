@@ -20,22 +20,8 @@ class Corpus:
         # Find all words, together with their respective synset id ...
         # -> Could best parallelize this ...
         # Strip word of all whitespaces
-        out = []
         word = word.replace(" ", "")
-        # We assume that self.corpus is a list of lists of words (not a list of sentences!)
-        for i in range(len(self.sentences)):
-            # Need to join the sentences ...
-            idx = self.sentences[i].find(word)
-            if idx == -1:
-                continue
-            out.append(
-                "[CLS] " + self.sentences[i]
-            )
-
-        # Keep only top samples
-        out = out[:args.max_samples]
-
-        # out = ["[CLS] " + x for x in self.corpus.sentences if word in x][:args.max_samples]
+        out = ["[CLS] " + x for x in self.data if word in x][:args.max_samples]
         # Must not allow any words that happen less than 5 times!
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
         # Perhaps best not to simply change the function signature, but to make it an attribute
@@ -43,6 +29,7 @@ class Corpus:
 
     @property
     def sentences(self):
+        # Tokenize sentences ...
         return self.data
 
     def __init__(self):
@@ -50,6 +37,7 @@ class Corpus:
         print("Starting corpus")
 
         self.filepath = os.getenv("EN_CORPUS")
+        self.stemmer = None
 
         self.data = self._load_corpus()
 
