@@ -15,6 +15,7 @@ from src.config import args
 from src.functional.string_searchers import find_all_indecies_subarray
 from src.language_models.model_wrappers.bert_wrapper import BertWrapper
 from src.resources.corpus import Corpus
+from src.resources.corpus_semcor import CorpusSemCor
 
 
 class BertEmbedding:
@@ -51,7 +52,7 @@ class BertEmbedding:
         self.wrapper = BertWrapper()
         self.bert_layer = 1  # Which BERT layer to take the embeddings from
 
-    def get_embedding(self, word, sample_sentences=None, cluster_labels=None):
+    def get_embedding(self, word, sample_sentences=None):
         """
             For a given word (or concept), we want to generate an embedding.
             The question is also, do we generate probabilistic embeddings or static ones (by pooling..?)
@@ -65,9 +66,7 @@ class BertEmbedding:
 
         # 1. Sample k sentences that include this word w
         if sample_sentences is None and cluster_labels is None:
-            sample_sentences, cluster_labels = self.corpus.sample_sentence_including_word_from_corpus(word)
-        if sample_sentences is None or cluster_labels is None:
-            assert False, ("You have specified sample sentences, but no true underlying cluster labels. Be sure this is what you want!", cluster_labels)
+            sample_sentences, _ = self.corpus.sample_sentence_including_word_from_corpus(word)
         tokenized_word = self.wrapper.tokenizer.tokenize(word)
         tokenized_word_window = len(tokenized_word)
 
@@ -118,17 +117,18 @@ class BertEmbedding:
                 print("One sentence-embedding-etrieval from BERT takes: ", time.time() - start_time)
 
             # Perhaps return a dictionary instead ...
-        return embeddings, cluster_labels
+        return embeddings
 
 
 if __name__ == "__main__":
     print("Starting to generate embeddings from the BERT model")
-    corpus = Corpus()
+    # corpus = Corpus()
+    corpus = CorpusSemCor()
     embeddings_model = BertEmbedding(corpus)
 
     # I add spaces before and after, s.t. the word must occur within a sentence (and not at the beginning!)
     # This is not fully unbiased, I guess...?
-    example_words = [" bank "]
+    example_words = [" have "]
     for word in example_words:
         print(word)
         embeddings, _ = embeddings_model.get_embedding(word)

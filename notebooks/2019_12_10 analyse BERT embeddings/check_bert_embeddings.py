@@ -43,6 +43,7 @@ from src.knowledge_graphs.wordnet import WordNetDataset
 
 # TODO: Should probably implement logging instead of this, and just rewrite logging to write to stdout...
 from src.resources.corpus import Corpus
+from src.resources.corpus_semcor import CorpusSemCor
 
 
 def get_bert_embeddings_and_sentences(model, corpus, tgt_word):
@@ -58,31 +59,31 @@ def get_bert_embeddings_and_sentences(model, corpus, tgt_word):
 
     if args.verbose >= 1:
         print("Retrieving example sentences from corpus")
-    sampled_sentences, cluster_labels = corpus.sample_sentence_including_word_from_corpus(word=tgt_word)
+    sampled_sentences, sampled_cluster_true_labels = corpus.sample_sentence_including_word_from_corpus(word=tgt_word)
 
     if args.verbose >= 1:
         print("Retrieving sampled embeddings from BERT")
-    sampled_embeddings, cluster_labels = model.get_embedding(
+    sampled_embeddings = model.get_embedding(
         word=tgt_word,
         sample_sentences=sampled_sentences
     )
 
     if args.verbose >= 2:
         print("\nSampled sentences are: \n")
-    for sentence, embedding in zip(sampled_sentences, sampled_embeddings):
+    for sentence, embedding, cluster_label in zip(sampled_sentences, sampled_embeddings, sampled_cluster_true_labels):
         if args.verbose >= 2:
             print(sentence)
         embedding = embedding.flatten()
         if args.verbose >= 2:
             print(embedding.shape)
         out.append(
-            (sentence, embedding, cluster_labels)
+            (sentence, embedding, cluster_label)
         )
 
-    return out, cluster_labels
+    return out, sampled_cluster_true_labels
 
 
-def save_embedding_to_tsv(tuples, identifier, predicted_cluster_labels=None):
+def save_embedding_to_tsv(tuples, identifier, true_cluster_labels, predicted_cluster_labels=None):
     """
         Saving the embeddings and sampled sentence into a format that we can easily upload to tensorboard
     :param tuples: is a list of tuples (sentence, embeddings),
@@ -207,10 +208,10 @@ def cluster_embeddings(tuples, method="dbscan", pca=True):
     else:
         assert False, ("This is not supposed to happen", method)
 
-    labels = cluster_model.fit_predict(embedding_matrix)
+    predicted_labels = cluster_model.fit_predict(embedding_matrix)
 
-    print(np.unique(labels))
-    n_clusters_ = len(np.unique(labels))
+    print(np.unique(predicted_labels))
+    n_clusters_ = len(np.unique(predicted_labels))
 
     print("Took so many seconds: ", time.time() - start_time)
 
@@ -221,22 +222,25 @@ def cluster_embeddings(tuples, method="dbscan", pca=True):
 
     # Replace by the array which assigns clusters to all items
     # Then calculate the silhouette score possibly
-    return n_clusters_, labels
+    return n_clusters_, predicted_labels
 
 
 if __name__ == "__main__":
     print("Sampling random sentences from the corpus, and their respective BERT embeddings")
 
     # Make sure that the respective word does not get tokenized into more tokens!
-    corpus = Corpus()
+    # corpus = Corpus()
+    corpus = CorpusSemCor()
     lang_model = BertEmbedding(corpus=corpus)
     wordnet_model = WordNetDataset()
 
     # Check out different types of polysemy?
 
     # The word to be analysed
-    polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
+    # polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
     # polysemous_words = [" have ", " test ", " limit ", " concern ", " central ", " pizza "]
+    polysemous_words = [" live ", " report ", " use ", " know ", " write ", " tell ", " state ", " allow ", " enter ", " learn ",
+                        " seek ", " final ", " critic ", " topic ", " obvious ", " kitchen "]
 
     method = "dbscan"
 
@@ -247,14 +251,14 @@ if __name__ == "__main__":
         number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
         print("Getting embeddings from BERT")
-        tuples = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+        tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
         print("Clustering embeddings...")
         # cluster_labels = None
         n_clusters, cluster_labels = cluster_embeddings(tuples, method=method)
         print("Number of clusters, wordnet senses, sentences: ", tgt_word, n_clusters, number_of_senses, len(tuples))
 
-        save_embedding_to_tsv(tuples, predicted_cluster_labels=cluster_labels, identifier=tgt_word + "_" + method + "_")
+        save_embedding_to_tsv(tuples, true_cluster_labels=true_cluster_labels, predicted_cluster_labels=cluster_labels, identifier=tgt_word + "_" + method + "_")
 
         # Now use this clustering to sample contexts
         # Ignore clusters which have less than 1% samples...

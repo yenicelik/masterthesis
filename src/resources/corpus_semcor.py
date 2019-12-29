@@ -44,10 +44,10 @@ class CorpusSemCor:
 
         # Should I stem retrieve from stemmed dictionary before feeding in?
         # for these ...?
-        word = word.replace(" ", "")
-        stemmed_word = self.stemmer.stem(word)
+        word = word.replace(" ", "") # because this time we have lists of lists of tokens
+        # stemmed_word = self.stemmer.stem(word)
         # pad front and back by a " "
-        print("Stemmed word", stemmed_word)
+        # print("Stemmed word", stemmed_word)
 
         out = []  # Will cover a list of sentences which contain the respective word
         out_idx = []  # Will cover a list of which cluster the given sentence belongs to
@@ -57,7 +57,7 @@ class CorpusSemCor:
             # Iterate through all sentences
             query_sentence = [self.stemmer.stem(x) for x in self.data[i]]
             try:
-                idx = query_sentence.index(stemmed_word)
+                idx = query_sentence.index(word)
             except:
                 continue
 
