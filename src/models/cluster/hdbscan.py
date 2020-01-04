@@ -1,0 +1,62 @@
+"""
+
+"""
+from ax import ParameterType, RangeParameter, SearchSpace
+import numpy as np
+from sklearn.cluster import OPTICS
+
+from src.models.cluster.base import BaseCluster
+
+
+class HdbScan(BaseCluster):
+    """
+        No open parameters
+    """
+
+    def _possible_metrics(self):
+        # TODO: Perhaps turn this into an integer optimization,
+        # (through dictionary translation)
+        # although even neighborhood cannot really be destroyed...
+
+        # Anything commented out is covered through other metrics,
+        # or is clearly not part of this space ...
+
+        # set as `metric=`
+        return [
+            'cosine',
+            'braycurtis',
+            'canberra',
+            'chebyshev',
+            'correlation',
+            'mahalanobis',
+            'minkowski',
+        ]
+
+    def __init__(self, metric='minkowski'):
+        super(HdbScan, self).__init__()
+        # metric is one of:
+
+    def hyperparameter_dictionary(self):
+        return [
+            RangeParameter(
+                name="min_samples",
+                parameter_type=ParameterType.INT,
+                lower=1, upper=50
+            ),
+            RangeParameter(
+                name="eps",
+                parameter_type=ParameterType.FLOAT,
+                lower=0.01, upper=5
+            ),
+            RangeParameter(
+                name="metric_params",
+                parameter_type=ParameterType.FLOAT,
+                lower=0.01, upper=10
+            )
+        ]
+
+    def fit(self, X, y=None):
+        # Run hyperparameter optimizeration inside of this...
+        for i in range(self.max_optimization_iterations):
+            # Sample
+            self.model = OPTICS()

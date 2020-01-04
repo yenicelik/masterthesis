@@ -15,3 +15,5 @@ tensorflow_probability==0.7.0
 torch==1.3.1
 umap-learn==0.3.10
 chinese-whispers==0.6.1
+ax-platform==0.1.8
+hdbscan==0.8.24
