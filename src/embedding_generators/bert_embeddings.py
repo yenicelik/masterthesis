@@ -89,9 +89,10 @@ class BertEmbedding:
 
             # Find all indecies of tokenized word within array
             # For simplicity, taking the first occurence...
-            print("Sentence and tokenized word is")
-            print(tokenized_word)
-            print(sentence)
+            if args.verbose == 2:
+                print("Sentence and tokenized word is")
+                print(tokenized_word)
+                print(sentence)
             tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, self.corpus)[0]
 
             # Now convert to pytorch tensors..

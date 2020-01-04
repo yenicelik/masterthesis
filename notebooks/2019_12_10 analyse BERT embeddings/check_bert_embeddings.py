@@ -41,7 +41,7 @@ from src.knowledge_graphs.wordnet import WordNetDataset
 
 # TODO: Should probably implement logging instead of this, and just rewrite logging to write to stdout...
 from src.resources.corpus_semcor import CorpusSemCor
-from src.samples.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
+from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
 
 def save_embedding_to_tsv(tuples, identifier, true_cluster_labels, predicted_cluster_labels=None):

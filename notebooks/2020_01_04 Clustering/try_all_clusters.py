@@ -11,7 +11,7 @@
     this is really as good as any other metric
 """
 
-from ax import optimize
+from ax import optimize, SearchSpace
 import numpy as np
 from sklearn.metrics import adjusted_rand_score
 
@@ -23,7 +23,7 @@ from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.meanshift import MTMeanShift
 from src.models.cluster.optics import MTOptics
 from src.resources.corpus_semcor import CorpusSemCor
-from src.samples.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
+from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
 
 def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
@@ -71,17 +71,17 @@ if __name__ == "__main__":
     tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
     # Just concat all to one big matrix
-    print("Tuples are")
-    print(tuples)
 
     X = np.concatenate(
         [x[1].reshape(1, -1) for x in tuples],
         axis=0
     )
+    known_indices = np.arange(X.shape[0])
+
+    # Sample some more sentences using the other corpus to fulfill this ...
 
     print("Dataset shape is: ", X.shape)
-
-    exit(0)
+    print("True cluster labels are", len(true_cluster_labels))
 
     # Apply PCA on X
 
@@ -90,21 +90,24 @@ if __name__ == "__main__":
 
         params = model_class.hyperparameter_dictionary()
 
-        lambda p: _evaluate_model(
-            model_class=model_class,
-            arg=p,
-            X=X,
-            known_indices=None,
-            true_clustering=None
-        )
+        def _current_eval_fun(p):
+            return _evaluate_model(
+                model_class=model_class,
+                arg=p,
+                X=X,
+                known_indices=known_indices,
+                true_clustering=true_cluster_labels
+            )
 
         best_parameters, best_values, experiment, model = optimize(
             parameters=params,
-            evaluation_function=_evaluate_model,
+            evaluation_function=_current_eval_fun,
             minimize=True,
             total_trials=len(params) * 10
         )
 
         print("Best parameters etc.")
         print(best_parameters, best_values, experiment, model)
+
+        exit(0)
 

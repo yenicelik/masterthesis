@@ -38,38 +38,41 @@ class MTOptics(BaseCluster):
             'xi'
         ]
 
-    def __init__(self, metric='minkowski'):
+    def __init__(self):
         super(MTOptics, self).__init__()
         # metric is one of:
+        self.model = OPTICS(
+
+        )
 
     @classmethod
     def hyperparameter_dictionary(cls):
         return [
-            RangeParameter(
-                name="min_samples",
-                parameter_type=ParameterType.INT,
-                lower=1, upper=50
-            ),
-            RangeParameter(
-                name="max_eps",
-                parameter_type=ParameterType.FLOAT,
-                lower=50, upper=np.inf
-            ),
-            RangeParameter(
-                name="p",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.1, upper=10
-            ),
-            RangeParameter(
-                name="xi",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.001, upper=10
-            ),
+            {
+                "name":"min_samples",
+                "type": ParameterType.INT,
+                "lower": 1,
+                "upper": 50
+            },
+            {
+                "name":"max_eps",
+                "type": ParameterType.FLOAT,
+                "lower": 50,
+                "upper": np.inf
+            },
+            # RangeParameter(
+            #     name="p",
+            #     parameter_type=ParameterType.FLOAT,
+            #     lower=0.1, upper=10
+            # ),
+            # RangeParameter(
+            #     name="xi",
+            #     parameter_type=ParameterType.FLOAT,
+            #     lower=0.001, upper=10
+            # ),
         ]
 
     def fit(self, X, y=None):
         # Run hyperparameter optimizeration inside of this...
-        for i in range(self.max_optimization_iterations):
-            # Sample
-            self.model = OPTICS()
+        return self.model.fit(X, y)
 

@@ -63,10 +63,12 @@ class CorpusSemCor:
 
             synset_id = self.data_wordnet_ids[i][idx]
             output_sentence = " ".join(self.data[i])
-            print("Query sentence")
-            print(query_sentence)
-            print("Output sentence")
-            print(output_sentence)
+
+            if args.verbose == 2:
+                print("Query sentence")
+                print(query_sentence)
+                print("Output sentence")
+                print(output_sentence)
 
             # replace all "_" by " "
             output_sentence = output_sentence.replace("_", " ")
@@ -155,7 +157,7 @@ class CorpusSemCor:
                     # Get number of meanings from word-net
 
                     wordnet_synsets = wn.synsets(word_txt)
-                    print("wordnet synset: ", word_synsetid, wordnet_synsets)
+                    # print("wordnet synset: ", word_synsetid, wordnet_synsets)
                     mean_number_of_wordset_senses.append(len(wordnet_synsets))
 
                     # Get number of senses...
@@ -172,7 +174,8 @@ class CorpusSemCor:
                     len(synset_ids)
                 )
 
-                print("Sentence is: ", words)
+                if args.verbose == 2:
+                    print("Sentence is: ", words)
                 data.append(words)
                 data_wordnet_ids.append(synset_ids)
 
