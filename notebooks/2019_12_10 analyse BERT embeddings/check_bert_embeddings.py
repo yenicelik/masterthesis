@@ -13,8 +13,6 @@ import time
 
 import pandas as pd
 import numpy as np
-import umap
-import sklearn
 from sklearn.cluster import AffinityPropagation, MeanShift, DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import normalize
@@ -151,9 +149,13 @@ def cluster_embeddings(tuples, method="dbscan", pca=True):
         # Using a non-parametric clustering and manifold projection!
         # embedding_matrix = umap.UMAP(n_components=100).fit_transform(embedding_matrix)
 
-        pca_model = PCA(n_components=min(100, embedding_matrix.shape[0]), whiten=True)
         # Center the data
         embedding_matrix = embedding_matrix - np.mean(embedding_matrix, axis=0).reshape(1, -1)
+        # Whiten data
+        # TODO: Uncomment following and try again!
+        # embedding_matrix = embedding_matrix / np.std(embedding_matrix, axis=0).reshape(1, -1)
+
+        pca_model = PCA(n_components=min(100, embedding_matrix.shape[0]), whiten=True)
 
         embedding_matrix = pca_model.fit_transform(embedding_matrix)
         captured_variance = pca_model.explained_variance_ratio_
