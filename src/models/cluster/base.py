@@ -15,7 +15,8 @@ class BaseCluster:
     def __init__(self):
         self.model = None
 
-    def hyperparameter_dictionary(self):
+    @classmethod
+    def hyperparameter_dictionary(cls):
         raise NotImplementedError
 
     @property

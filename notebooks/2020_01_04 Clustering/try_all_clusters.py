@@ -12,13 +12,18 @@
 """
 
 from ax import optimize
+import numpy as np
 from sklearn.metrics import adjusted_rand_score
 
+from src.embedding_generators.bert_embeddings import BertEmbedding
+from src.knowledge_graphs.wordnet import WordNetDataset
 from src.models.cluster.affinitypropagation import MTAffinityPropagation
 from src.models.cluster.dbscan import MTDbScan
 from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.meanshift import MTMeanShift
 from src.models.cluster.optics import MTOptics
+from src.resources.corpus_semcor import CorpusSemCor
+from src.samples.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
 
 def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
@@ -45,18 +50,8 @@ def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
 if __name__ == "__main__":
     print("Starting hyper-parameter search of the model")
 
-    params = [
-          {
-            "name": "x1",
-            "type": "range",
-            "bounds": [-10.0, 10.0],
-          },
-          {
-            "name": "x2",
-            "type": "range",
-            "bounds": [-10.0, 10.0],
-          },
-        ]
+    # For each individual word, apply this clustering ...
+    tgt_word = " use "
 
     model_classes = [
         ("MTOptics", MTOptics),
@@ -67,10 +62,33 @@ if __name__ == "__main__":
     ]
 
     # TODO: bootstrap a dataset ...
-    X = None
+    corpus = CorpusSemCor()
+    lang_model = BertEmbedding(corpus=corpus)
+    wordnet_model = WordNetDataset()
+
+    print("Looking at word", tgt_word)
+    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+
+    # Just concat all to one big matrix
+    print("Tuples are")
+    print(tuples)
+
+    X = np.concatenate(
+        [x[1].reshape(1, -1) for x in tuples],
+        axis=0
+    )
+
+    print("Dataset shape is: ", X.shape)
+
+    exit(0)
+
+    # Apply PCA on X
 
     for model_name, model_class in model_classes:
         print(f"Running {model_name}")
+
+        params = model_class.hyperparameter_dictionary()
 
         lambda p: _evaluate_model(
             model_class=model_class,

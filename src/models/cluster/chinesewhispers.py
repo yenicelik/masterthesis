@@ -19,7 +19,8 @@ class ChineseWhispers(BaseCluster):
         super(ChineseWhispers, self).__init__()
         # metric is one of:
 
-    def hyperparameter_dictionary(self):
+    @classmethod
+    def hyperparameter_dictionary(cls):
         return [
             RangeParameter(
                 name="damping",

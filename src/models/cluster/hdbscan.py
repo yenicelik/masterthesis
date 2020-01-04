@@ -18,7 +18,8 @@ class MTHdbScan(BaseCluster):
         super(MTHdbScan, self).__init__()
         # metric is one of:
 
-    def hyperparameter_dictionary(self):
+    @classmethod
+    def hyperparameter_dictionary(cls):
         return [
             RangeParameter(
                 name="min_cluster_size",
