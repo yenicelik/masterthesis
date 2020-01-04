@@ -4,11 +4,23 @@
 
 class BaseCluster:
 
+    @property
+    def max_optimization_iterations(self):
+        """
+            Maximum number of optimization steps to run
+        :return:
+        """
+        return 100
+
     def __init__(self):
-        pass
+        self.model = None
 
     def hyperparameter_dictionary(self):
         raise NotImplementedError
+
+    @property
+    def _min_cluster_size(self):
+        return 5
 
     def fit(self, X, y=None):
         return self.model.fit(X, y)

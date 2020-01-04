@@ -9,10 +9,6 @@ from src.models.cluster.base import BaseCluster
 
 
 class Optics(BaseCluster):
-    """
-        Taking out any trace of DBSCAN,
-        because we have a designated class for that
-    """
 
     def _possible_metrics(self):
         # TODO: Perhaps turn this into an integer optimization,
@@ -21,6 +17,8 @@ class Optics(BaseCluster):
 
         # Anything commented out is covered through other metrics,
         # or is clearly not part of this space ...
+
+        # set as `metric=`
         return [
             'cosine',
             'braycurtis',
@@ -29,11 +27,6 @@ class Optics(BaseCluster):
             'correlation',
             'mahalanobis',
             'minkowski',
-        ]
-
-    def _possible_cluster_methods(self):
-        return [
-            'xi'
         ]
 
     def __init__(self, metric='minkowski'):
@@ -48,20 +41,15 @@ class Optics(BaseCluster):
                 lower=1, upper=50
             ),
             RangeParameter(
-                name="max_eps",
+                name="eps",
                 parameter_type=ParameterType.FLOAT,
-                lower=50, upper=np.inf
+                lower=0.01, upper=5
             ),
             RangeParameter(
-                name="p",
+                name="metric_params",
                 parameter_type=ParameterType.FLOAT,
-                lower=0.1, upper=10
-            ),
-            RangeParameter(
-                name="xi",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.001, upper=10
-            ),
+                lower=0.01, upper=10
+            )
         ]
 
     def fit(self, X, y=None):
@@ -69,4 +57,3 @@ class Optics(BaseCluster):
         for i in range(self.max_optimization_iterations):
             # Sample
             self.model = OPTICS()
-
