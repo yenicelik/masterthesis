@@ -8,7 +8,10 @@ from sklearn.cluster import OPTICS
 from src.models.cluster.base import BaseCluster
 
 
-class Optics(BaseCluster):
+class DbScan(BaseCluster):
+    """
+        No open parameters
+    """
 
     def _possible_metrics(self):
         # TODO: Perhaps turn this into an integer optimization,
@@ -30,7 +33,7 @@ class Optics(BaseCluster):
         ]
 
     def __init__(self, metric='minkowski'):
-        super(Optics, self).__init__()
+        super(DbScan, self).__init__()
         # metric is one of:
 
     def hyperparameter_dictionary(self):

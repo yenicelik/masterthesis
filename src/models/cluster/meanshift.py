@@ -3,12 +3,12 @@
 """
 from ax import ParameterType, RangeParameter, SearchSpace
 import numpy as np
-from sklearn.cluster import OPTICS
+from sklearn.cluster import OPTICS, MeanShift
 
 from src.models.cluster.base import BaseCluster
 
 
-class Optics(BaseCluster):
+class OurMeanShift(BaseCluster):
     """
         Taking out any trace of DBSCAN,
         because we have a designated class for that.
@@ -39,30 +39,25 @@ class Optics(BaseCluster):
         ]
 
     def __init__(self, metric='minkowski'):
-        super(Optics, self).__init__()
+        super(OurMeanShift, self).__init__()
         # metric is one of:
 
     def hyperparameter_dictionary(self):
         return [
+            # RangeParameter(
+            #     name="bandwidth",
+            #     parameter_type=ParameterType.INT,
+            #     lower=0.001, upper=100
+            # ),
             RangeParameter(
-                name="min_samples",
+                name="min_bin_freq",
                 parameter_type=ParameterType.INT,
-                lower=1, upper=50
+                lower=1, upper=10
             ),
             RangeParameter(
-                name="max_eps",
-                parameter_type=ParameterType.FLOAT,
-                lower=50, upper=np.inf
-            ),
-            RangeParameter(
-                name="p",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.1, upper=10
-            ),
-            RangeParameter(
-                name="xi",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.001, upper=10
+                name="mean_iter",
+                parameter_type=ParameterType.INT,
+                lower=300, upper=1000
             ),
         ]
 
@@ -70,5 +65,5 @@ class Optics(BaseCluster):
         # Run hyperparameter optimizeration inside of this...
         for i in range(self.max_optimization_iterations):
             # Sample
-            self.model = OPTICS()
+            self.model = MeanShift()
 
