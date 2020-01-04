@@ -17,6 +17,7 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import adjusted_rand_score
 from sklearn.preprocessing import StandardScaler
 
+from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.knowledge_graphs.wordnet import WordNetDataset
 from src.models.cluster.affinitypropagation import MTAffinityPropagation
@@ -24,6 +25,7 @@ from src.models.cluster.dbscan import MTDbScan
 from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.meanshift import MTMeanShift
 from src.models.cluster.optics import MTOptics
+from src.resources.corpus import Corpus
 from src.resources.corpus_semcor import CorpusSemCor
 from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
@@ -53,6 +55,38 @@ def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
 
     return adjusted_rand_score(true_clustering, pred_clustering)
 
+def sample_semcor_data(tgt_word):
+    corpus = CorpusSemCor()
+    lang_model = BertEmbedding(corpus=corpus)
+    wordnet_model = WordNetDataset()
+
+    print("Looking at word", tgt_word)
+    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+
+    # Just concat all to one big matrix
+    X = np.concatenate(
+        [x[1].reshape(1, -1) for x in tuples],
+        axis=0
+    )
+    return X, true_cluster_labels
+
+def sample_naive_data(tgt_word, n=None):
+    corpus = Corpus()
+    lang_model = BertEmbedding(corpus=corpus)
+    wordnet_model = WordNetDataset()
+
+    print("Looking at word", tgt_word)
+    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
+
+    # Just concat all to one big matrix
+    X = np.concatenate(
+        [x[1].reshape(1, -1) for x in tuples],
+        axis=0
+    )
+    return X
+
 if __name__ == "__main__":
     print("Starting hyper-parameter search of the model")
 
@@ -70,21 +104,16 @@ if __name__ == "__main__":
     ]
 
     # TODO: bootstrap a dataset ...
-    corpus = CorpusSemCor()
-    lang_model = BertEmbedding(corpus=corpus)
-    wordnet_model = WordNetDataset()
 
-    print("Looking at word", tgt_word)
-    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+    X1, true_cluster_labels = sample_semcor_data(tgt_word)
+    n = max(0, (args.max_samples - X1.shape[0]))
+    X2 = sample_naive_data(tgt_word, n=n)
 
-    # Just concat all to one big matrix
+    known_indices = list(np.arange(X1.shape[0], dtype=int).tolist())
 
-    X = np.concatenate(
-        [x[1].reshape(1, -1) for x in tuples],
-        axis=0
-    )
-    known_indices = list(np.arange(X.shape[0], dtype=int).tolist())
+    X = np.concatenate([X1, X2], axis=0)
+    print("Collected data is: ")
+    print(X.shape)
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)

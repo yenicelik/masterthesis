@@ -33,7 +33,7 @@ def _get_all_top_words(n=5000):
 
 class CorpusSemCor:
 
-    def sample_sentence_including_word_from_corpus(self, word):
+    def sample_sentence_including_word_from_corpus(self, word, n=None):
         """
         :param word: The word for which we want to find example words
         :return:

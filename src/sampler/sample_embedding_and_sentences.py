@@ -1,7 +1,7 @@
 from src.config import args
 
 
-def get_bert_embeddings_and_sentences(model, corpus, tgt_word):
+def get_bert_embeddings_and_sentences(model, corpus, tgt_word, n=None):
     """
     :param model: A language model, which implements both the
         `_sample_sentence_including_word_from_corpus` and the
@@ -9,12 +9,11 @@ def get_bert_embeddings_and_sentences(model, corpus, tgt_word):
     function
     :return:
     """
-
     out = []
 
     if args.verbose >= 1:
         print("Retrieving example sentences from corpus")
-    sampled_sentences, sampled_cluster_true_labels = corpus.sample_sentence_including_word_from_corpus(word=tgt_word)
+    sampled_sentences, sampled_cluster_true_labels = corpus.sample_sentence_including_word_from_corpus(word=tgt_word, n=n)
 
     if args.verbose >= 1:
         print("Retrieving sampled embeddings from BERT")

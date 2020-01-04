@@ -11,16 +11,18 @@ load_dotenv()
 
 class Corpus:
 
-    def sample_sentence_including_word_from_corpus(self, word):
+    def sample_sentence_including_word_from_corpus(self, word, n=None):
         """
             The Corpus is some corpus that
             Probably better ways to parse this
         :return:
         """
+        if n is None:
+            n = args.max_samples
         # Find all words, together with their respective synset id ...
         # -> Could best parallelize this ...
         # Strip word of all whitespaces
-        out = ["[CLS] " + x for x in self.data if word in x][:args.max_samples]
+        out = ["[CLS] " + x for x in self.data if word in x][:n]
         # Must not allow any words that happen less than 5 times!
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
         # Perhaps best not to simply change the function signature, but to make it an attribute
