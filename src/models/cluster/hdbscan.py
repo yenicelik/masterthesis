@@ -9,13 +9,13 @@ from sklearn.cluster import OPTICS
 from src.models.cluster.base import BaseCluster
 
 
-class HdbScan(BaseCluster):
+class MTHdbScan(BaseCluster):
     """
         No open parameters really
     """
 
     def __init__(self):
-        super(HdbScan, self).__init__()
+        super(MTHdbScan, self).__init__()
         # metric is one of:
 
     def hyperparameter_dictionary(self):

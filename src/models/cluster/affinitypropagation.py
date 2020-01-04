@@ -8,7 +8,7 @@ from sklearn.cluster import OPTICS, AffinityPropagation
 from src.models.cluster.base import BaseCluster
 
 
-class OurAffinityPropagation(BaseCluster):
+class MTAffinityPropagation(BaseCluster):
     """
         Taking out any trace of DBSCAN,
         because we have a designated class for that.
@@ -20,7 +20,7 @@ class OurAffinityPropagation(BaseCluster):
     """
 
     def __init__(self, metric='minkowski'):
-        super(OurAffinityPropagation, self).__init__()
+        super(MTAffinityPropagation, self).__init__()
         # metric is one of:
 
     def hyperparameter_dictionary(self):

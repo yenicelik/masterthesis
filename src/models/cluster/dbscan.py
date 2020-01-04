@@ -8,7 +8,7 @@ from sklearn.cluster import OPTICS
 from src.models.cluster.base import BaseCluster
 
 
-class DbScan(BaseCluster):
+class MTDbScan(BaseCluster):
     """
         No open parameters
     """
@@ -33,7 +33,7 @@ class DbScan(BaseCluster):
         ]
 
     def __init__(self, metric='minkowski'):
-        super(DbScan, self).__init__()
+        super(MTDbScan, self).__init__()
         # metric is one of:
 
     def hyperparameter_dictionary(self):

@@ -8,7 +8,7 @@ from sklearn.cluster import OPTICS, MeanShift
 from src.models.cluster.base import BaseCluster
 
 
-class OurMeanShift(BaseCluster):
+class MTMeanShift(BaseCluster):
     """
         Taking out any trace of DBSCAN,
         because we have a designated class for that.
@@ -39,7 +39,7 @@ class OurMeanShift(BaseCluster):
         ]
 
     def __init__(self, metric='minkowski'):
-        super(OurMeanShift, self).__init__()
+        super(MTMeanShift, self).__init__()
         # metric is one of:
 
     def hyperparameter_dictionary(self):
