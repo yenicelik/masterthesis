@@ -61,16 +61,12 @@ def create_adjacency_matrix(X):
     n = 20 # Take 50 closest items!
     cor = cosine_similarity(X, X)
 
-    # print(np.max(cor), np.count_nonzero(cor))
-
     # Just take top 1000 edges in total.
     # Some items are not supposed to be connected
     # i.e. the above method just connects them forcefully in that case (even if they're far away!)
 
     opposite_of_top_neighbors = np.argsort(cor, axis=1)[:, ::-1][:, :n]
-    # print(opposite_of_top_neighbors)
     out = np.zeros_like(cor)
-    # print("dist", np.count_nonzero(cor), np.count_nonzero(opposite_of_top_neighbors))
 
     for i in range(opposite_of_top_neighbors.shape[0]):
 
@@ -249,7 +245,10 @@ if __name__ == "__main__":
 
     # Now apply the chinese whistering algorith..
 
-    model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=50)
+    model = ChineseWhispersClustering(
+        top_nearest_neighbors=50,
+        remove_hub_number=50
+    )
 
     model.fit(a)
 

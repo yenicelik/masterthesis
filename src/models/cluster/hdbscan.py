@@ -11,7 +11,7 @@ from src.models.cluster.base import BaseCluster
 
 class HdbScan(BaseCluster):
     """
-        No open parameters
+        No open parameters really
     """
 
     def __init__(self):
