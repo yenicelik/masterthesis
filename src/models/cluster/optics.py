@@ -1,7 +1,7 @@
 """
 
 """
-from ax import ParameterType, RangeParameter, SearchSpace
+from ax import ParameterType, RangeParameter
 import numpy as np
 from sklearn.cluster import OPTICS
 
