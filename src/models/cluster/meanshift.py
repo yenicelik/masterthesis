@@ -16,30 +16,27 @@ class MTMeanShift(BaseCluster):
         No meaningful open parameters
     """
 
-    def __init__(self, metric='minkowski'):
+    def __init__(self, kargs):
         super(MTMeanShift, self).__init__()
         # metric is one of:
+        self.model = MeanShift(**kargs)
 
     @classmethod
     def hyperparameter_dictionary(cls):
+        # removed mahalanobis
         return [
-            {
-                "name": "metric",
-                "type": "choice",
-                "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation', 'mahalanobis', 'minkowski', ]
-            },
             {
                 "name": "bandwidth",
                 "type": "choice",
-                "values": [x**2 for x in range(5)]
+                "values": [(x**2) for x in range(1, 5)]
             },
             {
                 "name": "min_bin_freq",
                 "type": "choice",
-                "values": [x for x in range(10)]
+                "values": [x for x in range(1, 10)]
             },
             {
-                "name": "mean_iter",
+                "name": "max_iter",
                 "type": "choice",
                 "values": [x for x in range(400, 1000, 50)]
             }

@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(description='Experiment Configuration Parser')
 parser.add_argument('--random_seed', default=0, type=int, help='an integer which determines the random seed. if no seed shall be provided, set this to 0')
 parser.add_argument('--dtype', default='tf.float32', help='the floating point type that is going to be used globally')
 
-parser.add_argument('--max_samples', default=5, type=int, help='the number of sentences to sample for BERT embeddings')
+parser.add_argument('--max_samples', default=40, type=int, help='the number of sentences to sample for BERT embeddings')
 parser.add_argument('--cuda', default='False', help='Whether or not CUDA will be used. This argument will be ignored if CUDA is available')
 
 parser.add_argument('--verbose', default=1, type=int, help='verbosity level. higher means more verbose')
@@ -29,4 +29,7 @@ if torch.cuda.is_available():
 else:
     args.cuda = False
     print("CUDA is not available!")
+
+assert args.max_samples > 32, ("If args is less than 32, it will not function properly!", args.max_samples)
+
 print(args)

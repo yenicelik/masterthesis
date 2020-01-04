@@ -50,7 +50,7 @@ def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
     # Drop all indices that are unkown
     pred_clustering = pred_clustering[known_indices]
 
-    if len(np.unique(pred_clustering)):
+    if len(np.unique(pred_clustering)) == 1:
         print("Couldn't find cluster!", np.unique(pred_clustering))
 
     return adjusted_rand_score(true_clustering, pred_clustering)
@@ -145,7 +145,7 @@ if __name__ == "__main__":
             parameters=params,
             evaluation_function=_current_eval_fun,
             minimize=False,
-            total_trials=len([x for x in params if x['type'] != "fixed"]) # * 10 * 2
+            total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 2
         )
 
         print("Best parameters etc.")

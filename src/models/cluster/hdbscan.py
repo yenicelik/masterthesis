@@ -14,9 +14,10 @@ class MTHdbScan(BaseCluster):
         No open parameters really
     """
 
-    def __init__(self):
+    def __init__(self, kargs):
         super(MTHdbScan, self).__init__()
         # metric is one of:
+        self.model = hdbscan.HDBSCAN(**kargs)
 
     @classmethod
     def hyperparameter_dictionary(cls):
@@ -24,20 +25,20 @@ class MTHdbScan(BaseCluster):
             {
                 "name": "min_samples",
                 "type": "choice",
-                "values": [2 ** x for x in range(5)],
+                "values": [(2 ** x) for x in range(1, 5)],
             },
             {
                 "name": "min_cluster_size",
                 "type": "choice",
-                "values": [2 ** x for x in range(6)],
+                "values": [(2 ** x) for x in range(1, 6)],
             },
             {
                 "name": "cluster_selection_epsilon",
                 "type": "range",
-                "bounds": [0.001, 10]
+                "bounds": [0.001, 10.]
             },
             {
-                "name": "cluster_selection_epsilon",
+                "name": "alpha",
                 "type": "range",
                 "bounds": [0.5, 2.0]
             }

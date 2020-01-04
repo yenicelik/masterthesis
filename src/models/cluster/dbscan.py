@@ -3,7 +3,7 @@
 """
 from ax import ParameterType, RangeParameter, SearchSpace
 import numpy as np
-from sklearn.cluster import OPTICS
+from sklearn.cluster import OPTICS, DBSCAN
 
 from src.models.cluster.base import BaseCluster
 
@@ -32,32 +32,33 @@ class MTDbScan(BaseCluster):
             'minkowski',
         ]
 
-    def __init__(self, metric='minkowski'):
+    def __init__(self, kargs):
         super(MTDbScan, self).__init__()
         # metric is one of:
+        self.model = DBSCAN(**kargs)
 
     @classmethod
     def hyperparameter_dictionary(cls):
+        # removed mahalanobis
         return [
             {
                 "name": "min_samples",
                 "type": "choice",
-                "values": [2 ** x for x in range(5)],
+                "values": [(2 ** x) for x in range(1, 5)],
             },
             {
                 "name": "eps",
                 "type": "range",
                 "bounds": [0.01, 5.]
             },
-            {
-                "name": "metric_params",
-                "type": "range",
-                "bounds": [0.01, 10.]
-            },
+            # {
+            #     "name": "metric_params",
+            #     "type": "range",
+            #     "bounds": [0.01, 10.]
+            # },
             {
                 "name": "metric",
                 "type": "choice",
-                "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation', 'mahalanobis', 'minkowski', ]
+                "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation']
             },
-
         ]

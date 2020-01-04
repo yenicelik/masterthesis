@@ -19,9 +19,10 @@ class MTAffinityPropagation(BaseCluster):
         is the only real option
     """
 
-    def __init__(self, metric='minkowski'):
+    def __init__(self, kargs):
         super(MTAffinityPropagation, self).__init__()
         # metric is one of:
+        self.model = AffinityPropagation(**kargs)
 
     @classmethod
     def hyperparameter_dictionary(cls):
@@ -29,7 +30,7 @@ class MTAffinityPropagation(BaseCluster):
             {
                 "name": "damping",
                 "type": "range",
-                "bounds": [0.01, 10.]
+                "bounds": [0.5, 0.999]
             },
             {
                 "name": "preference",

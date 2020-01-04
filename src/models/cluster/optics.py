@@ -34,17 +34,18 @@ class MTOptics(BaseCluster):
 
     @classmethod
     def hyperparameter_dictionary(cls):
+        # removed mahalanobis
         return [
             {
                 "name": "min_samples",
                 "type": "choice",
-                "values": [2**x for x in range(5)],
+                "values": [2**x for x in range(1, 5)],
             },
-            {
-                "name": "metric",
-                "type": "choice",
-                "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation', 'mahalanobis', 'minkowski',]
-            },
+            # {
+            #     "name": "metric",
+            #     "type": "choice",
+            #     "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation', 'minkowski']
+            # },
             {
                 "name": "cluster_method",
                 "type": "fixed",

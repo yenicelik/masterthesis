@@ -19,6 +19,8 @@ class Corpus:
         """
         if n is None:
             n = args.max_samples
+        if n == 0:
+            n = 1
         # Find all words, together with their respective synset id ...
         # -> Could best parallelize this ...
         # Strip word of all whitespaces
