@@ -13,7 +13,9 @@
 
 from ax import optimize, SearchSpace
 import numpy as np
+from sklearn.decomposition import PCA
 from sklearn.metrics import adjusted_rand_score
+from sklearn.preprocessing import StandardScaler
 
 from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.knowledge_graphs.wordnet import WordNetDataset
@@ -42,10 +44,13 @@ def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
         len(known_indices),
         len(true_clustering)
     )
-    pred_clustering = model_class(arg).fit(X)
+    pred_clustering = model_class(arg).fit_predict(X)
     # Drop all indices that are unkown
-    print("Known indices are ", known_indices, type(known_indices))
     pred_clustering = pred_clustering[known_indices]
+
+    if len(np.unique(pred_clustering)):
+        print("Couldn't find cluster!", np.unique(pred_clustering))
+
     return adjusted_rand_score(true_clustering, pred_clustering)
 
 if __name__ == "__main__":
@@ -53,6 +58,8 @@ if __name__ == "__main__":
 
     # For each individual word, apply this clustering ...
     tgt_word = " use "
+
+    # print("ADJ is: ", adjusted_rand_score([1, 2, 3, 4, 5], [0, 1, 2, 3, 4]))
 
     model_classes = [
         ("MTOptics", MTOptics),
@@ -77,7 +84,15 @@ if __name__ == "__main__":
         [x[1].reshape(1, -1) for x in tuples],
         axis=0
     )
-    known_indices = np.arange(X.shape[0], dtype=int).tolist()
+    known_indices = list(np.arange(X.shape[0], dtype=int).tolist())
+
+    # Apply PCA
+    X = StandardScaler().fit_transform(X)
+    pca_model = PCA(n_components=min(50, X.shape[0]), whiten=False)
+    X = pca_model.fit_transform(X)
+    print("Variance kept through pca is: ", np.sum(pca_model.explained_variance_ratio_))
+
+    print("ADJ is: ", adjusted_rand_score([1, 2, 3, 4, 0], [0, 1, 2, 3, 4]))
 
     # Sample some more sentences using the other corpus to fulfill this ...
 
@@ -87,7 +102,7 @@ if __name__ == "__main__":
     # Apply PCA on X
 
     for model_name, model_class in model_classes:
-        print(f"Running {model_name}")
+        print(f"Running {model_name} {model_class}")
 
         params = model_class.hyperparameter_dictionary()
 
@@ -103,12 +118,10 @@ if __name__ == "__main__":
         best_parameters, best_values, experiment, model = optimize(
             parameters=params,
             evaluation_function=_current_eval_fun,
-            minimize=True,
-            total_trials=len(params) * 10
+            minimize=False,
+            total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 2
         )
 
         print("Best parameters etc.")
         print(best_parameters, best_values, experiment, model)
-
-        exit(0)
 

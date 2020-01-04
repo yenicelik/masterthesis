@@ -23,8 +23,8 @@ class BaseCluster:
     def _min_cluster_size(self):
         return 5
 
-    def fit(self, X, y=None):
-        return self.model.fit(X, y)
+    def fit_predict(self, X, y=None):
+        return self.model.fit_predict(X, y)
 
     def predict(self, X, y=None):
         return self.model.predict(X, y)

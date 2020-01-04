@@ -42,10 +42,3 @@ class MTAffinityPropagation(BaseCluster):
                 lower=100, upper=500
             ),
         ]
-
-    def fit(self, X, y=None):
-        # Run hyperparameter optimizeration inside of this...
-        for i in range(self.max_optimization_iterations):
-            # Sample
-            self.model = AffinityPropagation()
-

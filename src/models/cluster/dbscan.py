@@ -55,9 +55,3 @@ class MTDbScan(BaseCluster):
                 lower=0.01, upper=10
             )
         ]
-
-    def fit(self, X, y=None):
-        # Run hyperparameter optimizeration inside of this...
-        for i in range(self.max_optimization_iterations):
-            # Sample
-            self.model = OPTICS()

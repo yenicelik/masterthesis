@@ -55,22 +55,17 @@ class MTOptics(BaseCluster):
             },
             {
                 "name": "max_eps",
-                "type": "range",
-                "bounds": [50., float(inf)]
+                "type": "fixed",
+                "value": np.inf
             },
-            # RangeParameter(
-            #     name="p",
-            #     parameter_type=ParameterType.FLOAT,
-            #     lower=0.1, upper=10
-            # ),
-            # RangeParameter(
-            #     name="xi",
-            #     parameter_type=ParameterType.FLOAT,
-            #     lower=0.001, upper=10
-            # ),
+            {
+                "name": "xi",
+                "type": "range",
+                "bounds": [0.001, 10.]
+            },
+            {
+                "name": "p",
+                "type": "range",
+                "bounds": [1, 10]
+            }
         ]
-
-    def fit(self, X, y=None):
-        # Run hyperparameter optimizeration inside of this...
-        return self.model.fit(X, y)
-

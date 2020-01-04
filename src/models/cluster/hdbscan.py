@@ -43,11 +43,3 @@ class MTHdbScan(BaseCluster):
             )
 
         ]
-
-    def fit(self, X, y=None):
-        # Run hyperparameter optimizeration inside of this...
-        for i in range(self.max_optimization_iterations):
-            # Sample
-            self.model = hdbscan.HDBSCAN(
-
-            )
