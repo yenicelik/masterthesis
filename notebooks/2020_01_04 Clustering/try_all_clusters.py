@@ -42,8 +42,9 @@ def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
         len(known_indices),
         len(true_clustering)
     )
-    pred_clustering = model_class(**arg).fit(X)
+    pred_clustering = model_class(arg).fit(X)
     # Drop all indices that are unkown
+    print("Known indices are ", known_indices, type(known_indices))
     pred_clustering = pred_clustering[known_indices]
     return adjusted_rand_score(true_clustering, pred_clustering)
 
@@ -76,7 +77,7 @@ if __name__ == "__main__":
         [x[1].reshape(1, -1) for x in tuples],
         axis=0
     )
-    known_indices = np.arange(X.shape[0])
+    known_indices = np.arange(X.shape[0], dtype=int).tolist()
 
     # Sample some more sentences using the other corpus to fulfill this ...
 

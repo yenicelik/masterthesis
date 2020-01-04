@@ -1,6 +1,8 @@
 """
 
 """
+from math import inf
+
 from ax import ParameterType, RangeParameter
 import numpy as np
 from sklearn.cluster import OPTICS
@@ -33,32 +35,28 @@ class MTOptics(BaseCluster):
             'minkowski',
         ]
 
-    def _possible_cluster_methods(self):
-        return [
-            'xi'
-        ]
-
-    def __init__(self):
+    def __init__(self, kargs):
         super(MTOptics, self).__init__()
         # metric is one of:
-        self.model = OPTICS(
-
-        )
+        self.model = OPTICS(**kargs)
 
     @classmethod
     def hyperparameter_dictionary(cls):
         return [
             {
-                "name":"min_samples",
-                "type": ParameterType.INT,
-                "lower": 1,
-                "upper": 50
+                "name": "min_samples",
+                "type": "choice",
+                "values": [2**x for x in range(5)],
             },
             {
-                "name":"max_eps",
-                "type": ParameterType.FLOAT,
-                "lower": 50,
-                "upper": np.inf
+                "name": "cluster_method",
+                "type": "fixed",
+                "value": "xi",
+            },
+            {
+                "name": "max_eps",
+                "type": "range",
+                "bounds": [50., float(inf)]
             },
             # RangeParameter(
             #     name="p",
