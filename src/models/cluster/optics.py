@@ -25,15 +25,7 @@ class MTOptics(BaseCluster):
 
         # Anything commented out is covered through other metrics,
         # or is clearly not part of this space ...
-        return [
-            'cosine',
-            'braycurtis',
-            'canberra',
-            'chebyshev',
-            'correlation',
-            'mahalanobis',
-            'minkowski',
-        ]
+        return
 
     def __init__(self, kargs):
         super(MTOptics, self).__init__()
@@ -47,6 +39,11 @@ class MTOptics(BaseCluster):
                 "name": "min_samples",
                 "type": "choice",
                 "values": [2**x for x in range(5)],
+            },
+            {
+                "name": "metric",
+                "type": "choice",
+                "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation', 'mahalanobis', 'minkowski',]
             },
             {
                 "name": "cluster_method",

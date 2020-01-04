@@ -39,19 +39,25 @@ class MTDbScan(BaseCluster):
     @classmethod
     def hyperparameter_dictionary(cls):
         return [
-            RangeParameter(
-                name="min_samples",
-                parameter_type=ParameterType.INT,
-                lower=1, upper=50
-            ),
-            RangeParameter(
-                name="eps",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.01, upper=5
-            ),
-            RangeParameter(
-                name="metric_params",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.01, upper=10
-            )
+            {
+                "name": "min_samples",
+                "type": "choice",
+                "values": [2 ** x for x in range(5)],
+            },
+            {
+                "name": "eps",
+                "type": "range",
+                "bounds": [0.01, 5.]
+            },
+            {
+                "name": "metric_params",
+                "type": "range",
+                "bounds": [0.01, 10.]
+            },
+            {
+                "name": "metric",
+                "type": "choice",
+                "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation', 'mahalanobis', 'minkowski', ]
+            },
+
         ]

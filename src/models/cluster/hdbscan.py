@@ -21,25 +21,24 @@ class MTHdbScan(BaseCluster):
     @classmethod
     def hyperparameter_dictionary(cls):
         return [
-            RangeParameter(
-                name="min_cluster_size",
-                parameter_type=ParameterType.INT,
-                lower=1, upper=50
-            ),
-            RangeParameter(
-                name="min_samples",
-                parameter_type=ParameterType.FLOAT,
-                lower=1, upper=50
-            ),
-            RangeParameter(
-                name="cluster_selection_epsilon",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.001, upper=10
-            ),
-            RangeParameter(
-                name="alpha",
-                parameter_type=ParameterType.FLOAT,
-                lower=0.5, upper=2.0
-            )
-
+            {
+                "name": "min_samples",
+                "type": "choice",
+                "values": [2 ** x for x in range(5)],
+            },
+            {
+                "name": "min_cluster_size",
+                "type": "choice",
+                "values": [2 ** x for x in range(6)],
+            },
+            {
+                "name": "cluster_selection_epsilon",
+                "type": "range",
+                "bounds": [0.001, 10]
+            },
+            {
+                "name": "cluster_selection_epsilon",
+                "type": "range",
+                "bounds": [0.5, 2.0]
+            }
         ]

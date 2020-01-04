@@ -16,28 +16,6 @@ class MTMeanShift(BaseCluster):
         No meaningful open parameters
     """
 
-    def _possible_metrics(self):
-        # TODO: Perhaps turn this into an integer optimization,
-        # (through dictionary translation)
-        # although even neighborhood cannot really be destroyed...
-
-        # Anything commented out is covered through other metrics,
-        # or is clearly not part of this space ...
-        return [
-            'cosine',
-            'braycurtis',
-            'canberra',
-            'chebyshev',
-            'correlation',
-            'mahalanobis',
-            'minkowski',
-        ]
-
-    def _possible_cluster_methods(self):
-        return [
-            'xi'
-        ]
-
     def __init__(self, metric='minkowski'):
         super(MTMeanShift, self).__init__()
         # metric is one of:
@@ -45,19 +23,24 @@ class MTMeanShift(BaseCluster):
     @classmethod
     def hyperparameter_dictionary(cls):
         return [
-            # RangeParameter(
-            #     name="bandwidth",
-            #     parameter_type=ParameterType.INT,
-            #     lower=0.001, upper=100
-            # ),
-            RangeParameter(
-                name="min_bin_freq",
-                parameter_type=ParameterType.INT,
-                lower=1, upper=10
-            ),
-            RangeParameter(
-                name="mean_iter",
-                parameter_type=ParameterType.INT,
-                lower=300, upper=1000
-            ),
+            {
+                "name": "metric",
+                "type": "choice",
+                "values": ['cosine', 'braycurtis', 'canberra', 'chebyshev', 'correlation', 'mahalanobis', 'minkowski', ]
+            },
+            {
+                "name": "bandwidth",
+                "type": "choice",
+                "values": [x**2 for x in range(5)]
+            },
+            {
+                "name": "min_bin_freq",
+                "type": "choice",
+                "values": [x for x in range(10)]
+            },
+            {
+                "name": "mean_iter",
+                "type": "choice",
+                "values": [x for x in range(400, 1000, 50)]
+            }
         ]

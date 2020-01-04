@@ -26,19 +26,19 @@ class MTAffinityPropagation(BaseCluster):
     @classmethod
     def hyperparameter_dictionary(cls):
         return [
-            RangeParameter(
-                name="damping",
-                parameter_type=ParameterType.INT,
-                lower=0.01, upper=10
-            ),
-            RangeParameter(
-                name="preference",
-                parameter_type=ParameterType.FLOAT,
-                lower=-200, upper=10
-            ),
-            RangeParameter(
-                name="max_iter",
-                parameter_type=ParameterType.FLOAT,
-                lower=100, upper=500
-            ),
+            {
+                "name": "damping",
+                "type": "range",
+                "bounds": [0.01, 10.]
+            },
+            {
+                "name": "preference",
+                "type": "range",
+                "bounds": [-200, 10]
+            },
+            {
+                "name": "max_iter",
+                "type": "range",
+                "bounds": [100, 500]
+            }
         ]

@@ -58,10 +58,7 @@ def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
 def sample_semcor_data(tgt_word):
     corpus = CorpusSemCor()
     lang_model = BertEmbedding(corpus=corpus)
-    wordnet_model = WordNetDataset()
 
-    print("Looking at word", tgt_word)
-    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
     tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
     # Just concat all to one big matrix
@@ -74,10 +71,7 @@ def sample_semcor_data(tgt_word):
 def sample_naive_data(tgt_word, n=None):
     corpus = Corpus()
     lang_model = BertEmbedding(corpus=corpus)
-    wordnet_model = WordNetDataset()
 
-    print("Looking at word", tgt_word)
-    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
     tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
 
     # Just concat all to one big matrix
@@ -104,6 +98,9 @@ if __name__ == "__main__":
     ]
 
     # TODO: bootstrap a dataset ...
+    print("Looking at word", tgt_word)
+    wordnet_model = WordNetDataset()
+    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
     X1, true_cluster_labels = sample_semcor_data(tgt_word)
     n = max(0, (args.max_samples - X1.shape[0]))
@@ -148,7 +145,7 @@ if __name__ == "__main__":
             parameters=params,
             evaluation_function=_current_eval_fun,
             minimize=False,
-            total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 2
+            total_trials=len([x for x in params if x['type'] != "fixed"]) # * 10 * 2
         )
 
         print("Best parameters etc.")
