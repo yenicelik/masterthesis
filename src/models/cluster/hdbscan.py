@@ -1,6 +1,7 @@
 """
 
 """
+import hdbscan
 from ax import ParameterType, RangeParameter, SearchSpace
 import numpy as np
 from sklearn.cluster import OPTICS
@@ -13,50 +14,39 @@ class HdbScan(BaseCluster):
         No open parameters
     """
 
-    def _possible_metrics(self):
-        # TODO: Perhaps turn this into an integer optimization,
-        # (through dictionary translation)
-        # although even neighborhood cannot really be destroyed...
-
-        # Anything commented out is covered through other metrics,
-        # or is clearly not part of this space ...
-
-        # set as `metric=`
-        return [
-            'cosine',
-            'braycurtis',
-            'canberra',
-            'chebyshev',
-            'correlation',
-            'mahalanobis',
-            'minkowski',
-        ]
-
-    def __init__(self, metric='minkowski'):
+    def __init__(self):
         super(HdbScan, self).__init__()
         # metric is one of:
 
     def hyperparameter_dictionary(self):
         return [
             RangeParameter(
-                name="min_samples",
+                name="min_cluster_size",
                 parameter_type=ParameterType.INT,
                 lower=1, upper=50
             ),
             RangeParameter(
-                name="eps",
+                name="min_samples",
                 parameter_type=ParameterType.FLOAT,
-                lower=0.01, upper=5
+                lower=1, upper=50
             ),
             RangeParameter(
-                name="metric_params",
+                name="cluster_selection_epsilon",
                 parameter_type=ParameterType.FLOAT,
-                lower=0.01, upper=10
+                lower=0.001, upper=10
+            ),
+            RangeParameter(
+                name="alpha",
+                parameter_type=ParameterType.FLOAT,
+                lower=0.5, upper=2.0
             )
+
         ]
 
     def fit(self, X, y=None):
         # Run hyperparameter optimizeration inside of this...
         for i in range(self.max_optimization_iterations):
             # Sample
-            self.model = OPTICS()
+            self.model = hdbscan.HDBSCAN(
+
+            )
