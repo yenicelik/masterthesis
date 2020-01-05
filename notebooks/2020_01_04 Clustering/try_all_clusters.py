@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)
-    pca_model = PCA(n_components=min(50, X.shape[0]), whiten=False)
+    pca_model = PCA(n_components=min(100, X.shape[0]), whiten=False)
     X = pca_model.fit_transform(X)
     print("Variance kept through pca is: ", np.sum(pca_model.explained_variance_ratio_))
 
@@ -141,13 +141,20 @@ if __name__ == "__main__":
                 true_clustering=true_cluster_labels
             )
 
-        best_parameters, best_values, experiment, model = optimize(
-            parameters=params,
-            evaluation_function=_current_eval_fun,
-            minimize=False,
-            total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 2
-        )
+        try:
 
-        print("Best parameters etc.")
-        print(best_parameters, best_values, experiment, model)
+            best_parameters, best_values, experiment, model = optimize(
+                parameters=params,
+                evaluation_function=_current_eval_fun,
+                minimize=False,
+                total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 10
+            )
+
+            print("Best parameters etc.")
+            print(best_parameters, best_values, experiment, model)
+
+        except Exception as e:
+            print("AGHHH")
+            print(e)
+            print("\n\n\n\n")
 

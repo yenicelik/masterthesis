@@ -52,11 +52,6 @@ class MTOptics(BaseCluster):
                 "value": "xi",
             },
             {
-                "name": "max_eps",
-                "type": "fixed",
-                "value": np.inf
-            },
-            {
                 "name": "xi",
                 "type": "range",
                 "bounds": [0.001, 10.]
