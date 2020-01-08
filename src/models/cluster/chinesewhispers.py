@@ -44,11 +44,14 @@ class ChineseWhispers(BaseCluster):
     def merge_unclustered_points_to_closest_cluster(self, cos, cluster_labels):
         counter = Counter(cluster_labels)
         # remove these things
+        print("Counter of cluster labels is", counter)
         free_clusters = set(
             [int(x[0]) for x in Counter(int(el) for el in counter.elements() if int(counter[el]) < self.min_cluster_size).items()]
         )
 
         print("Free clusters are: ", free_clusters)
+
+        assert len(free_clusters) < len(np.unique(cluster_labels))
 
         print("Cluster labels at the beginning..", len(cluster_labels))
 
@@ -59,16 +62,16 @@ class ChineseWhispers(BaseCluster):
                 closest_elements = np.argsort(cos[idx, :])[::-1]
 
                 # must also check that the two points are not in the same cluster ...
-
                 for element in closest_elements:
                     element = int(element)
-                    if cluster_labels[element] == cluster_labels[idx]:
+
+                    if cluster_labels[element] in free_clusters:
+                        # If included within a cluster label
                         continue
-                    if not (element in free_clusters):
-                        print("element is not in free_clusters", element, type(element), type(free_clusters), type(free_clusters.pop()), element in free_clusters)
-                        print("Assigning ", cluster_labels[idx], " to ", cluster_labels[element])
-                        cluster_labels[idx] = cluster_labels[element]
-                        break
+
+                    print("Assigning ", cluster_labels[idx], " to ", cluster_labels[element])
+                    cluster_labels[idx] = cluster_labels[element]
+                    break
 
                 # if no closest element is found, quit with an error emssage ...
 
