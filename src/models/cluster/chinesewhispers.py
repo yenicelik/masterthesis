@@ -15,6 +15,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from src.models.cluster.base import BaseCluster
 
+
 # TODO: Defer this to a later point in time
 
 class ChineseWhispers(BaseCluster):
@@ -28,37 +29,26 @@ class ChineseWhispers(BaseCluster):
 
     def insert_hubs_back(self, hubs_ids, original_cos, cluster_labels):
 
-        assert len(cluster_labels.shape) == 1, (cluster_labels.shape)
-
-        print("Hubs ids are. ")
-        print(sorted(hubs_ids))
-
-        # must build a dictionary
-
-        cluster_labels = cluster_labels.tolist()
         for idx in sorted(hubs_ids):
             closest_elements = np.argsort(original_cos[idx, :])[::-1]
 
-            # the "not in hubs_ids" is not well-recognized
-
-            # print("closest elements are: ")
-            # print(closest_elements[:10])
-
             for element in closest_elements:
-                if element not in hubs_ids:
-                    print("Element label: ", idx, element, len(cluster_labels))
-                    # offset by how many items are supposed to be inserted before this hub-location
+                if not (element in hubs_ids):
+
                     elements_index_within_cluster_Labels = element - len([x for x in hubs_ids if x < element])
                     cluster_labels.insert(idx, cluster_labels[elements_index_within_cluster_Labels])
                     break
 
         return cluster_labels
 
-
     def merge_unclustered_points_to_closest_cluster(self, cos, cluster_labels):
         counter = Counter(cluster_labels)
         # remove these things
-        free_clusters = set([x[0] for x in Counter(el for el in counter.elements() if counter[el] < self.min_cluster_size).items()])
+        free_clusters = set(
+            [int(x[0]) for x in Counter(int(el) for el in counter.elements() if int(counter[el]) < self.min_cluster_size).items()]
+        )
+
+        print("Free clusters are: ", free_clusters)
 
         print("Cluster labels at the beginning..", len(cluster_labels))
 
@@ -68,19 +58,21 @@ class ChineseWhispers(BaseCluster):
                 # Find closest cluster
                 closest_elements = np.argsort(cos[idx, :])[::-1]
 
+                # must also check that the two points are not in the same cluster ...
+
                 for element in closest_elements:
-                    if element not in free_clusters:
-                        closest_element = element
+                    element = int(element)
+                    if cluster_labels[element] == cluster_labels[idx]:
+                        continue
+                    if not (element in free_clusters):
+                        print("element is not in free_clusters", element, type(element), type(free_clusters), type(free_clusters.pop()), element in free_clusters)
+                        print("Assigning ", cluster_labels[idx], " to ", cluster_labels[element])
+                        cluster_labels[idx] = cluster_labels[element]
                         break
 
                 # if no closest element is found, quit with an error emssage ...
 
-                print("Closest element is: ", closest_element, len(cluster_labels))
-                cluster_labels[idx] = cluster_labels[closest_element]
-
         return cluster_labels
-
-
 
     def _create_adjacency_matrix(self, X):
         """
@@ -89,7 +81,6 @@ class ChineseWhispers(BaseCluster):
         :param X:
         :return:
         """
-
 
         cos = cosine_similarity(X, X)
         print("Cos shape is: ", cos.shape)
@@ -106,7 +97,7 @@ class ChineseWhispers(BaseCluster):
         # print("Summed weights are", summed_weights[self.hubs_])
 
         self.hubs_ = set(self.hubs_)
-        self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if x not in self.hubs_]
+        self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if not (x in self.hubs_)]
         cos_hat = cos[self.hub_mask_, :]
         cos_hat = cos_hat[:, self.hub_mask_]
 
@@ -120,10 +111,10 @@ class ChineseWhispers(BaseCluster):
         nx.draw(graph, node_size=10)
         plt.show()
 
-        chinese_whispers(graph, seed=1337) # iterations might depend on the number of clusters...
+        chinese_whispers(graph, seed=1337)  # iterations might depend on the number of clusters...
 
         print("Clustered items are: ")
-        self.cluster_ = np.ones((cos_hat.shape[0],)) * -1
+        self.cluster_ = np.ones((cos_hat.shape[0],), dtype=int) * -1
         print("aggregated clusters are", aggregate_clusters(graph).items())
         for cluster in aggregate_clusters(graph).items():
             print("Printing aggregated cluster")
@@ -131,13 +122,21 @@ class ChineseWhispers(BaseCluster):
                 self.cluster_[idx] = cluster[0]
 
         print("aggregated clusters are", self.cluster_)
+        # self.cluster_ = [int(x) for x in self.cluster_)
 
         assert not (np.any(self.cluster_ == -1)), (self.cluster_)
+
+        self.cluster_ = self.cluster_.tolist()
 
         self.cluster_ = self.merge_unclustered_points_to_closest_cluster(
             cos_hat,
             self.cluster_
         )
+        print("Self cluster is: ")
+        print(self.cluster_)
+        print(len(self.cluster_))
+        print(Counter(self.cluster_))
+        print(len(np.unique(self.cluster_)))
 
         if self.verbose:
             colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
