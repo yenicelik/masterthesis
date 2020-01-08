@@ -21,6 +21,7 @@ from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.knowledge_graphs.wordnet import WordNetDataset
 from src.models.cluster.affinitypropagation import MTAffinityPropagation
+from src.models.cluster.chinesewhispers import MTChineseWhispers
 from src.models.cluster.dbscan import MTDbScan
 from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.meanshift import MTMeanShift
@@ -85,16 +86,20 @@ if __name__ == "__main__":
     print("Starting hyper-parameter search of the model")
 
     # For each individual word, apply this clustering ...
+
+    # TODO: Implement this for more than one word.
+    # We want to find the best clustering algorithm applicable on a multitude of target words
     tgt_word = " use "
 
     # print("ADJ is: ", adjusted_rand_score([1, 2, 3, 4, 5], [0, 1, 2, 3, 4]))
 
     model_classes = [
-        ("MTOptics", MTOptics),
-        ("MTMeanShift", MTMeanShift),
-        ("MTHdbScan", MTHdbScan),
-        ("MTDbScan", MTDbScan),
-        ("MTAffinityPropagation", MTAffinityPropagation)
+        # ("MTOptics", MTOptics),
+        # ("MTMeanShift", MTMeanShift),
+        # ("MTHdbScan", MTHdbScan),
+        # ("MTDbScan", MTDbScan),
+        # ("MTAffinityPropagation", MTAffinityPropagation),
+        ("MTChineseWhispers", MTChineseWhispers)
     ]
 
     # TODO: bootstrap a dataset ...

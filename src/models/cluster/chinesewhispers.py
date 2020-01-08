@@ -18,7 +18,7 @@ from src.models.cluster.base import BaseCluster
 
 # TODO: Defer this to a later point in time
 
-class ChineseWhispers(BaseCluster):
+class MTChineseWhispers(BaseCluster):
     """
         Open parameters are:
 
@@ -87,16 +87,20 @@ class ChineseWhispers(BaseCluster):
         #     cor[np.nonzero(np.identity(cor.shape[0]))] = 0.  # Was previously below the cutoff calculation..
         cos[cos < lower_cutoff_value] = 0.
 
-        # # TODO: Use a hyperparameter to define wheter we should take out hubs or not
-        summed_weights = np.sum(cos, axis=1)
-        # print("Summed weights are", summed_weights)
-        self.hubs_ = np.argsort(summed_weights)[-self.remove_hub_number_:]
-        # print("Summed weights are", summed_weights[self.hubs_])
+        if self.remove_hub_number_ > 0:
+            summed_weights = np.sum(cos, axis=1)
+            # print("Summed weights are", summed_weights)
+            self.hubs_ = np.argsort(summed_weights)[-self.remove_hub_number_:]
+            # print("Summed weights are", summed_weights[self.hubs_])
 
-        self.hubs_ = set(self.hubs_)
-        self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if not (x in self.hubs_)]
-        cos_hat = cos[self.hub_mask_, :]
-        cos_hat = cos_hat[:, self.hub_mask_]
+            self.hubs_ = set(self.hubs_)
+            self.hub_mask_ = [x for x in np.arange(cos.shape[0]) if not (x in self.hubs_)]
+            cos_hat = cos[self.hub_mask_, :]
+            cos_hat = cos_hat[:, self.hub_mask_]
+
+        else:
+            cos_hat = cos
+
 
         # Shall I plot the chinese whispers just for the lulzz?
         cos_hat[np.nonzero(np.identity(cos_hat.shape[0]))] = 0.
@@ -143,7 +147,7 @@ class ChineseWhispers(BaseCluster):
         self.cluster_ = np.asarray(self.cluster_).astype(int)
 
     def __init__(self, std_multiplier=2., remove_hub_number=100, min_cluster_size=5, verbose=False):
-        super(ChineseWhispers, self).__init__()
+        super(MTChineseWhispers, self).__init__()
         # metric is one of:
 
         self.verbose = verbose
@@ -164,7 +168,7 @@ class ChineseWhispers(BaseCluster):
              {
                 "name": "remove_hub_number",
                 "type": "range",
-                "values": [1, 200]
+                "values": [0, 200]
             },
             {
                 "name": "min_cluster_size",
@@ -182,6 +186,6 @@ if __name__ == "__main__":
     print("Check chinese whispers incl. plotting ..")
     X = np.random.random((500, 150))
 
-    model = ChineseWhispers(verbose=True)
+    model = MTChineseWhispers(verbose=True)
 
     model.fit_predict(X)
