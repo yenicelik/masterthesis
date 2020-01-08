@@ -38,7 +38,6 @@ def create_adjacency_matrix(X):
     :param X:
     :return:
     """
-
     # Too much hyperparameter tuning. Let's use something simpler!
     # def _cutoff_function(matr):
     #     """
