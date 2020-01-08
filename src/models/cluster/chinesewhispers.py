@@ -44,16 +44,12 @@ class ChineseWhispers(BaseCluster):
     def merge_unclustered_points_to_closest_cluster(self, cos, cluster_labels):
         counter = Counter(cluster_labels)
         # remove these things
-        print("Counter of cluster labels is", counter)
+        # print("Counter of cluster labels is", counter)
         free_clusters = set(
             [int(x[0]) for x in Counter(int(el) for el in counter.elements() if int(counter[el]) < self.min_cluster_size).items()]
         )
 
-        print("Free clusters are: ", free_clusters)
-
         assert len(free_clusters) < len(np.unique(cluster_labels))
-
-        print("Cluster labels at the beginning..", len(cluster_labels))
 
         # Check for closest item, which is in an acceptable cluster ...
         for idx in range(len(cluster_labels)):
@@ -69,7 +65,6 @@ class ChineseWhispers(BaseCluster):
                         # If included within a cluster label
                         continue
 
-                    print("Assigning ", cluster_labels[idx], " to ", cluster_labels[element])
                     cluster_labels[idx] = cluster_labels[element]
                     break
 
@@ -86,7 +81,6 @@ class ChineseWhispers(BaseCluster):
         """
 
         cos = cosine_similarity(X, X)
-        print("Cos shape is: ", cos.shape)
 
         lower_cutoff_value = np.mean(cos) + self.std_multiplier_ * np.std(cos)
         # if self.remove_identity:
@@ -116,33 +110,22 @@ class ChineseWhispers(BaseCluster):
 
         chinese_whispers(graph, seed=1337)  # iterations might depend on the number of clusters...
 
-        print("Clustered items are: ")
         self.cluster_ = np.ones((cos_hat.shape[0],), dtype=int) * -1
-        print("aggregated clusters are", aggregate_clusters(graph).items())
         for cluster in aggregate_clusters(graph).items():
-            print("Printing aggregated cluster")
             for idx in cluster[1]:
                 self.cluster_[idx] = cluster[0]
-
-        print("aggregated clusters are", self.cluster_)
-        # self.cluster_ = [int(x) for x in self.cluster_)
 
         assert not (np.any(self.cluster_ == -1)), (self.cluster_)
 
         self.cluster_ = self.cluster_.tolist()
 
         self.cluster_ = self.merge_unclustered_points_to_closest_cluster(
-            cos_hat,
-            self.cluster_
+            cos=cos_hat,
+            cluster_labels=self.cluster_
         )
-        print("Self cluster is: ")
-        print(self.cluster_)
-        print(len(self.cluster_))
-        print(Counter(self.cluster_))
-        print(len(np.unique(self.cluster_)))
 
         if self.verbose:
-            colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
+            colors = [self.cluster_[idx] for idx, node in enumerate(graph.nodes())] # graph.nodes[node]['label']
             nx.draw_networkx(
                 graph,
                 node_color=colors,
@@ -158,12 +141,6 @@ class ChineseWhispers(BaseCluster):
         )
 
         self.cluster_ = np.asarray(self.cluster_).astype(int)
-
-        print("Self cluster is: ")
-        print(self.cluster_)
-        print(len(self.cluster_))
-        print(Counter(self.cluster_))
-        print(len(np.unique(self.cluster_)))
 
     def __init__(self, std_multiplier=2., remove_hub_number=100, min_cluster_size=5, verbose=False):
         super(ChineseWhispers, self).__init__()
