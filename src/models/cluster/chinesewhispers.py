@@ -9,12 +9,10 @@ from collections import Counter
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ax import ParameterType, RangeParameter, SearchSpace
 import networkx as nx
 from chinese_whispers import chinese_whispers, aggregate_clusters
 from sklearn.metrics.pairwise import cosine_similarity
 
-from src.graph_clustering.vectorspace_to_graph import ChineseWhispersClustering
 from src.models.cluster.base import BaseCluster
 
 # TODO: Defer this to a later point in time
@@ -28,7 +26,7 @@ class ChineseWhispers(BaseCluster):
         (as they cannot be clustered properly..)
     """
 
-    def insert_hubs_back(self, hubs_ids, cos, cluster_labels):
+    def insert_hubs_back(self, hubs_ids, original_cos, cluster_labels):
 
         assert len(cluster_labels.shape) == 1, (cluster_labels.shape)
 
@@ -39,7 +37,7 @@ class ChineseWhispers(BaseCluster):
 
         cluster_labels = cluster_labels.tolist()
         for idx in sorted(hubs_ids):
-            closest_elements = np.argsort(cos[idx, :])[::-1]
+            closest_elements = np.argsort(original_cos[idx, :])[::-1]
 
             # the "not in hubs_ids" is not well-recognized
 
@@ -136,7 +134,10 @@ class ChineseWhispers(BaseCluster):
 
         assert not (np.any(self.cluster_ == -1)), (self.cluster_)
 
-        self.cluster_ = self.merge_unclustered_points_to_closest_cluster(cos_hat, self.cluster_)
+        self.cluster_ = self.merge_unclustered_points_to_closest_cluster(
+            cos_hat,
+            self.cluster_
+        )
 
         if self.verbose:
             colors = [1. / graph.nodes[node]['label'] for node in graph.nodes()]
@@ -150,7 +151,7 @@ class ChineseWhispers(BaseCluster):
 
         self.cluster_ = self.insert_hubs_back(
             hubs_ids=self.hubs_,
-            cos=cos,
+            original_cos=cos,
             cluster_labels=self.cluster_
         )
 
