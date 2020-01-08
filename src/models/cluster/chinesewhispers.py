@@ -163,7 +163,7 @@ class MTChineseWhispers(BaseCluster):
             {
                 "name": "std_multiplier",
                 "type": "range",
-                "values": [(2 ** x) for x in range(1, 5)],
+                "values": [-3., 3.],
             },
              {
                 "name": "remove_hub_number",
