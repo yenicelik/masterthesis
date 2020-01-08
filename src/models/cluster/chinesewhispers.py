@@ -161,10 +161,15 @@ class ChineseWhispers(BaseCluster):
                 "type": "range",
                 "values": [(2 ** x) for x in range(1, 5)],
             },
-            {
+             {
                 "name": "remove_hub_number",
                 "type": "range",
-                "values": [1, 100]
+                "values": [1, 200]
+            },
+            {
+                "name": "min_cluster_size",
+                "type": "range",
+                "values": [1, 50]
             }
         ]
 
