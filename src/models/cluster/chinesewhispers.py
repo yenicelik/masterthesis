@@ -43,13 +43,15 @@ class ChineseWhispers(BaseCluster):
 
             # the "not in hubs_ids" is not well-recognized
 
-            print("closest elements are: ")
-            print(closest_elements[:10])
+            # print("closest elements are: ")
+            # print(closest_elements[:10])
 
             for element in closest_elements:
                 if element not in hubs_ids:
                     print("Element label: ", idx, element, len(cluster_labels))
-                    cluster_labels.insert(idx, cluster_labels[element])
+                    # offset by how many items are supposed to be inserted before this hub-location
+                    elements_index_within_cluster_Labels = element - len([x for x in hubs_ids if x < element])
+                    cluster_labels.insert(idx, cluster_labels[elements_index_within_cluster_Labels])
                     break
 
         return cluster_labels
@@ -152,11 +154,12 @@ class ChineseWhispers(BaseCluster):
             cluster_labels=self.cluster_
         )
 
-        self.cluster_ = np.asarray(self.cluster_)
+        self.cluster_ = np.asarray(self.cluster_).astype(int)
 
         print("Self cluster is: ")
         print(self.cluster_)
         print(len(self.cluster_))
+        print(Counter(self.cluster_))
         print(len(np.unique(self.cluster_)))
 
     def __init__(self, std_multiplier=2., remove_hub_number=100, min_cluster_size=5, verbose=False):
