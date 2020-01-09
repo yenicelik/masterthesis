@@ -146,20 +146,32 @@ if __name__ == "__main__":
                 true_clustering=true_cluster_labels
             )
 
-        try:
+        # try:
+        #
+        #     best_parameters, best_values, experiment, model = optimize(
+        #         parameters=params,
+        #         evaluation_function=_current_eval_fun,
+        #         minimize=False,
+        #         total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 10
+        #     )
+        #
+        #     print("Best parameters etc.")
+        #     print(best_parameters, best_values, experiment, model)
+        #
+        # except Exception as e:
+        #     print("AGHHH")
+        #     print(e)
+        #     print("\n\n\n\n")
 
-            best_parameters, best_values, experiment, model = optimize(
-                parameters=params,
-                evaluation_function=_current_eval_fun,
-                minimize=False,
-                total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 10
-            )
+        print()
 
-            print("Best parameters etc.")
-            print(best_parameters, best_values, experiment, model)
+        best_parameters, best_values, experiment, model = optimize(
+            parameters=params,
+            evaluation_function=_current_eval_fun,
+            minimize=False,
+            total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 10
+        )
 
-        except Exception as e:
-            print("AGHHH")
-            print(e)
-            print("\n\n\n\n")
+        print("Best parameters etc.")
+        print(best_parameters, best_values, experiment, model)
 

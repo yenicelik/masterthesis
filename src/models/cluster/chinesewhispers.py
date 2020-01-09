@@ -13,6 +13,7 @@ import networkx as nx
 from chinese_whispers import chinese_whispers, aggregate_clusters
 from sklearn.metrics.pairwise import cosine_similarity
 
+from src.config import args
 from src.models.cluster.base import BaseCluster
 
 
@@ -34,7 +35,6 @@ class MTChineseWhispers(BaseCluster):
 
             for element in closest_elements:
                 if not (element in hubs_ids):
-
                     elements_index_within_cluster_Labels = element - len([x for x in hubs_ids if x < element])
                     cluster_labels.insert(idx, cluster_labels[elements_index_within_cluster_Labels])
                     break
@@ -46,10 +46,19 @@ class MTChineseWhispers(BaseCluster):
         # remove these things
         # print("Counter of cluster labels is", counter)
         free_clusters = set(
-            [int(x[0]) for x in Counter(int(el) for el in counter.elements() if int(counter[el]) < self.min_cluster_size).items()]
+            [int(x[0]) for x in
+             Counter(int(el) for el in counter.elements() if int(counter[el]) < self.min_cluster_size).items()]
         )
 
-        assert len(free_clusters) < len(np.unique(cluster_labels))
+        if len(free_clusters) >= len(np.unique(cluster_labels)):
+            if self.verbose:
+                print(
+                    len(free_clusters), len(np.unique(cluster_labels)),
+                    "as many free clusters as there are clusters!"
+                )
+            # Return all -1! (because clustering failed
+            cluster_labels = [-1 for _ in cluster_labels]
+            return cluster_labels
 
         # Check for closest item, which is in an acceptable cluster ...
         for idx in range(len(cluster_labels)):
@@ -101,7 +110,6 @@ class MTChineseWhispers(BaseCluster):
         else:
             cos_hat = cos
 
-
         # Shall I plot the chinese whispers just for the lulzz?
         cos_hat[np.nonzero(np.identity(cos_hat.shape[0]))] = 0.
         # print("Final cos is: ", cos)
@@ -129,7 +137,7 @@ class MTChineseWhispers(BaseCluster):
         )
 
         if self.verbose:
-            colors = [self.cluster_[idx] for idx, node in enumerate(graph.nodes())] # graph.nodes[node]['label']
+            colors = [self.cluster_[idx] for idx, node in enumerate(graph.nodes())]  # graph.nodes[node]['label']
             nx.draw_networkx(
                 graph,
                 node_color=colors,
@@ -138,17 +146,25 @@ class MTChineseWhispers(BaseCluster):
             )  # font_color='white', # cmap=plt.get_cmap('jet'),
             plt.show()
 
-        self.cluster_ = self.insert_hubs_back(
-            hubs_ids=self.hubs_,
-            original_cos=cos,
-            cluster_labels=self.cluster_
-        )
+        if self.remove_hub_number_ > 0:
+            self.cluster_ = self.insert_hubs_back(
+                hubs_ids=self.hubs_,
+                original_cos=cos,
+                cluster_labels=self.cluster_
+            )
 
         self.cluster_ = np.asarray(self.cluster_).astype(int)
 
-    def __init__(self, std_multiplier=2., remove_hub_number=100, min_cluster_size=5, verbose=False):
+    def __init__(self, kwargs):
         super(MTChineseWhispers, self).__init__()
         # metric is one of:
+
+        # A little hakish, because we don't have a wrapper as we do with other cluster-classes
+
+        std_multiplier = kwargs['std_multiplier'] if 'std_multiplier' in kwargs else 2.
+        remove_hub_number = kwargs['remove_hub_number'] if 'remove_hub_number' in kwargs else 100
+        min_cluster_size = kwargs['min_cluster_size'] if 'min_cluster_size' in kwargs else 5
+        verbose= kwargs['verbose'] if 'verbose' in kwargs else False
 
         self.verbose = verbose
 
@@ -163,17 +179,17 @@ class MTChineseWhispers(BaseCluster):
             {
                 "name": "std_multiplier",
                 "type": "range",
-                "values": [-3., 3.],
+                "bounds": [-3., 3.],
             },
-             {
+            {
                 "name": "remove_hub_number",
                 "type": "range",
-                "values": [0, 200]
+                "bounds": [0, min(200, int(args.max_samples * 0.6))]
             },
             {
                 "name": "min_cluster_size",
                 "type": "range",
-                "values": [1, 50]
+                "bounds": [1, 50]
             }
         ]
 
