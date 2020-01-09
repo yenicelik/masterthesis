@@ -31,7 +31,7 @@ from src.resources.corpus_semcor import CorpusSemCor
 from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
 
-def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
+def _evaluate_model(model_class, arg, crossvalidation_data):
     """
         Evaluates a model class with the parameters that is was provided with.
         We assume that the optimization-hyperparameters
@@ -42,19 +42,25 @@ def _evaluate_model(model_class, arg, X, known_indices, true_clustering):
     :param true_clustering:
     :return:
     """
-    assert len(known_indices) == len(true_clustering), (
-        "Length of true clustering and known indices don't match up!",
-        len(known_indices),
-        len(true_clustering)
-    )
-    pred_clustering = model_class(arg).fit_predict(X)
-    # Drop all indices that are unkown
-    pred_clustering = pred_clustering[known_indices]
 
-    if len(np.unique(pred_clustering)) == 1:
-        print("Couldn't find cluster!", np.unique(pred_clustering))
+    for tgt_word, tpl in crossvalidation_data.items():
+        # Unpack tuple
+        print("Optimizing over target word ...", tgt_word)
+        number_of_senses, X, true_clustering, known_indices = tpl
 
-    return adjusted_rand_score(true_clustering, pred_clustering)
+        assert len(known_indices) == len(true_clustering), (
+            "Length of true clustering and known indices don't match up!",
+            len(known_indices),
+            len(true_clustering)
+        )
+        pred_clustering = model_class(arg).fit_predict(X)
+        # Drop all indices that are unkown
+        pred_clustering = pred_clustering[known_indices]
+
+        if len(np.unique(pred_clustering)) == 1:
+            print("Couldn't find cluster!", np.unique(pred_clustering))
+
+        return adjusted_rand_score(true_clustering, pred_clustering)
 
 def sample_semcor_data(tgt_word):
     corpus = CorpusSemCor()
@@ -82,27 +88,8 @@ def sample_naive_data(tgt_word, n=None):
     )
     return X
 
-if __name__ == "__main__":
-    print("Starting hyper-parameter search of the model")
+def sample_embeddings_for_target_word(tgt_word):
 
-    # For each individual word, apply this clustering ...
-
-    # TODO: Implement this for more than one word.
-    # We want to find the best clustering algorithm applicable on a multitude of target words
-    tgt_word = " use "
-
-    # print("ADJ is: ", adjusted_rand_score([1, 2, 3, 4, 5], [0, 1, 2, 3, 4]))
-
-    model_classes = [
-        # ("MTOptics", MTOptics),
-        # ("MTMeanShift", MTMeanShift),
-        # ("MTHdbScan", MTHdbScan),
-        # ("MTDbScan", MTDbScan),
-        # ("MTAffinityPropagation", MTAffinityPropagation),
-        ("MTChineseWhispers", MTChineseWhispers)
-    ]
-
-    # TODO: bootstrap a dataset ...
     print("Looking at word", tgt_word)
     wordnet_model = WordNetDataset()
     number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
@@ -130,7 +117,64 @@ if __name__ == "__main__":
     print("Dataset shape is: ", X.shape)
     print("True cluster labels are", len(true_cluster_labels))
 
-    # Apply PCA on X
+    return number_of_senses, X, true_cluster_labels, known_indices
+
+
+def sample_all_clusterable_items(prepare_testset=False):
+    """
+        Prepares a dictionary of clusterable word-embeddings,
+        for each of the polysemous words that we will be using for cross-validation ...
+    :return:
+    """
+    devset_polysemous_words = [
+        ' use ', ' test ', ' limit ',
+        ' concern ', ' central ', ' pizza '
+    ]
+
+    # polysemous_words = [
+    #     " live ", " report ", " use ",
+    #     " know ", " write ", " tell ",
+    #     " state ", " allow ", " enter ",
+    #     " learn ", " seek ", " final ",
+    #     " critic ", " topic ", " obvious ",
+    #     " kitchen "
+    # ]
+
+    devset = dict()
+
+    # Create the devset
+    for tgt_word in devset_polysemous_words:
+        number_of_senses, X, true_cluster_labels, known_indices = sample_embeddings_for_target_word(tgt_word)
+        devset[tgt_word] = (number_of_senses, X, true_cluster_labels, known_indices)
+
+    if not prepare_testset:
+        return devset, dict()
+
+    # Implement fetching of the testset as well
+    raise NotImplementedError
+
+
+
+
+
+if __name__ == "__main__":
+    print("Starting hyper-parameter search of the model")
+
+    # For each individual word, apply this clustering ...
+
+    # TODO: Implement this for more than one word.
+    # We want to find the best clustering algorithm applicable on a multitude of target words
+
+    model_classes = [
+        # ("MTOptics", MTOptics),
+        # ("MTMeanShift", MTMeanShift),
+        # ("MTHdbScan", MTHdbScan),
+        # ("MTDbScan", MTDbScan),
+        # ("MTAffinityPropagation", MTAffinityPropagation),
+        ("MTChineseWhispers", MTChineseWhispers)
+    ]
+
+    devset, _ = sample_all_clusterable_items(prepare_testset=False)
 
     for model_name, model_class in model_classes:
         print(f"Running {model_name} {model_class}")
@@ -141,9 +185,7 @@ if __name__ == "__main__":
             return _evaluate_model(
                 model_class=model_class,
                 arg=p,
-                X=X,
-                known_indices=known_indices,
-                true_clustering=true_cluster_labels
+                crossvalidation_data=devset
             )
 
         try:
