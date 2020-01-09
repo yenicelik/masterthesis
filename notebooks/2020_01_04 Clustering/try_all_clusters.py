@@ -56,7 +56,7 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
             len(true_clustering)
         )
         pred_clustering = model_class(arg).fit_predict(X)
-        # Drop all indices that are unkown
+        # Drop all indices that are unknown
         pred_clustering = pred_clustering[known_indices]
 
         if len(np.unique(pred_clustering)) == 1:
@@ -73,11 +73,19 @@ def sample_semcor_data(tgt_word):
 
     tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
-    # Just concat all to one big matrix
-    X = np.concatenate(
-        [x[1].reshape(1, -1) for x in tuples],
-        axis=0
-    )
+    if args.cuda:
+        # Just concat all to one big matrix
+        X = np.concatenate(
+            [x[1].cpu().reshape(1, -1) for x in tuples],
+            axis=0
+        )
+
+    else:
+        X = np.concatenate(
+            [x[1].reshape(1, -1) for x in tuples],
+            axis=0
+        )
+
     return X, true_cluster_labels
 
 def sample_naive_data(tgt_word, n=None):
@@ -87,10 +95,17 @@ def sample_naive_data(tgt_word, n=None):
     tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
 
     # Just concat all to one big matrix
-    X = np.concatenate(
-        [x[1].reshape(1, -1) for x in tuples],
-        axis=0
-    )
+    if args.cuda:
+        X = np.concatenate(
+            [x[1].cpu().reshape(1, -1) for x in tuples],
+            axis=0
+        )
+    else:
+        X = np.concatenate(
+            [x[1].reshape(1, -1) for x in tuples],
+            axis=0
+        )
+
     return X
 
 def sample_embeddings_for_target_word(tgt_word):
@@ -135,6 +150,9 @@ def sample_all_clusterable_items(prepare_testset=False):
         ' use ', ' test ', ' limit ',
         ' concern ', ' central ', ' pizza '
     ]
+
+    # TODO: Is a separate choice if we actually want to see performance on these...
+    # But can definitely do this as a "test set" after we have the optimal parameters
 
     # polysemous_words = [
     #     " live ", " report ", " use ",

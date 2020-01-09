@@ -73,7 +73,7 @@ class Corpus:
         # data = [" ".join(sentence) + "." for sentence in data]
 
         print("Data is: ", time.time() - start_time)
-        print(data[:100])
+        # print(data[:100])
 
         # Still returning this sample: [CLS] Not without more information           of the person who hacked into the foundation 's bank account , but -- .
         # Which is strongly incorrect I believe!

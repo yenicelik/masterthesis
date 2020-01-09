@@ -132,7 +132,7 @@ class CorpusSemCor:
                 for file in f:
                     if '.xml' in file:
                         filepath = os.path.join(r, file)
-                        print("Adding...", filepath)
+                        # print("Adding...", filepath)
                         xml_files.append(filepath)
 
         max_number_senses = []
