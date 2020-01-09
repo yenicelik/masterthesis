@@ -43,6 +43,8 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
     :return:
     """
 
+    out = 0.
+
     for tgt_word, tpl in crossvalidation_data.items():
         # Unpack tuple
         print("Optimizing over target word ...", tgt_word)
@@ -60,7 +62,10 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
         if len(np.unique(pred_clustering)) == 1:
             print("Couldn't find cluster!", np.unique(pred_clustering))
 
-        return adjusted_rand_score(true_clustering, pred_clustering)
+        out += adjusted_rand_score(true_clustering, pred_clustering)
+
+    # Return the score as the mean of all items
+    return float(out) / len(crossvalidation_data)
 
 def sample_semcor_data(tgt_word):
     corpus = CorpusSemCor()
@@ -147,6 +152,7 @@ def sample_all_clusterable_items(prepare_testset=False):
         number_of_senses, X, true_cluster_labels, known_indices = sample_embeddings_for_target_word(tgt_word)
         devset[tgt_word] = (number_of_senses, X, true_cluster_labels, known_indices)
 
+    assert len(devset) == len(devset_polysemous_words), (len(devset), len(devset_polysemous_words))
     if not prepare_testset:
         return devset, dict()
 
