@@ -117,8 +117,10 @@ class MTChineseWhispers(BaseCluster):
         # Now run the chinese whispers algorithm
         graph = nx.to_networkx_graph(cos_hat, create_using=nx.DiGraph)
         # graph = graph.convert_to_undirected()
-        nx.draw(graph, node_size=10)
-        plt.show()
+
+        if self.verbose:
+            nx.draw(graph, node_size=10)
+            plt.show()
 
         chinese_whispers(graph, seed=1337)  # iterations might depend on the number of clusters...
 
@@ -164,7 +166,7 @@ class MTChineseWhispers(BaseCluster):
         std_multiplier = kwargs['std_multiplier'] if 'std_multiplier' in kwargs else 2.
         remove_hub_number = kwargs['remove_hub_number'] if 'remove_hub_number' in kwargs else 100
         min_cluster_size = kwargs['min_cluster_size'] if 'min_cluster_size' in kwargs else 5
-        verbose= kwargs['verbose'] if 'verbose' in kwargs else False
+        verbose = kwargs['verbose'] if 'verbose' in kwargs else False
 
         self.verbose = verbose
 

@@ -47,7 +47,7 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
 
     for tgt_word, tpl in crossvalidation_data.items():
         # Unpack tuple
-        print("Optimizing over target word ...", tgt_word)
+        # print("Optimizing over target word ...", tgt_word)
         number_of_senses, X, true_clustering, known_indices = tpl
 
         assert len(known_indices) == len(true_clustering), (
@@ -172,11 +172,11 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        # ("MTOptics", MTOptics),
-        # ("MTMeanShift", MTMeanShift),
-        # ("MTHdbScan", MTHdbScan),
-        # ("MTDbScan", MTDbScan),
-        # ("MTAffinityPropagation", MTAffinityPropagation),
+        ("MTOptics", MTOptics),
+        ("MTMeanShift", MTMeanShift),
+        ("MTHdbScan", MTHdbScan),
+        ("MTDbScan", MTDbScan),
+        ("MTAffinityPropagation", MTAffinityPropagation),
         ("MTChineseWhispers", MTChineseWhispers)
     ]
 
