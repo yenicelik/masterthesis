@@ -67,6 +67,7 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
     # Return the score as the mean of all items
     return float(out) / len(crossvalidation_data)
 
+
 def sample_semcor_data(tgt_word):
     corpus = CorpusSemCor()
     lang_model = BertEmbedding(corpus=corpus)
@@ -88,11 +89,13 @@ def sample_semcor_data(tgt_word):
 
     return X, true_cluster_labels
 
+
 def sample_naive_data(tgt_word, n=None):
     corpus = Corpus()
     lang_model = BertEmbedding(corpus=corpus)
 
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word,
+                                                                    n=n)
 
     # Just concat all to one big matrix
     if args.cuda:
@@ -108,8 +111,8 @@ def sample_naive_data(tgt_word, n=None):
 
     return X
 
-def sample_embeddings_for_target_word(tgt_word):
 
+def sample_embeddings_for_target_word(tgt_word):
     print("Looking at word", tgt_word)
     wordnet_model = WordNetDataset()
     number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
@@ -122,7 +125,7 @@ def sample_embeddings_for_target_word(tgt_word):
 
     X = np.concatenate([X1, X2], axis=0)
     print("Collected data is: ")
-    print(X.shape)
+    print(X.shape, X1.shape, X2.shape)
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)
@@ -178,9 +181,6 @@ def sample_all_clusterable_items(prepare_testset=False):
     raise NotImplementedError
 
 
-
-
-
 if __name__ == "__main__":
     print("Starting hyper-parameter search of the model")
 
@@ -190,11 +190,11 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        ("MTOptics", MTOptics),
-        ("MTMeanShift", MTMeanShift),
-        ("MTHdbScan", MTHdbScan),
-        ("MTDbScan", MTDbScan),
-        ("MTAffinityPropagation", MTAffinityPropagation),
+        # ("MTOptics", MTOptics),
+        # ("MTMeanShift", MTMeanShift),
+        # ("MTHdbScan", MTHdbScan),
+        # ("MTDbScan", MTDbScan),
+        # ("MTAffinityPropagation", MTAffinityPropagation),
         ("MTChineseWhispers", MTChineseWhispers)
     ]
 
@@ -205,12 +205,14 @@ if __name__ == "__main__":
 
         params = model_class.hyperparameter_dictionary()
 
+
         def _current_eval_fun(p):
             return _evaluate_model(
                 model_class=model_class,
                 arg=p,
                 crossvalidation_data=devset
             )
+
 
         try:
 
