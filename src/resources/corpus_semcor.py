@@ -179,10 +179,10 @@ class CorpusSemCor:
                 data.append(words)
                 data_wordnet_ids.append(synset_ids)
 
-        print("Max number senses are")
-        print(list(
-            sorted([x for x in max_number_senses if (x[1] is not None) and (len(x[1]) <= 2)], key=lambda x: int(x[1])))[
-              ::-1])
+        # print("Max number senses are")
+        # print(list(
+        #     sorted([x for x in max_number_senses if (x[1] is not None) and (len(x[1]) <= 2)], key=lambda x: int(x[1])))[
+        #       ::-1])
 
         assert len(data) == len(data_wordnet_ids), (
             "Number of wordnet ids and data do not match up ", len(data), len(data_wordnet_ids))

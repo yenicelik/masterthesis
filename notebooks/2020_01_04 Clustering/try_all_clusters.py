@@ -207,7 +207,7 @@ if __name__ == "__main__":
         # ("MTMeanShift", MTMeanShift),
         # ("MTHdbScan", MTHdbScan),
         # ("MTDbScan", MTDbScan),
-        # ("MTAffinityPropagation", MTAffinityPropagation),
+        ("MTAffinityPropagation", MTAffinityPropagation),
         ("MTChineseWhispers", MTChineseWhispers)
     ]
 
@@ -238,7 +238,7 @@ if __name__ == "__main__":
                 parameters=params,
                 evaluation_function=_current_eval_fun,
                 minimize=False,
-                total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 10
+                total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 2
             )
 
             print("Best parameters etc.")
