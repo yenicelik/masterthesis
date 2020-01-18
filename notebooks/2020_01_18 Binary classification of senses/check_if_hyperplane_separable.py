@@ -25,25 +25,32 @@ def collect_high_occuring_senses(semcor_corpus: CorpusSemCor):
     counter = Counter(flattened_wordnet_ids)
     print(counter)
 
+def get_words_and_classes(cutoff):
+    pass
+
 if __name__ == "__main__":
     print("Getting semcor samples to be separated")
     corpus = CorpusSemCor()
 
-    print("Rocpus data is. ")
-    # print(corpus.data)
-    word_sense_clusters = corpus.word_sense_tuples
-    counter = Counter(word_sense_clusters)
-    counter = Counter(el for el in counter.elements() if counter[el] >= 80)
-    print(counter.most_common())
-    print(len(counter.most_common()))
+    for sentence_frequency_cutoff in range(30, 100, 5):
+        print("\n\n\n\n\n\n\n")
+        print("Frequency cutoff is: ", sentence_frequency_cutoff)
 
-    # collect_high_occuring_senses(corpus)
+        print("Rocpus data is. ")
+        # print(corpus.data)
+        word_sense_clusters = corpus.word_sense_tuples
+        counter = Counter(word_sense_clusters)
+        counter = Counter(el for el in counter.elements() if counter[el] >= sentence_frequency_cutoff)
+        print(counter.most_common())
+        print(len(counter.most_common()))
 
-    # Now remove all word-meanings which have no corresponding pair ...
-    pair_list_counter = Counter([x[0][0] for x in counter.most_common()])
-    print("Pair list is: ")
-    print(pair_list_counter)
-    # Removing all items where not enough pairs are present
-    pair_list_counter = Counter(el for el in pair_list_counter.elements() if pair_list_counter[el] >= 2)
-    print(pair_list_counter)
-    print(len(pair_list_counter))
+        # collect_high_occuring_senses(corpus)
+
+        # Now remove all word-meanings which have no corresponding pair ...
+        pair_list_counter = Counter([x[0][0] for x in counter.most_common()])
+        print("Pair list is: ")
+        print(pair_list_counter)
+        # Removing all items where not enough pairs are present
+        pair_list_counter = Counter(el for el in pair_list_counter.elements() if pair_list_counter[el] >= 2)
+        print(pair_list_counter)
+        print(len(pair_list_counter))
