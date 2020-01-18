@@ -25,32 +25,31 @@ def collect_high_occuring_senses(semcor_corpus: CorpusSemCor):
     counter = Counter(flattened_wordnet_ids)
     print(counter)
 
-def get_words_and_classes(cutoff):
-    pass
+def get_words_and_classes(corpus, cutoff):
+    print("\n\n\n")
+    word_sense_clusters = corpus.word_sense_tuples
+    counter = Counter(word_sense_clusters)
+    counter = Counter(el for el in counter.elements() if counter[el] >= cutoff)
+
+    # Now remove all word-meanings which have no corresponding pair ...
+    pair_list_counter = Counter([x[0][0] for x in counter.most_common()])
+    # Removing all items where not enough pairs are present
+    pair_list_counter = [el for el in pair_list_counter.elements() if pair_list_counter[el] >= 2]
+
+    counter = Counter(el for el in counter.elements() if el[0] in pair_list_counter)
+    # print(counter)
+    # print(list(counter.keys()))
+
+    out = list(counter.keys())
+
+    return out
 
 if __name__ == "__main__":
     print("Getting semcor samples to be separated")
     corpus = CorpusSemCor()
 
     for sentence_frequency_cutoff in range(30, 100, 5):
-        print("\n\n\n\n\n\n\n")
-        print("Frequency cutoff is: ", sentence_frequency_cutoff)
-
-        print("Rocpus data is. ")
-        # print(corpus.data)
-        word_sense_clusters = corpus.word_sense_tuples
-        counter = Counter(word_sense_clusters)
-        counter = Counter(el for el in counter.elements() if counter[el] >= sentence_frequency_cutoff)
-        print(counter.most_common())
-        print(len(counter.most_common()))
-
-        # collect_high_occuring_senses(corpus)
-
-        # Now remove all word-meanings which have no corresponding pair ...
-        pair_list_counter = Counter([x[0][0] for x in counter.most_common()])
-        print("Pair list is: ")
-        print(pair_list_counter)
-        # Removing all items where not enough pairs are present
-        pair_list_counter = Counter(el for el in pair_list_counter.elements() if pair_list_counter[el] >= 2)
-        print(pair_list_counter)
-        print(len(pair_list_counter))
+        get_words_and_classes(
+            corpus=corpus,
+            cutoff=sentence_frequency_cutoff
+        )
