@@ -159,6 +159,8 @@ def cluster_embeddings(tuples, method="dbscan", pca=True):
 
         # Implement the chinese whisper algorithms..
 
+        # TODO: implement visualization with optimal parameters
+
         # embedding_matrix = np.dot(embedding_matrix, embedding_matrix.T)
         cluster_model = AffinityPropagation(preference=-3, max_iter=2000)  # Was manually chosen using the word " set " and wordnet number of synsets as reference...
 

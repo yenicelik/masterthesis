@@ -101,6 +101,27 @@ class CorpusSemCor:
     def synset_ids(self):
         return self.data_wordnet_ids
 
+    @property
+    def word_sense_tuples(self):
+        if self.words_ is None:
+            out = []
+            assert len(self.sentences) == len(self.synset_ids)
+            for sentence, senses in zip(self.sentences, self.synset_ids):
+                assert len(sentence) == len(senses)
+                for word, sense in zip(sentence, senses):
+                    # append these to word
+                    if sense is None:
+                        continue
+                    if len(sense) > 2:
+                        continue
+                    out.append(
+                        (word, sense)
+                    )
+
+            self.words_ = out
+
+        return self.words_
+
     def __init__(self):
 
         print("Starting corpus")
@@ -111,6 +132,8 @@ class CorpusSemCor:
         self.data, self.data_wordnet_ids = self._load_corpus()
 
         print(type(self.data), type(self.data_wordnet_ids))
+
+        self.words_ = None
 
     def xml2arrays(self, filepath):
         print("Turning the filepath to ")
