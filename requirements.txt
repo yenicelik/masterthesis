@@ -18,3 +18,4 @@ umap-learn==0.3.10
 chinese-whispers==0.6.1
 ax-platform==0.1.8
 hdbscan==0.8.24
+imbalanced-learn==0.6.1

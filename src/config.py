@@ -16,6 +16,7 @@ parser.add_argument('--max_samples', default=10000, type=int, help='the number o
 parser.add_argument('--cuda', default='False', help='Whether or not CUDA will be used. This argument will be ignored if CUDA is available')
 
 parser.add_argument('--verbose', default=1, type=int, help='verbosity level. higher means more verbose')
+parser.add_argument('--stemsearch', default=0, type=int, help='whether or not to stem the sentences to look for')
 
 args = parser.parse_args()
 

@@ -52,10 +52,21 @@ class CorpusSemCor:
         out = []  # Will cover a list of sentences which contain the respective word
         out_idx = []  # Will cover a list of which cluster the given sentence belongs to
 
+        print("Looking for word ...", word)
+
         # These sentences are not word-delimited!!!
         for i in range(len(self.data)):
             # Iterate through all sentences
-            query_sentence = [self.stemmer.stem(x) for x in self.data[i]]
+            # TODO: Decide when it should be stemmed and when not!
+            if args.stemsearch:
+                query_sentence = [self.stemmer.stem(x) for x in self.data[i]]
+            else:
+                query_sentence = [x for x in self.data[i]]
+            # print("Gotta check if we should stem the word or not")
+            # if 'was' in query_sentence or 'was' in query_sentence_:
+            #     print("In sentence!")
+            #     print(query_sentence)
+            #     print(query_sentence_)
             try:
                 idx = query_sentence.index(word)
             except:
@@ -289,6 +300,6 @@ if __name__ == "__main__":
     # _get_all_top_words()
     corpus = CorpusSemCor()
     print("\n\n\n\n\n")
-    corpus._sample_sentence_including_word_from_corpus('central')
+    corpus.sample_sentence_including_word_from_corpus('central')
     print("\n\n\n\n\n")
-    corpus._sample_sentence_including_word_from_corpus('have')
+    corpus.sample_sentence_including_word_from_corpus('have')
