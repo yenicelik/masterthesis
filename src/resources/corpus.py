@@ -24,7 +24,19 @@ class Corpus:
         # Find all words, together with their respective synset id ...
         # -> Could best parallelize this ...
         # Strip word of all whitespaces
-        out = ["[CLS] " + x for x in self.data if word in x][:n]
+        print("FROM naive sampling following word...", word)
+        assert n > 1
+        print("Number of samples to keep is: ", n)
+        out = []
+        for x in self.data:
+            if word in x:
+                print("word in x", word, x)
+                out.append(
+                    "[CLS] " + x
+                )
+        out = out[:n]
+        print("Self data is. ")
+        # print(self.data)
         # Must not allow any words that happen less than 5 times!
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
         # Perhaps best not to simply change the function signature, but to make it an attribute

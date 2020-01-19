@@ -65,7 +65,7 @@ class BertEmbedding:
         word = word.lower()
 
         # 1. Sample k sentences that include this word w
-        if sample_sentences is None and cluster_labels is None:
+        if sample_sentences is None:
             sample_sentences, _ = self.corpus.sample_sentence_including_word_from_corpus(word)
         tokenized_word = self.wrapper.tokenizer.tokenize(word)
         tokenized_word_window = len(tokenized_word)
@@ -77,7 +77,6 @@ class BertEmbedding:
         # If the python list is nested, it means that the word was split up into multiple tokens,
         # and we can aggregate them somehow furthermore
         embeddings = []
-
 
         # 3. Run through language model, look at how the other paper reprocuded generating embeddings for word using BERT
         for sentence in sample_sentences:
@@ -93,6 +92,8 @@ class BertEmbedding:
                 print("Sentence and tokenized word is")
                 print(tokenized_word)
                 print(sentence)
+            # print("Tokenized word and sentence is: ")
+            # print("Tokenized word and sentence is: ", tokenized_word, sentence)
             tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, self.corpus)[0]
 
             # Now convert to pytorch tensors..

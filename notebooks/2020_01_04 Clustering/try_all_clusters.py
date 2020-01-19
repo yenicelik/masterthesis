@@ -75,6 +75,8 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
         if len(np.unique(pred_clustering)) == 1:
             print("Couldn't find cluster!", np.unique(pred_clustering))
 
+        print("Current score is: ", adjusted_rand_score(true_clustering, pred_clustering))
+
         out += adjusted_rand_score(true_clustering, pred_clustering)
 
     # Return the score as the mean of all items
@@ -131,7 +133,7 @@ def sample_embeddings_for_target_word(tgt_word):
     number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
     X1, true_cluster_labels = sample_semcor_data(tgt_word)
-    n = max(0, (args.max_samples - X1.shape[0]))
+    n = max(2, (args.max_samples - X1.shape[0]))
     X2 = sample_naive_data(tgt_word, n=n)
 
     known_indices = list(np.arange(X1.shape[0], dtype=int).tolist())
@@ -142,7 +144,7 @@ def sample_embeddings_for_target_word(tgt_word):
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)
-    pca_model = PCA(n_components=min(100, X.shape[0]), whiten=False)
+    pca_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
     X = pca_model.fit_transform(X)
     print("Variance kept through pca is: ", np.sum(pca_model.explained_variance_ratio_))
 
@@ -162,9 +164,14 @@ def sample_all_clusterable_items(prepare_testset=False):
         for each of the polysemous words that we will be using for cross-validation ...
     :return:
     """
+    # devset_polysemous_words = [
+    #     ' use ', ' test ', ' limit ',
+    #     ' concern ', ' central ', ' pizza '
+    # ]
+
     devset_polysemous_words = [
-        ' use ', ' test ', ' limit ',
-        ' concern ', ' central ', ' pizza '
+        ' was ', ' thought ', ' made ',
+        ' only ', ' central ', ' pizza '
     ]
 
     # TODO: Is a separate choice if we actually want to see performance on these...
@@ -203,10 +210,10 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        # ("MTOptics", MTOptics),
-        # ("MTMeanShift", MTMeanShift),
-        # ("MTHdbScan", MTHdbScan),
-        # ("MTDbScan", MTDbScan),
+        ("MTOptics", MTOptics),
+        ("MTMeanShift", MTMeanShift),
+        ("MTHdbScan", MTHdbScan),
+        ("MTDbScan", MTDbScan),
         ("MTAffinityPropagation", MTAffinityPropagation),
         ("MTChineseWhispers", MTChineseWhispers)
     ]

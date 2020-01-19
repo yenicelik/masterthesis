@@ -50,9 +50,8 @@ if __name__ == "__main__":
 
     word_pairs = get_words_and_classes(
         corpus=corpus,
-        cutoff=30
+        cutoff=10
     )
     print(sorted(list(set(word_pairs)), key=lambda x: x[0]))
 
     # Check a 4-way clustering perhaps ... for the words that work here ...
-

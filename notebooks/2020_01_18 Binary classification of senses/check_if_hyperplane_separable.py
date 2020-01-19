@@ -95,8 +95,8 @@ if __name__ == "__main__":
 
     # ('is', '1'), , ('is', '2')
 
-    word = ' was '
-    word_ids = [0, 1, 3, 5]
+    word = ' thought '
+    word_ids = [1, 2, 3]
 
     # corpus = CorpusSemCor()
     # corpus.sample_sentence_including_word_from_corpus(word)
@@ -117,9 +117,9 @@ if __name__ == "__main__":
 
     print("Resampled items are: ", X.shape, len(Y))
 
-    unique, counts = np.unique(Y)
+    unique = np.unique(Y)
     print("unique and counts are: ")
-    print(unique, counts)
+    print(unique)
 
     # shuffle data
     # Probably not needed anymore beecause it's random sampling anyways ...
