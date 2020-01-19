@@ -44,7 +44,7 @@ class CorpusSemCor:
 
         # Should I stem retrieve from stemmed dictionary before feeding in?
         # for these ...?
-        word = word.replace(" ", "") # because this time we have lists of lists of tokens
+        word = word.replace(" ", "")  # because this time we have lists of lists of tokens
         # stemmed_word = self.stemmer.stem(word)
         # pad front and back by a " "
         # print("Stemmed word", stemmed_word)
@@ -63,16 +63,20 @@ class CorpusSemCor:
             else:
                 query_sentence = [x for x in self.data[i]]
             # print("Gotta check if we should stem the word or not")
-            # if 'was' in query_sentence or 'was' in query_sentence_:
+            # if 'was' in query_sentence or 'was' in query_sentence:
             #     print("In sentence!")
             #     print(query_sentence)
-            #     print(query_sentence_)
             try:
                 idx = query_sentence.index(word)
+                # print("idx is: ", idx)
             except:
                 continue
 
             synset_id = self.data_wordnet_ids[i][idx]
+            if synset_id is None:
+                # ... sometimes there is no corresponding sense recorded...
+                continue
+
             output_sentence = " ".join(self.data[i])
 
             if args.verbose == 2:
@@ -88,8 +92,9 @@ class CorpusSemCor:
             output_sentence = output_sentence.replace("`", "").replace("'", "")
 
             out.append(
-                "[CLS] " + output_sentence
+                "[CLS] " + output_sentence + " [SEP] "
             )
+            assert synset_id is not None, (word, synset_id, query_sentence)
             out_idx.append(synset_id)
 
         # Keep only top samples
@@ -237,7 +242,8 @@ class CorpusSemCor:
 
         # Only keep top 1000 english words
         unique_word_pairs = set([(x[0].lower(), x[1]) for x in max_number_senses if
-                                 (x[1] is not None) and (len(x[1]) <= 2) and (x[0] in most_common_words)])  # Take logarithm because otherwise we see mostly 1s ...
+                                 (x[1] is not None) and (len(x[1]) <= 2) and (x[
+                                                                                  0] in most_common_words)])  # Take logarithm because otherwise we see mostly 1s ...
 
         if verbose:
             print("Queryable words in dictioanry are")

@@ -75,9 +75,18 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
         if len(np.unique(pred_clustering)) == 1:
             print("Couldn't find cluster!", np.unique(pred_clustering))
 
-        print("Current score is: ", adjusted_rand_score(true_clustering, pred_clustering))
+        # print("Current score is: ", adjusted_rand_score(true_clustering, pred_clustering))
 
-        out += adjusted_rand_score(true_clustering, pred_clustering)
+        assert len(true_clustering) == len(pred_clustering), (len(true_clustering), len(pred_clustering))
+
+        score = adjusted_rand_score(true_clustering, pred_clustering)
+
+        print("Input to adjusted random score is: ")
+        print("Content is 1: ", true_clustering)
+        print("Content is 2: ", pred_clustering)
+        print("Score is: ", score)
+
+        out += score
 
     # Return the score as the mean of all items
     return float(out) / len(crossvalidation_data)

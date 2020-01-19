@@ -93,7 +93,7 @@ class BertEmbedding:
                 print(tokenized_word)
                 print(sentence)
             # print("Tokenized word and sentence is: ")
-            # print("Tokenized word and sentence is: ", tokenized_word, sentence)
+            print("Tokenized word and sentence is: ", tokenized_word, sentence)
             tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, self.corpus)[0]
 
             # Now convert to pytorch tensors..

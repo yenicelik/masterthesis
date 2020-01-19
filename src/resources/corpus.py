@@ -30,12 +30,12 @@ class Corpus:
         out = []
         for x in self.data:
             if word in x:
-                print("word in x", word, x)
                 out.append(
-                    "[CLS] " + x
+                    "[CLS] " + x + " [SEP] "
                 )
         out = out[:n]
         print("Self data is. ")
+        print(out)
         # print(self.data)
         # Must not allow any words that happen less than 5 times!
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
