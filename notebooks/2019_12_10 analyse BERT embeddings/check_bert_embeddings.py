@@ -40,6 +40,7 @@ from src.knowledge_graphs.wordnet import WordNetDataset
 # Use random walk?
 
 # TODO: Should probably implement logging instead of this, and just rewrite logging to write to stdout...
+from src.models.cluster.chinesewhispers import MTChineseWhispers
 from src.resources.corpus_semcor import CorpusSemCor
 from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
@@ -82,7 +83,7 @@ def save_embedding_to_tsv(tuples, identifier, true_cluster_labels, predicted_clu
     np.savetxt(fname=identifier + "{}_values.tsv".format(len(sentences)), X=embeddings_matrix, delimiter="\t")
 
 
-def cluster_embeddings(tuples, method="dbscan", pca=True):
+def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
     """
         Taking the embeddings, we cluster them (using non-parameteric algortihms!)
         using different clustering algorithms.
@@ -170,7 +171,10 @@ def cluster_embeddings(tuples, method="dbscan", pca=True):
 
     elif method == "chinese_whispers":
         print("chinese whispers")
-        cluster_model = ChineseWhispersClustering(top_nearest_neighbors=50, remove_hub_number=int(args.max_samples * 0.3) )
+        arguments = {'std_multiplier': -3.0, 'remove_hub_number': 55, 'min_cluster_size': 1} # ({'objective': 0.40074227773260607}
+        arguments = {'std_multiplier': 1.3971661365029329, 'remove_hub_number': 0, 'min_cluster_size': 31} # ( {'objective': 0.4569029268755458}
+        # This is the case for 500 items!!!
+        cluster_model = MTChineseWhispers(**arguments) # ChineseWhispersClustering(**arguments)
 
     else:
         assert False, ("This is not supposed to happen", method)
@@ -209,7 +213,7 @@ if __name__ == "__main__":
     polysemous_words = [" live ", " report ", " use ", " know ", " write ", " tell ", " state ", " allow ", " enter ", " learn ",
                         " seek ", " final ", " critic ", " topic ", " obvious ", " kitchen "]
 
-    method = "dbscan"
+    method = "chinese_whispers"
 
     for tgt_word in polysemous_words:
         print("Looking at word ", tgt_word)
