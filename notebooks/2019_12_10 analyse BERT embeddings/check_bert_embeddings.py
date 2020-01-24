@@ -9,6 +9,9 @@
 
     -> Could perhaps do the orthogonal matchin pursuit to sample different meanings indeed (or find different such metrics..)
 """
+import os
+import random
+import string
 import time
 
 import pandas as pd
@@ -45,6 +48,12 @@ from src.resources.corpus_semcor import CorpusSemCor
 from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
 
+def randomString(stringLength=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
+
+
 def save_embedding_to_tsv(tuples, identifier, true_cluster_labels, predicted_cluster_labels=None):
     """
         Saving the embeddings and sampled sentence into a format that we can easily upload to tensorboard
@@ -62,6 +71,10 @@ def save_embedding_to_tsv(tuples, identifier, true_cluster_labels, predicted_clu
     print("Embeddings matrix has shape: ", embeddings_matrix.shape)
 
     if predicted_cluster_labels is not None:
+        print("Length of true labels and clusters are: ")
+        print(true_cluster_labels)
+        print(predicted_cluster_labels)
+        assert len(predicted_cluster_labels) == len(true_cluster_labels), (len(predicted_cluster_labels), len(true_cluster_labels))
         df = pd.DataFrame(data={
             "sentences": sentences,
             "clusters": predicted_cluster_labels,
@@ -119,7 +132,7 @@ def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
         # TODO: Uncomment following and try again!
         # embedding_matrix = embedding_matrix / np.std(embedding_matrix, axis=0).reshape(1, -1)
 
-        pca_model = PCA(n_components=min(100, embedding_matrix.shape[0]), whiten=True)
+        pca_model = PCA(n_components=min(20, embedding_matrix.shape[0]), whiten=True)
 
         embedding_matrix = pca_model.fit_transform(embedding_matrix)
         captured_variance = pca_model.explained_variance_ratio_
@@ -172,9 +185,9 @@ def cluster_embeddings(tuples, method="chinese_whispers", pca=True):
     elif method == "chinese_whispers":
         print("chinese whispers")
         arguments = {'std_multiplier': -3.0, 'remove_hub_number': 55, 'min_cluster_size': 1} # ({'objective': 0.40074227773260607}
-        arguments = {'std_multiplier': 1.3971661365029329, 'remove_hub_number': 0, 'min_cluster_size': 31} # ( {'objective': 0.4569029268755458}
+        # arguments = {'std_multiplier': 1.3971661365029329, 'remove_hub_number': 0, 'min_cluster_size': 31} # ( {'objective': 0.4569029268755458}
         # This is the case for 500 items!!!
-        cluster_model = MTChineseWhispers(**arguments) # ChineseWhispersClustering(**arguments)
+        cluster_model = MTChineseWhispers(arguments) # ChineseWhispersClustering(**arguments)
 
     else:
         assert False, ("This is not supposed to happen", method)
@@ -210,10 +223,18 @@ if __name__ == "__main__":
     # The word to be analysed
     # polysemous_words = [" set ", " bank ", " table ", " subject ", " key ", " book ", " mouse ", " pupil "]
     # polysemous_words = [" have ", " test ", " limit ", " concern ", " central ", " pizza "]
-    polysemous_words = [" live ", " report ", " use ", " know ", " write ", " tell ", " state ", " allow ", " enter ", " learn ",
-                        " seek ", " final ", " critic ", " topic ", " obvious ", " kitchen "]
+    # polysemous_words = [" live ", " report ", " use ", " know ", " write ", " tell ", " state ", " allow ", " enter ", " learn ",
+    #                     " seek ", " final ", " critic ", " topic ", " obvious ", " kitchen "]
+    polysemous_words = [
+        # ' made ', # ' was ', # ' thought ',
+        ' only ', ' central ', ' pizza '
+    ]
 
     method = "chinese_whispers"
+
+    rnd_string = randomString()
+    if not os.path.exists(rnd_string):
+        os.makedirs(rnd_string)
 
     for tgt_word in polysemous_words:
         print("Looking at word ", tgt_word)
@@ -229,7 +250,7 @@ if __name__ == "__main__":
         n_clusters, cluster_labels = cluster_embeddings(tuples, method=method)
         print("Number of clusters, wordnet senses, sentences: ", tgt_word, n_clusters, number_of_senses, len(tuples))
 
-        save_embedding_to_tsv(tuples, true_cluster_labels=true_cluster_labels, predicted_cluster_labels=cluster_labels, identifier=tgt_word + "_" + method + "_")
+        save_embedding_to_tsv(tuples, true_cluster_labels=true_cluster_labels, predicted_cluster_labels=cluster_labels, identifier=rnd_string + "/" + tgt_word + "_" + method + "_")
 
         # Now use this clustering to sample contexts
         # Ignore clusters which have less than 1% samples...

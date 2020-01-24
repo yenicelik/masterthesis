@@ -118,8 +118,7 @@ def sample_naive_data(tgt_word, n=None):
     corpus = Corpus()
     lang_model = BertEmbedding(corpus=corpus)
 
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word,
-                                                                    n=n)
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
 
     # Just concat all to one big matrix
     if args.cuda:
@@ -150,6 +149,8 @@ def sample_embeddings_for_target_word(tgt_word):
     X = np.concatenate([X1, X2], axis=0)
     print("Collected data is: ")
     print(X.shape, X1.shape, X2.shape)
+
+    # TODO: FIgure out whether to do this or as in the other script..
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)
