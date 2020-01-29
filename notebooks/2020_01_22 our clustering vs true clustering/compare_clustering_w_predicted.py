@@ -2,6 +2,8 @@
     Calculates the clustering based on
 """
 import os
+import random
+
 import numpy as np
 from scipy.signal import normalize
 from sklearn.decomposition import PCA
@@ -47,40 +49,50 @@ def predict_clustering(embedding_matrix):
     predicted_labels = cluster_model.fit_predict(X)
     return predicted_labels
 
-def print_thesaurus(sentences, clusters, word, savepath=None):
+def print_thesaurus(sentences, clusters, word, savepath=None, n=5):
     """
         Prints possible different use-cases of a word by taking
         :param : a set of tuples (sentence, cluster_label)
+        :param n : number of examples to show per meaning clustered ...
     :return:
     """
 
-    df = pd.DataFrame({
-        "cluster_id": [],
-        "sentence": []
-    })
-
-    if savepath is not None:
-        fp = open(savepath + f"/thesaurus_{word}.txt", "w+")
-    else:
-        fp = None
-
     # for cluster, sentence in zip(clusters, sentences):
+    data = []
+    for cluster, sentence in zip(clusters, sentences):
+        print(cluster, sentence)
+        data.append((cluster, sentence))
 
-    print(f"\n\n\nPrinting thesaurus for {word} \n")
-    for cluster_label in np.unique(clusters):
-        # pick 5 indecies at random which correspond to the cluster_label
-        # random.choice
-        print(f"====== {cluster_label} ======")
-        for cluster, sentence in zip(clusters, sentences):
-            if cluster == cluster_label:
-                print(cluster, sentence)
-                if fp is not None:
-                    fp.write("\n" + str(cluster) + "; " + sentence)
+    # Shuffle, and keep five (as determined by counter)
+    random.shuffle(data)
+    counter = dict()
 
-                df[cluster]
+    out = []
+    for cluster, sentence in data:
+        if cluster not in counter:
+            counter[cluster] = 0
+            out.append(
+                (cluster, sentence)
+            )
+        elif counter[cluster] < 5:
+            counter[cluster] += 1
+            out.append(
+                (cluster, sentence)
+            )
+        else:
+            continue
 
-    if fp is None:
-        fp.close()
+    print("out", out)
+
+    df = pd.DataFrame.from_records(out, columns =['cluster_id', 'sentence'])
+    df.to_csv(savepath + f"/thesaurus_{word}.csv")
+
+    df = pd.DataFrame.from_records(data, columns =['cluster_id', 'sentence'])
+    df.to_csv(savepath + f"/thesaurus_{word}_full.csv")
+
+    print("Sampled meanings through thesaurus are: ")
+    print(df.head())
+
 
 if __name__ == "__main__":
     print("Comparing our clusters with other clusters ...")
@@ -90,7 +102,19 @@ if __name__ == "__main__":
         # ' thought ', ' made ',  # ' was ',
         # ' only ', ' central ', ' pizza '
         # ' table ',
-        ' bank '
+        ' bank ',
+        ' cold ',
+        ' table ',
+        ' good ',
+        ' book ',
+        ' mouse ',
+        ' was ',
+        ' key ',
+        ' arms ',
+        ' was ',
+        ' thought ',
+        ' pizza ',
+        ' made '
     ]
 
     corpus = Corpus()

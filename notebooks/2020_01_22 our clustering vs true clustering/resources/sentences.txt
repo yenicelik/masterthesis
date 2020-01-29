@@ -1,0 +1,32 @@
+                                                ------
+                     [CLS] he swam by the river banks   out of sight . [SEP] [PAD]
+                                                ------
+                            [CLS] i scanned the banks   for my old row boat . [SEP] [PAD]
+               [CLS] daniel slid down the steep bank    into the canal . [SEP] [PAD]
+ [CLS] ivan and sofia walked a little along the shore   . [SEP] [PAD]
+                              [CLS] we make the bank    and we both climb up . [SEP] [PAD]
+   [CLS] she and jordan had moved closer to the cliffs  . [SEP] [PAD]
+[CLS] her eyes lingered on final head along the path    . [SEP] [PAD]
+                           [CLS] ` ` on the far bank    of the river . [SEP] [PAD]
+         [CLS] you can see them around the side beach   sometimes . [SEP] [PAD]
+   [CLS] his eyes travel to the shallow , sandy hills   . [SEP] [PAD]
+   [CLS] she lies motionless at the base of the shore   . [SEP] [PAD]
+                                                ------
+
+
+
+                                        ----
+                     [CLS] he went to a bank  to get more money . [SEP] [PAD]
+                                        ----
+                         [CLS] go rob a bank  and get me some cash . [SEP] [PAD]
+        [CLS] so i had to go to the new bank  . [SEP] [PAD]
+               [CLS] wed best go to the bank  , i think . [SEP] [PAD]
+                  [CLS] sam went to the bank  with max and frank . [SEP] [PAD]
+                              [CLS] the bank  has offered a good deal . ' ' [SEP] [PAD]
+           [CLS] the transaction at the bank  took very little time . [SEP] [PAD]
+                      [CLS] ill sue the bank  and whoever took the money ! [SEP] [PAD]
+      [CLS] did you place the page in a bank  yesterday ? [SEP] [PAD]
+[CLS] now she was the head teller at my bank  . [SEP] [PAD]
+                          [CLS] ` ` the bank  is officially closed . ' ' [SEP] [PAD]
+                                        ----
+
