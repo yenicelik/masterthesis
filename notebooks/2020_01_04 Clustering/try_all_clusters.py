@@ -154,7 +154,7 @@ def sample_embeddings_for_target_word(tgt_word):
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)
-    pca_model = PCA(n_components=min(30, X.shape[0]), whiten=False)
+    pca_model = PCA(n_components=min(120, X.shape[0]), whiten=False)
     X = pca_model.fit_transform(X)
     print("Variance kept through pca is: ", np.sum(pca_model.explained_variance_ratio_))
 

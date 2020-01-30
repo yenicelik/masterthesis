@@ -107,13 +107,11 @@ if __name__ == "__main__":
     polysemous_words = [
         # ' thought ', ' made ',  # ' was ',
         # ' only ', ' central ', ' pizza '
-        # ' table ',
-        # ' bank ',
-        # ' cold ',
-        # ' table ',
-        # ' good ',
-
-        # ' book ',
+        ' table ',
+        ' bank ',
+        ' cold ',
+        ' table ',
+        ' good ',
         ' mouse ',
         ' was ',
         ' key ',
@@ -121,7 +119,8 @@ if __name__ == "__main__":
         ' was ',
         ' thought ',
         ' pizza ',
-        ' made '
+        ' made ',
+        ' book '
     ]
 
     corpus = Corpus()

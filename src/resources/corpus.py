@@ -31,7 +31,7 @@ class Corpus:
         for x in self.data:
             if word in x:
                 out.append(
-                    "[CLS] " + x + " [SEP] [PAD]"
+                    "[CLS] " + x + " [SEP]"
                 )
         out = out[:n]
         print("Self data is. ")

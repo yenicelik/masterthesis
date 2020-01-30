@@ -92,7 +92,7 @@ class CorpusSemCor:
             output_sentence = output_sentence.replace("`", "").replace("'", "")
 
             out.append(
-                "[CLS] " + output_sentence + " [SEP] [PAD]"
+                "[CLS] " + output_sentence + " [SEP]"
             )
             assert synset_id is not None, (word, synset_id, query_sentence)
             out_idx.append(synset_id)
