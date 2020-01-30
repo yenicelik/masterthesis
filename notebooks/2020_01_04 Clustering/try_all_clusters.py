@@ -154,7 +154,7 @@ def sample_embeddings_for_target_word(tgt_word):
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)
-    pca_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
+    pca_model = PCA(n_components=min(30, X.shape[0]), whiten=False)
     X = pca_model.fit_transform(X)
     print("Variance kept through pca is: ", np.sum(pca_model.explained_variance_ratio_))
 
@@ -220,10 +220,10 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        ("MTOptics", MTOptics),
-        ("MTMeanShift", MTMeanShift),
+        # ("MTOptics", MTOptics),
+        # ("MTMeanShift", MTMeanShift),
         ("MTHdbScan", MTHdbScan),
-        ("MTDbScan", MTDbScan),
+        # ("MTDbScan", MTDbScan),
         ("MTAffinityPropagation", MTAffinityPropagation),
         ("MTChineseWhispers", MTChineseWhispers)
     ]

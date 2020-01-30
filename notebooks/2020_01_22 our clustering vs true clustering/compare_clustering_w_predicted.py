@@ -44,6 +44,12 @@ def predict_clustering(embedding_matrix):
         'min_cluster_size': 31
     }  # ( {'objective': 0.4569029268755458}
 
+    # {
+    #     'std_multiplier': 2.0614460712833473,
+    #     'remove_hub_number': 0,
+    #     'min_cluster_size': 42
+    # } # ({'objective': 0.4336888890925356}, {'objective': {'objective': 1.0887275582334232e-09}}
+
     cluster_model = MTChineseWhispers(arguments)  # ChineseWhispersClustering(**arguments)
 
     predicted_labels = cluster_model.fit_predict(X)
@@ -102,11 +108,12 @@ if __name__ == "__main__":
         # ' thought ', ' made ',  # ' was ',
         # ' only ', ' central ', ' pizza '
         # ' table ',
-        ' bank ',
-        ' cold ',
-        ' table ',
-        ' good ',
-        ' book ',
+        # ' bank ',
+        # ' cold ',
+        # ' table ',
+        # ' good ',
+
+        # ' book ',
         ' mouse ',
         ' was ',
         ' key ',
