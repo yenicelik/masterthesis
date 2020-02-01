@@ -19,3 +19,5 @@ chinese-whispers==0.6.1
 ax-platform==0.1.8
 hdbscan==0.8.24
 imbalanced-learn==0.6.1
+pyyaml==5.3
+seaborn==0.10.0

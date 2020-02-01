@@ -13,7 +13,7 @@
 
 import traceback
 import numpy as np
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, NMF
 from sklearn.metrics import adjusted_rand_score
 from sklearn.preprocessing import StandardScaler
 from ax import optimize, SearchSpace
@@ -154,9 +154,21 @@ def sample_embeddings_for_target_word(tgt_word):
 
     # Apply PCA
     X = StandardScaler().fit_transform(X)
-    pca_model = PCA(n_components=min(120, X.shape[0]), whiten=False)
-    X = pca_model.fit_transform(X)
-    print("Variance kept through pca is: ", np.sum(pca_model.explained_variance_ratio_))
+
+    if args.nmf == 0:
+        dimred_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
+    else:
+        # Now make the X positive!
+        if np.any(X < 0):
+            X = X - np.min(X)  # Should we perhaps do this feature-wise?
+            print("adding negative values to X")
+            print(np.min(X))
+
+        # Instead of PCA do NMF?
+        dimred_model = NMF(n_components=min(20, X.shape[0]))
+
+    X = dimred_model.fit_transform(X)
+    # print("Variance kept through pca is: ", np.sum(dimred_model.explained_variance_ratio_))
 
     print("ADJ is: ", adjusted_rand_score([1, 2, 3, 4, 0], [0, 1, 2, 3, 4]))
 
@@ -220,10 +232,10 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        # ("MTOptics", MTOptics),
-        # ("MTMeanShift", MTMeanShift),
+        ("MTOptics", MTOptics),
+        ("MTMeanShift", MTMeanShift),
         ("MTHdbScan", MTHdbScan),
-        # ("MTDbScan", MTDbScan),
+        ("MTDbScan", MTDbScan),
         ("MTAffinityPropagation", MTAffinityPropagation),
         ("MTChineseWhispers", MTChineseWhispers)
     ]

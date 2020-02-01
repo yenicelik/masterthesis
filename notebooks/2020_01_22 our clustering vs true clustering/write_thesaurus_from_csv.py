@@ -95,6 +95,6 @@ if __name__ == "__main__":
         ' thought ',
         ' pizza ',
         ' made ']:
-        filepath = f"/Users/david/GoogleDrive/_MasterThesis/notebooks/2020_01_22 our clustering vs true clustering/kucilnghrr/thesaurus_{tgt_word}.csv"
-        savefile= f"/Users/david/GoogleDrive/_MasterThesis/notebooks/2020_01_22 our clustering vs true clustering/kucilnghrr/thesaurus_{tgt_word}.txt"
+        filepath = f"/Users/david/GoogleDrive/_MasterThesis/notebooks/2020_01_22 our clustering vs true clustering/bxcavoyrgw/thesaurus_{tgt_word}.csv"
+        savefile= f"/Users/david/GoogleDrive/_MasterThesis/notebooks/2020_01_22 our clustering vs true clustering/bxcavoyrgw/thesaurus_{tgt_word}.txt"
         csv_to_thesaurus(filepath, savefile=savefile, tgt_word=tgt_word)
