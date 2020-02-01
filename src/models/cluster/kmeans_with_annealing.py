@@ -10,6 +10,7 @@ from collections import Counter
 from ax import ParameterType, RangeParameter, SearchSpace
 import numpy as np
 from sklearn.cluster import OPTICS, DBSCAN, KMeans
+from sklearn.metrics import pairwise_distances
 
 from src.models.cluster.base import BaseCluster
 
@@ -19,7 +20,11 @@ class MTKMeansAnnealing(BaseCluster):
         No open parameters
     """
 
-    def merge_clusters_too_close_to_each_other(self, X_centers, cluster_labels):
+    def merge_clusters_too_close_to_each_other(
+            self,
+            X_centers,
+            cluster_labels
+    ):
         """
             Based on some heuristics, and hyperparameters,
             merges two clusters together if they are too close together
@@ -27,7 +32,29 @@ class MTKMeansAnnealing(BaseCluster):
         :param cluster_labels:
         :return:
         """
-        pass
+        distances = pairwise_distances(X_centers)
+
+        cluster_merge_value = np.mean(distances) + self.std_multiplier_ * np.std(distances)
+
+
+        merge_indecies = np.argwhere(distances < cluster_merge_value)
+        # print("Merge indecies: ", merge_indecies)
+        # merge_indecies = list(set(set(tuple(merge_indecies[i, :])) for i in range(len(merge_indecies))))
+        # print("New merge indecies: ", merge_indecies)
+
+        labels = np.asarray(cluster_labels)
+
+        for i in range(merge_indecies.shape[0]):
+            replace_by = merge_indecies[i, 0]
+            original = merge_indecies[i, 1]
+
+            labels[labels == original] = replace_by
+
+        # Annealing log-loss loss function possible using an elbow techniques ...
+        # We need a function for this elbow-technique, where we find the maximal point of inflexion
+
+        # Find all items that are below a given number
+        return cluster_labels
 
     def merge_unclustered_points_to_closest_cluster(self, cos, cluster_labels):
         counter = Counter(cluster_labels)
@@ -89,6 +116,7 @@ class MTKMeansAnnealing(BaseCluster):
         self.model = KMeans(**kwargs)
 
         min_cluster_size = kwargs['min_cluster_size'] if 'min_cluster_size' in kwargs else 5
+        self.std_multiplier_ = kwargs['std_multiplier'] if 'std_multiplier' in kwargs else -0.5
         verbose = kwargs['verbose'] if 'verbose' in kwargs else False
 
         self.verbose = verbose
@@ -108,6 +136,11 @@ class MTKMeansAnnealing(BaseCluster):
                 "type": "choice",
                 "values": ['k-means++', 'random']
             },
+            {
+                "name": "std_multiplier",
+                "type": "range",
+                "bounds": [-2.5, 2.5]
+            },
         ]
 
     def fit_predict(self, X, y=None):
@@ -121,6 +154,10 @@ class MTKMeansAnnealing(BaseCluster):
         )
 
         # (2) Merge all clusters that are too close to another cluster with their closest cluster
+        labels = self.merge_clusters_too_close_to_each_other(
+            X_centers=self.model.cluster_centers_,
+            cluster_labels=labels
+        )
 
         return labels
 
@@ -133,6 +170,6 @@ if __name__ == "__main__":
     }
     model = MTKMeansAnnealing(kwargs)
 
-    X = np.random.random(100, 20)
+    X = np.random.random((500, 20))
     labels = model.fit_predict(X)
     print("Labels are: ", labels)
