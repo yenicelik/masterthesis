@@ -2,6 +2,7 @@
     Does some analysis including density estimation at different points
 """
 import numpy as np
+import umap
 import yaml
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -79,8 +80,8 @@ if __name__ == "__main__":
         #     print(np.min(X))
 
         # Instead of PCA do NMF?
-        dimred_model = TSNE(n_components=min(20, X.shape[0]))
-        # dimred_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
+
+        dimred_model = umap.UMAP(n_components=min(4, X.shape[0]))
         X = dimred_model.fit_transform(X)
 
         dist = pd.DataFrame(

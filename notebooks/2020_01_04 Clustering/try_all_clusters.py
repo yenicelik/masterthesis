@@ -13,9 +13,9 @@
 
 import traceback
 import numpy as np
+import umap
 from sklearn.decomposition import PCA, NMF, LatentDirichletAllocation
 from sklearn.metrics import adjusted_rand_score
-from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 from ax import optimize, SearchSpace
 
@@ -119,7 +119,8 @@ def sample_naive_data(tgt_word, n=None):
     corpus = Corpus()
     lang_model = BertEmbedding(corpus=corpus)
 
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word,
+                                                                    n=n)
 
     # Just concat all to one big matrix
     if args.cuda:
@@ -171,17 +172,22 @@ def sample_embeddings_for_target_word(tgt_word):
 
         # Instead of PCA do NMF?
         dimred_model = NMF(n_components=min(20, X.shape[0]))
-        
+
     elif args.nmf == 2:
         print("LDA")
+        if np.any(X < 0):
+            X = X - np.min(X)  # Should we perhaps do this feature-wise?
+            print("adding negative values to X")
+            print(np.min(X))
         dimred_model = LatentDirichletAllocation(n_components=min(20, X.shape[0]))
-
     else:
-        print("TSNE")
-        dimred_model = TSNE(n_components=min(20, X.shape[0]))
-
+        print("UMAP")
+        dimred_model = umap.UMAP(n_components=min(20, X.shape[0]))
 
     X = dimred_model.fit_transform(X)
+
+    # if args.tsne:
+    #     X = tsne_model.fit_transform(X)
     # print("Variance kept through pca is: ", np.sum(dimred_model.explained_variance_ratio_))
 
     print("ADJ is: ", adjusted_rand_score([1, 2, 3, 4, 0], [0, 1, 2, 3, 4]))
