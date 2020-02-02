@@ -7,7 +7,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from sklearn.decomposition import PCA, NMF
+from sklearn.decomposition import PCA, NMF, LatentDirichletAllocation
+from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 
 from src.embedding_generators.bert_embeddings import BertEmbedding
@@ -71,14 +72,14 @@ if __name__ == "__main__":
 
         X = StandardScaler().fit_transform(X)
 
-        # Now make the X positive!
-        if np.any(X < 0):
-            X = X - np.min(X) # Should we perhaps do this feature-wise?
-            print("adding negative values to X")
-            print(np.min(X))
+        # # Now make the X positive!
+        # if np.any(X < 0):
+        #     X = X - np.min(X) # Should we perhaps do this feature-wise?
+        #     print("adding negative values to X")
+        #     print(np.min(X))
 
         # Instead of PCA do NMF?
-        dimred_model = NMF(n_components=min(20, X.shape[0]))
+        dimred_model = TSNE(n_components=min(20, X.shape[0]))
         # dimred_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
         X = dimred_model.fit_transform(X)
 

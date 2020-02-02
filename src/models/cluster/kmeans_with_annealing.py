@@ -139,7 +139,7 @@ class MTKMeansAnnealing(BaseCluster):
             {
                 "name": "std_multiplier",
                 "type": "range",
-                "bounds": [-2.5, 2.5]
+                "bounds": [-2.5, 0.]
             },
         ]
 
@@ -166,7 +166,8 @@ if __name__ == "__main__":
 
     kwargs = {
         'n_clusters': 20,
-        'init': 'random'
+        'init': 'random',
+        'std_multiplier': -0.5,
     }
     model = MTKMeansAnnealing(kwargs)
 

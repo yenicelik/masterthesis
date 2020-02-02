@@ -13,8 +13,9 @@
 
 import traceback
 import numpy as np
-from sklearn.decomposition import PCA, NMF
+from sklearn.decomposition import PCA, NMF, LatentDirichletAllocation
 from sklearn.metrics import adjusted_rand_score
+from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 from ax import optimize, SearchSpace
 
@@ -155,9 +156,13 @@ def sample_embeddings_for_target_word(tgt_word):
     # Apply PCA
     X = StandardScaler().fit_transform(X)
 
+    print("Args args.nmf is: ", args.nmf, type(args.nmf))
+
     if args.nmf == 0:
+        print("PCA")
         dimred_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
-    else:
+    elif args.nmf == 1:
+        print("NMF")
         # Now make the X positive!
         if np.any(X < 0):
             X = X - np.min(X)  # Should we perhaps do this feature-wise?
@@ -166,6 +171,15 @@ def sample_embeddings_for_target_word(tgt_word):
 
         # Instead of PCA do NMF?
         dimred_model = NMF(n_components=min(20, X.shape[0]))
+        
+    elif args.nmf == 2:
+        print("LDA")
+        dimred_model = LatentDirichletAllocation(n_components=min(20, X.shape[0]))
+
+    else:
+        print("TSNE")
+        dimred_model = TSNE(n_components=min(20, X.shape[0]))
+
 
     X = dimred_model.fit_transform(X)
     # print("Variance kept through pca is: ", np.sum(dimred_model.explained_variance_ratio_))

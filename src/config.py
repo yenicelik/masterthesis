@@ -18,7 +18,7 @@ parser.add_argument('--cuda', default='False', help='Whether or not CUDA will be
 parser.add_argument('--verbose', default=1, type=int, help='verbosity level. higher means more verbose')
 parser.add_argument('--stemsearch', default=0, type=int, help='whether or not to stem the sentences to look for')
 
-parser.add_argument('--nmf', default=1, type=int, help='whether or not to use NMF. If NMF is not used, falling back to PCA')
+parser.add_argument('--nmf', default=3, type=int, help='whether or not to use NMF. If NMF is not used, falling back to PCA')
 
 args = parser.parse_args()
 
