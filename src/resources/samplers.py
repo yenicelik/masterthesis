@@ -1,0 +1,114 @@
+"""
+    Anything related to sampling different kinds of data
+"""
+
+import numpy as np
+import umap
+from sklearn.decomposition import PCA, NMF, LatentDirichletAllocation
+from sklearn.preprocessing import StandardScaler
+
+from src.config import args
+from src.embedding_generators.bert_embeddings import BertEmbedding
+from src.knowledge_graphs.wordnet import WordNetDataset
+from src.resources.corpus import Corpus
+from src.resources.corpus_semcor import CorpusSemCor
+from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
+
+
+def sample_naive_data(tgt_word, n=None):
+    corpus = Corpus()
+    lang_model = BertEmbedding(corpus=corpus)
+
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
+
+    # Just concat all to one big matrix
+    if args.cuda:
+        X = np.concatenate(
+            [x[1].cpu().reshape(1, -1) for x in tuples],
+            axis=0
+        )
+    else:
+        X = np.concatenate(
+            [x[1].reshape(1, -1) for x in tuples],
+            axis=0
+        )
+
+    return X
+
+
+def sample_semcor_data(tgt_word):
+    corpus = CorpusSemCor()
+    lang_model = BertEmbedding(corpus=corpus)
+
+    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+
+    if args.cuda:
+        # Just concat all to one big matrix
+        X = np.concatenate(
+            [x[1].cpu().reshape(1, -1) for x in tuples],
+            axis=0
+        )
+
+    else:
+        X = np.concatenate(
+            [x[1].reshape(1, -1) for x in tuples],
+            axis=0
+        )
+
+    return X, true_cluster_labels
+
+def sample_word_matrix(tgt_word):
+    number_of_senses, X, true_cluster_labels, known_indices = sample_embeddings_for_target_word(tgt_word)
+    return number_of_senses, X, true_cluster_labels, known_indices
+
+def sample_embeddings_for_target_word(tgt_word):
+    print("Looking at word", tgt_word)
+    wordnet_model = WordNetDataset()
+    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
+
+    X1, true_cluster_labels = sample_semcor_data(tgt_word)
+    n = max(2, (args.max_samples - X1.shape[0]))
+    X2 = sample_naive_data(tgt_word, n=n)
+
+    known_indices = list(np.arange(X1.shape[0], dtype=int).tolist())
+
+    X = np.concatenate([X1, X2], axis=0)
+    print("Collected data is: ")
+    print(X.shape, X1.shape, X2.shape)
+
+    # TODO: FIgure out whether to do this or as in the other script..
+
+    # Apply PCA
+    X = StandardScaler().fit_transform(X)
+
+    print("Args args.nmf is: ", args.nmf, type(args.nmf))
+
+    if args.dimred == "pca":
+        print("PCA")
+        dimred_model = PCA(n_components=min(args.dimred_dimensions, X.shape[0]), whiten=False)
+
+    elif args.dimred == "nmf":
+        print("NMF")
+        # Now make the X positive!
+        if np.any(X < 0):
+            X = X - np.min(X)  # Should we perhaps do this feature-wise?
+
+        # Instead of PCA do NMF?
+        dimred_model = NMF(n_components=min(args.dimred_dimensions, X.shape[0]))
+
+    elif args.dimred == "lda":
+        print("LDA")
+        if np.any(X < 0):
+            X = X - np.min(X)  # Should we perhaps do this feature-wise?
+        dimred_model = LatentDirichletAllocation(n_components=min(args.dimred_dimensions, X.shape[0]))
+
+    elif args.dimred == "umap":
+        print("UMAP")
+        dimred_model = umap.UMAP(n_components=min(args.dimred_dimensions, X.shape[0]))
+
+    else:
+        assert False, ("Must specify method of dimensionality reduction")
+
+    X = dimred_model.fit_transform(X)
+
+    return number_of_senses, X, true_cluster_labels, known_indices

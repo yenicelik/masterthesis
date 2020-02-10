@@ -13,24 +13,11 @@
 
 import traceback
 import numpy as np
-import umap
-from sklearn.decomposition import PCA, NMF, LatentDirichletAllocation
 from sklearn.metrics import adjusted_rand_score
-from sklearn.preprocessing import StandardScaler
-from ax import optimize, SearchSpace
+from ax import optimize
 
-from src.config import args
-from src.embedding_generators.bert_embeddings import BertEmbedding
-from src.knowledge_graphs.wordnet import WordNetDataset
-from src.models.cluster.affinitypropagation import MTAffinityPropagation
-from src.models.cluster.chinesewhispers import MTChineseWhispers
-from src.models.cluster.dbscan import MTDbScan
-from src.models.cluster.hdbscan import MTHdbScan
-from src.models.cluster.meanshift import MTMeanShift
-from src.models.cluster.optics import MTOptics
-from src.resources.corpus import Corpus
-from src.resources.corpus_semcor import CorpusSemCor
-from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
+from src.models.cluster.kmeans_with_annealing import MTKMeansAnnealing
+from src.resources.samplers import sample_embeddings_for_target_word
 
 
 def _evaluate_model(model_class, arg, crossvalidation_data):
@@ -92,114 +79,6 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
     # Return the score as the mean of all items
     return float(out) / len(crossvalidation_data)
 
-
-def sample_semcor_data(tgt_word):
-    corpus = CorpusSemCor()
-    lang_model = BertEmbedding(corpus=corpus)
-
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
-
-    if args.cuda:
-        # Just concat all to one big matrix
-        X = np.concatenate(
-            [x[1].cpu().reshape(1, -1) for x in tuples],
-            axis=0
-        )
-
-    else:
-        X = np.concatenate(
-            [x[1].reshape(1, -1) for x in tuples],
-            axis=0
-        )
-
-    return X, true_cluster_labels
-
-
-def sample_naive_data(tgt_word, n=None):
-    corpus = Corpus()
-    lang_model = BertEmbedding(corpus=corpus)
-
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word,
-                                                                    n=n)
-
-    # Just concat all to one big matrix
-    if args.cuda:
-        X = np.concatenate(
-            [x[1].cpu().reshape(1, -1) for x in tuples],
-            axis=0
-        )
-    else:
-        X = np.concatenate(
-            [x[1].reshape(1, -1) for x in tuples],
-            axis=0
-        )
-
-    return X
-
-
-def sample_embeddings_for_target_word(tgt_word):
-    print("Looking at word", tgt_word)
-    wordnet_model = WordNetDataset()
-    number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
-
-    X1, true_cluster_labels = sample_semcor_data(tgt_word)
-    n = max(2, (args.max_samples - X1.shape[0]))
-    X2 = sample_naive_data(tgt_word, n=n)
-
-    known_indices = list(np.arange(X1.shape[0], dtype=int).tolist())
-
-    X = np.concatenate([X1, X2], axis=0)
-    print("Collected data is: ")
-    print(X.shape, X1.shape, X2.shape)
-
-    # TODO: FIgure out whether to do this or as in the other script..
-
-    # Apply PCA
-    X = StandardScaler().fit_transform(X)
-
-    print("Args args.nmf is: ", args.nmf, type(args.nmf))
-
-    if args.nmf == 0:
-        print("PCA")
-        dimred_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
-    elif args.nmf == 1:
-        print("NMF")
-        # Now make the X positive!
-        if np.any(X < 0):
-            X = X - np.min(X)  # Should we perhaps do this feature-wise?
-            print("adding negative values to X")
-            print(np.min(X))
-
-        # Instead of PCA do NMF?
-        dimred_model = NMF(n_components=min(20, X.shape[0]))
-
-    elif args.nmf == 2:
-        print("LDA")
-        if np.any(X < 0):
-            X = X - np.min(X)  # Should we perhaps do this feature-wise?
-            print("adding negative values to X")
-            print(np.min(X))
-        dimred_model = LatentDirichletAllocation(n_components=min(20, X.shape[0]))
-    else:
-        print("UMAP")
-        dimred_model = umap.UMAP(n_components=min(20, X.shape[0]))
-
-    X = dimred_model.fit_transform(X)
-
-    # if args.tsne:
-    #     X = tsne_model.fit_transform(X)
-    # print("Variance kept through pca is: ", np.sum(dimred_model.explained_variance_ratio_))
-
-    print("ADJ is: ", adjusted_rand_score([1, 2, 3, 4, 0], [0, 1, 2, 3, 4]))
-
-    # Sample some more sentences using the other corpus to fulfill this ...
-
-    print("Dataset shape is: ", X.shape)
-    print("True cluster labels are", len(true_cluster_labels))
-
-    return number_of_senses, X, true_cluster_labels, known_indices
-
-
 def sample_all_clusterable_items(prepare_testset=False):
     """
         Prepares a dictionary of clusterable word-embeddings,
@@ -252,12 +131,13 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        ("MTOptics", MTOptics),
-        ("MTMeanShift", MTMeanShift),
-        ("MTHdbScan", MTHdbScan),
-        ("MTDbScan", MTDbScan),
-        ("MTAffinityPropagation", MTAffinityPropagation),
-        ("MTChineseWhispers", MTChineseWhispers)
+        # ("MTOptics", MTOptics),
+        # ("MTMeanShift", MTMeanShift),
+        # ("MTHdbScan", MTHdbScan),
+        # ("MTDbScan", MTDbScan),
+        # ("MTAffinityPropagation", MTAffinityPropagation),
+        # ("MTChineseWhispers", MTChineseWhispers),
+        ("MTKMeansAnnealing", MTKMeansAnnealing)
     ]
 
     devset, _ = sample_all_clusterable_items(prepare_testset=False)
@@ -287,7 +167,7 @@ if __name__ == "__main__":
                 parameters=params,
                 evaluation_function=_current_eval_fun,
                 minimize=False,
-                total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 2
+                total_trials=len([x for x in params if x['type'] != "fixed"]) * 10 * 5
             )
 
             print("Best parameters etc.")

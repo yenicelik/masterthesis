@@ -113,11 +113,17 @@ class MTKMeansAnnealing(BaseCluster):
     def __init__(self, kwargs):
         super(MTKMeansAnnealing, self).__init__()
         # metric is one of:
-        self.model = KMeans(**kwargs)
 
         min_cluster_size = kwargs['min_cluster_size'] if 'min_cluster_size' in kwargs else 5
         self.std_multiplier_ = kwargs['std_multiplier'] if 'std_multiplier' in kwargs else -0.5
         verbose = kwargs['verbose'] if 'verbose' in kwargs else False
+
+        # for kwargs.items():
+        kwargs = {your_key: kwargs[your_key] for your_key in kwargs.keys() if your_key in
+                  ['n_clusters', 'init', 'n_init', 'max_iter', 'tol', 'precompute_distances', 'verbose', 'random_state', 'copy_x', 'n_jobs, algorithm']
+                  }
+
+        self.model = KMeans(**kwargs)
 
         self.verbose = verbose
         self.min_cluster_size = min_cluster_size
@@ -129,17 +135,17 @@ class MTKMeansAnnealing(BaseCluster):
             {
                 "name": "n_clusters",
                 "type": "choice",
-                "values": [10, 20, 40, 55, 70, 90],
+                "values": [47, 55, 63, 70, 80, 90],
             },
             {
                 "name": "init",
                 "type": "choice",
-                "values": ['k-means++', 'random']
+                "values": ['k-means++', 'random'] # , 'random'
             },
             {
                 "name": "std_multiplier",
                 "type": "range",
-                "bounds": [-2.5, 0.]
+                "bounds": [-2.5, 2.5]
             },
         ]
 
