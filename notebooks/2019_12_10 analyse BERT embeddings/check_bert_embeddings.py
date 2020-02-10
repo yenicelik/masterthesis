@@ -243,7 +243,7 @@ if __name__ == "__main__":
         number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
         print("Getting embeddings from BERT")
-        tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+        tuples, true_cluster_labels, _ = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
         print("Clustering embeddings...")
         # cluster_labels = None

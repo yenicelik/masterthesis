@@ -33,7 +33,7 @@ def sample_semcor_data(tgt_word):
 
     print("Lang model is: ", corpus, lang_model, tgt_word)
 
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+    tuples, true_cluster_labels, _ = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
     if args.cuda:
         # Just concat all to one big matrix

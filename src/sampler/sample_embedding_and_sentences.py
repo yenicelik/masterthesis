@@ -34,4 +34,4 @@ def get_bert_embeddings_and_sentences(model, corpus, tgt_word, n=None):
             (sentence, embedding, cluster_label)
         )
 
-    return out, sampled_cluster_true_labels
+    return out, sampled_cluster_true_labels, sampled_sentences

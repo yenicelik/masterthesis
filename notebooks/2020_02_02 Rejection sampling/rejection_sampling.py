@@ -11,6 +11,9 @@
 
 import numpy as np
 import matplotlib
+
+from src.resources.samplers import sample_embeddings_for_target_word
+
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
@@ -226,7 +229,7 @@ if __name__ == "__main__":
         ' arms '
     ]
 
-    rnd_str = randomString(additonal_label="PCA4" if args.nmf == 0 else "UMAP4")
+    rnd_str = randomString(additonal_label=f"{args.dimred}_{args.dimred_dimensions}")
 
     for tgt_word in devset_polysemous_words:
 

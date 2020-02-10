@@ -136,9 +136,11 @@ if __name__ == "__main__":
 
         number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
+        # TODO: Could actually replace this with the other sample function ...
+
         print("Getting embeddings from BERT")
-        tuples_semcor, true_cluster_labels_semcor = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus_semcor, tgt_word=tgt_word)
-        tuples, _ = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+        tuples_semcor, true_cluster_labels_semcor, _  = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus_semcor, tgt_word=tgt_word)
+        tuples, _, _  = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
         print("semcor tuples and normal tuples are")
 

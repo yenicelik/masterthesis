@@ -19,7 +19,7 @@ def sample_naive_data(tgt_word, n=None):
     corpus = Corpus()
     lang_model = BertEmbedding(corpus=corpus)
 
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
+    tuples, true_cluster_labels, sentences = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
 
     # Just concat all to one big matrix
     if args.cuda:
@@ -33,14 +33,16 @@ def sample_naive_data(tgt_word, n=None):
             axis=0
         )
 
-    return X
+    assert X.shape[0] == len(sentences), ("Shapes don't conform, ", X.shape, len(sentences))
+
+    return X, sentences
 
 
 def sample_semcor_data(tgt_word):
     corpus = CorpusSemCor()
     lang_model = BertEmbedding(corpus=corpus)
 
-    tuples, true_cluster_labels = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+    tuples, true_cluster_labels, sentences = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
 
     if args.cuda:
         # Just concat all to one big matrix
@@ -55,7 +57,9 @@ def sample_semcor_data(tgt_word):
             axis=0
         )
 
-    return X, true_cluster_labels
+    assert X.shape[0] == len(sentences), ("Shapes don't conform, ", X.shape, len(sentences))
+
+    return X, true_cluster_labels, sentences
 
 def sample_word_matrix(tgt_word):
     number_of_senses, X, true_cluster_labels, known_indices = sample_embeddings_for_target_word(tgt_word)
@@ -66,13 +70,15 @@ def sample_embeddings_for_target_word(tgt_word):
     wordnet_model = WordNetDataset()
     number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
-    X1, true_cluster_labels = sample_semcor_data(tgt_word)
+    X1, true_cluster_labels, sentences_semcor = sample_semcor_data(tgt_word)
     n = max(2, (args.max_samples - X1.shape[0]))
-    X2 = sample_naive_data(tgt_word, n=n)
+    X2, sentences_naive = sample_naive_data(tgt_word, n=n)
 
     known_indices = list(np.arange(X1.shape[0], dtype=int).tolist())
 
     X = np.concatenate([X1, X2], axis=0)
+    sentences = sentences_semcor + sentences_naive
+    assert X.shape[0] == len(sentences), ("Shapes don't conform", X.shape[0], len(sentences))
     print("Collected data is: ")
     print(X.shape, X1.shape, X2.shape)
 
@@ -81,7 +87,7 @@ def sample_embeddings_for_target_word(tgt_word):
     # Apply PCA
     X = StandardScaler().fit_transform(X)
 
-    print("Args args.nmf is: ", args.nmf, type(args.nmf))
+    print("Args args.dimred is: ", args.dimred, type(args.dimred))
 
     if args.dimred == "pca":
         print("PCA")
@@ -100,6 +106,7 @@ def sample_embeddings_for_target_word(tgt_word):
         print("LDA")
         if np.any(X < 0):
             X = X - np.min(X)  # Should we perhaps do this feature-wise?
+
         dimred_model = LatentDirichletAllocation(n_components=min(args.dimred_dimensions, X.shape[0]))
 
     elif args.dimred == "umap":
@@ -112,3 +119,7 @@ def sample_embeddings_for_target_word(tgt_word):
     X = dimred_model.fit_transform(X)
 
     return number_of_senses, X, true_cluster_labels, known_indices
+
+if __name__ == "__main__":
+    print("Testing retrieval of sentences")
+    sample_embeddings_for_target_word(" was ")
