@@ -161,7 +161,6 @@ if __name__ == "__main__":
                 traceback.print_tb(e.__traceback__)
                 return 0.
 
-
         try:
             best_parameters, best_values, experiment, model = optimize(
                 parameters=params,

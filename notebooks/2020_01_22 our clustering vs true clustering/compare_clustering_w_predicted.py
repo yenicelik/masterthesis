@@ -20,6 +20,7 @@ from src.utils.create_experiments_folder import randomString
 
 
 # All the sample data logic now ....
+from src.utils.thesaurus_io import print_thesaurus
 
 
 def predict_clustering(embedding_matrix):
@@ -54,50 +55,6 @@ def predict_clustering(embedding_matrix):
 
     predicted_labels = cluster_model.fit_predict(X)
     return predicted_labels
-
-def print_thesaurus(sentences, clusters, word, savepath=None, n=5):
-    """
-        Prints possible different use-cases of a word by taking
-        :param : a set of tuples (sentence, cluster_label)
-        :param n : number of examples to show per meaning clustered ...
-    :return:
-    """
-
-    # for cluster, sentence in zip(clusters, sentences):
-    data = []
-    for cluster, sentence in zip(clusters, sentences):
-        print(cluster, sentence)
-        data.append((cluster, sentence))
-
-    # Shuffle, and keep five (as determined by counter)
-    random.shuffle(data)
-    counter = dict()
-
-    out = []
-    for cluster, sentence in data:
-        if cluster not in counter:
-            counter[cluster] = 0
-            out.append(
-                (cluster, sentence)
-            )
-        elif counter[cluster] < 5:
-            counter[cluster] += 1
-            out.append(
-                (cluster, sentence)
-            )
-        else:
-            continue
-
-    print("out", out)
-
-    df = pd.DataFrame.from_records(out, columns =['cluster_id', 'sentence'])
-    df.to_csv(savepath + f"/thesaurus_{word}.csv")
-
-    df = pd.DataFrame.from_records(data, columns =['cluster_id', 'sentence'])
-    df.to_csv(savepath + f"/thesaurus_{word}_full.csv")
-
-    print("Sampled meanings through thesaurus are: ")
-    print(df.head())
 
 
 if __name__ == "__main__":
@@ -183,6 +140,7 @@ if __name__ == "__main__":
         print_thesaurus(
             sentences=sentences,
             clusters=labels,
+            true_clusters=None,
             word=tgt_word,
             savepath=savepath
         )
