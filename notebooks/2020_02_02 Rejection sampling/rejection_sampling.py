@@ -11,14 +11,14 @@
 
 import numpy as np
 import matplotlib
-
-from src.resources.samplers import sample_embeddings_for_target_word
-
 matplotlib.use('TkAgg')
+
+import pandas as pd
 import matplotlib.pyplot as plt
 
 from src.config import args
 from src.utils.create_experiments_folder import randomString
+from src.resources.samplers import sample_embeddings_for_target_word
 
 
 def linearly_spaced_combinations(bounds, num_samples):
@@ -155,7 +155,7 @@ def rejection_sampling(X, cube, grid, rejection_threshold):
     # Now apply some very basic modality detection ...
     return densities
 
-def sample_thesaurus_by_density_distribution(X, sentences, grid, distribution, std_parameter=-1.0):
+def sample_thesaurus_by_density_distribution(X, sentences, grid, distribution, std_parameter=1.0):
     """
         We take out certain items if they are below a certain threshold
     :param X:
@@ -165,49 +165,56 @@ def sample_thesaurus_by_density_distribution(X, sentences, grid, distribution, s
     :return:
     """
 
-    mu = np.mean(distribution)
-    std = np.std(distribution)
+    # mu = np.median(distribution)
+    # std = np.std(distribution)
+    # threshold = mu + (mu / 2.) # Takes the 75th percentile, lol doesn't, but lets see how this works
 
-    threshold = mu + std_parameter * std
+    # distribution = [np.log(x) for x in distribution]
+
+    threshold = np.max(distribution) / 2.
 
     out = []
 
+    print("Densities are ", densities)
+    print("Thresholds are: ", threshold)
+
     # This is very important! We have to traverse the grid in the same way
     # we didcalculate the individual grid items
-    for idx, row_idx in enumerate(grid.shape[0]):
+    for idx, row_idx in enumerate(range(grid.shape[0])):
         anchor_point = grid[row_idx]
         end_point = anchor_point + cube
 
         def inside_cube(vec):
-            tmp = np.all(anchor_point <= vec) and np.all(vec <= end_point)
-            tmp = tmp.all()
+            positive_examples = np.all(anchor_point <= vec) and np.all(vec <= end_point)
+            tmp = positive_examples.all()
             return 1 if tmp else 0
 
         density = 0.
+        true_indecies = []
 
         for i in range(X.shape[0]):
 
             count_inside_cube = inside_cube(X[i, :])
             density += count_inside_cube
+            if count_inside_cube > 0:
+                true_indecies.append(i)
 
+        # Look for samples inside the cube
         if density > threshold:
             # Because the density if above a certain threshold,
             # we can now sample one of the words here
             # Take the sentence corresponding to "X"
-            out.append(
-                (idx, sentences[i], X[i, :])
-            )
+            for ele in true_indecies:
+                out.append(
+                    (idx, sentences[ele], X[ele, :])
+                )
 
+    # Now prepare the dataframe which we will write into a csv file
+    df = pd.DataFrame(
+        out, columns=["cluster_id", "sentence", "embedding"]
+    )
 
-
-
-
-
-
-
-
-
-
+    return df, threshold
 
 if __name__ == "__main__":
     print("Rejection sampling")
@@ -215,13 +222,13 @@ if __name__ == "__main__":
     # ' was ',
     # ' made '
     devset_polysemous_words = [
-        # ' was ',
+        ' bank ',
+        ' was ',
         ' thought ',
-        # ' table ',
+        ' table ',
         # ' only ',
         ' central ',
         ' pizza ',
-        ' bank ',
         ' cold ',
         ' mouse ',
         ' good ',
@@ -229,18 +236,18 @@ if __name__ == "__main__":
         ' arms '
     ]
 
-    rnd_str = randomString(additonal_label=f"{args.dimred}_{args.dimred_dimensions}")
+    rnd_str = randomString(additonal_label=f"_{args.dimred}{args.dimred_dimensions}")
 
     for tgt_word in devset_polysemous_words:
 
-        # Perhaps also try out a parzen window estimate ..?
+        # Perhaps also try out a Parzen window estimate ..?
         # tgt_word = ' bank '
-        number_of_senses, X, true_cluster_labels, known_indices = sample_embeddings_for_target_word(tgt_word)
+        number_of_senses, X, true_cluster_labels, known_indices, sentences = sample_embeddings_for_target_word(tgt_word)
         print("Number of senses: ", number_of_senses)
 
         # First, we start with a random matrix
         # X = np.random.random((1000, 3))
-        grid = create_grid(X, sample_per_dim=6)
+        grid = create_grid(X, sample_per_dim=10)
         print("Grid is: ", grid)
         cube = calculate_cubes(grid)
 
@@ -248,8 +255,18 @@ if __name__ == "__main__":
 
         print("Densities are: ", densities)
 
+        print("Saving to csv ...")
+        df, threshold = sample_thesaurus_by_density_distribution(
+            X=X,
+            sentences=sentences,
+            grid=grid,
+            distribution=densities
+        )
+        df.to_csv(rnd_str + f"/thesaurus_{tgt_word}_samples{args.max_samples}_senses{len(number_of_senses)}_full.csv")
+
         # Print a histogram plot of how many density distributions we have for each square ...
         plt.hist(densities, bins=100, log=True)
+        plt.axvline(x=threshold, color="red")
         plt.title("log" + tgt_word)
 
         plt.savefig(rnd_str + f"/log_{tgt_word}_samples{args.max_samples}_senses{len(number_of_senses)}.png")

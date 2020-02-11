@@ -111,7 +111,7 @@ def sample_all_clusterable_items(prepare_testset=False):
 
     # Create the devset
     for tgt_word in devset_polysemous_words:
-        number_of_senses, X, true_cluster_labels, known_indices = sample_embeddings_for_target_word(tgt_word)
+        number_of_senses, X, true_cluster_labels, known_indices, _ = sample_embeddings_for_target_word(tgt_word)
         devset[tgt_word] = (number_of_senses, X, true_cluster_labels, known_indices)
 
     assert len(devset) == len(devset_polysemous_words), (len(devset), len(devset_polysemous_words))

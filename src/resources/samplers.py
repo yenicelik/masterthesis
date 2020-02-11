@@ -62,7 +62,7 @@ def sample_semcor_data(tgt_word):
     return X, true_cluster_labels, sentences
 
 def sample_word_matrix(tgt_word):
-    number_of_senses, X, true_cluster_labels, known_indices = sample_embeddings_for_target_word(tgt_word)
+    number_of_senses, X, true_cluster_labels, known_indices, _ = sample_embeddings_for_target_word(tgt_word)
     return number_of_senses, X, true_cluster_labels, known_indices
 
 def sample_embeddings_for_target_word(tgt_word):
@@ -118,7 +118,7 @@ def sample_embeddings_for_target_word(tgt_word):
 
     X = dimred_model.fit_transform(X)
 
-    return number_of_senses, X, true_cluster_labels, known_indices
+    return number_of_senses, X, true_cluster_labels, known_indices, sentences
 
 if __name__ == "__main__":
     print("Testing retrieval of sentences")
