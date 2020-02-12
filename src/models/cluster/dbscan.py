@@ -3,7 +3,7 @@
 """
 from ax import ParameterType, RangeParameter, SearchSpace
 import numpy as np
-from sklearn.cluster import OPTICS, DBSCAN
+from sklearn.cluster import DBSCAN
 
 from src.models.cluster.base import BaseCluster
 

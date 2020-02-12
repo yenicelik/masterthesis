@@ -1,9 +1,7 @@
 """
 
 """
-from ax import ParameterType, RangeParameter, SearchSpace
-import numpy as np
-from sklearn.cluster import OPTICS, MeanShift
+from sklearn.cluster import MeanShift
 
 from src.models.cluster.base import BaseCluster
 

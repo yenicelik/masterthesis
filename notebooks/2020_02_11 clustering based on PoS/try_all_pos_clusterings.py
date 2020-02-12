@@ -69,7 +69,6 @@ if __name__ == "__main__":
         ' run ',
         ' well ',
         ' round ',
-        # ' damn ',
         ' down ',
         ' table ',
         ' bank ',
@@ -81,8 +80,11 @@ if __name__ == "__main__":
         ' arms ',
         ' thought ',
         ' pizza ',
+
         # ' made ',
-        # ' book '
+        # ' book ',
+        # ' damn ',
+
     ]
 
     print("Creating corpus ...")
@@ -94,11 +96,11 @@ if __name__ == "__main__":
     nlp = spacy.load("en_core_web_sm")
 
     model_classes = [
-        ("MTOptics", MTOptics),
-        ("MTMeanShift", MTMeanShift),
+        # ("MTOptics", MTOptics),
+        # ("MTMeanShift", MTMeanShift),
         ("MTHdbScan", MTHdbScan),
         ("MTDbScan", MTDbScan),
-        ("MTAffinityPropagation", MTAffinityPropagation),
+        # ("MTAffinityPropagation", MTAffinityPropagation),
         ("MTChineseWhispers", MTChineseWhispers),
         ("MTKMeansAnnealing", MTKMeansAnnealing)
     ]
@@ -109,7 +111,6 @@ if __name__ == "__main__":
         print(f"Running {model_name} {model_class}")
 
         params = model_class.hyperparameter_dictionary()
-
 
         # Define the evaluation functions ...
         def _current_eval_fun(p):

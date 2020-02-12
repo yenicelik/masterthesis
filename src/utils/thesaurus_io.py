@@ -27,6 +27,7 @@ def print_thesaurus(sentences, clusters, word, true_clusters=None, savepath=None
     counter = dict()
 
     out = []
+    duplicates = set()
     for cluster, true_cluster, sentence in data:
         if cluster not in counter:
             counter[cluster] = 0
@@ -34,10 +35,13 @@ def print_thesaurus(sentences, clusters, word, true_clusters=None, savepath=None
                 (cluster, true_cluster, sentence)
             )
         elif counter[cluster] < 5:
+            if sentence in duplicates:
+                continue
             counter[cluster] += 1
             out.append(
                 (cluster, true_cluster, sentence)
             )
+            duplicates.add(sentence)
         else:
             continue
 

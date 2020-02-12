@@ -22,7 +22,6 @@ from src.models.cluster.dbscan import MTDbScan
 from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.kmeans_with_annealing import MTKMeansAnnealing
 from src.models.cluster.meanshift import MTMeanShift
-from src.models.cluster.optics import MTOptics
 from src.resources.samplers import sample_embeddings_for_target_word
 
 
@@ -137,7 +136,6 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        ("MTOptics", MTOptics),
         ("MTMeanShift", MTMeanShift),
         ("MTHdbScan", MTHdbScan),
         ("MTDbScan", MTDbScan),

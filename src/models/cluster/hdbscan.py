@@ -2,9 +2,6 @@
 
 """
 import hdbscan
-from ax import ParameterType, RangeParameter, SearchSpace
-import numpy as np
-from sklearn.cluster import OPTICS
 
 from src.models.cluster.base import BaseCluster
 

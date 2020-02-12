@@ -13,7 +13,7 @@ parser.add_argument('--random_seed', default=0, type=int,
                     help='an integer which determines the random seed. if no seed shall be provided, set this to 0')
 parser.add_argument('--dtype', default='tf.float32', help='the floating point type that is going to be used globally')
 
-parser.add_argument('--max_samples', default=500, type=int,
+parser.add_argument('--max_samples', default=1000, type=int,
                     help='the number of sentences to sample for BERT embeddings')
 parser.add_argument('--cuda', default='False',
                     help='Whether or not CUDA will be used. This argument will be ignored if CUDA is available')
@@ -21,8 +21,10 @@ parser.add_argument('--cuda', default='False',
 parser.add_argument('--verbose', default=1, type=int, help='verbosity level. higher means more verbose')
 parser.add_argument('--stemsearch', default=0, type=int, help='whether or not to stem the sentences to look for')
 
-parser.add_argument('--dimred', default="umap", help='which dimensionality reduction algorithm to use. If none specified, falling back to PCA. One of "nmf", "pca", "umap", "lda" ')
-parser.add_argument('--dimred_dimensions', default=4, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
+parser.add_argument('--dimred', default="pca", help='which dimensionality reduction algorithm to use. If none specified, falling back to PCA. One of "nmf", "pca", "umap", "lda" ')
+parser.add_argument('--dimred_dimensions', default=20, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
+parser.add_argument('--pca_whiten', default=True, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
+parser.add_argument('--normalization_norm', default="l2", help='What norm to normalize the vectors by before applying clustering. set to an invalid value if you dont want any normalization')
 
 args = parser.parse_args()
 

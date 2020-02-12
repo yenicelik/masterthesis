@@ -20,14 +20,13 @@ if __name__ == "__main__":
     # We first sample a few sentences which include a word
     polypos_words = [
         ' run ',
-        ' well ',
+        # ' well ',
         ' round ',
-        # ' damn ',
-        ' down ',
+        # ' down ',
         ' table ',
         ' bank ',
         ' cold ',
-        ' good ',
+        # ' good ',
         ' mouse ',
         ' was ',
         ' key ',
@@ -35,14 +34,15 @@ if __name__ == "__main__":
         ' thought ',
         ' pizza ',
         # ' made ',
-        # ' book '
+        # ' book ',
+        # ' damn ',
     ]
 
     print("Creating corpus ...")
     corpus = Corpus()
     lang_model = BertEmbedding(corpus=corpus)
 
-    rnd_str = randomString(additonal_label=f"PoS_{args.dimred}{args.dimred_dimensions}")
+    rnd_str = randomString(additonal_label=f"PoS_{args.dimred}_{args.dimred_dimensions}_whiten{args.pca_whiten}_norm{args.normalization_norm}")
 
     print("Loading spacy")
     # Not sure if we need anything more from this
@@ -53,12 +53,20 @@ if __name__ == "__main__":
     for tgt_word in polypos_words:
         X, sentences, labels = retrieve_data(nlp, tgt_word=tgt_word)
 
+        # Check if adding oversampling logic (kmeans SMOTE) helps
         if args.dimred == "pca" and args.dimred_dimensions == 20:
             kwargs = {'std_multiplier': 0.05224261597234525, 'remove_hub_number': 0,
                       'min_cluster_size': 18}  # {'objective': 0.21264054073371708}
             pred_cluster_labels = MTChineseWhispers(kwargs).fit_predict(X)
-        elif args.dimred == "umap" and args.dimred_dimensions in (2, 4):
+        elif args.dimred == "pca" and args.dimred_dimensions == 4:
+            kwargs = {'std_multiplier': 0.05224261597234525, 'remove_hub_number': 0,
+                      'min_cluster_size': 18}  # {'objective': 0.21264054073371708}
+            pred_cluster_labels = MTChineseWhispers(kwargs).fit_predict(X)
+        elif args.dimred == "umap" and args.dimred_dimensions == 2:
             kwargs = {'eps': 1.8823876589536668, 'min_samples': 16, 'metric': 'chebyshev'}
+            pred_cluster_labels = MTDbScan(kwargs).fit_predict(X)
+        elif args.dimred == "umap" and args.dimred_dimensions == 4:
+            kwargs = {'eps': 2.3, 'min_samples': 2, 'metric': 'chebyshev'}
             pred_cluster_labels = MTDbScan(kwargs).fit_predict(X)
         else:
             assert False, ("You should run the model selection experiment before doing this first!")
@@ -66,9 +74,10 @@ if __name__ == "__main__":
         assert len(labels) == len(pred_cluster_labels), (len(labels), len(pred_cluster_labels))
         assert len(sentences) == len(labels), (len(sentences), len(labels))
 
-        # TODO: Project again onto a lower dimension, so we can actually visualize this ...
-        pca_model = PCA(n_components=min(5, X.shape[1]), whiten=False)
-        X = pca_model.fit_transform(X)
+        # # TODO: Project again onto a lower dimension, so we can actually visualize this ...
+        if args.dimred_dimensions > 5:
+            pca_model = PCA(n_components=min(5, X.shape[1]), whiten=False)
+            X = pca_model.fit_transform(X)
 
         # Pairplots!
         # Visualize the predictions

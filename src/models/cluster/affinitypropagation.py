@@ -1,9 +1,7 @@
 """
 
 """
-from ax import ParameterType, RangeParameter, SearchSpace
-import numpy as np
-from sklearn.cluster import OPTICS, AffinityPropagation
+from sklearn.cluster import AffinityPropagation
 
 from src.models.cluster.base import BaseCluster
 

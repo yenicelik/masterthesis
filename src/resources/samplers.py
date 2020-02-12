@@ -4,6 +4,7 @@
 
 import numpy as np
 import umap
+from sklearn import preprocessing
 from sklearn.decomposition import PCA, NMF, LatentDirichletAllocation
 from sklearn.preprocessing import StandardScaler
 
@@ -118,6 +119,10 @@ def sample_embeddings_for_target_word(tgt_word):
 
     X = dimred_model.fit_transform(X)
 
+    # Shall we normalize the vectors..
+    if args.normalization_norm in ("l1", "l2"):
+        X = preprocessing.normalize(X, norm=args.normalization_norm)
+
     return number_of_senses, X, true_cluster_labels, known_indices, sentences
 
 def sample_pos_embeddings_for_target_word(tgt_word, n=None):
@@ -140,7 +145,8 @@ def sample_pos_embeddings_for_target_word(tgt_word, n=None):
 
     if args.dimred == "pca":
         print("PCA")
-        dimred_model = PCA(n_components=min(args.dimred_dimensions, X.shape[0]), whiten=False)
+        # TODO: Whiten set to true, perhaps revert ...
+        dimred_model = PCA(n_components=min(args.dimred_dimensions, X.shape[0]), whiten=args.pca_whiten)
 
     elif args.dimred == "nmf":
         print("NMF")
@@ -166,6 +172,10 @@ def sample_pos_embeddings_for_target_word(tgt_word, n=None):
         assert False, ("Must specify method of dimensionality reduction")
 
     X = dimred_model.fit_transform(X)
+
+    # Shall we normalize the vectors..
+    if args.normalization_norm in ("l1", "l2"):
+        X = preprocessing.normalize(X, norm=args.normalization_norm)
 
     return X, sentences
 

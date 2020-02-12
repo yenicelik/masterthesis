@@ -7,9 +7,8 @@
 """
 from collections import Counter
 
-from ax import ParameterType, RangeParameter, SearchSpace
 import numpy as np
-from sklearn.cluster import OPTICS, DBSCAN, KMeans
+from sklearn.cluster import KMeans
 from sklearn.metrics import pairwise_distances
 
 from src.models.cluster.base import BaseCluster
