@@ -52,9 +52,9 @@ def evaluate_model(model_class, arg, devset):
         # Nothing about "known indices" ... this is only the case for limited corpora, but this time we have spacy ...
         score = adjusted_rand_score(labels, pred_clustering)
 
-        print("Input to adjusted random score is: ")
-        print("Content is 1: ", labels)
-        print("Content is 2: ", pred_clustering)
+        # print("Input to adjusted random score is: ")
+        # print("Content is 1: ", labels)
+        # print("Content is 2: ", pred_clustering)
         print("Score is: ", score)
 
         final_score += score

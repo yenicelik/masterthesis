@@ -16,7 +16,13 @@ import numpy as np
 from sklearn.metrics import adjusted_rand_score
 from ax import optimize
 
+from src.models.cluster.affinitypropagation import MTAffinityPropagation
+from src.models.cluster.chinesewhispers import MTChineseWhispers
+from src.models.cluster.dbscan import MTDbScan
+from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.kmeans_with_annealing import MTKMeansAnnealing
+from src.models.cluster.meanshift import MTMeanShift
+from src.models.cluster.optics import MTOptics
 from src.resources.samplers import sample_embeddings_for_target_word
 
 
@@ -69,9 +75,9 @@ def _evaluate_model(model_class, arg, crossvalidation_data):
 
         score = adjusted_rand_score(true_clustering, pred_clustering)
 
-        print("Input to adjusted random score is: ")
-        print("Content is 1: ", true_clustering)
-        print("Content is 2: ", pred_clustering)
+        # print("Input to adjusted random score is: ")
+        # print("Content is 1: ", true_clustering)
+        # print("Content is 2: ", pred_clustering)
         print("Score is: ", score)
 
         out += score
@@ -131,12 +137,12 @@ if __name__ == "__main__":
     # We want to find the best clustering algorithm applicable on a multitude of target words
 
     model_classes = [
-        # ("MTOptics", MTOptics),
-        # ("MTMeanShift", MTMeanShift),
-        # ("MTHdbScan", MTHdbScan),
-        # ("MTDbScan", MTDbScan),
-        # ("MTAffinityPropagation", MTAffinityPropagation),
-        # ("MTChineseWhispers", MTChineseWhispers),
+        ("MTOptics", MTOptics),
+        ("MTMeanShift", MTMeanShift),
+        ("MTHdbScan", MTHdbScan),
+        ("MTDbScan", MTDbScan),
+        ("MTAffinityPropagation", MTAffinityPropagation),
+        ("MTChineseWhispers", MTChineseWhispers),
         ("MTKMeansAnnealing", MTKMeansAnnealing)
     ]
 

@@ -2,58 +2,17 @@
     Making prediction with best model
 """
 import spacy
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 
 from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.models.cluster.chinesewhispers import MTChineseWhispers
+from src.models.cluster.dbscan import MTDbScan
 from src.resources.corpus import Corpus
 from src.resources.samplers import retrieve_data
 from src.utils.create_experiments_folder import randomString
 from src.utils.thesaurus_io import print_thesaurus
-
-
-def visualize_true_cluster_embeddings(savepath, tgt_word, cluster_labels):
-
-    dist = pd.DataFrame(
-        data=X, columns=[f'lat{i}' for i in range(X.shape[1])]
-    )
-    colors = pd.DataFrame(
-        data=cluster_labels, columns=['PoS']
-    )
-    dist = pd.concat([dist, colors], axis=1)
-
-    # Apply some visualization based on seaborn distribution analysis
-    sns.pairplot(dist, hue='PoS')
-
-    plt.savefig(savepath + f'/matplotlib_pairplot_{tgt_word}_true.png')
-    plt.show()
-
-def visualize_predicted_cluster_embeddings(savepath, tgt_word, cluster_labels_pred):
-    dist = pd.DataFrame(
-        data=X, columns=[f'lat{i}' for i in range(X.shape[1])]
-    )
-    # Append to dataframe another dimension which is the
-    colors = pd.DataFrame(
-        data=pred_cluster_labels, columns=['PoS']
-    )
-    dist = pd.concat([dist, colors], axis=1)
-
-    # Apply some visualization based on seaborn distribution analysis
-    sns.pairplot(dist, hue='PoS')
-
-    plt.savefig(savepath + f'/matplotlib_pairplot_{tgt_word}_pred.png')
-    plt.show()
-
-def create_thesaurus():
-    """
-        create the full thesaurus given the labels,
-        and the
-    :return:
-    """
-    pass
+from src.visualize.pairplots import visualize_true_cluster_embeddings, visualize_predicted_cluster_embeddings
 
 if __name__ == "__main__":
     print("Writing to thesaurus, and printing best model")
@@ -94,18 +53,28 @@ if __name__ == "__main__":
     for tgt_word in polypos_words:
         X, sentences, labels = retrieve_data(nlp, tgt_word=tgt_word)
 
-        kwargs = {'std_multiplier': 0.05224261597234525, 'remove_hub_number': 0,
-                  'min_cluster_size': 18}  # {'objective': 0.21264054073371708}
-        pred_cluster_labels = MTChineseWhispers(kwargs).fit_predict(X)
+        if args.dimred == "pca" and args.dimred_dimensions == 20:
+            kwargs = {'std_multiplier': 0.05224261597234525, 'remove_hub_number': 0,
+                      'min_cluster_size': 18}  # {'objective': 0.21264054073371708}
+            pred_cluster_labels = MTChineseWhispers(kwargs).fit_predict(X)
+        elif args.dimred == "umap" and args.dimred_dimensions in (2, 4):
+            kwargs = {'eps': 1.8823876589536668, 'min_samples': 16, 'metric': 'chebyshev'}
+            pred_cluster_labels = MTDbScan(kwargs).fit_predict(X)
+        else:
+            assert False, ("You should run the model selection experiment before doing this first!")
 
         assert len(labels) == len(pred_cluster_labels), (len(labels), len(pred_cluster_labels))
         assert len(sentences) == len(labels), (len(sentences), len(labels))
 
+        # TODO: Project again onto a lower dimension, so we can actually visualize this ...
+        pca_model = PCA(n_components=min(5, X.shape[1]), whiten=False)
+        X = pca_model.fit_transform(X)
+
         # Pairplots!
         # Visualize the predictions
         print("Visualizing predictions ...")
-        visualize_true_cluster_embeddings(rnd_str, tgt_word, labels)
-        visualize_predicted_cluster_embeddings(rnd_str, tgt_word, pred_cluster_labels)
+        visualize_true_cluster_embeddings(X, rnd_str, tgt_word, labels, title="PoS")
+        visualize_predicted_cluster_embeddings(X, rnd_str, tgt_word, pred_cluster_labels, title="PoS")
         # Visualize the true labels
 
         # Write to full thesaurus
