@@ -17,7 +17,6 @@ from src.models.cluster.dbscan import MTDbScan
 from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.kmeans_with_annealing import MTKMeansAnnealing
 from src.models.cluster.meanshift import MTMeanShift
-from src.models.cluster.optics import MTOptics
 from src.resources.corpus import Corpus
 from src.resources.samplers import retrieve_data
 from src.utils.create_experiments_folder import randomString
@@ -67,19 +66,19 @@ if __name__ == "__main__":
     # We first sample a few sentences which include a word
     polypos_words = [
         ' run ',
-        ' well ',
+        # ' well ',
         ' round ',
         ' down ',
-        ' table ',
+        # ' table ',
         ' bank ',
         ' cold ',
-        ' good ',
+        # ' good ',
         ' mouse ',
         ' was ',
-        ' key ',
-        ' arms ',
-        ' thought ',
-        ' pizza ',
+        # ' key ',
+        # ' arms ',
+        # ' thought ',
+        # ' pizza ',
 
         # ' made ',
         # ' book ',
@@ -96,7 +95,6 @@ if __name__ == "__main__":
     nlp = spacy.load("en_core_web_sm")
 
     model_classes = [
-        # ("MTOptics", MTOptics),
         # ("MTMeanShift", MTMeanShift),
         ("MTHdbScan", MTHdbScan),
         ("MTDbScan", MTDbScan),

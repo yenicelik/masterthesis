@@ -4,6 +4,7 @@
     (which is quite weird..)
 """
 import numpy as np
+import umap
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
@@ -25,19 +26,44 @@ if __name__ == "__main__":
         # ' thought ', ' made ',  # ' was ',
         # ' only ', ' central ', ' pizza '
         # ' table ',
-        ' bank ',
-        ' cold ',
-        ' table ',
-        ' good ',
-        ' mouse ',
-        ' was ',
-        ' key ',
-        ' arms ',
-        ' was ',
-        ' thought ',
-        ' pizza ',
-        ' made ',
-        ' book '
+        # ' bank ',
+        # ' cold ',
+        # ' table ',
+        # ' good ',
+        # ' mouse ',
+        # ' was ',
+        # ' key ',
+        # ' arms ',
+        # ' was ',
+        # ' thought ',
+        # ' pizza ',
+        # ' made ',
+
+        ' act ',
+        ' address ',
+        ' back ',
+        ' bear ',
+        ' block ',
+        ' catch ',
+
+        ' crack ',
+
+        ' face ',
+        ' head ',
+        ' march ',
+
+        ' play ',
+        ' roll ',
+        ' saw ',
+        ' tie ',
+        ' train ',
+        ' treat ',
+        ' value ',
+        ' visit ',
+        ' wake ',
+        ' work ',
+        ' zone ',
+
     ]
 
     corpus = Corpus()
@@ -70,16 +96,20 @@ if __name__ == "__main__":
         ]
 
         X = StandardScaler().fit_transform(X)
-        pca_model = PCA(n_components=min(20, X.shape[0]), whiten=False)
-        X = pca_model.fit_transform(X)
+        dimred_model = umap.UMAP(n_epochs=500, n_components=min(2, X.shape[0]))
+        X = dimred_model.fit_transform(X)
 
         arguments = {
-            'std_multiplier': 1.3971661365029329,
-            'remove_hub_number': 0,
-            'min_cluster_size': 31
-        }  # ( {'objective': 0.4569029268755458}
+            'std_multiplier': 0.7303137869824812,
+            'remove_hub_number': 106,
+            'min_cluster_size': 7
+        }
+        # arguments = {
+        #     'std_multiplier': 1.3971661365029329,
+        #     'remove_hub_number': 0,
+        #     'min_cluster_size': 31
+        # }  # ( {'objective': 0.4569029268755458}
         # with PCA20
-
         cluster_model = MTChineseWhispers(arguments)  # ChineseWhispersClustering(**arguments)
 
         labels = cluster_model.fit_predict(X)

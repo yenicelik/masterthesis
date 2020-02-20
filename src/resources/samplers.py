@@ -168,10 +168,14 @@ def sample_pos_embeddings_for_target_word(tgt_word, n=None):
         print("UMAP")
         dimred_model = umap.UMAP(n_components=min(args.dimred_dimensions, X.shape[0]))
 
+    elif args.dimred == "none":
+        print("No dimred")
+
     else:
         assert False, ("Must specify method of dimensionality reduction")
 
-    X = dimred_model.fit_transform(X)
+    if args.dimred != "none":
+        X = dimred_model.fit_transform(X)
 
     # Shall we normalize the vectors..
     if args.normalization_norm in ("l1", "l2"):
@@ -186,7 +190,7 @@ def get_pos_for_word(nlp, sentence, word):
     for token in doc:
         # return first occurrence of the word which has a POS tag
         if word == token.text:
-            return token.text, token.pos_
+            return token.text, token.pos_ # token.tag_
 
     assert None, ("Sentence should be required to include the given token: ", sentence, word)
 

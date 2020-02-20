@@ -21,10 +21,10 @@ parser.add_argument('--cuda', default='False',
 parser.add_argument('--verbose', default=1, type=int, help='verbosity level. higher means more verbose')
 parser.add_argument('--stemsearch', default=0, type=int, help='whether or not to stem the sentences to look for')
 
-parser.add_argument('--dimred', default="pca", help='which dimensionality reduction algorithm to use. If none specified, falling back to PCA. One of "nmf", "pca", "umap", "lda" ')
-parser.add_argument('--dimred_dimensions', default=20, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
-parser.add_argument('--pca_whiten', default=True, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
-parser.add_argument('--normalization_norm', default="l2", help='What norm to normalize the vectors by before applying clustering. set to an invalid value if you dont want any normalization')
+parser.add_argument('--dimred', default="none", help='which dimensionality reduction algorithm to use. If none specified, falling back to PCA. One of "nmf", "pca", "umap", "lda" ')
+parser.add_argument('--dimred_dimensions', default=768, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
+parser.add_argument('--pca_whiten', default=False, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
+parser.add_argument('--normalization_norm', default="", help='What norm to normalize the vectors by before applying clustering. set to an invalid value if you dont want any normalization')
 
 args = parser.parse_args()
 

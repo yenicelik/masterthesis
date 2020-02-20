@@ -1,0 +1,132 @@
+IBM Debater(R) - Multi-word Term Relatedness Benchmark - TR9856 - release 0.2
+
+1. Summary
+----------
+The release contains 2 files:
+1.1. TermRelatednessLabeling.doc - 
+     Guidelines for the term relatedness labeling task.
+
+1.2. TermRelatednessResults.csv - 
+     Term relatedness dataset with complete results of all labelers. 
+	 Columns 1-3 contain the two terms and the topic under which the pair is considered (a.k.a the context).
+     Columns 4-25 contain the results of 22 labelers who participated in the task. 
+     Each entry in the matrix has three possible values: Related, Unrelated and null where null means that 
+     the labeler didn't receive the given pair.
+     Columns 26 contains the final relatedness score which is defined as #Related/(#Related+#Unrelated).
+      
+	
+2. Methods for generating the TR9856 data
+-----------------------------------------
+2.1 Goals -
+	In constructing the TR9856 data we aimed to address the following issues: 
+	(i) include concepts that involve more than a single word
+	(ii) disambiguate terms, as needed
+	(iii) have a relatively high fraction of ``related'' term pairs, beyond what would be expected at random
+	(iv) focus on terms that are relatively common and dominant in a given context, as opposed to uncommon and/or 
+	esoteric terms
+	(v) generate a relatively large benchmark data, sufficient for developing and assessing supervised machine 
+	learning techniques. 
+	To achieve these goals we defined and followed a systematic and reproducible protocol, 
+	composed of the steps described next.
+
+2.2 Defining topics and articles of interest -
+	We start by observing that framing the relatedness question within a pre-specified context may simplify the task 
+	for humans and machines alike, in particular since the correct sense of ambiguous terms can be identified. 
+	Correspondingly, we focus on a list of 47 topics selected from Debatabase (http://idebate.org/debatabase).
+	For each topic, 5 human labelers were asked to search Wikipedia for articles relevant for a discussion about the 
+	topic. All articles returned by the labelers - an average of 21 articles per topic -
+	were considered in the following steps. The expectation was that articles associated with a particular topic 
+	will be enriched with terms related to that topic, hence with terms related to one another.
+
+2.3 Identifying dominant terms per topic -
+	In order to create a set of terms related to a topic of interest, we used the Hypergeometric (HG) test.
+	Specifically, let M be the number of sentences in the entire collection of articles, i.e., all topics' articles.
+	Let n be the number of sentences in the articles identified for a specific topic, referred henceforth as the "topic articles".
+	Next, we considered all 3-gram terms that were mentioned in the topic articles 3 times or more, while excluding terms that 
+	start and/or end with a stop word. For each considered term, t, let K be the number of sentences that include t
+	over the entire set of articles, and x be the number of sentences that include t
+	in the topic articles. Intuitively, if t is related to the topic, most of its occurrences
+	will be in the topic articles, i.e., x will be relatively close to K. More formally, 
+	given M, n, K and x, the HG test estimates the probability p, to obtain x or more
+	occurrences of t within n sentences selected at random out of the total population of M sentences.
+	The smaller p is, the higher our confidence that t is related to the examined topic. 
+	After applying Bonfferroni correction, we retained all 3-gram terms with a corrected p-value below 0.05, 
+	giving rise to the "topic 3-gram lexicon". We used a similar process to generate the "topic bi-gram lexicon". 
+	The only exception was that the occurrences of bi-grams within 3-grams selected in the previous step were ignored, so to 
+	avoid repetitions (example: "nonpartisan blanket primary" is a valid 3-gram term while "nonpartisan blanket" is not a 
+	valid bi-gram term but its counts are affected by the counts of the longer term).
+	Finally, we used the same process to generate the "topic unigram lexicon". Thus, for each of the 47 topics, 
+	this process gave rise to three topic lexicons, where the terms within each lexicon are
+	sorted by their p-values, that quantify their statistical enrichment within the topic articles. 
+
+2.4 Selecting pairs for annotation
+	For each of the 47 topics, we first identify the set of m1 terms mentioned within the topic definition. 
+	We denote this set as S-def. For example, for the topic ``The use of performance enhancing drugs in 
+	professional sports should be permitted'', S-def will include ``performance enhancing drugs'', and 
+	``professional sports'', hence m1=2. Next, for each of the three lexicons associated with the topic, we define
+	S-top-n to include the top m2 terms in the n-gram topic lexicon; i.e., the n-grams that are most enriched 
+	in the topic articles for n=1,2,3. And Finally, we define S-misc-n to include an additional set of m2 terms, 
+	selected at random from the remaining terms in the n-gram topic lexicon (in defining S-top-n and S-misc-n 
+	we manually ignored a small fraction of incomprehensible terms - e.g., ``access to safe`` - 
+	that were sometimes selected by the automatic process used to generate the topic lexicons).
+	Given these sets, the term pairs to be labeled are selected using the following procedure:
+	
+		1. For n=1,2,3
+		2. Pair each term in S-def with each term in S-top-n, to generate m1*m2 pairs. 
+		3. Pair each term in S-def with each term in S-misc-n, to generate additional m1*m2 pairs. 
+		4. Pair terms selected at random from S-top-n with terms selected at random from S-misc-n, 
+		   to generate an additional set of 2*m1*m2 pairs.
+		   
+	This procedure yields 12*m1*m2 pairs per topic. 
+	By construction, we expect that the average relatedness score of pairs generated by Step 2 
+	will be higher than the average relatedness score of pairs generated by Step 3, which by itself  
+	will be higher than the average relatedness score of pairs generated by Step 4. 
+
+	
+3. Dataset statistics - term relatedness
+----------------------------------------
+Number of labeled pairs - 9856
+Number of unique terms - 2627
+Number of topics - 47
+Number of labelers - 22
+Number of labelers per pair - 10
+Mean number of answers per labeler - 4480
+Min number of answers per labeler - 36
+Max number of answers per labeler - 9856
+Mean ratio of "Related" answers per labeler - 0.52
+Min ratio of "Related" answers per labeler - 0.36
+Max ratio of "Related" answers per labeler - 0.88 (this is probably an outlier as the 2nd highest ratio was 0.68, however this annotator completed only 165 pairs)
+
+
+4. Changes in release 0.2
+-------------------------
+4.1. Replaced several terms with their lower case equivalent - now all terms in the dataset are in lower case.		
+	 The default capitalization for terms in the dataset is lower case since the term counts for the HG test are performed 
+	 on lower cased n-grams (see section 2.3).
+	 However, some terms taken from the topic definition were not lower cased in release 0.1 (see section 2.4).
+
+	 
+5. Contacts
+-----------
+Ran Levy - ranl@il.ibm.com
+Noam Slonim - noams@il.ibm.com
+
+When writing a paper using TR9856 please cite Levy et. al. ACL 2015 
+@InProceedings{levy-EtAl:2015:ACL-IJCNLP,
+  author    = {Levy, Ran  and  Ein-Dor, Liat  and  Hummel, Shay  and  Rinott, Ruty  and  Slonim, Noam},
+  title     = {TR9856: A Multi-word Term Relatedness Benchmark},
+  booktitle = {Proceedings of the 53rd Annual Meeting of the Association for Computational Linguistics and the 7th International Joint Conference on Natural Language Processing (Volume 2: Short Papers)},
+  month     = {July},
+  year      = {2015},
+  address   = {Beijing, China},
+  publisher = {Association for Computational Linguistics},
+  pages     = {419--424},
+  url       = {http://www.aclweb.org/anthology/P15-2069}
+} Slonim. "TR9856: A Multi-word Term Relatedness Benchmark." Volume 2: Short Papers: 419.
+
+
+6. Copyright
+------------
+The dataset is released under the following licensing and copyright terms:
+(c) Copyright Wikipedia. 
+(c) Copyright IBM 2014. Released under CC-BY-SA. 
