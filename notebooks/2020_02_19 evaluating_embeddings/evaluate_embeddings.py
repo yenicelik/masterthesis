@@ -9,6 +9,7 @@ from sklearn.preprocessing import StandardScaler
 
 from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
+from src.functional.pdf import pdf_gaussian, pdf_gmm_diagional_covariance
 from src.models.cluster.chinesewhispers import MTChineseWhispers
 from src.resources.corpus import Corpus
 from src.resources.samplers import retrieve_data
@@ -74,11 +75,14 @@ def return_gaussian_mixture_from_principal_components(cluster_center_variance_pa
     :return:
     """
 
-    for pvec, pvar in cluster_center_variance_pairs:
-        pass
+    mus = [x[0] for x in cluster_center_variance_pairs]
+    covs = [x[1] for x in cluster_center_variance_pairs]
 
-    # Now do something with this representative set
+    # Assume that we don't necessarily have a matrix, but usually just a scalar ...
+    pdf_gmm = pdf_gmm_diagional_covariance(mus, covs)
 
+    # Sample a few times to check here if this actually worked perhaps
+    return pdf_gmm
 
 def return_gaussian_process_from_datasamples(matr):
     """
@@ -89,8 +93,7 @@ def return_gaussian_process_from_datasamples(matr):
     :return:
     """
 
-    for pvec, pvar in cluster_center_variance_pairs:
-        pass
+    pdf_gmm_diagional_covariance
 
     # Now do something with this representative set
 
@@ -120,7 +123,11 @@ if __name__ == "__main__":
         print(X_hat.shape)
 
         clusters_hat = cluster_then_get_static_principal_component(X_hat)
+        centers_and_variances = sample_principal_components_from_cluster_centers(X_hat)
 
+        gmm_pdf = return_gaussian_mixture_from_principal_components(centers_and_variances)
+
+        gp_pdf = return_gaussian_process_from_datasamples(centers_and_variances)
         # Get representative vector from this ..
 
 

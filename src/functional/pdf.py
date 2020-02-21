@@ -6,6 +6,9 @@
 """
 import tensorflow as tf
 import tensorflow_probability as tfp
+import tensorflow_probability.math.psd_kernels as psd_kernels
+from tensorflow_probability.python.distributions import MultivariateNormalDiag
+
 tfd = tfp.distributions
 
 def pdf_gaussian(mu, cov):
@@ -91,3 +94,33 @@ def pdf_gmm_diagional_covariance(mus, covs, mixture_weights=None):
 
     return gmm
 
+
+def pdf_kernel_density_estimation_rbf(X):
+
+
+
+    kernels = [MultivariateNormalDiag(loc=data, scale=bandwidth) for data in X]
+
+    # You can query the PDF using this function
+    tf.reduce_sum([kernel._prob(X) for kernel in kernels], axis=0)
+
+    # kernel = psd_kernels.ExponentiatedQuadratic(
+    #     amplitude=tf.get_variable('amplitude', shape=(), dtype=np.float64),
+    #     length_scale=tf.get_variable('length_scale', shape=(), dtype=np.float64)
+    # )
+    #
+    # gp = tfd.GaussianProcess(
+    #     kernel=kernel
+    # )
+
+    return gp
+
+if __name__ == "__main__":
+
+    import numpy as np
+    import random
+
+    matr = np.random.random(100, 50)
+
+    print("Generate a short gaussian process sample")
+    pdf_gaussian_prrocess_rbf(matr)
