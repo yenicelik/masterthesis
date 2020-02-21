@@ -70,5 +70,5 @@ def get_ordering(corpus):
 
 
 if __name__ == "__main__":
-    print("Hellow")
+    print("Hello")
     get_ordering("simlex")
