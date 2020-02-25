@@ -4,9 +4,10 @@
         - Unimodal Gaussian (Normal) Distribution
         - Gaussian Mixture Model
 """
+import numpy as np
+
 import tensorflow as tf
 import tensorflow_probability as tfp
-import tensorflow_probability.math.psd_kernels as psd_kernels
 from tensorflow_probability.python.distributions import MultivariateNormalDiag
 
 tfd = tfp.distributions
@@ -62,15 +63,20 @@ def pdf_gmm_diagional_covariance(mus, covs, mixture_weights=None):
     # Assert matching batch types
     for i in range(len(mus)):
         assert mus[0].shape == mus[i].shape, (mus[0].shape, mus[i].shape)
+
+        # This doesn't have to be the case, no?
         assert covs[0].shape == covs[i].shape, (covs[0].shape, covs[i].shape)
+
+        # But the cov dimensions have to match the mus dimensions, right?
 
     # Generate all individual components first
     all_gaussians = []
     for mu, cov in zip(mus, covs):
         print("Cov is: ", mu, cov)
+        # How do I find out the batch shape
         single_gaussian = tfd.MultivariateNormalFullCovariance(
             loc=mu,
-            covariance_matrix=cov
+            covariance_matrix=cov if len(cov.shape) == 2 else np.identity(mu.shape[0]) * cov
         )
         print("Single Gaussian is: ")
         print(single_gaussian)
@@ -86,6 +92,8 @@ def pdf_gmm_diagional_covariance(mus, covs, mixture_weights=None):
 
     print("All Gaussians are")
     print(all_gaussians)
+    print(len(all_gaussians))
+    print(len(mixture_weights))
     gmm = tfd.Mixture(
       cat=tfd.Categorical(probs=[mixture_weights]),
       components=all_gaussians
@@ -97,12 +105,18 @@ def pdf_gmm_diagional_covariance(mus, covs, mixture_weights=None):
 
 def pdf_kernel_density_estimation_rbf(X):
 
+    # Turn the data into each individual kernels ...
+    # Take as the scale identity multiplier some hyperparameter based on the average distance between two points..?
+    cov = (np.maximum(X, axis=0) - np.minimum(X, axis=0)) / X.shape[0]
 
-
-    kernels = [MultivariateNormalDiag(loc=data, scale=bandwidth) for data in X]
+    print("New covariance is new :", cov)
+    kernels = [MultivariateNormalDiag(loc=X[i, :], scale_diag=cov) for i in range(X.shape[0])]
 
     # You can query the PDF using this function
-    tf.reduce_sum([kernel._prob(X) for kernel in kernels], axis=0)
+    # Can I probe from here ..
+    return tf.reduce_sum([kernel._prob(X) for kernel in kernels], axis=0)
+
+    # TODO: Do some PCA to double-check if the covariance is calculate in an ok manner ...
 
     # kernel = psd_kernels.ExponentiatedQuadratic(
     #     amplitude=tf.get_variable('amplitude', shape=(), dtype=np.float64),
@@ -113,8 +127,6 @@ def pdf_kernel_density_estimation_rbf(X):
     #     kernel=kernel
     # )
 
-    return gp
-
 if __name__ == "__main__":
 
     import numpy as np
@@ -123,4 +135,5 @@ if __name__ == "__main__":
     matr = np.random.random(100, 50)
 
     print("Generate a short gaussian process sample")
-    pdf_gaussian_prrocess_rbf(matr)
+    kdf = pdf_kernel_density_estimation_rbf(matr)
+    print("kdf is: ", kdf)
