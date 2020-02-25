@@ -1,0 +1,518 @@
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:516: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:517: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:518: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:519: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:520: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:525: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+[INFO 01-12 13:30:22] ax.modelbridge.dispatch_utils: Using Bayesian Optimization generation strategy: GenerationStrategy(name='Sobol+GPEI', steps=[Sobol for 5 arms, GPEI for subsequent arms], generated 0 arm(s) so far). Iterations after 5 will take longer to generate due to model-fitting.
+[INFO 01-12 13:30:22] ax.service.managed_loop: Started full optimization with 60 steps.
+[INFO 01-12 13:30:22] ax.service.managed_loop: Running optimization trial 1...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 13:36:15] ax.service.managed_loop: Running optimization trial 2...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 13:41:58] ax.service.managed_loop: Running optimization trial 3...
+[INFO 01-12 13:42:19] ax.service.managed_loop: Running optimization trial 4...
+[INFO 01-12 13:42:39] ax.service.managed_loop: Running optimization trial 5...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 13:47:30] ax.service.managed_loop: Running optimization trial 6...
+[INFO 01-12 13:47:51] ax.service.managed_loop: Running optimization trial 7...
+[INFO 01-12 13:48:12] ax.service.managed_loop: Running optimization trial 8...
+[INFO 01-12 13:48:33] ax.service.managed_loop: Running optimization trial 9...
+[INFO 01-12 13:48:54] ax.service.managed_loop: Running optimization trial 10...
+[INFO 01-12 13:49:15] ax.service.managed_loop: Running optimization trial 11...
+[INFO 01-12 13:49:35] ax.service.managed_loop: Running optimization trial 12...
+[INFO 01-12 13:49:57] ax.service.managed_loop: Running optimization trial 13...
+[INFO 01-12 13:50:18] ax.service.managed_loop: Running optimization trial 14...
+[INFO 01-12 13:50:51] ax.service.managed_loop: Running optimization trial 15...
+[INFO 01-12 13:51:12] ax.service.managed_loop: Running optimization trial 16...
+[INFO 01-12 13:51:33] ax.service.managed_loop: Running optimization trial 17...
+[INFO 01-12 13:51:54] ax.service.managed_loop: Running optimization trial 18...
+[INFO 01-12 13:52:14] ax.service.managed_loop: Running optimization trial 19...
+[INFO 01-12 13:52:36] ax.service.managed_loop: Running optimization trial 20...
+[INFO 01-12 13:53:26] ax.service.managed_loop: Running optimization trial 21...
+[INFO 01-12 13:53:47] ax.service.managed_loop: Running optimization trial 22...
+[INFO 01-12 13:54:09] ax.service.managed_loop: Running optimization trial 23...
+[INFO 01-12 13:54:30] ax.service.managed_loop: Running optimization trial 24...
+[INFO 01-12 13:54:51] ax.service.managed_loop: Running optimization trial 25...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 13:56:32] ax.service.managed_loop: Running optimization trial 26...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 13:58:19] ax.service.managed_loop: Running optimization trial 27...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:00:15] ax.service.managed_loop: Running optimization trial 28...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:03:39] ax.service.managed_loop: Running optimization trial 29...
+[INFO 01-12 14:09:15] ax.service.managed_loop: Running optimization trial 30...
+[INFO 01-12 14:09:37] ax.service.managed_loop: Running optimization trial 31...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:13:29] ax.service.managed_loop: Running optimization trial 32...
+[INFO 01-12 14:13:50] ax.service.managed_loop: Running optimization trial 33...
+[INFO 01-12 14:14:12] ax.service.managed_loop: Running optimization trial 34...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:18:52] ax.service.managed_loop: Running optimization trial 35...
+[INFO 01-12 14:25:53] ax.service.managed_loop: Running optimization trial 36...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:33:40] ax.service.managed_loop: Running optimization trial 37...
+[INFO 01-12 14:34:17] ax.service.managed_loop: Running optimization trial 38...
+[INFO 01-12 14:35:16] ax.service.managed_loop: Running optimization trial 39...
+[INFO 01-12 14:35:38] ax.service.managed_loop: Running optimization trial 40...
+[INFO 01-12 14:36:25] ax.service.managed_loop: Running optimization trial 41...
+[INFO 01-12 14:36:47] ax.service.managed_loop: Running optimization trial 42...
+[INFO 01-12 14:37:09] ax.service.managed_loop: Running optimization trial 43...
+[INFO 01-12 14:37:31] ax.service.managed_loop: Running optimization trial 44...
+[INFO 01-12 14:37:53] ax.service.managed_loop: Running optimization trial 45...
+[INFO 01-12 14:38:31] ax.service.managed_loop: Running optimization trial 46...
+[INFO 01-12 14:38:53] ax.service.managed_loop: Running optimization trial 47...
+[INFO 01-12 14:39:15] ax.service.managed_loop: Running optimization trial 48...
+[INFO 01-12 14:39:37] ax.service.managed_loop: Running optimization trial 49...
+[INFO 01-12 14:39:58] ax.service.managed_loop: Running optimization trial 50...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:41:38] ax.service.managed_loop: Running optimization trial 51...
+[INFO 01-12 14:42:00] ax.service.managed_loop: Running optimization trial 52...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:43:40] ax.service.managed_loop: Running optimization trial 53...
+[INFO 01-12 14:48:40] ax.service.managed_loop: Running optimization trial 54...
+[INFO 01-12 14:53:03] ax.service.managed_loop: Running optimization trial 55...
+[INFO 01-12 14:53:25] ax.service.managed_loop: Running optimization trial 56...
+[INFO 01-12 14:54:12] ax.service.managed_loop: Running optimization trial 57...
+[INFO 01-12 14:54:34] ax.service.managed_loop: Running optimization trial 58...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:58:10] ax.service.managed_loop: Running optimization trial 59...
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+/home/david/_MasterThesis/venv/lib/python3.6/site-packages/sklearn/cluster/_affinity_propagation.py:226: ConvergenceWarning: Affinity propagation did not converge, this model will not have any cluster centers.
+  "will not have any cluster centers.", ConvergenceWarning)
+[INFO 01-12 14:59:52] ax.service.managed_loop: Running optimization trial 60...
+[INFO 01-12 15:00:14] ax.modelbridge.dispatch_utils: Using Bayesian Optimization generation strategy: GenerationStrategy(name='Sobol+GPEI', steps=[Sobol for 5 arms, GPEI for subsequent arms], generated 0 arm(s) so far). Iterations after 5 will take longer to generate due to model-fitting.
+[INFO 01-12 15:00:14] ax.service.managed_loop: Started full optimization with 60 steps.
+[INFO 01-12 15:00:14] ax.service.managed_loop: Running optimization trial 1...
+[INFO 01-12 15:44:00] ax.service.managed_loop: Running optimization trial 2...
+[INFO 01-12 16:12:48] ax.service.managed_loop: Running optimization trial 3...
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 227, in _current_eval_fun
+    crossvalidation_data=devset
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 73, in _evaluate_model
+    pred_clustering = pred_clustering[known_indices]
+[INFO 01-12 16:13:35] ax.service.managed_loop: Running optimization trial 4...
+[INFO 01-12 16:26:56] ax.service.managed_loop: Running optimization trial 5...
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 227, in _current_eval_fun
+    crossvalidation_data=devset
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 73, in _evaluate_model
+    pred_clustering = pred_clustering[known_indices]
+[INFO 01-12 16:27:40] ax.service.managed_loop: Running optimization trial 6...
+[INFO 01-12 16:46:58] ax.service.managed_loop: Running optimization trial 7...
+[INFO 01-12 16:59:24] ax.service.managed_loop: Running optimization trial 8...
+[INFO 01-12 17:14:19] ax.service.managed_loop: Running optimization trial 9...
+[INFO 01-12 17:57:41] ax.service.managed_loop: Running optimization trial 10...
+[INFO 01-12 18:06:28] ax.service.managed_loop: Running optimization trial 11...
+[INFO 01-12 18:19:40] ax.service.managed_loop: Running optimization trial 12...
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 227, in _current_eval_fun
+    crossvalidation_data=devset
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 73, in _evaluate_model
+    pred_clustering = pred_clustering[known_indices]
+[INFO 01-12 18:52:24] ax.service.managed_loop: Running optimization trial 13...
+[INFO 01-12 19:06:40] ax.service.managed_loop: Running optimization trial 14...
+[INFO 01-12 19:33:36] ax.service.managed_loop: Running optimization trial 15...
+[INFO 01-12 19:49:43] ax.service.managed_loop: Running optimization trial 16...
+CUDA active!
+Namespace(cuda=True, dtype=tf.float32, max_samples=10000, random_seed=0, verbose=1)
+Starting hyper-parameter search of the model
+Looking at word  use 
+Starting corpus
+Number of sentences are:  5619 3.227895498275757
+<class 'list'> <class 'list'>
+Retrieving example sentences from corpus
+Number of sample sentences found 136
+Retrieving sampled embeddings from BERT
+Starting corpus
+Reading file... 123821556 0.13210201263427734
+Extracting words.. 0.3041377067565918
+Data is:  0.3041520118713379
+Number of sentences are:  1000001 0.304154634475708
+Retrieving example sentences from corpus
+Retrieving sampled embeddings from BERT
+Collected data is: 
+(8712, 768) (136, 768) (8576, 768)
+Variance kept through pca is:  0.7068597
+ADJ is:  1.0
+Dataset shape is:  (8712, 100)
+True cluster labels are 136
+Looking at word  test 
+Starting corpus
+Number of sentences are:  5619 1.992781639099121
+<class 'list'> <class 'list'>
+Retrieving example sentences from corpus
+Number of sample sentences found 24
+Retrieving sampled embeddings from BERT
+Starting corpus
+Reading file... 123821556 0.1091609001159668
+Extracting words.. 0.2798118591308594
+Data is:  0.2798271179199219
+Number of sentences are:  1000001 0.2798302173614502
+Retrieving example sentences from corpus
+Retrieving sampled embeddings from BERT
+Collected data is: 
+(2022, 768) (24, 768) (1998, 768)
+Variance kept through pca is:  0.75553495
+ADJ is:  1.0
+Dataset shape is:  (2022, 100)
+True cluster labels are 24
+Looking at word  limit 
+Starting corpus
+Number of sentences are:  5619 1.7912964820861816
+<class 'list'> <class 'list'>
+Retrieving example sentences from corpus
+Number of sample sentences found 30
+Retrieving sampled embeddings from BERT
+Starting corpus
+Reading file... 123821556 0.07126903533935547
+Extracting words.. 0.23686742782592773
+Data is:  0.23688125610351562
+Number of sentences are:  1000001 0.23688435554504395
+Retrieving example sentences from corpus
+Retrieving sampled embeddings from BERT
+Collected data is: 
+(809, 768) (30, 768) (779, 768)
+Variance kept through pca is:  0.8245853
+ADJ is:  1.0
+Dataset shape is:  (809, 100)
+True cluster labels are 30
+Looking at word  concern 
+Starting corpus
+Number of sentences are:  5619 1.816734790802002
+<class 'list'> <class 'list'>
+Retrieving example sentences from corpus
+Number of sample sentences found 32
+Retrieving sampled embeddings from BERT
+Starting corpus
+Reading file... 123821556 0.10763120651245117
+Extracting words.. 0.27687859535217285
+Data is:  0.27689385414123535
+Number of sentences are:  1000001 0.27689695358276367
+Retrieving example sentences from corpus
+Retrieving sampled embeddings from BERT
+Collected data is: 
+(1124, 768) (32, 768) (1092, 768)
+Variance kept through pca is:  0.786061
+ADJ is:  1.0
+Dataset shape is:  (1124, 100)
+True cluster labels are 32
+Looking at word  central 
+Starting corpus
+Number of sentences are:  5619 1.7939579486846924
+<class 'list'> <class 'list'>
+Retrieving example sentences from corpus
+Number of sample sentences found 11
+Retrieving sampled embeddings from BERT
+Starting corpus
+Reading file... 123821556 0.10749101638793945
+Extracting words.. 0.2769649028778076
+Data is:  0.2769794464111328
+Number of sentences are:  1000001 0.27698254585266113
+Retrieving example sentences from corpus
+Retrieving sampled embeddings from BERT
+Collected data is: 
+(1912, 768) (11, 768) (1901, 768)
+Variance kept through pca is:  0.7662582
+ADJ is:  1.0
+Dataset shape is:  (1912, 100)
+True cluster labels are 11
+Looking at word  pizza 
+Starting corpus
+Number of sentences are:  5619 1.8081510066986084
+<class 'list'> <class 'list'>
+Retrieving example sentences from corpus
+Number of sample sentences found 1
+Retrieving sampled embeddings from BERT
+Starting corpus
+Reading file... 123821556 0.10910654067993164
+Extracting words.. 0.27824950218200684
+Data is:  0.27826356887817383
+Number of sentences are:  1000001 0.27826642990112305
+Retrieving example sentences from corpus
+Retrieving sampled embeddings from BERT
+Collected data is: 
+(147, 768) (1, 768) (146, 768)
+Variance kept through pca is:  1.0000002
+ADJ is:  1.0
+Dataset shape is:  (147, 100)
+True cluster labels are 1
+Running MTAffinityPropagation <class 'src.models.cluster.affinitypropagation.MTAffinityPropagation'>
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [0]
+Couldn't find cluster! [0]
+Best parameters etc.
+{'damping': 0.9633106391056272, 'preference': -194, 'max_iter': 322} ({'objective': 0.17036952391853247}, {'objective': {'objective': 1.1840075073134894e-13}}) SimpleExperiment(None) <ax.modelbridge.torch.TorchModelBridge object at 0x7efb1bef1a90>
+Running MTChineseWhispers <class 'src.models.cluster.chinesewhispers.MTChineseWhispers'>
+Couldn't find cluster! [70]
+Couldn't find cluster! [38]
+Logging all variables
+Pred clustering is:  []
+Known indices are:  [0]
+Number of senses (1, [Synset('pizza.n.01')]) (147, 100)
+True clustering is:  ['1']
+Arguments are:  {'std_multiplier': 2.3767776489257812, 'remove_hub_number': 165, 'min_cluster_size': 8}
+Error occurred!
+index 0 is out of bounds for axis 0 with size 0
+Couldn't find cluster! [16]
+Logging all variables
+Pred clustering is:  []
+Known indices are:  [0]
+Number of senses (1, [Synset('pizza.n.01')]) (147, 100)
+True clustering is:  ['1']
+Arguments are:  {'std_multiplier': 2.111893057823181, 'remove_hub_number': 150, 'min_cluster_size': 6}
+Error occurred!
+index 0 is out of bounds for axis 0 with size 0
+Couldn't find cluster! [18]
+Couldn't find cluster! [15]
+Couldn't find cluster! [4]
+Couldn't find cluster! [16]
+Couldn't find cluster! [7]
+Couldn't find cluster! [5]
+Logging all variables
+Pred clustering is:  []
+Known indices are:  [0]
+Number of senses (1, [Synset('pizza.n.01')]) (147, 100)
+True clustering is:  ['1']
+Arguments are:  {'std_multiplier': -2.417090822839138, 'remove_hub_number': 181, 'min_cluster_size': 1}
+Error occurred!
+index 0 is out of bounds for axis 0 with size 0
+Couldn't find cluster! [17]
+Couldn't find cluster! [45]
+Couldn't find cluster! [58]
+Couldn't find cluster![INFO 01-12 20:14:46] ax.service.managed_loop: Running optimization trial 17...
+[INFO 01-12 20:34:40] ax.service.managed_loop: Running optimization trial 18...
+[INFO 01-12 20:57:04] ax.service.managed_loop: Running optimization trial 19...
+[INFO 01-12 21:14:47] ax.service.managed_loop: Running optimization trial 20...
+[INFO 01-12 21:36:35] ax.service.managed_loop: Running optimization trial 21...
+[INFO 01-12 21:58:19] ax.service.managed_loop: Running optimization trial 22...
+[INFO 01-12 22:23:54] ax.service.managed_loop: Running optimization trial 23...
+[INFO 01-12 22:44:30] ax.service.managed_loop: Running optimization trial 24...
+[INFO 01-12 23:06:25] ax.service.managed_loop: Running optimization trial 25...
+[INFO 01-12 23:16:22] ax.service.managed_loop: Running optimization trial 26...
+[INFO 01-12 23:23:38] ax.service.managed_loop: Running optimization trial 27...
+[INFO 01-12 23:44:36] ax.service.managed_loop: Running optimization trial 28...
+[INFO 01-13 00:06:02] ax.service.managed_loop: Running optimization trial 29...
+[INFO 01-13 00:40:54] ax.service.managed_loop: Running optimization trial 30...
+[INFO 01-13 00:51:52] ax.service.managed_loop: Running optimization trial 31...
+[INFO 01-13 01:12:25] ax.service.managed_loop: Running optimization trial 32...
+[INFO 01-13 01:20:27] ax.service.managed_loop: Running optimization trial 33...
+[INFO 01-13 01:32:47] ax.service.managed_loop: Running optimization trial 34...
+[INFO 01-13 01:43:05] ax.service.managed_loop: Running optimization trial 35...
+[INFO 01-13 01:53:09] ax.service.managed_loop: Running optimization trial 36...
+[INFO 01-13 02:03:07] ax.service.managed_loop: Running optimization trial 37...
+[INFO 01-13 02:15:33] ax.service.managed_loop: Running optimization trial 38...
+[INFO 01-13 02:26:16] ax.service.managed_loop: Running optimization trial 39...
+[INFO 01-13 02:47:12] ax.service.managed_loop: Running optimization trial 40...
+[INFO 01-13 03:01:47] ax.service.managed_loop: Running optimization trial 41...
+[INFO 01-13 03:23:49] ax.service.managed_loop: Running optimization trial 42...
+[INFO 01-13 03:39:24] ax.service.managed_loop: Running optimization trial 43...
+[INFO 01-13 03:57:41] ax.service.managed_loop: Running optimization trial 44...
+[INFO 01-13 04:14:55] ax.service.managed_loop: Running optimization trial 45...
+[INFO 01-13 04:36:06] ax.service.managed_loop: Running optimization trial 46...
+[INFO 01-13 04:46:13] ax.service.managed_loop: Running optimization trial 47...
+[INFO 01-13 05:07:29] ax.service.managed_loop: Running optimization trial 48...
+[INFO 01-13 05:25:45] ax.service.managed_loop: Running optimization trial 49...
+[INFO 01-13 05:46:50] ax.service.managed_loop: Running optimization trial 50...
+[INFO 01-13 06:08:36] ax.service.managed_loop: Running optimization trial 51...
+[INFO 01-13 06:24:05] ax.service.managed_loop: Running optimization trial 52...
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 227, in _current_eval_fun
+    crossvalidation_data=devset
+  File "notebooks/2020_01_04 Clustering/try_all_clusters.py", line 73, in _evaluate_model
+    pred_clustering = pred_clustering[known_indices]
+[INFO 01-13 06:39:19] ax.service.managed_loop: Running optimization trial 53...
+[INFO 01-13 06:51:02] ax.service.managed_loop: Running optimization trial 54...
+[INFO 01-13 07:02:47] ax.service.managed_loop: Running optimization trial 55...
+[INFO 01-13 07:19:16] ax.service.managed_loop: Running optimization trial 56...
+[INFO 01-13 07:47:40] ax.service.managed_loop: Running optimization trial 57...
+[INFO 01-13 08:06:56] ax.service.managed_loop: Running optimization trial 58...
+[INFO 01-13 08:25:28] ax.service.managed_loop: Running optimization trial 59...
+[INFO 01-13 08:56:34] ax.service.managed_loop: Running optimization trial 60...
+ [28]
+Couldn't find cluster! [36]
+Couldn't find cluster! [45]
+Couldn't find cluster! [76]
+Couldn't find cluster! [96]
+Couldn't find cluster! [37]
+Couldn't find cluster! [100]
+Couldn't find cluster! [37]
+Couldn't find cluster! [37]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [383]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [93]
+Couldn't find cluster! [93]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [93]
+Couldn't find cluster! [93]
+Couldn't find cluster! [809]
+Couldn't find cluster! [313]
+Couldn't find cluster! [93]
+Couldn't find cluster! [93]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [93]
+Couldn't find cluster! [37]
+Couldn't find cluster! [93]
+Couldn't find cluster! [93]
+Couldn't find cluster! [93]
+Couldn't find cluster! [93]
+Couldn't find cluster! [93]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [93]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [93]
+Couldn't find cluster! [90]
+Couldn't find cluster! [37]
+Couldn't find cluster! [120]
+Couldn't find cluster! [37]
+Couldn't find cluster! [93]
+Couldn't find cluster! [-1]
+Logging all variables
+Pred clustering is:  []
+Known indices are:  [0]
+Number of senses (1, [Synset('pizza.n.01')]) (147, 100)
+True clustering is:  ['1']
+Arguments are:  {'std_multiplier': -1.0849290010941104, 'remove_hub_number': 180, 'min_cluster_size': 43}
+Error occurred!
+index 0 is out of bounds for axis 0 with size 0
+Couldn't find cluster! [21]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [120]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [-1]
+Couldn't find cluster! [11]
+Best parameters etc.
+{'std_multiplier': -1.0504999127430026, 'remove_hub_number': 0, 'min_cluster_size': 34} ({'objective': 0.24922177591477793}, {'objective': {'objective': 3.444365884234873e-10}}) SimpleExperiment(None) <ax.modelbridge.torch.TorchModelBridge object at 0x7efb161d3ef0>

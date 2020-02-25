@@ -129,8 +129,156 @@ This allows for interpretability in polysemy sentences.
 
 Not using more complex flows implies that the flow itself is not the bottleneck (they probably tried out other flows as well).
 
+Are the individual word-embeddings going to be one big blob with high variance, or is it going to be a multi-modal distribution...?
+
+Another task we may look at is, from a given word-embedding, sample it's context. 
+Not entirely sure how to do this with BERT and co.
+
+At what point do we overfit, and at what point do we generalize?
+
+\section{Generating "static" word-embeddings through contextual embeddings}
+
+Some work has been done in extracting word-embeddings from contextual language models like BERT or ELMo.
+
+CITE (BERT WEARS GLOVES: DISTILLING STATIC EMBEDDINGS FROM PRETRAINED CONTEXTUAL REPRESENTATIONS)
+
+(1) Uses \textit{pooling} between BERT tokens to arrive at a single representation between words.
+
+Here, sentences are split by space (tokenized).
+Words are tokenized further into a subword as defined by WordPiece (Wu et al. 2016).
+
+The defined pooling operations looks as follows to arrive at the word from the individual subwords:
+
+$$
+\mathbf{w}_{c}=f\left(\mathbf{w}_{c}^{1}, \ldots, \mathbf{w}_{c}^{k}\right) ; f \in\{\min , \max , \text { mean, last }\}
+$$
+
+where we have subwords $w^{1},  \ldots, w^{k}$ such that $\operatorname{cat}\left(w^{1}, \ldots, w^{k}\right)=w$
+
+Why would any of these pooling operations result in a meaninigful source-word? 
+This is just squishing tokens together! \\
+
+-> This is a major limitation for which we may need to use ELMo
+-> However this may be needed for "unseen concepts" (which are unseen words...)
+-> Perhaps check what fasttext does...?
 
 
+(2) Uses \textit{context combination} to map from different contexts $c_1, \ldots, c_n$ to a single static embedding $w$ that is agnostic of context.
+
+Proposed are two ways to represent context.
+
+\textbf{Decontextualization} For a single word-context, we siimply feed-in the word by itself to the model.
+
+\textbf{Aggregated} combine $w$ in multiple contexts.
+n sentences are sampled from the dictionary $\mathcal{D}$.
+From the multiple sampled words, we then apply pooling to arrive at a single representation that aggregates the different tokens into one.
+
+$$
+\mathbf{w}=g\left(\mathbf{w}_{c_{1}}, \dots, \mathbf{w}_{c_{n}}\right) ; g \in\{\min , \max , \text { mean }\}
+$$
+
+
+This post extracts (token?) word-embeddings: 
+(https://towardsdatascience.com/nlp-extract-contextualized-word-embeddings-from-bert-keras-tf-67ef29f60a7b)
+
+This seems to be a way to extract embeddings for tokens from BERT
+(https://github.com/imgarylai/bert-embedding)
+
+(->How can we create a (parametric) probability density from a point-cloud distribution?)
+
+perhaps not necessarily interpretable in standard euclidean space
+(https://www.kdnuggets.com/2019/02/bert-features-interbertible.html)
+original (https://medium.com/thelocalminima/are-bert-features-interbertible-250a91eb9dc)
+
+Perhaps we can mask all but the target token to arrive at one vector per token (and then combine them somehow...).
+But how do they extract the singular word-embeddings...?
+
+(-> you could be like "acquiring bedeutung" is a big problem in many tasks. especially useful when we try to map one concept to another. we look at the NLP task for concreteness)
+
+Generally, really good critique on this paper:
+
+(https://openreview.net/forum?id=SJg3T2EFvr)
+
+usually, we have sentence-embeddings, and do not look at word-embeddings.
+
+(-> we don't want to add more and more context. we want a model which contains the polysemy of different contexts, which could allow for probability maximization..., otherwise we have to look at bigger and bigger documents to build more accurate language models, which becomes infeasible at some point. (although this would be the way humans work, because they live in context as well)
+
+This blog aims to generate word-embeddings (and sentence-embeddings) from the BERT model.
+(https://mccormickml.com/2019/05/14/BERT-word-embeddings-tutorial/)
+
+create word-vectors by taking out what BERT predicts at the nth token.
+create word-vectors by concatenating or summing multiple layer's outputs.
+
+the cosine similarity between these vectors seem pretty well-done!
+
+
+(-> Does it make sense to use BERT and then on calculate word-embeddings through an extended fully-connected model)
+
+-> ELMo may provide a better tokenizer, maybe better ot use this? What about GPT? ELMo uses moses tokenizer which seems word-level enough
+
+-> How to solve this tokenization problem....
+
+-> Can also analyze only words that exist.
+
+
+\textbf{Artetxe bilingual token matching through unsupervised machine translation}
+
+- Input is cross-lignual word-embeddings
+- Build an unsupervised phrase-based statistical machine translation system
+- Derive phrase-based embeddings from input-word-embeddings by taking top 400'000 bigrams and 400'000 trigrams -> take arithmetic mean of word-embedding
+- score top 100 close phrases using softmax cosine similarity
+- generation of synthetic parallel corpus using this approach
+- Then use FastAlign to use parallel corpus to align words
+- 
+
+
+
+FROM (How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings)
+
+
+
+going down the drain of "geometry" of BERT and ELMo.
+
+could also go down the drain of bias (we would prefer to have uniform space over gender etc.)
+
+-> does projection into some subspace which has same metric properties perhaps not make it asitropic?
+
+pretty ok summary of what kind of properties we want from word-embeddings... (https://devopedia.org/word-embedding)
+
+
+Especially in Named Entity Recognition (NER), there is a lot of use for static word-embeddings.
+I guess this is because we need static embeddings which represent the individual clusters?
+
+-> Using pooling for some 
+
+-> Character level operation
+
+-> Perhaps make good sense to work towards a word-embeddings where different vectors are close to each other?
+
+-> perhaps find a metric space warping the vectors, s.t. an isotropic representation is achieved?
+
+-> Perhaps tokenization is a big problem, but perhaps other architecture..? but retraining is too difficult.. probably best to just stick to BERT? one way or the other, we need good word-embeddings derived from good language models to form a probabilistic prediction of the concept
+
+
+-> Could perhaps also try to make an adversarial autoencoder after the BERT layer (or continue training, s.t. a second loss is mimized as a downstream task?)
+
+-> Perhaps distilling with "correct" tokens? i.e. another network which copies BERT, but instead of outputting ##end, it outputs one of most frequent 20k words
+
+-> thesaurus using a (set of) words. a little like sentence-generation, but generating most-probable examples
+
+-> Everyone just averages token-embeddings..
+
+-> perhaps fitting a GMM to the contextualized representations of BERT may give a good probability space..?
+
+-> Perhaps make sense to apply MUSE to this?
+
+-> Artetxe 2019 uses language models to generate embeddings. we also do this, but do it using 1) better language models, and 2) better 
+
+-> QUESTION: Which factors (mapping algo, embedding) is delimiting in automated embedding matching
+
+-> perhaps create a GMM for each concept, based on how many modals we identify? how to estimate the number of clusters? by graph-clustering perhaps! (this could be very consuming)
+
+-> Adversarial autoencoder on BERTs last models to enforce it to some better distribution
 
 \section{Gaussian Embeddings}
 
@@ -1210,6 +1358,10 @@ Other lines of work
 \item iterate through a bunch of sentences. Make mean-variance from context-vectors to get uncertainty, and capture polysemy. dude, this is so smooth. -> i.e. we get word-embeddings from multiple documents.
 \item A
 \end{enumerate}
+
+After first meeting ideas:
+
+-> Perhaps it makes sense to put a prior on BERT or ELMo for distill-learning to regualizre it to a certain space..?
 
 \chapter{Further Work}
 
