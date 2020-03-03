@@ -65,7 +65,7 @@ if __name__ == "__main__":
         if len(out) % csv_splitoff == 0:
             # Write to csv and reset next csv part
             if df is not None:
-                df.to_csv(rnd_str + "mean_std_vectors.csv")
+                df.to_csv(rnd_str + f"mean_std_vectors_{len(out)}.csv")
             df = pd.DataFrame(
                 out, columns=['word', 'wordnet_senses', 'semcor_senses', 'mean_vec', 'std_vec']
             )

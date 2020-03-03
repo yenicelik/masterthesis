@@ -7,7 +7,55 @@
     Resources on how to add your custom tokens and vocabulary
     - https://github.com/huggingface/transformers/blob/master/README.md in Section "Serialization"
 """
-from transformers import BertTokenizer, TFBertForSequenceClassification, BertForSequenceClassification
+import tensorflow_datasets
+from transformers import BertTokenizer, BertForSequenceClassification, glue_convert_examples_to_features
+
+from src.utils.create_experiments_folder import randomString
+
+
+def expand_bert_by_target_word(tgt_word, model: BertForSequenceClassification, tokenizer: BertTokenizer, n=5):
+    """
+        Getting the BERT embedding
+    :return:
+    """
+    # Number of new tokens to add
+    old_vocab_size = len(tokenizer.added_tokens_decoder)
+
+    # 0: Find the target word idx in the vocabulary
+    print(tokenizer.added_tokens_decoder)
+    word_idx = tokenizer.vocab[tgt_word]
+
+    # 1: Retrieve the embedding in the vocabulary
+    old_vector = model.bert.embeddings.word_embeddings.weight.data[word_idx, :]
+
+    # 2: Add tokens into tokenizeer and make space for new vectors
+    tokens_to_add = [(f'{tgt_word}_{i}') for i in range(n - 1)]
+    number_new_tokens = len(tokens_to_add)
+    print("Tokens before", tokenizer.vocab_size)
+    added_tokens = tokenizer.add_tokens(tokens_to_add)  # TODO: add_special_tokens or add_tokens?
+    assert added_tokens == n - 1, (added_tokens, n)
+    print("added tokens", added_tokens)
+    model.resize_token_embeddings(len(tokenizer))
+    print("Tokens after", tokenizer.vocab_size)
+
+    # 2.1: Test if tokenization worked out
+    # print([tokenizer.convert_tokens_to_ids(x) for x in tokens_to_add])
+    assert all([tokenizer.convert_tokens_to_ids(x) for x in tokens_to_add])
+
+    # 2: Inject / overwrite new word-embeddings with old embedding
+    model.bert.embeddings.word_embeddings.weight.data[-number_new_tokens:, :] = old_vector.reshape(1, -1).repeat((n - 1, 1))
+
+    assert (model.bert.embeddings.word_embeddings.weight.data[-number_new_tokens + 1, :] == \
+           model.bert.embeddings.word_embeddings.weight.data[word_idx, :]).all()
+
+    # Take the embeddings vector at position `word_idx` and add this to the embedding
+    # Double check if these were successfully copied ...
+
+    new_vocab_size = len(tokenizer.added_tokens_decoder)
+
+    assert new_vocab_size == old_vocab_size + (n - 1), (new_vocab_size, old_vocab_size, (n - 1))
+
+    return model, tokenizer
 
 def get_bert_size_stats(model, tokenizer):
     print("Number of embeddings in BERT model and tokenizer")
@@ -27,37 +75,51 @@ def get_bert_model():
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     model = BertForSequenceClassification.from_pretrained('bert-base-uncased') # No, let's not use TFBert, let's use PyTorch BERT
 
-    old_vocab_size = len(tokenizer)
+    get_bert_size_stats(model.bert, tokenizer)
+
+    # for word in extra-words ...
+    ######################################################
+    #
+    # Add words to the BERT tokenizer and embedding
+    #
+    ######################################################
+    tgt_word = "run"
+    model, tokenizer = expand_bert_by_target_word(tgt_word, model, tokenizer)
 
     get_bert_size_stats(model.bert, tokenizer)
 
-    # Iteratively apply this for a set of tokens.
-    # at least 1000 tokens that are polysemous
-    # TODO: Perhaps pick tokens which have high variance..?
+    # now fine-tune the model on one of the GLUE language tasks
+    rnd_str = randomString(additonal_label=f"_fine-tune-BERT")
 
+    ######################################################
+    #
+    # Fine Tune BERT here
+    #
+    ######################################################
 
-    # I guess this is how you add new tokens / vocabulary..?
-    # Theoretically, here we inject two types of words ..
-    # Add n-1 tokens. The nth token is the unmodified word (without any underscore ...)
+    # You could save it as a BERT models, and load for tensorflow ...
 
-    # In the lower-level function (for BERT), the old embeddings are copied over.
-    # New embeddings are appended to axis 0
-    tokenizer.add_tokens(['[run_1]', '[run_2]'])
-    model.resize_token_embeddings(len(tokenizer))
+    # for i in language task
 
-    # Now initialize the new embeddings with copy of the intial embedding..
-    idx = None  # TODO: replace this by the word that was split into multiple tokens
-    word_embedding = model.bert.embeddings.word_embeddings[idx]
-    # Overwrite embeddings
-    word_embedding[old_vocab_size:, :] = word_embedding
+    data = tensorflow_datasets.load('glue/mrpc')
+    train_dataset = glue_convert_examples_to_features(data['train'], tokenizer, max_length=128, task='mrpc')
+    valid_dataset = glue_convert_examples_to_features(data['validation'], tokenizer, max_length=128, task='mrpc')
+    train_dataset = train_dataset.shuffle(100).batch(32).repeat(2)
+    valid_dataset = valid_dataset.batch(64)
 
-    # Does this change the model somehow, or are weights properly kept?
+    # Do it simple, and with ... keras?! Let's use pytorch instead ....
+    # Prepare training: Compile tf.keras model with optimizer, loss and learning rate schedule
+
+    # optimizer = tf.keras.optimizers.Adam(learning_rate=3e-5, epsilon=1e-08, clipnorm=1.0)
+    # loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+    # metric = tf.keras.metrics.SparseCategoricalAccuracy('accuracy')
+    # model.compile(optimizer=optimizer, loss=loss, metrics=[metric])
 
     # Save this model somewhere ..
     # ### Now let's save our model and tokenizer to a directory
-    # model.save_pretrained('./my_saved_model_directory/')
-    # tokenizer.save_pretrained('./my_saved_model_directory/')
-    #
+    model.save_pretrained(f'{rnd_str}/-my_saved_model_directory/')
+    tokenizer.save_pretrained(f'{rnd_str}/my_saved_model_directory/')
+
     # # Fine-tune pretrained BERT ...
     #
     # ### Reload the model and the tokenizer
