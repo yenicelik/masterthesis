@@ -15,10 +15,6 @@ from src.resources.corpus import Corpus
 from src.resources.samplers import sample_embeddings_for_target_word, get_pos_for_word
 from src.utils.create_experiments_folder import randomString
 
-
-def get_pos():
-    pass
-
 if __name__ == "__main__":
     print("Calculate the PoS' correlation to word meaning")
 
@@ -203,7 +199,6 @@ if __name__ == "__main__":
     for tgt_word in words:
 
         try:
-
 
             # Get the respective PoS embeddings
             # Try catch if the respectiv word does not exist within the corpus

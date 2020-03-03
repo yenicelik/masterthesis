@@ -43,6 +43,8 @@ if __name__ == "__main__":
     print(bert_words)
     print(len(bert_words))
 
+    bert_words = sorted(bert_words)
+
     # sample from BERT, and analyse which ones have highest variance
     # save mean and variance in to vector
     print("Creating corpus ...")
@@ -50,7 +52,7 @@ if __name__ == "__main__":
     lang_model = BertEmbedding(corpus=corpus)
 
     # Save intermediate csv
-    csv_splitoff = 2000
+    csv_splitoff = 500
 
     # Generate foldere to save this in
     rnd_str = randomString(additonal_label=f"_mean_std_vector_{args.dimred}_{args.dimred_dimensions}_whiten{args.pca_whiten}_norm{args.normalization_norm}/")
@@ -69,35 +71,42 @@ if __name__ == "__main__":
             )
             out = []
 
-        tgt_word = f' {word} '  # So we only take words that are not part of any other word ...
-        number_of_senses, X, true_cluster_labels, known_indices, sentences = sample_embeddings_for_target_word(
-            tgt_word=tgt_word
-        )
+        try:
 
-        # Prune if X is not enough ..
-        if X.shape[0] < 500:  # Keep only top matches
-            continue
+            tgt_word = f' {word} '  # So we only take words that are not part of any other word ...
+            number_of_senses, X, true_cluster_labels, known_indices, sentences = sample_embeddings_for_target_word(
+                tgt_word=tgt_word
+            )
 
-        semcor_senses = np.unique(true_cluster_labels) - 1
+            # Prune if X is not enough ..
+            if X.shape[0] < 300:  # Keep only top matches
+                continue
 
-        # Assert that the number
-        X_mean = np.mean(X, axis=0).flatten()
-        X_std = np.stddev(X, axis=0).flatten()
+            semcor_senses = len(np.unique(true_cluster_labels)) - 1
 
-        assert len(X_mean.shape) == 1, (X_mean.shape)
-        assert len(X_std.shape) == 1, (X_std.shape)
+            # Assert that the number
+            X_mean = np.mean(X, axis=0).flatten()
+            X_std = np.std(X, axis=0).flatten()
 
-        tpl = (
-            tgt_word,
-            number_of_senses,
-            semcor_senses,
-            X_mean.tolist(),
-            X_std.tolist()
-        )
+            assert len(X_mean.shape) == 1, (X_mean.shape)
+            assert len(X_std.shape) == 1, (X_std.shape)
+            assert X_mean.shape[0] == X.shape[1], ("Shapes of mean and std do not conform", X_mean.shape[0], X.shape[1])
 
-        print("tuple is: ", tpl)
+            tpl = (
+                tgt_word,
+                number_of_senses,
+                semcor_senses,
+                X_mean.tolist(),
+                X_std.tolist()
+            )
 
-        out.append(tpl)
+            print("tuple is: ", tpl)
+
+            out.append(tpl)
+
+        except Exception as e:
+            print(e)
+            print(f"This did not work out! {tgt_word}")
 
     # Calculate mean and stddev vectors per dimension
 
