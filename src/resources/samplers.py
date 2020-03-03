@@ -195,7 +195,7 @@ def get_pos_for_word(nlp, sentence, word):
     assert None, ("Sentence should be required to include the given token: ", sentence, word)
 
 
-def retrieve_data(nlp, tgt_word, pos_tag=False):
+def retrieve_data_pos(nlp, tgt_word, pos_tag=False):
 
     if pos_tag:
         # In this case, this is supposed to retrieve the POS TAG instead of only the POS

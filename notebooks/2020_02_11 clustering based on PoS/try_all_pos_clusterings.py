@@ -18,7 +18,7 @@ from src.models.cluster.hdbscan import MTHdbScan
 from src.models.cluster.kmeans_with_annealing import MTKMeansAnnealing
 from src.models.cluster.meanshift import MTMeanShift
 from src.resources.corpus import Corpus
-from src.resources.samplers import retrieve_data
+from src.resources.samplers import retrieve_data_pos
 from src.utils.create_experiments_folder import randomString
 
 
@@ -27,7 +27,7 @@ def create_evaluation_sets(nlp, wordlist):
     devset = dict()
 
     for word in wordlist:
-        X, sentences, labels = retrieve_data(nlp, word)
+        X, sentences, labels = retrieve_data_pos(nlp, word)
         devset[word] = X, sentences, labels
 
     assert len(devset) == len(wordlist), (len(devset), len(wordlist), wordlist, devset.keys())
