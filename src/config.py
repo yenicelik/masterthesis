@@ -25,6 +25,8 @@ parser.add_argument('--dimred', default="none", help='which dimensionality reduc
 parser.add_argument('--dimred_dimensions', default=768, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
 parser.add_argument('--pca_whiten', default=False, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
 parser.add_argument('--normalization_norm', default="", help='What norm to normalize the vectors by before applying clustering. set to an invalid value if you dont want any normalization')
+parser.add_argument('--standardize', default=False, help='What norm to normalize the vectors by before applying clustering. set to an invalid value if you dont want any normalization')
+
 
 args = parser.parse_args()
 

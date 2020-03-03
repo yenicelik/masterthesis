@@ -66,33 +66,43 @@ def sample_word_matrix(tgt_word):
     number_of_senses, X, true_cluster_labels, known_indices, _ = sample_embeddings_for_target_word(tgt_word)
     return number_of_senses, X, true_cluster_labels, known_indices
 
-def sample_embeddings_for_target_word(tgt_word):
+def sample_embeddings_for_target_word(tgt_word, semcor_only=False):
     print("Looking at word", tgt_word)
     wordnet_model = WordNetDataset()
     number_of_senses = wordnet_model.get_number_of_senses("".join(tgt_word.split()))
 
     X1, true_cluster_labels, sentences_semcor = sample_semcor_data(tgt_word)
     n = max(2, (args.max_samples - X1.shape[0]))
-    X2, sentences_naive = sample_naive_data(tgt_word, n=n)
+    if not semcor_only:
+        X2, sentences_naive = sample_naive_data(tgt_word, n=n)
+        X = np.concatenate([X1, X2], axis=0)
+        sentences = sentences_semcor + sentences_naive
+        print(X.shape, X1.shape, X2.shape)
+    else:
+        X = X1
+        sentences = sentences_semcor
+        print(X.shape, X1.shape)
 
     known_indices = list(np.arange(X1.shape[0], dtype=int).tolist())
 
-    X = np.concatenate([X1, X2], axis=0)
-    sentences = sentences_semcor + sentences_naive
     assert X.shape[0] == len(sentences), ("Shapes don't conform", X.shape[0], len(sentences))
     print("Collected data is: ")
-    print(X.shape, X1.shape, X2.shape)
 
     # TODO: FIgure out whether to do this or as in the other script..
 
     # Apply PCA
-    X = StandardScaler().fit_transform(X)
+    if args.standardize:
+        print("Standardizing!")
+        X = StandardScaler().fit_transform(X)
+    else:
+        print("Not standardizing!")
 
     print("Args args.dimred is: ", args.dimred, type(args.dimred))
 
     if args.dimred == "pca":
         print("PCA")
         dimred_model = PCA(n_components=min(args.dimred_dimensions, X.shape[0]), whiten=False)
+        X = dimred_model.fit_transform(X)
 
     elif args.dimred == "nmf":
         print("NMF")
@@ -102,6 +112,7 @@ def sample_embeddings_for_target_word(tgt_word):
 
         # Instead of PCA do NMF?
         dimred_model = NMF(n_components=min(args.dimred_dimensions, X.shape[0]))
+        X = dimred_model.fit_transform(X)
 
     elif args.dimred == "lda":
         print("LDA")
@@ -109,15 +120,16 @@ def sample_embeddings_for_target_word(tgt_word):
             X = X - np.min(X)  # Should we perhaps do this feature-wise?
 
         dimred_model = LatentDirichletAllocation(n_components=min(args.dimred_dimensions, X.shape[0]))
+        X = dimred_model.fit_transform(X)
 
     elif args.dimred == "umap":
         print("UMAP")
         dimred_model = umap.UMAP(n_components=min(args.dimred_dimensions, X.shape[0]))
+        X = dimred_model.fit_transform(X)
 
     else:
-        assert False, ("Must specify method of dimensionality reduction")
-
-    X = dimred_model.fit_transform(X)
+        # assert False, ("Must specify method of dimensionality reduction")
+        print("No dimred applied!")
 
     # Shall we normalize the vectors..
     if args.normalization_norm in ("l1", "l2"):
