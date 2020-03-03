@@ -86,7 +86,7 @@ def sample_embeddings_for_target_word(tgt_word, semcor_only=False):
     known_indices = list(np.arange(X1.shape[0], dtype=int).tolist())
 
     assert X.shape[0] == len(sentences), ("Shapes don't conform", X.shape[0], len(sentences))
-    print("Collected data is: ")
+    # print("Collected data is: ")
 
     # TODO: FIgure out whether to do this or as in the other script..
 

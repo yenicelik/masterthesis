@@ -19,11 +19,11 @@ if __name__ == "__main__":
     # Filter out clusters that don't have enough items inside..
     # df = df[df['number_items_in_cluster'] > 3]  # we should see at least 3 examples to consider this a valid observation
 
-    plt.hist(df['percentage dominance'].values, bins=10, cumulative=True, density=True, stacked=True)
+    plt.hist(df['percentage dominance'].values, bins=3, cumulative=True, density=True, stacked=True)
     plt.show()
     plt.clf()
 
-    plt.hist(df['percentage dominance'].values, bins=10, cumulative=False, density=False, stacked=False)
+    plt.hist(df['percentage dominance'].values, bins=3, cumulative=False, density=False, stacked=False)
     plt.show()
     plt.clf()
 
