@@ -43,7 +43,7 @@ if __name__ == "__main__":
     print(bert_words)
     print(len(bert_words))
 
-    bert_words = sorted(bert_words)
+    # bert_words = sorted(bert_words)
 
     # sample from BERT, and analyse which ones have highest variance
     # save mean and variance in to vector
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     lang_model = BertEmbedding(corpus=corpus)
 
     # Save intermediate csv
-    csv_splitoff = 500
+    csv_splitoff = 20
 
     # Generate foldere to save this in
     rnd_str = randomString(additonal_label=f"_mean_std_vector_{args.dimred}_{args.dimred_dimensions}_whiten{args.pca_whiten}_norm{args.normalization_norm}/")
@@ -60,20 +60,23 @@ if __name__ == "__main__":
     out = []
     df = None
     # Sample from BERT
+    i = 0
     for word in bert_words:
 
-        if len(out) % csv_splitoff == 0:
+        if i % csv_splitoff == 0:
             # Write to csv and reset next csv part
-            if df is not None:
-                df.to_csv(rnd_str + f"mean_std_vectors_{len(out)}.csv")
             df = pd.DataFrame(
                 out, columns=['word', 'wordnet_senses', 'semcor_senses', 'mean_vec', 'std_vec']
             )
+            if out:
+                print(df.head())
+                df.to_csv(rnd_str + f"mean_std_vectors_{i}.csv")
             out = []
 
         try:
 
             tgt_word = f' {word} '  # So we only take words that are not part of any other word ...
+            print("Looking at word: ", word)
             number_of_senses, X, true_cluster_labels, known_indices, sentences = sample_embeddings_for_target_word(
                 tgt_word=tgt_word
             )
@@ -107,6 +110,8 @@ if __name__ == "__main__":
         except Exception as e:
             print(e)
             print(f"This did not work out! {tgt_word}")
+
+        i += 1
 
     # Calculate mean and stddev vectors per dimension
 

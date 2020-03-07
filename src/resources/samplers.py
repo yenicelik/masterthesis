@@ -151,7 +151,10 @@ def sample_pos_embeddings_for_target_word(tgt_word, n=None):
     # TODO: Figure out whether to do this or as in the other script..
 
     # Apply PCA
-    X = StandardScaler().fit_transform(X)
+    if args.standardize:
+        X = StandardScaler().fit_transform(X)
+    else:
+        print("Not standardizing!")
 
     print("Args args.dimred is: ", args.dimred, type(args.dimred))
 
