@@ -58,7 +58,3 @@ if __name__ == "__main__":
 
     print("Negative samples are")
     print(negative_samples(corpus.sentences))
-
-
-
-

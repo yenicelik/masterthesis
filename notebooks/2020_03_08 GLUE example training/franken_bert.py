@@ -7,81 +7,11 @@
     Resources on how to add your custom tokens and vocabulary
     - https://github.com/huggingface/transformers/blob/master/README.md in Section "Serialization"
 """
-import os
-
 from transformers import BertTokenizer, BertForSequenceClassification
 
+from src.resources.augment import expand_bert_by_target_word, _get_bert_size_stats
 from src.resources.split_words import get_polysemous_splitup_words
-from src.utils.create_experiments_folder import randomString
-
-# TODO: Replace the vocabulary as well (...)
-
-
-def expand_bert_by_target_word(tgt_word, model: BertForSequenceClassification, tokenizer: BertTokenizer, n=5):
-    """
-        Getting the BERT embedding
-    :return:
-    """
-    # Number of new tokens to add
-    old_vocab_size = len(tokenizer.added_tokens_decoder)
-
-    # 0: Find the target word idx in the vocabulary
-    print(tokenizer.added_tokens_decoder)
-    # Return the target word if it is not within the vocabulary
-    if tgt_word not in tokenizer.vocab:
-        print(f"{tgt_word} not in vocabulary! Cannot add this!")
-        return model, tokenizer
-    word_idx = tokenizer.vocab[tgt_word]
-
-    # 1: Retrieve the embedding in the vocabulary
-    old_vector = model.bert.embeddings.word_embeddings.weight.data[word_idx, :]
-
-    # 2: Add tokens into tokenizeer and make space for new vectors
-    tokens_to_add = [(f'{tgt_word}_{i}') for i in range(n - 1)]
-    number_new_tokens = len(tokens_to_add)
-    print("Tokens before", tokenizer.vocab_size)
-    added_tokens = tokenizer.add_tokens(tokens_to_add)  # TODO: add_special_tokens or add_tokens?
-    assert added_tokens == n - 1, (added_tokens, n)
-    print("added tokens", added_tokens)
-    model.resize_token_embeddings(len(tokenizer))
-    print("Tokens after", tokenizer.vocab_size)
-
-    # 2.1: Test if tokenization worked out
-    # print([tokenizer.convert_tokens_to_ids(x) for x in tokens_to_add])
-    assert all([tokenizer.convert_tokens_to_ids(x) for x in tokens_to_add])
-
-    # 2: Inject / overwrite new word-embeddings with old embedding
-    model.bert.embeddings.word_embeddings.weight.data[-number_new_tokens:, :] = old_vector.reshape(1, -1).repeat(
-        (n - 1, 1))
-
-    assert (model.bert.embeddings.word_embeddings.weight.data[-number_new_tokens + 1, :] == \
-            model.bert.embeddings.word_embeddings.weight.data[word_idx, :]).all()
-
-    # Take the embeddings vector at position `word_idx` and add this to the embedding
-    # Double check if these were successfully copied ...
-
-    new_vocab_size = len(tokenizer.added_tokens_decoder)
-
-    assert new_vocab_size == old_vocab_size + (n - 1), (new_vocab_size, old_vocab_size, (n - 1))
-
-    return model, tokenizer
-
-
-def get_bert_size_stats(model, tokenizer):
-    print("Number of embeddings in BERT model and tokenizer")
-    print("Tokenizer number of vocabs is: ", len(tokenizer))
-    # print(model)
-    # print("Encoder: ", model.encoder)
-    print("Encoder number of attention mechanisms: ", model.encoder.output_attentions)
-    print("Embeddings: ", model.embeddings)
-    print("Word emb: ", model.embeddings.word_embeddings.num_embeddings)
-    print("Position emb: ", model.embeddings.position_embeddings.num_embeddings)
-    print("Token type emb: ", model.embeddings.token_type_embeddings.num_embeddings)
-
-
-def create_path(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+from src.utils.create_experiments_folder import randomString, create_path
 
 
 def get_bert_model():
@@ -92,7 +22,7 @@ def get_bert_model():
     model = BertForSequenceClassification.from_pretrained(
         'bert-base-uncased')  # No, let's not use TFBert, let's use PyTorch BERT
 
-    get_bert_size_stats(model.bert, tokenizer)
+    _get_bert_size_stats(model.bert, tokenizer)
 
     # for word in extra-words ...
     ######################################################
@@ -114,7 +44,7 @@ def get_bert_model():
     # now fine-tune the model on one of the GLUE language tasks
     rnd_str = randomString(additonal_label=f"_fine-tune-BERT/")
 
-    get_bert_size_stats(model.bert, tokenizer)
+    _get_bert_size_stats(model.bert, tokenizer)
 
     # Save the model somewhere, s.t. you can run the standard trainer ...
 

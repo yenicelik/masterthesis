@@ -18,6 +18,9 @@ def randomString(root_path="./", stringLength=10, additonal_label=""):
 
     return rnd_str
 
+def create_path(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 
 
