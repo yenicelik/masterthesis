@@ -18,6 +18,7 @@ from transformers import glue_processors as processors
 from src.glue.args import args, MODEL_CLASSES
 from src.glue.trainer import set_seed, train
 
+
 # def load_BERT_vanilla():
 #     """
 #         Loads the BERT vanilla model, including the vanilla tokenizer
@@ -36,7 +37,6 @@ from src.glue.trainer import set_seed, train
 #     pass
 
 def main():
-
     print("Will now run the GLUE tasks")
 
     ##########################################################
@@ -44,7 +44,8 @@ def main():
     # Create the output directory if this does not exist yet #
     #                                                        #
     ##########################################################
-    if os.path.exists(args.output_dir) and os.listdir(args.output_dir) and args.do_train and not args.overwrite_output_dir:
+    if os.path.exists(args.output_dir) and os.listdir(
+            args.output_dir) and args.do_train and not args.overwrite_output_dir:
         raise ValueError(
             "Output directory ({}) already exists and is not empty. Use --overwrite_output_dir to overcome.".format(
                 args.output_dir
@@ -132,9 +133,11 @@ def main():
         cache_dir=args.cache_dir if args.cache_dir else None,
     )
 
+    # TODO: Could also just augment the tokenizer here, and replace it with your own ...
+
     ##########################################################
     #                                                        #
-    # TODO: Optionally improve our model here,               #
+    # TODO: Optionally augment our model here,               #
     # and then modify the config file by that ...            #
     #                                                        #
     ##########################################################
@@ -185,7 +188,6 @@ def main():
         model = model_class.from_pretrained(args.output_dir)
         tokenizer = tokenizer_class.from_pretrained(args.output_dir)
         model.to(args.device)
-
 
     ##########################################################
     #                                                        #

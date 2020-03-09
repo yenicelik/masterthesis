@@ -43,6 +43,9 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
         examples = (
             processor.get_dev_examples(args.data_dir) if evaluate else processor.get_train_examples(args.data_dir)
         )
+
+        # TODO: This is probably the spot where we have to convert the sentences to the new representations ...
+
         features = convert_examples_to_features(
             examples,
             tokenizer,
