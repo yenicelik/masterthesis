@@ -31,7 +31,6 @@ def get_bert_model():
     #
     ######################################################
 
-    # # TODO: Extend by more than just this words
     # Get fine-tune-words
     fine_tune_words = get_polysemous_splitup_words()
     for tgt_word in fine_tune_words:
