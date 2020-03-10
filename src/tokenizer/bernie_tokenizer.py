@@ -15,6 +15,11 @@ class BerniePoSTokenizer(BertTokenizer):
         run_VERB = run_2
     """
 
+    # TODO: Make a policy, s.t. when the number of additional vectors are full, you cannot add more and it defaults to run_0
+    # This happens during live-tokenization!
+
+    # TODO: What about the case where we don't realize the case of run
+
     def __init__(self,
                  vocab_file,
                  do_lower_case=True,
@@ -61,43 +66,44 @@ class BerniePoSTokenizer(BertTokenizer):
 
     def inject_split_token(self, split_word, n=5):
         """
+
+        # Do the part where you add the few additional tokens to the vocabulary ...
+        # Need to do this dynamically, as we don't know all tokens beforehand
+
         :param target_words: A word which will be replaced by a PoS specialization
         :return:
         """
         assert len(split_word) > 0, ("Split word is empty", split_word)
         self.split_tokens = split_word
 
+        old_vocab_size = len(self.added_tokens_decoder)
+
         # Check if the word is already in the vocabulary. If not, we cannot allow this split
         # (for convenience, also a rare case)
         if split_word not in self.vocab:
-            return f"'{split_word}' cannot be added, as it is not part of the standard vocabulary"
+            print(f"'{split_word}' cannot be added, as it is not part of the standard vocabulary")
+            return -1, 0
 
+        # 0. Find the target word idx in the vocabulary
         word_idx = self.vocab[split_word]
 
-        # Expand the tokenizer by this words ...
-        tokens_to_add = [(f'{tgt_word}_{i}') for i in range(n)]
+        # 1. Expand the tokenizer by this words ...
+        tokens_to_add = [(f'{split_word}_{i}') for i in range(n)]
         number_new_tokens = len(tokens_to_add)
-
         added_tokens = self.add_tokens(tokens_to_add)
+
+        # 2. Check if the new dimensions conform
         assert added_tokens == n
+        new_vocab_size = len(tokenizer.added_tokens_decoder)
+        assert new_vocab_size == old_vocab_size + n, (new_vocab_size, old_vocab_size, n)
 
-        # Make a policy, s.t. when the number of additional vectors are full, you cannot add more and it defaults to run_0
+        # 3. Test if adding to the tokenizer was successful, by checking if this token converts to any integer id
+        assert all([self.convert_tokens_to_ids(x) for x in tokens_to_add])
 
-
-        # The idx of this word is returned, such that any the copy-over policy for the BERT model can be applied
-
+        # 4. The idx of this word is returned, such that any the copy-over policy for the BERT model can be applied
         return word_idx, number_new_tokens
 
-        # Do the part where you add the few additional tokens to the vocabulary ...
-        # Need to do this dynamically, as we don't know all tokens beforehand
-        old_vocab_size = len(self.added_tokens_decoder)
-
-        # 0. Find the target word idx in the vocabular
-
-        # 1. Return the target word id if it is not within the vocabulary
-
-
-    def _tokenize(self, text):
+    def tokenize(self, text, **kwargs):
         assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")
         assert self.split_tokens, ("Injection of new tokens must bee specified")
 
@@ -109,7 +115,8 @@ class BerniePoSTokenizer(BertTokenizer):
         print("New text is: ", new_text)
 
         # now run the actual tokenizer
-        return super()._tokenize(new_text)
+        return super().tokenize(new_text)
+
 
 if __name__ == "__main__":
     print("Run the tokenizer on an example sentence!")
@@ -120,7 +127,7 @@ if __name__ == "__main__":
 
     print("Tokenizer is: ", tokenizer)
 
-    tokenizer.inject_split_tokens(" book ")
+    tokenizer.inject_split_token("book")
 
     # Toknize an example sentence
     example_sentence = "It costs the Open Content Alliance as much as $30 to scan each book, a cost shared by the group’s members and benefactors, so there are obvious financial benefits to libraries of Google’s wide-ranging offer, started in 2004."
