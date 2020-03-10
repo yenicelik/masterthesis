@@ -23,6 +23,7 @@ def _get_bert_size_stats(model, tokenizer):
 
 def expand_bert_by_target_word(tgt_word, model: BertForSequenceClassification, tokenizer: BertTokenizer, n=5):
     """
+        # TODO: NOTICE! Replaced with workflow of BerniePoSTokenizer and BerniePoSModel
         Getting the BERT embedding
     :return:
     """

@@ -3,7 +3,6 @@ from transformers import BertTokenizer
 
 from src.resources.augment import augment_sentence_by_pos
 
-
 class BerniePoSTokenizer(BertTokenizer):
     """
         Implements the BERT tokenizer,
@@ -14,11 +13,6 @@ class BerniePoSTokenizer(BertTokenizer):
         run_NOUN = run_1
         run_VERB = run_2
     """
-
-    # TODO: Make a policy, s.t. when the number of additional vectors are full, you cannot add more and it defaults to run_0
-    # This happens during live-tokenization!
-
-    # TODO: What about the case where we don't realize the case of run
 
     def __init__(self,
                  vocab_file,
@@ -64,6 +58,9 @@ class BerniePoSTokenizer(BertTokenizer):
     def replace_dict(self):
         return self._replace_dict
 
+    # TODO: What about a function one has to call each time before a sentence is input,
+    # that both updates the tokenizer and the model, if the token is not present in the model
+
     def inject_split_token(self, split_word, n=5):
         """
 
@@ -103,6 +100,19 @@ class BerniePoSTokenizer(BertTokenizer):
         # 4. The idx of this word is returned, such that any the copy-over policy for the BERT model can be applied
         return word_idx, number_new_tokens
 
+    def pre_tokenizer(self):
+        """
+            Checks if there are any items in the sentence which need to be added to the tokenizer.
+            If this is the case, returns the original idx, and how many additional tokens need to be added for the BertModel to be registered!
+        :return:
+        """
+
+        # TODO: Make a policy, s.t. when the number of additional vectors are full, you cannot add more and it defaults to run_0
+        # This happens during live-tokenization!
+
+        # TODO: What about the case where we don't realize the case of run
+        raise NotImplementedError
+
     def tokenize(self, text, **kwargs):
         assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")
         assert self.split_tokens, ("Injection of new tokens must bee specified")
@@ -116,7 +126,6 @@ class BerniePoSTokenizer(BertTokenizer):
 
         # now run the actual tokenizer
         return super().tokenize(new_text)
-
 
 if __name__ == "__main__":
     print("Run the tokenizer on an example sentence!")
