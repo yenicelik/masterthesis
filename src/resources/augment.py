@@ -40,7 +40,7 @@ def expand_bert_by_target_word(tgt_word, model: BertForSequenceClassification, t
     # 1: Retrieve the embedding in the vocabulary
     old_vector = model.bert.embeddings.word_embeddings.weight.data[word_idx, :]
 
-    # 2: Add tokens into tokenizeer and make space for new vectors
+    # 2: Add tokens into tokenizer and make space for new vectors
     tokens_to_add = [(f'{tgt_word}_{i}') for i in range(n - 1)]
     number_new_tokens = len(tokens_to_add)
     print("Tokens before", tokenizer.vocab_size)
