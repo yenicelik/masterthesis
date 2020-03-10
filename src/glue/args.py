@@ -8,6 +8,9 @@ from transformers import glue_processors as processors
 from transformers import BertConfig, BertTokenizer, BertForSequenceClassification, AlbertTokenizer, \
     AlbertForSequenceClassification, AlbertConfig
 
+from src.tokenizer.bernie_sequence_model import BerniePoSForSequenceClassification
+from src.tokenizer.bernie_tokenizer import BerniePoSTokenizer
+
 ALL_MODELS = sum(
     (
         tuple(conf.pretrained_config_archive_map.keys())
@@ -21,6 +24,7 @@ ALL_MODELS = sum(
 
 MODEL_CLASSES = {
     "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
+    "bernie": (BertConfig, BerniePoSForSequenceClassification, BerniePoSTokenizer),
     "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
 }
 

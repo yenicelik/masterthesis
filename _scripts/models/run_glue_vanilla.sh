@@ -5,15 +5,23 @@ export PYTHONPATH=$(pwd) # From the root folder of this repo
 export GLUE_DIR=/Users/david/GoogleDrive/_MasterThesis/data/GLUE
 export SAVEDIR=/Users/david/GoogleDrive/_MasterThesis/savedir/
 
+export PYTHONPATH=/home/david/_MasterThesis # From the root folder of this repo
+export GLUE_DIR=/home/david/_MasterThesis/data/GLUE
+export SAVEDIR=/home/david/_MasterThesis/savedir/
+
 # TODO: Make sure the parameters are adjusted to whatever task we have (if this is relevant...) !!!
 
-for TASK in 'COLA', 'MNLI', 'MNLI-MM', 'MRPC', 'SST-2', 'STS-B', 'QQP', 'QNLI', 'RTE', 'WNLI'
+# TODO: Implement multiple runs to have better experiment measurements
+
+# BERT
+
+for TASK in 'MRPC' # 'COLA', 'MNLI', 'MNLI-MM', 'MRPC', 'SST-2', 'STS-B', 'QQP', 'QNLI', 'RTE', 'WNLI'
 do
 
     python main.py \
       --model_type bert \
       --model_name_or_path bert-base-uncased \
-      --task_name MRPC \
+      --task_name $TASK \
       --do_train \
       --do_eval \
       --do_lower_case \

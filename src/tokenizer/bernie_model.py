@@ -4,6 +4,7 @@
 """
 from transformers import BertModel
 
+
 class BerniePoSModel(BertModel):
 
     def __init__(self, config):
@@ -28,18 +29,19 @@ class BerniePoSModel(BertModel):
         self.resize_token_embeddings(new_total_vocabulary_size)
 
         # 3. Inject the mean vector to the new vectors
-        self.embeddings.word_embeddings.weight.data[-number_new_tokens:, :] = old_vector.reshape(1, -1).repeat((number_new_tokens, 1))
+        self.embeddings.word_embeddings.weight.data[-number_new_tokens:, :] = old_vector.reshape(1, -1).repeat(
+            (number_new_tokens, 1))
 
         # 4. Make sure that copy-over tokens are
-        assert (self.embeddings.word_embeddings.weight.data[-number_new_tokens, :] == self.embeddings.word_embeddings.weight.data[token_idx, :]).all()
+        assert (self.embeddings.word_embeddings.weight.data[-number_new_tokens,
+                :] == self.embeddings.word_embeddings.weight.data[token_idx, :]).all()
 
         new_embedding_len = self.embeddings.shape[0]
-        assert new_embedding_len == old_embedding_len + number_new_tokens, (new_embedding_len, old_embedding_len + number_new_tokens)
+        assert new_embedding_len == old_embedding_len + number_new_tokens, (
+        new_embedding_len, old_embedding_len + number_new_tokens)
 
         # No need to return anything, because this model will be used as an "end-product"
 
 
-
 if __name__ == "__maine__":
     print("Testing if the model resizing works well!")
-

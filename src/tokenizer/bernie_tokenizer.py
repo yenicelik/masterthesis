@@ -123,6 +123,7 @@ class BerniePoSTokenizer(BertTokenizer):
         new_text = augment_sentence_by_pos(text, self.nlp, self.split_tokens, self._replace_dict)
 
         print("New text is: ", new_text)
+        print("New replace dict is: ", self.replace_dict)
 
         # now run the actual tokenizer
         return super().tokenize(new_text)
