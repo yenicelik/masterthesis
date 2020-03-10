@@ -57,24 +57,20 @@ do
           --output_dir $SAVEDIR/albert
     done done 2>&1 | tee full_bert_glue.txt
 
-for TRY in 1 2 3
+for TASK in 'MRPC'
 do
-    for TASK in 'MRPC'
-    do
 
-        python main.py \
-          --model_type bernie \
-          --model_name_or_path bert-base-uncased \
-          --task_name $TASK \
-          --do_train \
-          --do_eval \
-          --do_lower_case \
-          --data_dir $GLUE_DIR/$TASK/ \
-          --max_seq_length 128 \
-          --per_gpu_train_batch_size 32 \
-          --learning_rate 2e-5 \
-          --num_train_epochs 3.0 \
-          --output_dir $SAVEDIR/bernie
-
-    done
+    python main.py \
+      --model_type bernie \
+      --model_name_or_path bert-base-uncased \
+      --task_name $TASK \
+      --do_train \
+      --do_eval \
+      --do_lower_case \
+      --data_dir $GLUE_DIR/$TASK/ \
+      --max_seq_length 128 \
+      --per_gpu_train_batch_size 32 \
+      --learning_rate 2e-5 \
+      --num_train_epochs 3.0 \
+      --output_dir $SAVEDIR/bernie
 done

@@ -18,7 +18,6 @@ from transformers import glue_processors as processors
 from src.glue.args import args, MODEL_CLASSES
 from src.glue.trainer import set_seed, train
 
-
 # def load_BERT_vanilla():
 #     """
 #         Loads the BERT vanilla model, including the vanilla tokenizer
@@ -35,6 +34,8 @@ from src.glue.trainer import set_seed, train
 #
 # def load_ALBERT_vanilla():
 #     pass
+from src.resources.split_words import get_polysemous_splitup_words
+
 
 def main():
     print("Will now run the GLUE tasks")
@@ -132,15 +133,32 @@ def main():
         config=config,
         cache_dir=args.cache_dir if args.cache_dir else None,
     )
+    tokenizer.inject_model
 
     # TODO: Could also just augment the tokenizer here, and replace it with your own ...
 
     ##########################################################
     #                                                        #
-    # TODO: Optionally augment our model here,               #
     # and then modify the config file by that ...            #
     #                                                        #
     ##########################################################
+
+    # For all the split words, introduce the split token
+
+    if args.model_type == "bernie":
+
+        # Inject model to the tokenizer
+        tokenizer.inject_model(model)
+
+        polysemous_words = get_polysemous_splitup_words()
+        polysemous_words = [x.strip() for x in polysemous_words]
+
+        # Add split words to the tokenizer
+        for word in polysemous_words:
+            # Add 5 new emebddings.
+            # This should be done dynamically in the best case,
+            # but let's skip this for now ...
+            tokenizer.inject_split_token(word, n=5)
 
     ##########################################################
     #                                                        #
