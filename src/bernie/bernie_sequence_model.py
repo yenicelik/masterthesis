@@ -5,7 +5,7 @@
 from torch import nn
 from transformers import BertForSequenceClassification
 
-from src.tokenizer.bernie_model import BerniePoSModel
+from src.bernie.bernie_model import BerniePoSModel
 
 
 class BerniePoSForSequenceClassification(BertForSequenceClassification):

@@ -1,7 +1,9 @@
 import spacy
 from transformers import BertTokenizer
 
+from src.bernie.bernie_model import BerniePoSModel
 from src.resources.augment import augment_sentence_by_pos
+
 
 class BerniePoSTokenizer(BertTokenizer):
     """
@@ -27,7 +29,6 @@ class BerniePoSTokenizer(BertTokenizer):
                  tokenize_chinese_chars=True,
                  **kwargs
                  ):
-
         print("kwargs are")
         print(kwargs)
 
@@ -53,6 +54,7 @@ class BerniePoSTokenizer(BertTokenizer):
         self.nlp = spacy.load("en_core_web_sm")
 
         # what are the target words
+        self.bernie_model = None
 
     @property
     def replace_dict(self):
@@ -60,6 +62,14 @@ class BerniePoSTokenizer(BertTokenizer):
 
     # TODO: What about a function one has to call each time before a sentence is input,
     # that both updates the tokenizer and the model, if the token is not present in the model
+
+    def inject_model(self, bernie_model: BerniePoSModel):
+        """
+            Injecting a reference to the BernieModel.
+            This allows for just-in-time insertion of new tokens that are not within the replace-dict!
+        :return:
+        """
+        self.bernie_model = bernie_model
 
     def inject_split_token(self, split_word, n=5):
         """
@@ -70,48 +80,72 @@ class BerniePoSTokenizer(BertTokenizer):
         :param target_words: A word which will be replaced by a PoS specialization
         :return:
         """
+
+
+        assert self.bernie_model is not None, ("BernieModel must be injected before this dynamic tokenizer can be used!")
         assert len(split_word) > 0, ("Split word is empty", split_word)
         self.split_tokens = split_word
 
-        old_vocab_size = len(self.added_tokens_decoder)
+        old_additional_vocab_size = len(self.added_tokens_decoder)
 
         # Check if the word is already in the vocabulary. If not, we cannot allow this split
         # (for convenience, also a rare case)
         if split_word not in self.vocab:
             print(f"'{split_word}' cannot be added, as it is not part of the standard vocabulary")
-            return -1, 0
+            return (self.vocab_size + len(self.added_tokens_decoder)), -1, 0
 
         # 0. Find the target word idx in the vocabulary
-        word_idx = self.vocab[split_word]
+        token_idx = self.vocab[split_word]
+
+        # TODO: Make the replace-dict decide what to add and how many ...
 
         # 1. Expand the tokenizer by this words ...
         tokens_to_add = [(f'{split_word}_{i}') for i in range(n)]
-        number_new_tokens = len(tokens_to_add)
+        number_new_additional_tokens = len(tokens_to_add)
         added_tokens = self.add_tokens(tokens_to_add)
 
         # 2. Check if the new dimensions conform
         assert added_tokens == n
-        new_vocab_size = len(tokenizer.added_tokens_decoder)
-        assert new_vocab_size == old_vocab_size + n, (new_vocab_size, old_vocab_size, n)
+        new_additional_vocab_size = len(self.added_tokens_decoder)
+        assert new_additional_vocab_size == old_additional_vocab_size + n, (
+        new_additional_vocab_size, old_additional_vocab_size, n)
 
         # 3. Test if adding to the tokenizer was successful, by checking if this token converts to any integer id
         assert all([self.convert_tokens_to_ids(x) for x in tokens_to_add])
 
-        # 4. The idx of this word is returned, such that any the copy-over policy for the BERT model can be applied
-        return word_idx, number_new_tokens
+        new_vocab_size = self.vocab_size + len(self.added_tokens_decoder)
 
-    def pre_tokenizer(self):
-        """
-            Checks if there are any items in the sentence which need to be added to the tokenizer.
-            If this is the case, returns the original idx, and how many additional tokens need to be added for the BertModel to be registered!
-        :return:
-        """
+        print("New vocab size is: ", new_vocab_size, old_additional_vocab_size, new_additional_vocab_size)
+
+        # TODO:
+        # self._expand_injected_bernie_model(new_vocab_size, token_idx, number_new_additional_tokens)
 
         # TODO: Make a policy, s.t. when the number of additional vectors are full, you cannot add more and it defaults to run_0
         # This happens during live-tokenization!
 
         # TODO: What about the case where we don't realize the case of run
-        raise NotImplementedError
+
+        # 4. The idx of this word is returned, such that any the copy-over policy for the BERT model can be applied
+        return new_vocab_size, token_idx, number_new_additional_tokens
+
+
+    # def _expand_injected_bernie_model(self, new_vocab_size, token_idx, number_new_additional_tokens):
+    #     """
+    #             Checks if there are any items in the sentence which need to be added to the tokenizer.
+    #             If this is the case, returns the original idx, and how many additional tokens need to be added for the BertModel to be registered!
+    #         :return:
+    #         """
+    #
+    #     if number_new_additional_tokens == 0:
+    #         print(f"Word {word} was skipped!")
+    #         return
+    #
+    #     self.bernie_model.inject_split_token(
+    #         new_total_vocabulary_size=new_vocab_size,
+    #         token_idx=token_idx,
+    #         number_new_tokens=number_new_additional_tokens
+    #     )
+
 
     def tokenize(self, text, **kwargs):
         assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")
@@ -127,6 +161,7 @@ class BerniePoSTokenizer(BertTokenizer):
 
         # now run the actual tokenizer
         return super().tokenize(new_text)
+
 
 if __name__ == "__main__":
     print("Run the tokenizer on an example sentence!")

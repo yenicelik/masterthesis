@@ -20,7 +20,7 @@ class BerniePoSModel(BertModel):
         :return:
         """
 
-        old_embedding_len = self.embeddings.shape[0]
+        old_embedding_len = self.embeddings.word_embeddings.weight.size(0)
 
         # 1. Get the old vector
         old_vector = self.embeddings.word_embeddings.weight.data[token_idx, :]
@@ -36,7 +36,7 @@ class BerniePoSModel(BertModel):
         assert (self.embeddings.word_embeddings.weight.data[-number_new_tokens,
                 :] == self.embeddings.word_embeddings.weight.data[token_idx, :]).all()
 
-        new_embedding_len = self.embeddings.shape[0]
+        new_embedding_len = self.embeddings.word_embeddings.weight.size(0)
         assert new_embedding_len == old_embedding_len + number_new_tokens, (
         new_embedding_len, old_embedding_len + number_new_tokens)
 
