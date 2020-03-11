@@ -1,7 +1,7 @@
 
 # TODO: Make the tokenizer accessible at the end of the paper!
 
-export PYTHONPATH=/Users/david/GoogleDrive/_MasterThesis # From the root folder of this repo
+export PYTHONPATH=$(pwd)
 export GLUE_DIR=/Users/david/GoogleDrive/_MasterThesis/data/GLUE
 export SAVEDIR=/Users/david/GoogleDrive/_MasterThesis/savedir/
 

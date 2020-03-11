@@ -45,6 +45,7 @@ class BerniePoSTokenizer(BertTokenizer):
             if token.text not in self.split_tokens:
                 new_sentence.append(token.text)
             else:
+
                 pos = token.pos_
                 if token.text in self.replace_dict:
                     # retrieve index of item
@@ -60,6 +61,10 @@ class BerniePoSTokenizer(BertTokenizer):
                 # print("Replacing with ", token.text, token.pos)
 
                 new_token = f"{token.text}_{idx}"
+
+                # TODO: Put the new token to the replace-dict
+                # TODO: Expand tokenizer here to include the new token if not existent!
+                # TODO: Expand model here if not existent!
 
                 # replace the token with the new token
                 new_sentence.append(new_token)
