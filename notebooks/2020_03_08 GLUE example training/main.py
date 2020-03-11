@@ -121,6 +121,8 @@ def main():
     # TODO: Could also just augment the tokenizer here, and replace it with your own ...
 
     # TODO: Double check if bernie was actually loaded, and not something else ...
+    print("Tokenizer, config and model are")
+    print(tokenizer, model, config)
 
     ##########################################################
     #                                                        #
@@ -130,20 +132,22 @@ def main():
 
     # For all the split words, introduce the split token
 
+    # TODO: Do all this here just-in-time ..
+
     if args.model_type == "bernie":
+
+        print("Using BERNIE model")
 
         # Inject model to the tokenizer
         tokenizer.inject_model(model)
 
+        # Inject the split tokens, s.t. new tokens are created for these over time
         polysemous_words = get_polysemous_splitup_words()
-        polysemous_words = [x.strip() for x in polysemous_words]
+        tokenizer.set_split_tokens(polysemous_words)
 
-        # Add split words to the tokenizer
-        for word in polysemous_words:
-            # Add 5 new emebddings.
-            # This should be done dynamically in the best case,
-            # but let's skip this for now ...
-            tokenizer.inject_split_token(word, n=5)
+    else:
+        print("Not using bernie model!!!")
+        print(args.model_type)
 
     ##########################################################
     #                                                        #
@@ -153,6 +157,15 @@ def main():
     model.to(args.device)
 
     logger.info("Training/evaluation parameters %s", args)
+
+    # TODO: Perhapds do a sample tokenization run with a sentence containing "book"?
+    example_sentence = "It costs the Open Content Alliance as much as $30 to scan each book, a cost shared by the group’s members and benefactors, so there are obvious financial benefits to libraries of Google’s wide-ranging offer, started in 2004."
+
+    # Overwriting the tokenizer does not work ... need to manually write a `from_pretrained` function probably...?
+
+    print("Run through the tokenizer, and check if it successfully tokenizes 'book'")
+    new_example_sentence = tokenizer.tokenize(example_sentence)
+    print("New example sentence", new_example_sentence)
 
     ##########################################################
     #                                                        #

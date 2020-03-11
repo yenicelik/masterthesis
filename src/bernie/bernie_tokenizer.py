@@ -16,7 +16,7 @@ class BerniePoSTokenizer(BertTokenizer):
         run_VERB = run_2
     """
 
-    def _inject_token(self, sentence):
+    def _augment_sentence_and_inject_token(self, sentence):
         """
             Apply this function before feeding a sentence in to BERET.
             Due to the nature of the `replace_dict`,
@@ -63,8 +63,10 @@ class BerniePoSTokenizer(BertTokenizer):
                 new_token = f"{token.text}_{idx}"
 
                 # TODO: Put the new token to the replace-dict
-                # TODO: Expand tokenizer here to include the new token if not existent!
-                # TODO: Expand model here if not existent!
+                if new_token not in self.added_tokens:
+                    # TODO: Expand tokenizer here to include the new token if not existent!
+                    self.inject_split_token(new_token, n=1)
+                    # TODO: Expand model here if not existent! -> This is done within the above function! (hopefully, lol)
 
                 # replace the token with the new token
                 new_sentence.append(new_token)
@@ -78,6 +80,10 @@ class BerniePoSTokenizer(BertTokenizer):
             .replace("$ ", "$")
 
         return new_sentence
+
+    @property
+    def added_tokens(self):
+        return set(self.added_tokens)
 
     def __init__(self,
                  vocab_file,
@@ -122,6 +128,9 @@ class BerniePoSTokenizer(BertTokenizer):
     @property
     def replace_dict(self):
         return self._replace_dict
+
+    def set_split_tokens(self, split_tokens):
+        self.split_tokens = set(split_tokens)
 
     # TODO: What about a function one has to call each time before a sentence is input,
     # that both updates the tokenizer and the model, if the token is not present in the model
@@ -177,7 +186,7 @@ class BerniePoSTokenizer(BertTokenizer):
 
         new_vocab_size = self.vocab_size + len(self.added_tokens_decoder)
 
-        print("New vocab size is: ", new_vocab_size, old_additional_vocab_size, new_additional_vocab_size)
+        print("New vocab size is: ", split_word, new_vocab_size, old_additional_vocab_size, new_additional_vocab_size)
 
         # Automatically add new tokens to the injected model
         self._expand_injected_bernie_model(new_vocab_size, token_idx, number_new_additional_tokens)
@@ -211,13 +220,14 @@ class BerniePoSTokenizer(BertTokenizer):
         assert new_vocab_size == self.bernie_model.bert.embeddings.word_embeddings.weight.shape[0], (new_vocab_size, self.bernie_model.bert.embeddings.word_embeddings.weight.shape)
 
     def tokenize(self, text, **kwargs):
-        assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")
-        assert self.split_tokens, ("Injection of new tokens must bee specified")
+        # assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")
+        # assert self.split_tokens, ("Injection of new tokens must bee specified")
 
         print("Previous text is: ", text)
         # Apply the nlp tokenization, replace tokens,
         # retokenize and pass this into the BERT Tokenizer function
-        new_text = augment_sentence_by_pos(text, self.nlp, self.split_tokens, self._replace_dict)
+        new_text = self._augment_sentence_and_inject_token(text)
+        # new_text = augment_sentence_by_pos(text, self.nlp, self.split_tokens, self._replace_dict)
 
         # TODO: If the new_text includes a token which is not in the vocabulary yet, include this into the vocabulary
 
