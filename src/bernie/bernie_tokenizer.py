@@ -44,10 +44,13 @@ class BerniePoSTokenizer(BertTokenizer):
             # If it is not a target word, don't modify
             if token.text not in self.split_tokens:
                 new_sentence.append(token.text)
+
             else:
+                print("Found token in split tokens!", token.text)
 
                 pos = token.pos_
                 if token.text in self.replace_dict:
+
                     # retrieve index of item
                     idx = self.replace_dict[token.text].index(pos) if pos in self.replace_dict[token.text] else -1
                     if idx == -1:
@@ -58,19 +61,23 @@ class BerniePoSTokenizer(BertTokenizer):
                     self.replace_dict[token.text] = [pos, ]
                     idx = 0
 
-                # print("Replacing with ", token.text, token.pos)
+                print("This is the new token...")
+                print("Replacing with ", token.text, token.pos)
 
                 new_token = f"{token.text}_{idx}"
 
                 # TODO: Put the new token to the replace-dict
                 if new_token not in self.added_tokens:
+                    print("Injecting new token ...")
                     # TODO: Expand tokenizer here to include the new token if not existent!
-                    self.inject_split_token(new_token, n=1)
+                    self.inject_split_token(split_word=token.text, new_token=new_token)
                     # Finally add it to the added tokens
                     # TODO: Expand model here if not existent! -> This is done within the above function! (hopefully, lol)
 
                 # replace the token with the new token
                 new_sentence.append(new_token)
+
+                # remove old vocabulary
 
         res_str = " ".join(new_sentence)
         new_sentence = res_str \
@@ -82,6 +89,7 @@ class BerniePoSTokenizer(BertTokenizer):
 
         return new_sentence
 
+    @property
     def added_tokens(self):
         return set(self.added_tokens_decoder)
 
@@ -116,7 +124,6 @@ class BerniePoSTokenizer(BertTokenizer):
         )
 
         self.split_tokens = set()
-        self.added_tokens = set()
 
         # This should probably
         # The dictionary which records which index corresponds to which meaning
@@ -146,7 +153,7 @@ class BerniePoSTokenizer(BertTokenizer):
         """
         self.bernie_model = bernie_model
 
-    def inject_split_token(self, split_word, n=5):
+    def inject_split_token(self, split_word, new_token):
         """
 
         # Do the part where you add the few additional tokens to the vocabulary ...
@@ -156,17 +163,12 @@ class BerniePoSTokenizer(BertTokenizer):
         :return:
         """
 
-        assert self.bernie_model is not None, ("BernieModel must be injected before this dynamic tokenizer can be used!")
+        assert self.bernie_model is not None, (
+            "BernieModel must be injected before this dynamic tokenizer can be used!")
         assert len(split_word) > 0, ("Split word is empty", split_word)
         self.split_tokens = set([split_word, ])
 
         old_additional_vocab_size = len(self.added_tokens_decoder)
-
-        # Check if the word is already in the vocabulary. If not, we cannot allow this split
-        # (for convenience, also a rare case)
-        if split_word not in self.vocab:
-            print(f"'{split_word}' cannot be added, as it is not part of the standard vocabulary")
-            return (self.vocab_size + len(self.added_tokens_decoder)), -1, 0
 
         # 0. Find the target word idx in the vocabulary
         token_idx = self.vocab[split_word]
@@ -174,15 +176,15 @@ class BerniePoSTokenizer(BertTokenizer):
         # TODO: Make the replace-dict decide what to add and how many ...
 
         # 1. Expand the tokenizer by this words ...
-        tokens_to_add = [(f'{split_word}_{i}') for i in range(n)]
+        tokens_to_add = [new_token,]
         number_new_additional_tokens = len(tokens_to_add)
         added_tokens = self.add_tokens(tokens_to_add)
 
         # 2. Check if the new dimensions conform
-        assert added_tokens == n
+        assert added_tokens == 1
         new_additional_vocab_size = len(self.added_tokens_decoder)
-        assert new_additional_vocab_size == old_additional_vocab_size + n, (
-        new_additional_vocab_size, old_additional_vocab_size, n)
+        assert new_additional_vocab_size == old_additional_vocab_size + 1, (
+            new_additional_vocab_size, old_additional_vocab_size, 1)
 
         # 3. Test if adding to the tokenizer was successful, by checking if this token converts to any integer id
         assert all([self.convert_tokens_to_ids(x) for x in tokens_to_add])
@@ -202,7 +204,6 @@ class BerniePoSTokenizer(BertTokenizer):
         # 4. The idx of this word is returned, such that any the copy-over policy for the BERT model can be applied
         return new_vocab_size, token_idx, number_new_additional_tokens
 
-
     def _expand_injected_bernie_model(self, new_vocab_size, token_idx, number_new_additional_tokens):
         """
                 Checks if there are any items in the sentence which need to be added to the tokenizer.
@@ -220,11 +221,15 @@ class BerniePoSTokenizer(BertTokenizer):
             number_new_tokens=number_new_additional_tokens
         )
 
-        assert new_vocab_size == self.bernie_model.bert.embeddings.word_embeddings.weight.shape[0], (new_vocab_size, self.bernie_model.bert.embeddings.word_embeddings.weight.shape)
+        assert new_vocab_size == self.bernie_model.bert.embeddings.word_embeddings.weight.shape[0], (
+        new_vocab_size, self.bernie_model.bert.embeddings.word_embeddings.weight.shape)
 
     def tokenize(self, text, **kwargs):
         # assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")
         # assert self.split_tokens, ("Injection of new tokens must bee specified")
+
+        print("Split words are")
+        print(sorted(self.split_tokens))
 
         print("Previous text is: ", text)
         # Apply the nlp tokenization, replace tokens,
@@ -234,11 +239,16 @@ class BerniePoSTokenizer(BertTokenizer):
 
         # TODO: If the new_text includes a token which is not in the vocabulary yet, include this into the vocabulary
 
+        print("At this point, we should have added 'book_0' to the new vocabulary ..")
+        print(self.added_tokens)
+
         # TODO: If some tokens _0 etc. are not in replace-dict, (from within the augment_sentence_by_pos),
         # Then add them to replace-dict, add them to tokenizer, and expand model by one ...
 
         print("New text is: ", new_text)
         print("New replace dict is: ", self.replace_dict)
+
+        # TODO: The re-used BERT tokenizer does not use the newly discovered / generated vocabulary
 
         # now run the actual tokenizer
         return super().tokenize(new_text)
