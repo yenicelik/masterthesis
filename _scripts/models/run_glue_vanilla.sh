@@ -57,7 +57,7 @@ do
           --output_dir $SAVEDIR/albert
     done done 2>&1 | tee full_bert_glue.txt
 
-for TASK in 'MRPC'
+for TASK in 'CoLA'
 do
 
     python main.py \

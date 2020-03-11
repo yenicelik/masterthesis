@@ -156,16 +156,20 @@ def main():
     ##########################################################
     model.to(args.device)
 
+    # TODO: BUG! Update within replace-dict and added-tokens does not happen simultanouelsy! Check this out..
+
     logger.info("Training/evaluation parameters %s", args)
 
     # TODO: Perhapds do a sample tokenization run with a sentence containing "book"?
-    example_sentence = "It costs the Open Content Alliance as much as $30 to scan each book, a cost shared by the group’s members and benefactors, so there are obvious financial benefits to libraries of Google’s wide-ranging offer, started in 2004."
 
     # Overwriting the tokenizer does not work ... need to manually write a `from_pretrained` function probably...?
 
-    print("Run through the tokenizer, and check if it successfully tokenizes 'book'")
-    new_example_sentence = tokenizer.tokenize(example_sentence)
-    print("New example sentence", new_example_sentence)
+    # TODO: Only one item is added to the hashmap at a time... fix this ...
+
+    # example_sentence = "It costs the Open Content Alliance as much as $30 to scan each book, a cost shared by the group’s members and benefactors, so there are obvious financial benefits to libraries of Google’s wide-ranging offer, started in 2004."
+    # print("Run through the tokenizer, and check if it successfully tokenizes 'book'")
+    # new_example_sentence = tokenizer.tokenize(example_sentence)
+    # print("New example sentence", new_example_sentence)
 
     ##########################################################
     #                                                        #
@@ -174,9 +178,12 @@ def main():
     ##########################################################
     if args.do_train:
         # TODO: Do the dataset augmentation here!
+        # TODO: Make sure cached is somehow turned off!!!
         train_dataset = load_and_cache_examples(args, args.task_name, tokenizer, evaluate=False)
+        print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
         global_step, tr_loss = train(args, train_dataset, model, tokenizer)
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
+        print("Added tokens for the tokenizer are (2): ", tokenizer.added_tokens)
 
     ##########################################################
     #                                                        #

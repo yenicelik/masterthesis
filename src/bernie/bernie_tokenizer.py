@@ -49,7 +49,8 @@ class BerniePoSTokenizer(BertTokenizer):
                 print("Found token in split tokens!", token.text)
 
                 pos = token.pos_
-                if token.text in self.replace_dict:
+                if token.text in self.replace_dict.keys():
+                    print("Fill into existing dictionary")
 
                     # retrieve index of item
                     idx = self.replace_dict[token.text].index(pos) if pos in self.replace_dict[token.text] else -1
@@ -57,18 +58,21 @@ class BerniePoSTokenizer(BertTokenizer):
                         self.replace_dict[token.text].append(pos)
                         idx = self.replace_dict[token.text].index(pos)
                         assert idx >= 0
+
                 else:
+                    print("Make a new spot")
+
                     self.replace_dict[token.text] = [pos, ]
                     idx = 0
 
                 print("This is the new token...")
-                print("Replacing with ", token.text, token.pos)
+                print("Replacing with ", token.text, pos)
 
                 new_token = f"{token.text}_{idx}"
 
                 # TODO: Put the new token to the replace-dict
                 if new_token not in self.added_tokens:
-                    print("Injecting new token ...")
+                    print("Injecting new token ...", new_token, self.added_tokens)
                     # TODO: Expand tokenizer here to include the new token if not existent!
                     self.inject_split_token(split_word=token.text, new_token=new_token)
                     # Finally add it to the added tokens
@@ -88,10 +92,6 @@ class BerniePoSTokenizer(BertTokenizer):
             .replace("$ ", "$")
 
         return new_sentence
-
-    @property
-    def added_tokens(self):
-        return set(self.added_tokens_decoder)
 
     def __init__(self,
                  vocab_file,
@@ -132,6 +132,10 @@ class BerniePoSTokenizer(BertTokenizer):
 
         # what are the target words
         self.bernie_model = None
+
+    @property
+    def added_tokens(self):
+        return set(self.added_tokens_decoder.values())
 
     @property
     def replace_dict(self):
@@ -178,6 +182,7 @@ class BerniePoSTokenizer(BertTokenizer):
         # 1. Expand the tokenizer by this words ...
         tokens_to_add = [new_token,]
         number_new_additional_tokens = len(tokens_to_add)
+        print("Tokens to add is: ", tokens_to_add)
         added_tokens = self.add_tokens(tokens_to_add)
 
         # 2. Check if the new dimensions conform
@@ -232,6 +237,7 @@ class BerniePoSTokenizer(BertTokenizer):
         print(sorted(self.split_tokens))
 
         print("Previous text is: ", text)
+
         # Apply the nlp tokenization, replace tokens,
         # retokenize and pass this into the BERT Tokenizer function
         new_text = self._augment_sentence_and_inject_token(text)
