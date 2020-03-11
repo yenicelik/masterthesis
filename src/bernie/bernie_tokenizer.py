@@ -1,7 +1,10 @@
 import spacy
 from transformers import BertTokenizer
 
+from src.bernie.bernie_configuration import BerniePoSConfig
 from src.bernie.bernie_model import BerniePoSModel
+from src.bernie.bernie_sequence_model import BerniePoSForSequenceClassification
+from src.config import args
 from src.resources.augment import augment_sentence_by_pos
 
 
@@ -15,6 +18,57 @@ class BerniePoSTokenizer(BertTokenizer):
         run_NOUN = run_1
         run_VERB = run_2
     """
+
+    def _inject_token(self):
+        pass
+
+    def _augment_sentence(self, sentence):
+        new_sentence = []
+
+        doc = self.nlp(sentence)
+
+        # For all the above target words
+        for token in doc:
+            # Identify if it is in sentence
+
+            # If it is not a target word, don't modify
+            if token.text not in self.split_tokens:
+                new_sentence.append(token.text)
+
+            else:
+                pos = token.pos_
+
+                if token.text in self.replace_dict:
+                    # retrieve index of item
+                    idx = self.replace_dict[token.text].index(pos) if pos in self.replace_dict[token.text] else -1
+                    if idx == -1:
+                        self.replace_dict[token.text].append(pos)
+                        idx = self.replace_dict[token.text].index(pos)
+                        assert idx >= 0
+
+                else:
+                    self.replace_dict[token.text] = [pos, ]
+                    idx = 0
+
+                # print("Replacing with ", token.text, token.pos)
+
+                new_token = f"{token.text}_{idx}"
+
+                # In either case, add this new token to the tokenizer
+                # And expand the underlying model to expand the vectors
+
+                # replace the token with the new token
+                new_sentence.append(new_token)
+
+        res_str = " ".join(new_sentence)
+        new_sentence = res_str \
+            .replace(" .", ".") \
+            .replace(" ,", ",") \
+            .replace(" ’", "’") \
+            .replace(" - ", "-") \
+            .replace("$ ", "$")
+
+        return new_sentence
 
     def __init__(self,
                  vocab_file,
@@ -46,7 +100,7 @@ class BerniePoSTokenizer(BertTokenizer):
             **kwargs
         )
 
-        self.split_tokens = []
+        self.split_tokens = set()
 
         # This should probably
         # The dictionary which records which index corresponds to which meaning
@@ -83,7 +137,7 @@ class BerniePoSTokenizer(BertTokenizer):
 
         assert self.bernie_model is not None, ("BernieModel must be injected before this dynamic tokenizer can be used!")
         assert len(split_word) > 0, ("Split word is empty", split_word)
-        self.split_tokens = split_word
+        self.split_tokens.add(set([split_word, ]))
 
         old_additional_vocab_size = len(self.added_tokens_decoder)
 
@@ -171,9 +225,35 @@ class BerniePoSTokenizer(BertTokenizer):
 if __name__ == "__main__":
     print("Run the tokenizer on an example sentence!")
 
+    # num_labels = 1000
+    # config_class, model_class, tokenizer_class = BerniePoSConfig, BerniePoSForSequenceClassification, BerniePoSTokenizer
+    #
+    # # args
+    # model_name_or_path = 'bert-base-uncased'
+    # tokenizer_name = ''
+    # task_name = 'MNLI'
+    #
+    # config = config_class.from_pretrained(
+    #     args.config_name if args.config_name else args.model_name_or_path,
+    #     num_labels=num_labels,
+    #     finetuning_task=args.task_name,
+    #     cache_dir=args.cache_dir if args.cache_dir else None,
+    # )
+    #
+    # #  TODO: Double-check if bernie is actually loaded!!!
+    # model = model_class.from_pretrained(
+    #     model_name_or_path,
+    #     from_tf=False,
+    #     config=config,
+    #     cache_dir=None,
+    # )
+
     # Load from pre-trained
     tokenizer = BerniePoSTokenizer.from_pretrained('bert-base-uncased')
     # tokenizer = BerniePoSTokenizer()
+
+    tokenizer.inject_model(model)
+
 
     print("Tokenizer is: ", tokenizer)
 

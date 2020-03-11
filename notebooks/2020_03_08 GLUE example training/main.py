@@ -18,24 +18,7 @@ from transformers import glue_processors as processors
 from src.glue.args import args, MODEL_CLASSES
 from src.glue.trainer import set_seed, train
 
-# def load_BERT_vanilla():
-#     """
-#         Loads the BERT vanilla model, including the vanilla tokenizer
-#     :return:
-#     """
-#     pass
-#
-# def load_BERT_ours():
-#     """
-#         Loads our BERT model, including the augmented tokenizer
-#     :return:
-#     """
-#     pass
-#
-# def load_ALBERT_vanilla():
-#     pass
 from src.resources.split_words import get_polysemous_splitup_words
-
 
 def main():
     print("Will now run the GLUE tasks")
@@ -115,6 +98,8 @@ def main():
     ##########################################################
     args.model_type = args.model_type.lower()
     # TODO: Replace by our own BERT (alternatively, allow import through this as well...
+
+    #  TODO: Double-check if bernie is actually loaded!!!
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
     config = config_class.from_pretrained(
         args.config_name if args.config_name else args.model_name_or_path,
@@ -133,7 +118,6 @@ def main():
         config=config,
         cache_dir=args.cache_dir if args.cache_dir else None,
     )
-    tokenizer.inject_model
 
     # TODO: Could also just augment the tokenizer here, and replace it with your own ...
 

@@ -16,9 +16,10 @@ ALL_MODELS = sum(
     (
         tuple(conf.pretrained_config_archive_map.keys())
         for conf in (
-            BertConfig,
-            AlbertConfig
-        )
+        BertConfig,
+        BerniePoSConfig,
+        AlbertConfig
+    )
     ),
     (),
 )
@@ -33,10 +34,12 @@ parser = argparse.ArgumentParser()
 
 # Required parameters
 parser.add_argument(
-    "--data_dir", default=None, type=str, required=True, help="The input data dir. Should contain the .tsv files (or other data files) for the task.",
+    "--data_dir", default=None, type=str, required=True,
+    help="The input data dir. Should contain the .tsv files (or other data files) for the task.",
 )
 parser.add_argument(
-    "--model_type", default=None, type=str, required=True, help="Model type selected in the list: " + ", ".join(MODEL_CLASSES.keys()),
+    "--model_type", default=None, type=str, required=True,
+    help="Model type selected in the list: " + ", ".join(MODEL_CLASSES.keys()),
 )
 parser.add_argument(
     "--model_name_or_path",
@@ -45,8 +48,9 @@ parser.add_argument(
     required=True,
     help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),
 )
-parser.add_argument("--task_name", default=None, type=str, required=True, help="The name of the task to train selected in the list: " + ", ".join(processors.keys()),
-)
+parser.add_argument("--task_name", default=None, type=str, required=True,
+                    help="The name of the task to train selected in the list: " + ", ".join(processors.keys()),
+                    )
 parser.add_argument(
     "--output_dir",
     default=None,
