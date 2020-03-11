@@ -35,9 +35,9 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
     # TODO: Remove this part!!!
     if os.path.exists(cached_features_file) and not args.overwrite_cache:
         logger.info("Loading features from cached file %s", cached_features_file)
-        print("You are trying to load cached tokenizer.. don't..")
-        exit(-1)
-        features = torch.load(cached_features_file)
+        # print("You are trying to load cached tokenizer.. don't..")
+        # exit(-1)
+        # features = torch.load(cached_features_file)
     else:
         logger.info("Creating features from dataset file at %s", args.data_dir)
         label_list = processor.get_labels()
@@ -62,9 +62,9 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
         )
         if args.local_rank in [-1, 0]:
             logger.info("Saving features into cached file %s", cached_features_file)
-            print("Will not save before we fix this stupid thing!")
-            exit(0)
-            torch.save(features, cached_features_file)
+            # print("Will not save before we fix this stupid thing!")
+            # exit(0)
+            # torch.save(features, cached_features_file)
 
     if args.local_rank == 0 and not evaluate:
         torch.distributed.barrier()  # Make sure only the first process in distributed training process the dataset, and the others will use the cache

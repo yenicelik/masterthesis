@@ -6,6 +6,7 @@
 import glob
 import logging
 
+# I de-activated caching, because we are playing around with the tokenizer..
 from src.glue.evaluate import load_and_cache_examples, evaluate
 from src.glue.logger import logger
 import os

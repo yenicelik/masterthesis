@@ -170,7 +170,6 @@ class BerniePoSTokenizer(BertTokenizer):
         assert self.bernie_model is not None, (
             "BernieModel must be injected before this dynamic tokenizer can be used!")
         assert len(split_word) > 0, ("Split word is empty", split_word)
-        self.split_tokens = set([split_word, ])
 
         old_additional_vocab_size = len(self.added_tokens_decoder)
 
@@ -245,7 +244,7 @@ class BerniePoSTokenizer(BertTokenizer):
 
         # TODO: If the new_text includes a token which is not in the vocabulary yet, include this into the vocabulary
 
-        print("At this point, we should have added 'book_0' to the new vocabulary ..")
+        # print("At this point, we should have added 'book_0' to the new vocabulary ..")
         print(self.added_tokens)
 
         # TODO: If some tokens _0 etc. are not in replace-dict, (from within the augment_sentence_by_pos),
