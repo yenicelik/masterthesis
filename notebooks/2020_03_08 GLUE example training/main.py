@@ -18,22 +18,6 @@ from transformers import glue_processors as processors
 from src.glue.args import args, MODEL_CLASSES
 from src.glue.trainer import set_seed, train
 
-# def load_BERT_vanilla():
-#     """
-#         Loads the BERT vanilla model, including the vanilla tokenizer
-#     :return:
-#     """
-#     pass
-#
-# def load_BERT_ours():
-#     """
-#         Loads our BERT model, including the augmented tokenizer
-#     :return:
-#     """
-#     pass
-#
-# def load_ALBERT_vanilla():
-#     pass
 from src.resources.split_words import get_polysemous_splitup_words
 
 
@@ -135,6 +119,8 @@ def main():
     )
 
     # TODO: Could also just augment the tokenizer here, and replace it with your own ...
+
+    # TODO: Double check if bernie was actually loaded, and not something else ...
 
     ##########################################################
     #                                                        #

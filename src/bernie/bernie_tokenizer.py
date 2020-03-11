@@ -16,6 +16,64 @@ class BerniePoSTokenizer(BertTokenizer):
         run_VERB = run_2
     """
 
+    def _inject_token(self, sentence):
+        """
+            Apply this function before feeding a sentence in to BERET.
+            Due to the nature of the `replace_dict`,
+            this function must be applied to the entire corpus before the application.
+
+            This function takes 0.01 (0.05 completely non-cached) seconds per run, which is considered fast enough for actual runs.
+
+            replace_dict must be a reference!!!
+
+        :param sentence: the sentence to be replaced
+        :param nlp: the spacy nlp tokenizer
+        :param tgt_words: The target words which shall all be replaced
+        :param replace_dict: The dictionary which translates the "meaning" to the number # MUST BE A DICT-reference!!!
+        :return:
+        """
+
+        new_sentence = []
+
+        doc = self.nlp(sentence)
+
+        # For all the above target words
+        for token in doc:
+            # Identify if it is in sentence
+
+            # If it is not a target word, don't modify
+            if token.text not in self.split_tokens:
+                new_sentence.append(token.text)
+            else:
+                pos = token.pos_
+                if token.text in self.replace_dict:
+                    # retrieve index of item
+                    idx = self.replace_dict[token.text].index(pos) if pos in self.replace_dict[token.text] else -1
+                    if idx == -1:
+                        self.replace_dict[token.text].append(pos)
+                        idx = self.replace_dict[token.text].index(pos)
+                        assert idx >= 0
+                else:
+                    self.replace_dict[token.text] = [pos, ]
+                    idx = 0
+
+                # print("Replacing with ", token.text, token.pos)
+
+                new_token = f"{token.text}_{idx}"
+
+                # replace the token with the new token
+                new_sentence.append(new_token)
+
+        res_str = " ".join(new_sentence)
+        new_sentence = res_str \
+            .replace(" .", ".") \
+            .replace(" ,", ",") \
+            .replace(" ’", "’") \
+            .replace(" - ", "-") \
+            .replace("$ ", "$")
+
+        return new_sentence
+
     def __init__(self,
                  vocab_file,
                  do_lower_case=True,
@@ -46,7 +104,7 @@ class BerniePoSTokenizer(BertTokenizer):
             **kwargs
         )
 
-        self.split_tokens = []
+        self.split_tokens = set()
 
         # This should probably
         # The dictionary which records which index corresponds to which meaning
@@ -83,7 +141,7 @@ class BerniePoSTokenizer(BertTokenizer):
 
         assert self.bernie_model is not None, ("BernieModel must be injected before this dynamic tokenizer can be used!")
         assert len(split_word) > 0, ("Split word is empty", split_word)
-        self.split_tokens = split_word
+        self.split_tokens = set([split_word, ])
 
         old_additional_vocab_size = len(self.added_tokens_decoder)
 
