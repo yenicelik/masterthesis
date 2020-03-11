@@ -159,7 +159,7 @@ def main():
     logger.info("Training/evaluation parameters %s", args)
 
     # TODO: Perhapds do a sample tokenization run with a sentence containing "book"?
-    example_sentence = "It costs the Open Content Alliance as much as $30 to scan each book, a cost shared by the group’s members and benefactors, so there are obvious financial benefits to libraries of Google’s wide-ranging offer, started in 2004."
+    example_sentence = "It costs the Open Content Alliance as much as $30 to scan each book , a cost shared by the group’s members and benefactors, so there are obvious financial benefits to libraries of Google’s wide-ranging offer, started in 2004."
 
     # Overwriting the tokenizer does not work ... need to manually write a `from_pretrained` function probably...?
 

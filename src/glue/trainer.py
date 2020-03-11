@@ -13,6 +13,7 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import trange, tqdm
 from transformers import AdamW, get_linear_schedule_with_warmup
 
+from src.glue.evaluate import evaluate
 from .logger import logger
 
 def set_seed(args):

@@ -66,6 +66,7 @@ class BerniePoSTokenizer(BertTokenizer):
                 if new_token not in self.added_tokens:
                     # TODO: Expand tokenizer here to include the new token if not existent!
                     self.inject_split_token(new_token, n=1)
+                    # Finally add it to the added tokens
                     # TODO: Expand model here if not existent! -> This is done within the above function! (hopefully, lol)
 
                 # replace the token with the new token
@@ -81,9 +82,8 @@ class BerniePoSTokenizer(BertTokenizer):
 
         return new_sentence
 
-    @property
     def added_tokens(self):
-        return set(self.added_tokens)
+        return set(self.added_tokens_decoder)
 
     def __init__(self,
                  vocab_file,
@@ -116,6 +116,7 @@ class BerniePoSTokenizer(BertTokenizer):
         )
 
         self.split_tokens = set()
+        self.added_tokens = set()
 
         # This should probably
         # The dictionary which records which index corresponds to which meaning
@@ -130,7 +131,9 @@ class BerniePoSTokenizer(BertTokenizer):
         return self._replace_dict
 
     def set_split_tokens(self, split_tokens):
-        self.split_tokens = set(split_tokens)
+        print("Setting split tokens..")
+        _split_tokens = [x.strip() for x in split_tokens]
+        self.split_tokens = set(_split_tokens)
 
     # TODO: What about a function one has to call each time before a sentence is input,
     # that both updates the tokenizer and the model, if the token is not present in the model
