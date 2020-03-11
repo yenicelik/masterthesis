@@ -133,7 +133,6 @@ def main():
         config=config,
         cache_dir=args.cache_dir if args.cache_dir else None,
     )
-    tokenizer.inject_model
 
     # TODO: Could also just augment the tokenizer here, and replace it with your own ...
 
