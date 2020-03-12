@@ -9,6 +9,10 @@ export PYTHONPATH=/home/david/_MasterThesis # From the root folder of this repo
 export GLUE_DIR=/home/david/_MasterThesis/data/GLUE
 export SAVEDIR=/home/david/_MasterThesis/savedir
 
+export PYTHONPATH=/cluster/home/yedavid/_MasterThesis # From the root folder of this repo
+export GLUE_DIR=/cluster/home/yedavid/_MasterThesis/data/GLUE
+export SAVEDIR=/cluster/home/yedavid/_MasterThesis/savedir
+
 # TODO: Make sure the parameters are adjusted to whatever task we have (if this is relevant...) !!!
 
 # TODO: Implement multiple runs to have better experiment measurements
@@ -74,3 +78,6 @@ do
       --num_train_epochs 3.0 \
       --output_dir $SAVEDIR/bernie
 done
+
+# bsub -W 32:00 -R "rusage[mem=16000, ngpus_excl_p=1]" bash _scripts/run_on_cluster.sh
+# bash _scripts/run_on_cluster.sh

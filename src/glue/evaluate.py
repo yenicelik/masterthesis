@@ -35,8 +35,8 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
     # TODO: Remove this part!!!
     if os.path.exists(cached_features_file) and not args.overwrite_cache:
         logger.info("Loading features from cached file %s", cached_features_file)
-        # print("You are trying to load cached tokenizer.. don't..")
-        # exit(-1)
+        print("You are trying to load cached tokenizer.. don't..")
+        exit(-1)
         # features = torch.load(cached_features_file)
     else:
         logger.info("Creating features from dataset file at %s", args.data_dir)
