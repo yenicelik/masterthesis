@@ -10,12 +10,13 @@ from collections import Counter
 import numpy as np
 from nltk.cluster import cosine_distance
 from sklearn.decomposition import PCA
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import StandardScaler
 
 from src.models.cluster.chinesewhispers import MTChineseWhispers
 from src.resources.samplers import sample_naive_data
 
-def predict_meaning_cluster(word, embedding, clustermodel_savedir):
+def predict_meaning_cluster(word, embedding, clustermodel_savedir, knn_n=10):
     """
 
         Given a word, we want to predict the cluster.
@@ -88,7 +89,7 @@ def predict_meaning_cluster(word, embedding, clustermodel_savedir):
     # Transform to PCA
     # also do standardization
     embedding_hat = standardize_model.transform(embedding.reshape(1, -1))
-    embedding_hat = pca_model.transform(embedding_hat).flatten()
+    embedding_hat = pca_model.transform(embedding_hat)
 
     # Predict using this corpus
     # Do a transform first, especially if it is a vanilla BERT vector that is inputted ...
@@ -99,17 +100,22 @@ def predict_meaning_cluster(word, embedding, clustermodel_savedir):
 
     # Should also do this as an argument ....
     # lol too many hyperparameters to tune lol
-    cos = cosine_distance(X_hat, embedding_hat)
-    knn_idx = np.argsort(cos).tolist()[:10] # Take most similar items
+    print("X_hat and emb are: ", X_hat.shape, embedding_hat.shape)
+    # Cosine similarity, or sth else?
+    cos = 1. - cosine_similarity(X=X_hat, Y=embedding_hat)
+    knn_idx = np.argsort(cos).flatten().tolist()[:knn_n] # Take most similar items
+    print("knn indecies are: ", knn_idx)
     labels = y_hat[knn_idx].tolist()
+    print("Labels are: ", labels)
     out = Counter(labels).most_common(1)
 
     # Return an arbitrary number if not enough vocabulary items are found!
     # (i.e. if output is -1)
     out[out == -1] = 99
 
-    return out.flatten()
+    print("Out is: ", out)
 
+    return out
 
 if __name__ == "__main__":
     word = " was "
