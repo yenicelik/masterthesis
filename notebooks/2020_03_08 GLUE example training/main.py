@@ -146,6 +146,8 @@ def main():
         polysemous_words = get_polysemous_splitup_words()
         tokenizer.set_split_tokens(polysemous_words)
 
+        print("Polysemous words are!", polysemous_words)
+
     else:
         print("Not using bernie model!!!")
         print(args.model_type)
@@ -181,10 +183,10 @@ def main():
         # TODO: Do the dataset augmentation here!
         # TODO: Make sure cached is somehow turned off!!!
         train_dataset = load_and_cache_examples(args, args.task_name, tokenizer, evaluate=False)
-        print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
+        # print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
         global_step, tr_loss = train(args, train_dataset, model, tokenizer)
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
-        print("Added tokens for the tokenizer are (2): ", tokenizer.added_tokens)
+        # print("Added tokens for the tokenizer are (2): ", tokenizer.added_tokens)
 
     ##########################################################
     #                                                        #
@@ -206,12 +208,14 @@ def main():
         tokenizer.save_pretrained(args.output_dir)
 
         # Good practice: save your training arguments together with the trained model
-        torch.save(args, os.path.join(args.output_dir, "training_args.bin"))
-
-        # Load a trained model and vocabulary that you have fine-tuned
-        model = model_class.from_pretrained(args.output_dir)
-        tokenizer = tokenizer_class.from_pretrained(args.output_dir)
-        model.to(args.device)
+        # torch.save(args, os.path.join(args.output_dir, "training_args.bin"))
+        #
+        # # Load a trained model and vocabulary that you have fine-tuned
+        # model = model_class.from_pretrained(args.output_dir)
+        # tokenizer = tokenizer_class.from_pretrained(args.output_dir)
+        # # TODO: Split words must be saved and re-loaded as well!!!
+        # # TODO: Replace-dict needs to be saved and re-loaded as well!!!
+        # model.to(args.device)
 
     ##########################################################
     #                                                        #
@@ -220,7 +224,7 @@ def main():
     ##########################################################
     results = {}
     if args.do_eval and args.local_rank in [-1, 0]:
-        tokenizer = tokenizer_class.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
+        # tokenizer = tokenizer_class.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
         checkpoints = [args.output_dir]
         if args.eval_all_checkpoints:
             checkpoints = list(
@@ -232,8 +236,9 @@ def main():
             global_step = checkpoint.split("-")[-1] if len(checkpoints) > 1 else ""
             prefix = checkpoint.split("/")[-1] if checkpoint.find("checkpoint") != -1 else ""
 
-            model = model_class.from_pretrained(checkpoint)
-            model.to(args.device)
+            # model = model_class.from_pretrained(checkpoint)
+            # # TODO: Model class should check if embedding dimensions add up?
+            # model.to(args.device)
             result = evaluate(args, model, tokenizer, prefix=prefix)
             result = dict((k + "_{}".format(global_step), v) for k, v in result.items())
             results.update(result)

@@ -8,9 +8,12 @@ from transformers import glue_processors as processors
 from transformers import BertConfig, BertTokenizer, BertForSequenceClassification, AlbertTokenizer, \
     AlbertForSequenceClassification, AlbertConfig
 
-from src.bernie.bernie_configuration import BerniePoSConfig
-from src.bernie.bernie_sequence_model import BerniePoSForSequenceClassification
-from src.bernie.bernie_tokenizer import BerniePoSTokenizer
+from src.bernie.bernie_meaning_configuration import BernieMeaningConfig
+from src.bernie.bernie_meaning_sequence_model import BernieMeaningForSequenceClassification
+from src.bernie.bernie_meaning_tokenizer import BernieMeaningTokenizer
+from src.bernie.bernie_pos_configuration import BerniePoSConfig
+from src.bernie.bernie_pos_sequence_model import BerniePoSForSequenceClassification
+from src.bernie.bernie_pos_tokenizer import BerniePoSTokenizer
 
 ALL_MODELS = sum(
     (
@@ -26,7 +29,8 @@ ALL_MODELS = sum(
 
 MODEL_CLASSES = {
     "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
-    "bernie": (BerniePoSConfig, BerniePoSForSequenceClassification, BerniePoSTokenizer),
+    "bernie_pos": (BerniePoSConfig, BerniePoSForSequenceClassification, BerniePoSTokenizer),
+    "bernie_meaning": (BernieMeaningConfig, BernieMeaningForSequenceClassification, BernieMeaningTokenizer),
     "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
 }
 

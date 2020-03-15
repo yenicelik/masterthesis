@@ -1,7 +1,7 @@
 import spacy
 from transformers import BertTokenizer
 
-from src.bernie.bernie_model import BerniePoSModel
+from src.bernie.bernie_pos_model import BerniePoSModel
 from src.resources.augment import augment_sentence_by_pos
 
 
@@ -46,11 +46,11 @@ class BerniePoSTokenizer(BertTokenizer):
                 new_sentence.append(token.text)
 
             else:
-                print("Found token in split tokens!", token.text)
+                # print("Found token in split tokens!", token.text)
 
                 pos = token.pos_
                 if token.text in self.replace_dict.keys():
-                    print("Fill into existing dictionary")
+                    # print("Fill into existing dictionary")
 
                     # retrieve index of item
                     idx = self.replace_dict[token.text].index(pos) if pos in self.replace_dict[token.text] else -1
@@ -60,13 +60,13 @@ class BerniePoSTokenizer(BertTokenizer):
                         assert idx >= 0
 
                 else:
-                    print("Make a new spot")
+                    # print("Make a new spot")
 
                     self.replace_dict[token.text] = [pos, ]
                     idx = 0
 
-                print("This is the new token...")
-                print("Replacing with ", token.text, pos)
+                # print("This is the new token...")
+                # print("Replacing with ", token.text, pos)
 
                 new_token = f"{token.text}_{idx}"
 
@@ -232,10 +232,9 @@ class BerniePoSTokenizer(BertTokenizer):
         # assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")
         # assert self.split_tokens, ("Injection of new tokens must bee specified")
 
-        print("Split words are")
-        print(sorted(self.split_tokens))
-
-        print("Previous text is: ", text)
+        # print("Split words are")
+        # print(sorted(self.split_tokens))
+        # print("Previous text is: ", text)
 
         # Apply the nlp tokenization, replace tokens,
         # retokenize and pass this into the BERT Tokenizer function
@@ -245,13 +244,13 @@ class BerniePoSTokenizer(BertTokenizer):
         # TODO: If the new_text includes a token which is not in the vocabulary yet, include this into the vocabulary
 
         # print("At this point, we should have added 'book_0' to the new vocabulary ..")
-        print(self.added_tokens)
+        # print(self.added_tokens)
 
         # TODO: If some tokens _0 etc. are not in replace-dict, (from within the augment_sentence_by_pos),
         # Then add them to replace-dict, add them to tokenizer, and expand model by one ...
 
-        print("New text is: ", new_text)
-        print("New replace dict is: ", self.replace_dict)
+        # print("New text is: ", new_text)
+        # print("New replace dict is: ", self.replace_dict)
 
         # TODO: The re-used BERT tokenizer does not use the newly discovered / generated vocabulary
 
