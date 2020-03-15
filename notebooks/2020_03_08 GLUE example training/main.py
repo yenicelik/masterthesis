@@ -135,7 +135,7 @@ def main():
 
     # TODO: Do all this here just-in-time ..
 
-    if args.model_type == "bernie_pos":
+    if args.model_type in ("bernie_pos", "bernie_meaning"):
 
         print("Using BERNIE model")
 

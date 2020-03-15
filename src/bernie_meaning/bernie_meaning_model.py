@@ -9,6 +9,7 @@ class BernieMeaningModel(BertModel):
 
     def __init__(self, config):
         super().__init__(config)
+        print("Using BERnie meaning ..")
 
     def inject_split_token(self, new_total_vocabulary_size, token_idx, number_new_tokens):
         """

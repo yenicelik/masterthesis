@@ -182,7 +182,7 @@ class BernieMeaningTokenizer(BertTokenizer):
         # TODO: Make the replace-dict decide what to add and how many ...
 
         # 1. Expand the tokenizer by this words ...
-        tokens_to_add = [new_token,]
+        tokens_to_add = [new_token, ]
         number_new_additional_tokens = len(tokens_to_add)
         print("Tokens to add is: ", tokens_to_add)
         added_tokens = self.add_tokens(tokens_to_add)

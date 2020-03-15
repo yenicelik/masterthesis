@@ -1,4 +1,4 @@
-export PYTHONPATH=$(pwd)
+export PYTHONPATH=/Users/david/GoogleDrive/_MasterThesis # $(pwd)
 export GLUE_DIR=/Users/david/GoogleDrive/_MasterThesis/data/GLUE
 export SAVEDIR=/Users/david/GoogleDrive/_MasterThesis/savedir/
 

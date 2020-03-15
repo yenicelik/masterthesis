@@ -133,6 +133,15 @@ parser.add_argument(
 parser.add_argument(
     "--overwrite_cache", action="store_true", help="Overwrite the cached training and evaluation sets",
 )
+
+parser.add_argument(
+    "--output_meaning_dir",
+    default="/Users/david/GoogleDrive/_MasterThesis/savedir/cluster_model_caches",
+    type=str,
+    required=True,
+    help="The output directory where the meaning-cluster model trains and caches the cluster-models for each word individually.",
+)
+
 parser.add_argument("--seed", type=int, default=42, help="random seed for initialization")
 
 parser.add_argument(
