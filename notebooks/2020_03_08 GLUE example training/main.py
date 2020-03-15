@@ -121,7 +121,7 @@ def main():
 
     # TODO: Could also just augment the tokenizer here, and replace it with your own ...
 
-    # TODO: Double check if bernie was actually loaded, and not something else ...
+    # TODO: Double check if bernie_pos was actually loaded, and not something else ...
     print("Tokenizer, config and model are")
     print(tokenizer, model, config)
 
@@ -135,7 +135,7 @@ def main():
 
     # TODO: Do all this here just-in-time ..
 
-    if args.model_type == "bernie":
+    if args.model_type == "bernie_pos":
 
         print("Using BERNIE model")
 
@@ -149,7 +149,7 @@ def main():
         print("Polysemous words are!", polysemous_words)
 
     else:
-        print("Not using bernie model!!!")
+        print("Not using bernie_pos model!!!")
         print(args.model_type)
 
     ##########################################################

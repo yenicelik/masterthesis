@@ -1,11 +1,10 @@
 import spacy
 from transformers import BertTokenizer
 
-from src.bernie.bernie_pos_model import BerniePoSModel
-from src.resources.augment import augment_sentence_by_pos
+from src.bernie_meaning.bernie_meaning_model import BernieMeaningModel
 
 
-class BerniePoSTokenizer(BertTokenizer):
+class BernieMeaningTokenizer(BertTokenizer):
     """
         Implements the BERT tokenizer,
         with the difference that we split up by PoS tokens,
@@ -47,6 +46,10 @@ class BerniePoSTokenizer(BertTokenizer):
 
             else:
                 # print("Found token in split tokens!", token.text)
+
+                # TODO: Rewrite this function based on some clustering pickle files ....
+                # TODO: Perhaps also do a "just-in-time" training with the BERT model -> These files can be cached!!!
+                # (saving and loading will be a bit tough, but should be good)
 
                 pos = token.pos_
                 if token.text in self.replace_dict.keys():
@@ -109,7 +112,7 @@ class BerniePoSTokenizer(BertTokenizer):
         print("kwargs are")
         print(kwargs)
 
-        super(BerniePoSTokenizer, self).__init__(
+        super(BernieMeaningTokenizer, self).__init__(
             vocab_file=vocab_file,
             do_lower_case=do_lower_case,
             do_basic_tokenize=do_basic_tokenize,
@@ -149,7 +152,7 @@ class BerniePoSTokenizer(BertTokenizer):
     # TODO: What about a function one has to call each time before a sentence is input,
     # that both updates the tokenizer and the model, if the token is not present in the model
 
-    def inject_model(self, bernie_model: BerniePoSModel):
+    def inject_model(self, bernie_model: BernieMeaningModel):
         """
             Injecting a reference to the BernieModel.
             This allows for just-in-time insertion of new tokens that are not within the replace-dict!
@@ -239,7 +242,6 @@ class BerniePoSTokenizer(BertTokenizer):
         # Apply the nlp tokenization, replace tokens,
         # retokenize and pass this into the BERT Tokenizer function
         new_text = self._augment_sentence_and_inject_token(text)
-        # new_text = augment_sentence_by_pos(text, self.nlp, self.split_tokens, self._replace_dict)
 
         # TODO: If the new_text includes a token which is not in the vocabulary yet, include this into the vocabulary
 
@@ -262,7 +264,7 @@ if __name__ == "__main__":
     print("Run the tokenizer on an example sentence!")
 
     # Load from pre-trained
-    tokenizer = BerniePoSTokenizer.from_pretrained('bert-base-uncased')
+    tokenizer = BernieMeaningTokenizer.from_pretrained('bert-base-uncased')
     # tokenizer = BerniePoSTokenizer()
 
     print("Tokenizer is: ", tokenizer)

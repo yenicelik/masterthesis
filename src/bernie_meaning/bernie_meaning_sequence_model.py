@@ -5,7 +5,7 @@
 from torch import nn
 from transformers import BertForSequenceClassification
 
-from src.bernie.bernie_meaning_model import BernieMeaningModel
+from src.bernie_meaning.bernie_meaning_model import BernieMeaningModel
 
 
 class BernieMeaningForSequenceClassification(BertForSequenceClassification):

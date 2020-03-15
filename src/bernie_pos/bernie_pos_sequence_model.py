@@ -5,7 +5,7 @@
 from torch import nn
 from transformers import BertForSequenceClassification
 
-from src.bernie.bernie_pos_model import BerniePoSModel
+from src.bernie_pos.bernie_pos_model import BerniePoSModel
 
 
 class BerniePoSForSequenceClassification(BertForSequenceClassification):

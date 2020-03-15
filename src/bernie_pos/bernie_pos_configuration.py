@@ -107,7 +107,7 @@ class BerniePoSConfig(PretrainedConfig):
                 A dictionary containing all the available pre-trained checkpoints.
     """
     pretrained_config_archive_map = BERT_PRETRAINED_CONFIG_ARCHIVE_MAP
-    model_type = "bernie"
+    model_type = "bernie_pos"
 
     def __init__(
         self,
