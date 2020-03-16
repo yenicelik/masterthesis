@@ -103,16 +103,18 @@ def predict_meaning_cluster(word, embedding, clustermodel_savedir, knn_n=10):
     print("X_hat and emb are: ", X_hat.shape, embedding_hat.shape)
     # Cosine similarity, or sth else?
     cos = 1. - cosine_similarity(X=X_hat, Y=embedding_hat)
-    knn_idx = np.argsort(cos).flatten().tolist()[:knn_n] # Take most similar items
+    print("Similarity matrix is: ", cos.shape)
+    knn_idx = np.argsort(cos.flatten()).tolist()[:knn_n] # Take most similar items
+    assert len(set(knn_idx)) == len(knn_idx)
     print("knn indecies are: ", knn_idx)
+    print("Y hat is: ", y_hat, np.unique(y_hat))
+    y_hat[y_hat == -1] = 1000
     labels = y_hat[knn_idx].tolist()
     print("Labels are: ", labels)
-    out = Counter(labels).most_common(1)
+    out = Counter(labels).most_common(1)[0][0]
 
     # Return an arbitrary number if not enough vocabulary items are found!
     # (i.e. if output is -1)
-    out[out == -1] = 99
-
     print("Out is: ", out)
 
     return out
