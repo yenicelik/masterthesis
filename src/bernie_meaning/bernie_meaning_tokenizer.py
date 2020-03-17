@@ -4,7 +4,6 @@ import torch
 
 from src.bernie_meaning.bernie_meaning_model import BernieMeaningModel
 from src.bernie_meaning.cluster_model import predict_meaning_cluster
-from src.config import args
 from src.functional.string_searchers import find_all_indecies_subarray
 from src.language_models.model_wrappers.bert_wrapper import BertWrapper
 
@@ -105,7 +104,7 @@ class BernieMeaningTokenizer(BertTokenizer):
                 context_id = predict_meaning_cluster(
                     word=token.text,
                     embedding=embedding,
-                    clustermodel_savedir=args.output_meaning_dir,  # '"/Users/david/GoogleDrive/_MasterThesis/savedir/cluster_model_caches",
+                    clustermodel_savedir=self.output_meaning_dir,  # '"/Users/david/GoogleDrive/_MasterThesis/savedir/cluster_model_caches",
                     knn_n=10
                 )
                 # Prepend context_id by "C{context_id}" s.t. it becomes a string
@@ -166,6 +165,7 @@ class BernieMeaningTokenizer(BertTokenizer):
                  cls_token="[CLS]",
                  mask_token="[MASK]",
                  tokenize_chinese_chars=True,
+                 output_meaning_dir=None,
                  **kwargs
                  ):
         print("kwargs are")
@@ -194,6 +194,7 @@ class BernieMeaningTokenizer(BertTokenizer):
 
         # what are the target words
         self.bernie_model = None
+        self.output_meaning_dir = output_meaning_dir
 
         self.bert_embedding_retriever_model = BertWrapper()
 

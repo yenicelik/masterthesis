@@ -7,6 +7,7 @@ import glob
 import logging
 
 # I de-activated caching, because we are playing around with the tokenizer..
+from src.config import args
 from src.glue.evaluate import load_and_cache_examples, evaluate
 from src.glue.logger import logger
 import os
@@ -16,8 +17,8 @@ from transformers import WEIGHTS_NAME
 from transformers import glue_output_modes as output_modes
 from transformers import glue_processors as processors
 
-from src.glue.args import args, MODEL_CLASSES
 from src.glue.trainer import set_seed, train
+from src.glue_args import MODEL_CLASSES
 
 from src.resources.split_words import get_polysemous_splitup_words
 
@@ -99,7 +100,7 @@ def main():
     #                                                        #
     ##########################################################
     args.model_type = args.model_type.lower()
-    print("Args model type is: ", args.model_type)
+    print("args model type is: ", args.model_type)
     print(MODEL_CLASSES)
     # TODO: Replace by our own BERT (alternatively, allow import through this as well...
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
@@ -153,6 +154,9 @@ def main():
     else:
         print("Not using bernie_pos model!!!")
         print(args.model_type)
+
+    if args.model_type in ("bernie_meaning"):
+        tokenizer.output_meaning_dir = args.output_meaning_dir
 
     ##########################################################
     #                                                        #

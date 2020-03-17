@@ -59,30 +59,28 @@ do
       --output_dir $SAVEDIR/albert-$TASK;
 done 2>&1 | tee $SAVEDIR/small_task_all_models_glue.txt
 
+#    echo bernie-pos;\
+#    echo $TASK; \
+#    echo $PYTHONPATH; \
+#    echo $GLUE_DIR; \
+#    echo $SAVEDIR; \
+
 # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+
 for TASK in 'CoLA'
 do
-    echo bernie-pos;\
-    echo $TASK; \
-    echo $PYTHONPATH; \
-    echo $GLUE_DIR; \
-    echo $SAVEDIR; \
-    python "notebooks/2020_03_08 GLUE example training/main.py" \
-      --model_type bernie_pos \
-      --model_name_or_path bert-base-uncased \
-      --task_name $TASK \
-      --do_train \
-      --do_eval \
-      --overwrite_cache \
-      --do_lower_case \
-      --data_dir $GLUE_DIR/$TASK \
-      --max_seq_length 128 \
-      --per_gpu_train_batch_size 32 \
-      --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
-      --overwrite_output_dir \
-      --seed 101 \
-      --output_dir $SAVEDIR/bernie_pos-$TASK-20200317;
+    python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
+    --model_type bernie_pos \
+    --model_name_or_path bert-base-uncased \
+    --data_dir $GLUE_DIR/$TASK \
+    --overwrite_cache \
+    --do_lower_case \
+    --num_train_epochs 3.0 \
+    --learning_rate 0.00005 \
+    --overwrite_output_dir \
+    --task_name $TASK \
+    --do_eval \
+    --do_train
 done 2>&1 | tee $SAVEDIR/small_task_bernie_pos_models_glue_20200317.txt
 
 
