@@ -8,7 +8,6 @@ import pickle
 from collections import Counter
 
 import numpy as np
-from nltk.cluster import cosine_distance
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import StandardScaler

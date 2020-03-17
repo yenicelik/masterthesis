@@ -1,7 +1,12 @@
 import spacy
 from transformers import BertTokenizer
+import torch
 
 from src.bernie_meaning.bernie_meaning_model import BernieMeaningModel
+from src.bernie_meaning.cluster_model import predict_meaning_cluster
+from src.config import args
+from src.functional.string_searchers import find_all_indecies_subarray
+from src.language_models.model_wrappers.bert_wrapper import BertWrapper
 
 
 class BernieMeaningTokenizer(BertTokenizer):
@@ -14,6 +19,41 @@ class BernieMeaningTokenizer(BertTokenizer):
         run_NOUN = run_1
         run_VERB = run_2
     """
+
+    def _get_bert_embedding_for_word(self, word, sentence):
+        """
+            Retrieves a single embedding for the word
+        :param word:
+        :param sentence:
+        :return:
+        """
+        tokenized_word = self.bert_embedding_retriever_model.tokenizer.tokenize(word)
+        tokenized_word_window = len(tokenized_word)  # This targets words which make up more than a single token
+
+        indexed_tokens = self.bert_embedding_retriever_model.tokenizer.convert_tokens_to_ids(sentence)
+        # Get location of indexed tokens
+        tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, corpus=None)[0]
+
+        # Convert to pytorch tensors
+        # Now convert to pytorch tensors..
+        segments_ids = [0, ] * len(sentence)
+        tokens_tensor = torch.tensor([indexed_tokens])
+        segments_tensors = torch.tensor([segments_ids])
+
+        outputs = self.bert_embedding_retriever_model.forward(
+            tokens_tensor=tokens_tensor,
+            segments_tensors=segments_tensors
+        )
+        word_embedding = outputs[0, tokenized_word_idx:tokenized_word_idx + tokenized_word_window, :]
+
+        # Reshape amongst new dimension
+        # And apply aggregation if desired
+
+        assert word_embedding.shape == (1, 768), (word_embedding.shape, (1, 768))
+
+        # Perhaps return a dictionary instead ...
+        return word_embedding
+
 
     def _augment_sentence_and_inject_token(self, sentence):
         """
@@ -34,6 +74,9 @@ class BernieMeaningTokenizer(BertTokenizer):
 
         new_sentence = []
 
+        # Here, apply the meaning-tokenization by wordnet senses
+
+        # TODO: Do we need to do this now..? Can we use a different tokenizer, perhaps a simpler one?
         doc = self.nlp(sentence)
 
         # For all the above target words
@@ -51,21 +94,37 @@ class BernieMeaningTokenizer(BertTokenizer):
                 # TODO: Perhaps also do a "just-in-time" training with the BERT model -> These files can be cached!!!
                 # (saving and loading will be a bit tough, but should be good)
 
-                pos = token.pos_
+                # Do a sentence forward pass through the vanilla BERT model
+                # We use the vanilla BERT model, because this is what we cluster by ...
+                embedding = self._get_bert_embedding_for_word(token.text, sentence)
+
+                # Check if the embedding dimensions match with whatever we want to have
+
+                # Predict the meaning that this vector entails
+                # TODO: Move clustermodel savedir to args!
+                context_id = predict_meaning_cluster(
+                    word=token.text,
+                    embedding=embedding,
+                    clustermodel_savedir=args.output_meaning_dir,  # '"/Users/david/GoogleDrive/_MasterThesis/savedir/cluster_model_caches",
+                    knn_n=10
+                )
+                # Prepend context_id by "C{context_id}" s.t. it becomes a string
+                context_id = f"C{context_id}"
+
                 if token.text in self.replace_dict.keys():
                     # print("Fill into existing dictionary")
 
                     # retrieve index of item
-                    idx = self.replace_dict[token.text].index(pos) if pos in self.replace_dict[token.text] else -1
+                    idx = self.replace_dict[token.text].index(context_id) if context_id in self.replace_dict[token.text] else -1
                     if idx == -1:
-                        self.replace_dict[token.text].append(pos)
-                        idx = self.replace_dict[token.text].index(pos)
+                        self.replace_dict[token.text].append(context_id)
+                        idx = self.replace_dict[token.text].index(context_id)
                         assert idx >= 0
 
                 else:
                     # print("Make a new spot")
 
-                    self.replace_dict[token.text] = [pos, ]
+                    self.replace_dict[token.text] = [context_id, ]
                     idx = 0
 
                 # print("This is the new token...")
@@ -135,6 +194,8 @@ class BernieMeaningTokenizer(BertTokenizer):
 
         # what are the target words
         self.bernie_model = None
+
+        self.bert_embedding_retriever_model = BertWrapper()
 
     @property
     def added_tokens(self):

@@ -99,6 +99,8 @@ def main():
     #                                                        #
     ##########################################################
     args.model_type = args.model_type.lower()
+    print("Args model type is: ", args.model_type)
+    print(MODEL_CLASSES)
     # TODO: Replace by our own BERT (alternatively, allow import through this as well...
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
     config = config_class.from_pretrained(

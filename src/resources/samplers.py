@@ -88,7 +88,7 @@ def sample_embeddings_for_target_word(tgt_word, semcor_only=False):
     assert X.shape[0] == len(sentences), ("Shapes don't conform", X.shape[0], len(sentences))
     # print("Collected data is: ")
 
-    # TODO: FIgure out whether to do this or as in the other script..
+    # TODO: Figure out whether to do this or as in the other script..
 
     # Apply PCA
     if args.standardize:

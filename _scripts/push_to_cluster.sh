@@ -5,7 +5,7 @@
 
 #rsync -rPz -e 'ssh -p 2223' --exclude '*.png' --exclude 'data/' --exclude '*.tsv' --exclude 'venv/' --exclude 'analysis/' --exclude '.env' --progress /Users/david/GoogleDrive/_MasterThesis/ david@77.59.149.134:/home/david/_MasterThesis/
 #rsync -rPz -e 'ssh -p 2223' --exclude '*.png' --exclude '*.tsv' --exclude 'venv/' --exclude 'analysis/' --exclude '.env' --progress /Users/david/GoogleDrive/_MasterThesis/ david@77.59.149.134:/home/david/_MasterThesis/
-rsync -rPz -e 'ssh -p 2223' --exclude 'notebooks/2020_03_02 experiment with GLUE/_fine-tune-BERT/' --exclude '.git/' --exclude 'pictures/' --exclude 'data/' --exclude '_logdump/' --exclude '*.png' --exclude '*.tsv' --exclude 'venv/' --exclude 'analysis/' --exclude '.env' --progress /Users/david/GoogleDrive/_MasterThesis/ david@77.59.149.134:/home/david/_MasterThesis/
+rsync -rPz -e 'ssh -p 2223' --exclude 'logs_BerniePoS/' --exclude 'notebooks/2020_03_02 experiment with GLUE/_fine-tune-BERT/' --exclude '.git/' --exclude 'pictures/' --exclude 'data/' --exclude '_logdump/' --exclude '*.png' --exclude '*.tsv' --exclude 'venv/' --exclude 'analysis/' --exclude '.env' --progress /Users/david/GoogleDrive/_MasterThesis/ david@77.59.149.134:/home/david/_MasterThesis/
 
 
 # Load modules for leonhard
