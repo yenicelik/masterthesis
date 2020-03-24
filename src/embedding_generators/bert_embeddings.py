@@ -14,7 +14,6 @@ import torch
 from src.config import args
 from src.functional.string_searchers import find_all_indecies_subarray
 from src.language_models.model_wrappers.bert_wrapper import BertWrapper
-from src.resources.corpus import Corpus
 from src.resources.corpus_semcor import CorpusSemCor
 
 

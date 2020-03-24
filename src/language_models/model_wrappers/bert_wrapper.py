@@ -21,7 +21,7 @@ class BertWrapper:
         self.masekd_model.eval()
 
         if args.cuda:
-            self.model.to('cuda')
+            self.model.to(args.device)
 
     def forward(self, tokens_tensor, segments_tensors):
         """
@@ -31,14 +31,17 @@ class BertWrapper:
         """
         # Project to CUDA if not projected yet
         if args.cuda:
-            tokens_tensor = tokens_tensor.to('cuda')
-            segments_tensors = segments_tensors.to('cuda')
+            # print("tokens tensor")
+            # print(tokens_tensor)
+            tokens_tensor = tokens_tensor.to(args.device)
+            segments_tensors = segments_tensors.to(args.device)
 
         with torch.no_grad():
             # See the models docstrings for the detail of the inputs
+            print("Inputs are: ", tokens_tensor)
             encoded_layers, _ = self.model.forward(
                 input_ids=tokens_tensor,
-                # token_type_ids=segments_tensors
+                token_type_ids=segments_tensors
             )
             # print("Encoded layers are: ", encoded_layers.shape)
 
@@ -51,11 +54,14 @@ class BertWrapper:
             Predicts the token for any masked items
         """
         if args.cuda:
-            tokens_tensor = tokens_tensor.to('cuda')
-            segments_tensors = segments_tensors.to('cuda')
+            tokens_tensor = tokens_tensor.to(args.device)
+            segments_tensors = segments_tensors.to(args.device)
 
         with torch.no_grad():
-            outputs = self.masekd_model(tokens_tensor, token_type_ids=segments_tensors)
+            outputs = self.masekd_model(
+                input_ids=tokens_tensor,
+                token_type_ids=segments_tensors
+            )
             # Checking what the output is:
             # print("Outputs are: ")
             # print(outputs)

@@ -221,7 +221,7 @@ def main():
         # tokenizer = tokenizer_class.from_pretrained(args.output_dir)
         # # TODO: Split words must be saved and re-loaded as well!!!
         # # TODO: Replace-dict needs to be saved and re-loaded as well!!!
-        # model.to(args.device)
+        model.to(args.device)
 
     ##########################################################
     #                                                        #

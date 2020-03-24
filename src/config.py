@@ -15,12 +15,12 @@ model_parser.add_argument('--random_seed', default=101, type=int,
                           help='an integer which determines the random seed. if no seed shall be provided, set this to 0')
 model_parser.add_argument('--dtype', default='tf.float32', help='the floating point type that is going to be used globally')
 
-model_parser.add_argument('--max_samples', default=500, type=int,
+model_parser.add_argument('--max_samples', default=512, type=int,
                           help='the number of sentences to sample for BERT embeddings')
 model_parser.add_argument('--cuda', default='False',
                           help='Whether or not CUDA will be used. This argument will be ignored if CUDA is available')
 
-model_parser.add_argument('--verbose', default=2, type=int, help='verbosity level. higher means more verbose')
+model_parser.add_argument('--verbose', default=0, type=int, help='verbosity level. higher means more verbose')
 model_parser.add_argument('--stemsearch', default=0, type=int, help='whether or not to stem the sentences to look for')
 
 model_parser.add_argument('--dimred', default="none", help='which dimensionality reduction algorithm to use. If none specified, falling back to PCA. One of "nmf", "pca", "umap", "lda" ')
@@ -156,6 +156,7 @@ model_parser.add_argument(
          "See details at https://nvidia.github.io/apex/amp.html",
 )
 model_parser.add_argument("--local_rank", type=int, default=-1, help="For distributed training: local_rank")
+model_parser.add_argument("--device", type=int, default=1, help="If 0, uses CPU only. If 1, will use GPU when possible")
 
 
 args = model_parser.parse_args()
