@@ -30,6 +30,9 @@ def predict_meaning_cluster(word, embedding, clustermodel_savedir, knn_n=10):
     :param word:
     :return:
     """
+    assert word[0] == " ", ("First char must be empty", word)
+    assert word[-1] == " ", ("Last char must be empty", word)
+
     # TODO: Generate folder if not existent
     savedir = os.path.join(clustermodel_savedir)
     if not os.path.exists(savedir):

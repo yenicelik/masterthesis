@@ -96,7 +96,11 @@ class BertEmbedding:
                 print("Sentence and tokenized word is")
                 print(tokenized_word)
                 print(sentence)
-            tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, self.corpus)[0]
+            tokenized_word_idx = find_all_indecies_subarray(
+                subarray=tokenized_word,
+                array=sentence,
+                fn_stem=self.corpus.stemmer.stem if self.corpus.stemmer is not None else None
+            )[0]
 
             # Now convert to pytorch tensors..
             tokens_tensor = torch.tensor([indexed_tokens])

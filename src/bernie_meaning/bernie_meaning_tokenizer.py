@@ -1,4 +1,5 @@
 import spacy
+from nltk import PorterStemmer
 from transformers import BertTokenizer
 import torch
 
@@ -46,7 +47,16 @@ class BernieMeaningTokenizer(BertTokenizer):
         print("Indexed tokens are", indexed_tokens)
         # tmp = find_all_indecies_subarray(tokenized_word, tokenized_sentence, corpus=None)
         # print("Tmp is: ", tmp)
-        tokenized_word_idx = find_all_indecies_subarray(tokenized_word, tokenized_sentence, corpus=None)[0]
+        # TODO Might have to introduce a basic stemmer ...
+
+        print("Tokens are", tokenized_word)
+        print("Sentence tokens are", tokenized_sentence)
+
+        tokenized_word_idx = find_all_indecies_subarray(
+            subarray=tokenized_word,
+            array=tokenized_sentence,
+            fn_stem=self.stemmer.stem if self.stemmer is not None else None
+        )[0]
 
         # Convert to pytorch tensors
         # Now convert to pytorch tensors..
@@ -133,7 +143,7 @@ class BernieMeaningTokenizer(BertTokenizer):
                 print("Embeddings shape are: ", embedding.shape)
                 # TODO: Move clustermodel savedir to args!
                 context_id = predict_meaning_cluster(
-                    word=token.text,
+                    word=f" {token.text} ", #  TODO: Must add space-padding to sample words!
                     embedding=embedding,
                     clustermodel_savedir=self.output_meaning_dir,  # '"/Users/david/GoogleDrive/_MasterThesis/savedir/cluster_model_caches",
                     knn_n=10
@@ -229,6 +239,8 @@ class BernieMeaningTokenizer(BertTokenizer):
         self.output_meaning_dir = output_meaning_dir
 
         self.bert_embedding_retriever_model = BertWrapper()
+
+        self.stemmer = None  # PorterStemmer()
 
     @property
     def added_tokens(self):
