@@ -116,7 +116,7 @@ def get_polysemous_splitup_words():
         ' well ',
         ' wish ',
         ' work ',
-        ' yawn ',
+        # ' yawn ',
         ' zone '
     ]
 

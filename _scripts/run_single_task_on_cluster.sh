@@ -84,10 +84,11 @@ do
       --overwrite_output_dir \
       --overwrite_cache \
       --seed 101 \
-      --output_dir $SAVEDIR/bernie_pos-$TASK-20200317;
-done 2>&1 | tee $SAVEDIR/small_task_bernie_pos_models_glue_20200317.txt
+      --output_dir $SAVEDIR/bernie_pos-$TASK-20200319_s101;
+done 2>&1 | tee $SAVEDIR/sst2_bernie_pos_models_glue_20200319_s101.txt
 
-for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+# Dis one
+for TASK in 'SST-2' # 'CoLA' 'MRPC' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
     echo bernie-meaning;\
     echo $TASK; \
@@ -107,12 +108,12 @@ do
       --overwrite_cache \
       --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/bernie_meaning-$TASK-20200317;
-done 2>&1 | tee $SAVEDIR/small_task_bernie_meaning_models_glue_20200317.txt
+      --output_dir $SAVEDIR/bernie_meaning-$TASK-20200324;
+done 2>&1 | tee $SAVEDIR/small_task_bernie_meaning_models_glue_20200324.txt
 
 for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
-    echo bert;\
+    echo bert; \
     echo $TASK; \
     python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
       --model_type bert \

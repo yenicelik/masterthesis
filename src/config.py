@@ -11,7 +11,7 @@ import torch
 from transformers import glue_processors as processors
 
 model_parser = argparse.ArgumentParser(description='Experiment Configuration Parser')
-model_parser.add_argument('--random_seed', default=0, type=int,
+model_parser.add_argument('--random_seed', default=101, type=int,
                           help='an integer which determines the random seed. if no seed shall be provided, set this to 0')
 model_parser.add_argument('--dtype', default='tf.float32', help='the floating point type that is going to be used globally')
 
@@ -20,7 +20,7 @@ model_parser.add_argument('--max_samples', default=500, type=int,
 model_parser.add_argument('--cuda', default='False',
                           help='Whether or not CUDA will be used. This argument will be ignored if CUDA is available')
 
-model_parser.add_argument('--verbose', default=0, type=int, help='verbosity level. higher means more verbose')
+model_parser.add_argument('--verbose', default=2, type=int, help='verbosity level. higher means more verbose')
 model_parser.add_argument('--stemsearch', default=0, type=int, help='whether or not to stem the sentences to look for')
 
 model_parser.add_argument('--dimred', default="none", help='which dimensionality reduction algorithm to use. If none specified, falling back to PCA. One of "nmf", "pca", "umap", "lda" ')
@@ -137,7 +137,7 @@ model_parser.add_argument(
     "--output_meaning_dir",
     default="/Users/david/GoogleDrive/_MasterThesis/savedir/cluster_model_caches",
     type=str,
-    required=True,
+    required=False,
     help="The output directory where the meaning-cluster model trains and caches the cluster-models for each word individually.",
 )
 

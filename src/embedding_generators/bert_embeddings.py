@@ -52,7 +52,7 @@ class BertEmbedding:
         self.wrapper = BertWrapper()
         self.bert_layer = 1  # Which BERT layer to take the embeddings from
 
-    def get_embedding(self, word, sample_sentences=None):
+    def get_embedding(self, word: str, sample_sentences: list=None):
         """
             For a given word (or concept), we want to generate an embedding.
             The question is also, do we generate probabilistic embeddings or static ones (by pooling..?)
@@ -60,7 +60,11 @@ class BertEmbedding:
         :param token:
         :return:
         """
-        assert isinstance(word, str), ("Word is not of type string", word)
+        assert isinstance(word, str), ("Word is not of type string", type(word), word)
+        assert isinstance(sample_sentences, list), ("Sentence is not of type list!", type(sample_sentences), sample_sentences)
+        if sample_sentences is not None:
+            assert len(sample_sentences) > 0
+            assert isinstance(sample_sentences[0], str), ("First sentence is not of type str!", type(sample_sentences), sample_sentences)
 
         word = word.lower()
 

@@ -19,25 +19,47 @@ class BernieMeaningTokenizer(BertTokenizer):
         run_VERB = run_2
     """
 
-    def _get_bert_embedding_for_word(self, word, sentence):
+    def _get_bert_embedding_for_word(self, word: str, sentence: str):
         """
             Retrieves a single embedding for the word
         :param word:
         :param sentence:
         :return:
         """
+        assert isinstance(word, str), ("Word should be a string!", word, type(word))
+        assert isinstance(sentence, str), ("Sentence should be a string!", type(sentence), sentence)
+
+        # strip word if further needed maybe?
         tokenized_word = self.bert_embedding_retriever_model.tokenizer.tokenize(word)
         tokenized_word_window = len(tokenized_word)  # This targets words which make up more than a single token
 
-        indexed_tokens = self.bert_embedding_retriever_model.tokenizer.convert_tokens_to_ids(sentence)
+        # Need to tokenize the sentence as well
+        print("Sentence before tokenization is: ", sentence)
+        tokenized_sentence = self.bert_embedding_retriever_model.tokenizer.tokenize(sentence)
+        print("Sentence after tokenization is: ", sentence)
+        indexed_tokens = self.bert_embedding_retriever_model.tokenizer.convert_tokens_to_ids(tokenized_sentence)
+        print("Indexed tokens are: ", indexed_tokens)
         # Get location of indexed tokens
-        tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, corpus=None)[0]
+        print("Inputs are: ", tokenized_word, tokenized_sentence)
+        print(len(tokenized_word))
+        print("Inputs are: ", word, sentence)
+        print("Indexed tokens are", indexed_tokens)
+        # tmp = find_all_indecies_subarray(tokenized_word, tokenized_sentence, corpus=None)
+        # print("Tmp is: ", tmp)
+        tokenized_word_idx = find_all_indecies_subarray(tokenized_word, tokenized_sentence, corpus=None)[0]
 
         # Convert to pytorch tensors
         # Now convert to pytorch tensors..
-        segments_ids = [0, ] * len(sentence)
+        segments_ids = [0, ] * len(tokenized_sentence)
+        print("Segment ids are", segments_ids)
+        print("Sentence is", segments_ids)
         tokens_tensor = torch.tensor([indexed_tokens])
         segments_tensors = torch.tensor([segments_ids])
+
+        print("Tokens tensor and segments tensor is: ")
+        # The first one should not be a single entity ...
+        print(tokens_tensor)
+        print(segments_tensors)
 
         outputs = self.bert_embedding_retriever_model.forward(
             tokens_tensor=tokens_tensor,
@@ -84,10 +106,11 @@ class BernieMeaningTokenizer(BertTokenizer):
 
             # If it is not a target word, don't modify
             if token.text not in self.split_tokens:
+                print("Normal append")
                 new_sentence.append(token.text)
 
             else:
-                # print("Found token in split tokens!", token.text)
+                print("Special append (found in split tokens)!", token.text)
 
                 # TODO: Rewrite this function based on some clustering pickle files ....
                 # TODO: Perhaps also do a "just-in-time" training with the BERT model -> These files can be cached!!!
@@ -95,11 +118,19 @@ class BernieMeaningTokenizer(BertTokenizer):
 
                 # Do a sentence forward pass through the vanilla BERT model
                 # We use the vanilla BERT model, because this is what we cluster by ...
-                embedding = self._get_bert_embedding_for_word(token.text, sentence)
+                print("Input to embeddings are: ")
+                print(token.text)
+                print(sentence)
+                print()
+                embedding = self._get_bert_embedding_for_word(
+                    word=token.text,
+                    sentence=sentence
+                )
 
                 # Check if the embedding dimensions match with whatever we want to have
 
                 # Predict the meaning that this vector entails
+                print("Embeddings shape are: ", embedding.shape)
                 # TODO: Move clustermodel savedir to args!
                 context_id = predict_meaning_cluster(
                     word=token.text,
@@ -109,20 +140,21 @@ class BernieMeaningTokenizer(BertTokenizer):
                 )
                 # Prepend context_id by "C{context_id}" s.t. it becomes a string
                 context_id = f"C{context_id}"
+                print("Context id is: ", context_id)
 
                 if token.text in self.replace_dict.keys():
-                    # print("Fill into existing dictionary")
+                    print("Fill into existing dictionary")
 
                     # retrieve index of item
                     idx = self.replace_dict[token.text].index(context_id) if context_id in self.replace_dict[token.text] else -1
                     if idx == -1:
+                        print("Specialization not found")
                         self.replace_dict[token.text].append(context_id)
                         idx = self.replace_dict[token.text].index(context_id)
                         assert idx >= 0
 
                 else:
-                    # print("Make a new spot")
-
+                    print("Make a new spot", context_id)
                     self.replace_dict[token.text] = [context_id, ]
                     idx = 0
 
@@ -303,6 +335,7 @@ class BernieMeaningTokenizer(BertTokenizer):
 
         # Apply the nlp tokenization, replace tokens,
         # retokenize and pass this into the BERT Tokenizer function
+        print("Input text is: ", text)
         new_text = self._augment_sentence_and_inject_token(text)
 
         # TODO: If the new_text includes a token which is not in the vocabulary yet, include this into the vocabulary

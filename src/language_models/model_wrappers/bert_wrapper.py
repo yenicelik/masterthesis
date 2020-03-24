@@ -7,6 +7,8 @@ import torch
 
 from transformers import BertTokenizer, BertModel, BertForMaskedLM
 
+from src.config import args
+
 class BertWrapper:
 
     def __init__(self):
@@ -17,8 +19,6 @@ class BertWrapper:
         # Masked predictor
         self.masekd_model = BertForMaskedLM.from_pretrained('bert-base-uncased')
         self.masekd_model.eval()
-
-        from src.config import args
 
         if args.cuda:
             self.model.to('cuda')
