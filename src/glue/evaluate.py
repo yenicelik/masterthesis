@@ -50,6 +50,7 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
 
         # TODO: This is probably the spot where we have to convert the sentences to the new representations ...
 
+        print("max sequence length is: ", args.max_seq_length)
         features = convert_examples_to_features(
             examples,
             tokenizer,

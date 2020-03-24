@@ -88,8 +88,9 @@ do
 done 2>&1 | tee $SAVEDIR/sst2_bernie_pos_models_glue_20200319_s101.txt
 
 # Dis one
+#       --device 0 \
 CUDA_LAUNCH_BLOCKING=1
-for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
     echo bernie-meaning;\
     echo $TASK; \
@@ -108,11 +109,9 @@ do
       --overwrite_output_dir \
       --overwrite_cache \
       --seed 42 \
-      --device 0 \
-      --no_cuda \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/bernie_meaning-$TASK-20200324;
-done 2>&1 | tee $SAVEDIR/small_task_bernie_meaning_models_glue_20200324.txt
+      --output_dir $SAVEDIR/_bernie_meaning-$TASK-20200324;
+done 2>&1 | tee $SAVEDIR/_small_task_bernie_meaning_models_glue_20200324.txt
 
 for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do

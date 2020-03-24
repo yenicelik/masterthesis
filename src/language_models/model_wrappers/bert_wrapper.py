@@ -38,7 +38,6 @@ class BertWrapper:
 
         with torch.no_grad():
             # See the models docstrings for the detail of the inputs
-            print("Inputs are: ", tokens_tensor)
             encoded_layers, _ = self.model.forward(
                 input_ids=tokens_tensor,
                 token_type_ids=segments_tensors

@@ -29,6 +29,8 @@ class BernieMeaningTokenizer(BertTokenizer):
         """
         assert isinstance(word, str), ("Word should be a string!", word, type(word))
         assert isinstance(sentence, str), ("Sentence should be a string!", type(sentence), sentence)
+        assert word[0] == " ", word
+        assert word[-1] == " ", word
 
         # strip word if further needed maybe?
         tokenized_word = self.bert_embedding_retriever_model.tokenizer.tokenize(word)
@@ -108,19 +110,23 @@ class BernieMeaningTokenizer(BertTokenizer):
         # Here, apply the meaning-tokenization by wordnet senses
 
         # TODO: Do we need to do this now..? Can we use a different tokenizer, perhaps a simpler one?
-        doc = self.nlp(sentence)
+        doc = sentence.split() # self.nlp(sentence) ### TODO: Re-assembling spacy tokenizer destroys sentiment!!!
 
         # For all the above target words
         for token in doc:
             # Identify if it is in sentence
 
+            # print("token text looking at is: ", token)
+            # print("token text looking at is: ", token.strip())
+            # print("token text looking at is: ", f" {token} ")
+
             # If it is not a target word, don't modify
-            if token.text not in self.split_tokens:
+            if token not in self.split_tokens:
                 # print("Normal append")
-                new_sentence.append(token.text)
+                new_sentence.append(token)
 
             else:
-                # print("Special append (found in split tokens)!", token.text)
+                # print("Special append (found in split tokens)!", token)
 
                 # TODO: Rewrite this function based on some clustering pickle files ....
                 # TODO: Perhaps also do a "just-in-time" training with the BERT model -> These files can be cached!!!
@@ -133,7 +139,7 @@ class BernieMeaningTokenizer(BertTokenizer):
                 # print(sentence)
                 # print()
                 embedding = self._get_bert_embedding_for_word(
-                    word=token.text,
+                    word=f" {token} ",
                     sentence=sentence
                 )
 
@@ -143,7 +149,7 @@ class BernieMeaningTokenizer(BertTokenizer):
                 # print("Embeddings shape are: ", embedding.shape)
                 # TODO: Move clustermodel savedir to args!
                 context_id = predict_meaning_cluster(
-                    word=f" {token.text} ", #  TODO: Must add space-padding to sample words!
+                    word=f" {token} ", #  TODO: Must add space-padding to sample words!
                     embedding=embedding,
                     clustermodel_savedir=self.output_meaning_dir,  # '"/Users/david/GoogleDrive/_MasterThesis/savedir/cluster_model_caches",
                     knn_n=10
@@ -152,32 +158,32 @@ class BernieMeaningTokenizer(BertTokenizer):
                 context_id = f"C{context_id}"
                 # print("Context id is: ", context_id)
 
-                if token.text in self.replace_dict.keys():
+                if token in self.replace_dict.keys():
                     # print("Fill into existing dictionary")
 
                     # retrieve index of item
-                    idx = self.replace_dict[token.text].index(context_id) if context_id in self.replace_dict[token.text] else -1
+                    idx = self.replace_dict[token].index(context_id) if context_id in self.replace_dict[token] else -1
                     if idx == -1:
                         # print("Specialization not found")
-                        self.replace_dict[token.text].append(context_id)
-                        idx = self.replace_dict[token.text].index(context_id)
+                        self.replace_dict[token].append(context_id)
+                        idx = self.replace_dict[token].index(context_id)
                         assert idx >= 0
 
                 else:
                     # print("Make a new spot", context_id)
-                    self.replace_dict[token.text] = [context_id, ]
+                    self.replace_dict[token] = [context_id, ]
                     idx = 0
 
                 # print("This is the new token...")
                 # print("Replacing with ", token.text, pos)
 
-                new_token = f"{token.text}_{idx}"
+                new_token = f"{token}_{idx}"
 
                 # TODO: Put the new token to the replace-dict
                 if new_token not in self.added_tokens:
                     print("Injecting new token ...", new_token, self.added_tokens)
                     # TODO: Expand tokenizer here to include the new token if not existent!
-                    self.inject_split_token(split_word=token.text, new_token=new_token)
+                    self.inject_split_token(split_word=token, new_token=new_token)
                     # Finally add it to the added tokens
                     # TODO: Expand model here if not existent! -> This is done within the above function! (hopefully, lol)
 
