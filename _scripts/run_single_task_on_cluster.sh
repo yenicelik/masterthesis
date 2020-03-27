@@ -7,6 +7,11 @@ export PYTHONPATH=/home/david/_MasterThesis # From the root folder of this repo
 export GLUE_DIR=/home/david/_MasterThesis/data/GLUE
 export SAVEDIR=/home/david/_MasterThesis/savedir
 
+# dalab gpus
+export PYTHONPATH=/local/home/yedavid/_MasterThesis # From the root folder of this repo
+export GLUE_DIR=/local/home/yedavid/_MasterThesis/data/GLUE
+export SAVEDIR=/local/home/yedavid/_MasterThesis/savedir
+
 for TASK in 'CoLA' 'MRPC' 'SST' 'SST-2' 'STS' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
     echo bernie;\
@@ -89,8 +94,10 @@ done 2>&1 | tee $SAVEDIR/sst2_bernie_pos_models_glue_20200319_s101.txt
 
 # Dis one
 #       --device 0 \
+#       --no_cuda
 CUDA_LAUNCH_BLOCKING=1
-for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+# for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+for TASK in 'WNLI' 'RTE' 'QNLI' 'STS-B' 'SST-2' 'MRPC' 'CoLA'
 do
     echo bernie-meaning;\
     echo $TASK; \
@@ -108,10 +115,10 @@ do
       --num_train_epochs 3.0 \
       --overwrite_output_dir \
       --overwrite_cache \
-      --seed 42 \
+      --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/_bernie_meaning-$TASK-20200324;
-done 2>&1 | tee $SAVEDIR/_small_task_bernie_meaning_models_glue_20200324.txt
+      --output_dir $SAVEDIR/_bernie_meaning-$TASK-20200327;
+done 2>&1 | tee $SAVEDIR/_small_task_bernie_meaning_models_glue_20200327.txt
 
 for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
