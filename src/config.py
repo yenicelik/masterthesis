@@ -28,9 +28,13 @@ model_parser.add_argument('--dimred_dimensions', default=768, help='which dimens
 model_parser.add_argument('--pca_whiten', default=False, help='which dimensionality to reduce to during the dimred phase. Falling back to 4 if not specified')
 model_parser.add_argument('--normalization_norm', default="", help='What norm to normalize the vectors by before applying clustering. set to an invalid value if you dont want any normalization')
 model_parser.add_argument('--standardize', default=False, help='What norm to normalize the vectors by before applying clustering. set to an invalid value if you dont want any normalization')
+model_parser.add_argument('--additional_pretraining', default=False, help='If the model is BERnie etc, whether or not to apply additional pre-training on the english news corpus')
 
-
-# Now add GLUE args
+#########################
+#                       #
+#    Now add GLUE args  #
+#                       #
+#########################
 
 # Required parameters
 model_parser.add_argument(
@@ -118,8 +122,8 @@ model_parser.add_argument(
 )
 model_parser.add_argument("--warmup_steps", default=0, type=int, help="Linear warmup over warmup_steps.")
 
-model_parser.add_argument("--logging_steps", type=int, default=500, help="Log every X updates steps.")
-model_parser.add_argument("--save_steps", type=int, default=500, help="Save checkpoint every X updates steps.")
+model_parser.add_argument("--logging_steps", type=int, default=3000, help="Log every X updates steps.")
+model_parser.add_argument("--save_steps", type=int, default=3000, help="Save checkpoint every X updates steps.")
 model_parser.add_argument(
     "--eval_all_checkpoints",
     action="store_true",
@@ -158,6 +162,12 @@ model_parser.add_argument(
 model_parser.add_argument("--local_rank", type=int, default=-1, help="For distributed training: local_rank")
 model_parser.add_argument("--device", type=int, default=1, help="If 0, uses CPU only. If 1, will use GPU when possible")
 
+
+#########################
+#                       #
+# Now add pretrain args #
+#                       #
+#########################
 
 args = model_parser.parse_args()
 

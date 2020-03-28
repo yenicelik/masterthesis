@@ -158,6 +158,16 @@ def main():
     if args.model_type in ("bernie_meaning"):
         tokenizer.output_meaning_dir = args.output_meaning_dir
 
+
+    # TODO: Do some additional pre-training if BERnie PoS or Meaning!
+    if args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos"):
+        # Set only part of the embeddings as trainable
+
+        # 1. Load the corpus dataset (
+        corpus =
+
+        pass
+
     ##########################################################
     #                                                        #
     # Start the actual training...                           #

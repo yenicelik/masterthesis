@@ -12,24 +12,42 @@ export PYTHONPATH=/local/home/yedavid/_MasterThesis # From the root folder of th
 export GLUE_DIR=/local/home/yedavid/_MasterThesis/data/GLUE
 export SAVEDIR=/local/home/yedavid/_MasterThesis/savedir
 
-for TASK in 'CoLA' 'MRPC' 'SST' 'SST-2' 'STS' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+#    echo bernie;\
+#    echo $TASK; \
+#    python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
+#      --model_type bernie \
+#      --model_name_or_path bert-base-uncased \
+#      --task_name $TASK \
+#      --do_train \
+#      --do_eval \
+#      --do_lower_case \
+#      --data_dir $GLUE_DIR/$TASK/ \
+#      --max_seq_length 128 \
+#      --per_gpu_train_batch_size 32 \
+#      --learning_rate 2e-5 \
+#      --num_train_epochs 3.0 \
+#      --overwrite_cache \
+#      --output_dir $SAVEDIR/bernie-$TASK; \
+
+#    echo albert;\
+#    echo $TASK; \
+#    python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
+#      --model_type albert \
+#      --model_name_or_path albert-base-v1 \
+#      --task_name $TASK \
+#      --do_train \
+#      --do_eval \
+#      --do_lower_case \
+#      --data_dir $GLUE_DIR/$TASK/ \
+#      --max_seq_length 128 \
+#      --per_gpu_train_batch_size 32 \
+#      --learning_rate 2e-5 \
+#      --num_train_epochs 3.0 \
+#      --overwrite_cache \
+#      --output_dir $SAVEDIR/albert-$TASK;
+
+for TASK in 'MNLI' 'SNLI' 'QQP' # 'CoLA' 'MRPC' 'SST' 'SST-2' 'STS' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
-    echo bernie;\
-    echo $TASK; \
-    python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
-      --model_type bernie \
-      --model_name_or_path bert-base-uncased \
-      --task_name $TASK \
-      --do_train \
-      --do_eval \
-      --do_lower_case \
-      --data_dir $GLUE_DIR/$TASK/ \
-      --max_seq_length 128 \
-      --per_gpu_train_batch_size 32 \
-      --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
-      --overwrite_cache \
-      --output_dir $SAVEDIR/bernie-$TASK; \
     echo bert;\
     echo $TASK; \
     python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
@@ -45,24 +63,10 @@ do
       --learning_rate 2e-5 \
       --num_train_epochs 3.0 \
       --overwrite_cache \
-      --output_dir $SAVEDIR/bert-$TASK; \
-    echo albert;\
-    echo $TASK; \
-    python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
-      --model_type albert \
-      --model_name_or_path albert-base-v1 \
-      --task_name $TASK \
-      --do_train \
-      --do_eval \
-      --do_lower_case \
-      --data_dir $GLUE_DIR/$TASK/ \
-      --max_seq_length 128 \
-      --per_gpu_train_batch_size 32 \
-      --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
-      --overwrite_cache \
-      --output_dir $SAVEDIR/albert-$TASK;
-done 2>&1 | tee $SAVEDIR/small_task_all_models_glue.txt
+      --overwrite_output_dir \
+      --seed 101 \
+      --output_dir $SAVEDIR/bert-$TASK
+done 2>&1 | tee $SAVEDIR/big_task_bert_models_glue-101.txt
 
 #    echo bernie-pos;\
 #    echo $TASK; \
@@ -97,7 +101,8 @@ done 2>&1 | tee $SAVEDIR/sst2_bernie_pos_models_glue_20200319_s101.txt
 #       --no_cuda
 CUDA_LAUNCH_BLOCKING=1
 # for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
-for TASK in 'WNLI' 'RTE' 'QNLI' 'STS-B' 'SST-2' 'MRPC' 'CoLA'
+# for TASK in  'WNLI' 'RTE' 'QNLI' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
+for TASK in  'MNLI' 'SNLI' 'QQP' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
 do
     echo bernie-meaning;\
     echo $TASK; \
@@ -117,8 +122,8 @@ do
       --overwrite_cache \
       --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/_bernie_meaning-$TASK-20200327;
-done 2>&1 | tee $SAVEDIR/_small_task_bernie_meaning_models_glue_20200327.txt
+      --output_dir $SAVEDIR/_bernie_meaning-$TASK-20200328-101;
+done 2>&1 | tee $SAVEDIR/_big_task_bernie_meaning_models_glue_20200328-101.txt
 
 for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
