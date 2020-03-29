@@ -118,7 +118,13 @@ def train(args, train_dataset, model, tokenizer):
         epochs_trained, int(args.num_train_epochs), desc="Epoch") # disable=args.local_rank not in [-1, 0]
     set_seed(args)  # Added here for reproductibility
     for _ in train_iterator:
+        print("Train dataloadeer at this point is: ")
+        print(train_dataloader)
+        print(type(train_dataloader.dataset))
+        print(train_dataloader.dataset)
+        print(train_dataloader.dataset.examples)
         epoch_iterator = tqdm(train_dataloader, desc="Iteration") # disable=args.local_rank not in [-1, 0]
+        print("Epoch iterator is: ", epoch_iterator)
         for step, batch in enumerate(epoch_iterator):
 
             # Skip past any already trained steps if resuming training

@@ -104,7 +104,7 @@ CUDA_LAUNCH_BLOCKING=1
 # for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 # for TASK in  'WNLI' 'RTE' 'QNLI' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
 #for TASK in  'MNLI' 'SNLI' 'QQP' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
-for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
     echo bernie-meaning;\
     echo $TASK; \

@@ -58,7 +58,7 @@ class Corpus:
 
         self.data = self._load_corpus()
         # TODO: BERT does not allow for sentences which have more than 512 tokens!!!
-        self.data = [x for x in self.data if len(x.split()) < (args.max_samples - 100)]
+        self.data = [x for x in self.data if len(x.split()) < (512 - 100)]
 
     def _load_corpus(self):
         """^

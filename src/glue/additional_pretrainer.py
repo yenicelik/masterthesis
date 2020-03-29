@@ -11,6 +11,7 @@ import argparse
 import glob
 import logging
 import os
+import pickle
 import random
 import re
 from typing import Dict, List, Tuple
@@ -41,6 +42,58 @@ from torch.utils.tensorboard import SummaryWriter
 
 logger = logging.getLogger(__name__)
 
+# class TextDataset(Dataset):
+#     def __init__(self, tokenizer: PreTrainedTokenizer, args, file_path: str, block_size=512):
+#         assert os.path.isfile(file_path)
+#         directory, filename = os.path.split(file_path)
+#         cached_features_file = os.path.join(
+#             directory, args.model_type + "_cached_lm_" + str(block_size) + "_" + filename
+#         )
+#
+#         if os.path.exists(cached_features_file) and not args.overwrite_cache:
+#             logger.info("Loading features from cached file %s", cached_features_file)
+#             with open(cached_features_file, "rb") as handle:
+#                 self.examples = pickle.load(handle)
+#         else:
+#             logger.info("Creating features from dataset file at %s", directory)
+#
+#             self.examples = []
+#             with open(file_path, encoding="utf-8") as f:
+#                 text = f.read()
+#
+#             print("Beginning of text is: ", text[:10000])
+#             # TODO: UNCOMMENT!!!
+#             text = text[:block_size * 10000]
+#
+#             text.replace("\n", " ")
+#
+#             tokenized_text = tokenizer.convert_tokens_to_ids(tokenizer.tokenize(text))
+#
+#             for i in range(0, len(tokenized_text) - block_size + 1, block_size):  # Truncate in block of block_size
+#                 self.examples.append(tokenizer.build_inputs_with_special_tokens(tokenized_text[i : i + block_size]))
+#             # Note that we are loosing the last truncated example here for the sake of simplicity (no padding)
+#             # If your dataset is small, first you should loook for a bigger one :-) and second you
+#             # can change this behavior by adding (model specific) padding.
+#
+#             # logger.info("Saving features into cached file %s", cached_features_file)
+#             # with open(cached_features_file, "wb") as handle:
+#             #     pickle.dump(self.examples, handle, protocol=pickle.HIGHEST_PROTOCOL)
+#
+#         # Take out any items that are bigger than 500 items
+#         print("Self examples are: ")
+#         print(len(self.examples))
+#         print(self.examples[0])
+#         print(len(self.examples[0]))
+#         print(len(self.examples[1]))
+#         print(len(self.examples[5]))
+#         print(len(self.examples[50]))
+#         print("Max length is : ", max([len(x) for x in self.examples]))
+#
+#     def __len__(self):
+#         return len(self.examples)
+#
+#     def __getitem__(self, item):
+#         return torch.tensor(self.examples[item])
 
 class LineByLineTextDataset(Dataset):
     def __init__(self, tokenizer: PreTrainedTokenizer, args, file_path: str, block_size=512):
@@ -51,9 +104,28 @@ class LineByLineTextDataset(Dataset):
         logger.info("Creating features from dataset file at %s", file_path)
 
         with open(file_path, encoding="utf-8") as f:
-            lines = [line for line in f.read().splitlines() if (len(line) > 0 and not line.isspace())]
+            lines = [
+                line
+                for line in f.read().splitlines()[:100]
+                if (len(line) > 0 and not line.isspace()) and (len(line.split()) < (block_size))
+            ]
 
+        # Need to add padding whenever possible I guess ... ?
         self.examples = tokenizer.batch_encode_plus(lines, add_special_tokens=True, max_length=block_size)["input_ids"]
+        # TODO: These need to be uniform for BERT at a later stage!!! (to be taken as input training data..)
+        # TODO: Append with "PAD" whenevre it is not at maximum length
+        max_example_length = max([len(x) for x in self.examples])
+        print(len(self.examples))
+        self.examples = [x + [tokenizer.pad_token_id, ] * (max_example_length - len(x)) for x in self.examples]
+        # Take out any items that are bigger than 500 items
+        print("Self examples are: ")
+        print(len(self.examples))
+        print(self.examples[0])
+        print(len(self.examples[0]))
+        print(len(self.examples[1]))
+        print(len(self.examples[5]))
+        print(len(self.examples[50]))
+        print("Max length is : ", max([len(x) for x in self.examples]))
 
     def __len__(self):
         return len(self.examples)
