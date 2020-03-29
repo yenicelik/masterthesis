@@ -1,4 +1,8 @@
+import json
+import pickle
+
 import spacy
+import os
 from nltk import PorterStemmer
 from transformers import BertTokenizer
 import torch
@@ -8,6 +12,7 @@ from src.bernie_meaning.cluster_model import predict_meaning_cluster
 from src.functional.string_searchers import find_all_indecies_subarray
 from src.language_models.model_wrappers.bert_wrapper import BertWrapper
 
+BERNIE_TOKENIZER_CONFIG_FILE = "bernie_special_tokenizer_config.json"
 
 class BernieMeaningTokenizer(BertTokenizer):
     """
@@ -19,6 +24,66 @@ class BernieMeaningTokenizer(BertTokenizer):
         run_NOUN = run_1
         run_VERB = run_2
     """
+
+    # Create a new save function,
+    def save_bernie_specifics(self, save_directory):
+        """
+            Saves all items specific to the bernie model.
+
+            Important when you save and re-train the model!!!!
+            (perhaps can be called within the overriden save function)
+
+        :return:
+        """
+        if not os.path.isdir(save_directory):
+            print("Saving directory ({}) should be a directory".format(save_directory))
+            return
+
+        tokenizer_bernie_config_file = os.path.join(save_directory, BERNIE_TOKENIZER_CONFIG_FILE)
+
+        # Create the dictionary ...
+        replace_dict_special_config = dict(
+            replace_dict=self.replace_dict,
+            split_tokens=self.split_tokens
+            # Following items are saved anyways!
+            # added_tokens=self.added_tokens,
+            # added_tokens_encoder=self.added_tokens_encoder,
+            # added_tokens_decoder=self.added_tokens_decoder,
+            # vocab=self.vocab,
+        )
+
+        # Use pickle otherwise lol
+        with open(tokenizer_bernie_config_file, "wb") as f:
+            print("Saving special bernie config ...")
+            pickle.dump(replace_dict_special_config, f)
+            # f.write(json.dumps(replace_dict_special_config, ensure_ascii=False))
+
+
+    def load_bernie_specifics(self, pretrained_model_name_or_path, bernie_model):
+        """
+            Loads all items specific to the bernie model.
+
+            Important when you load and re-train the model!!!!
+            (perhaps can be called within the overriden save function)
+        :return:
+        """
+        assert bernie_model is not None, bernie_model
+
+        self.bernie_model = bernie_model
+
+        if not os.path.isdir(pretrained_model_name_or_path):
+            print("Saving directory ({}) should be a directory".format(pretrained_model_name_or_path))
+            return
+
+        tokenizer_bernie_config_file = os.path.join(pretrained_model_name_or_path, BERNIE_TOKENIZER_CONFIG_FILE)
+
+        # Use pickle otherwise lol
+        with open(tokenizer_bernie_config_file, "rb") as f:
+            print("Saving special bernie config ...")
+            pkl = pickle.load(f)
+            self._replace_dict = pkl['replace_dict']
+            self.split_tokens = pkl['split_tokens']
+
 
     def _get_bert_embedding_for_word(self, word: str, sentence: str):
         """
@@ -181,7 +246,7 @@ class BernieMeaningTokenizer(BertTokenizer):
 
                 # TODO: Put the new token to the replace-dict
                 if new_token not in self.added_tokens:
-                    print("Injecting new token ...", new_token, self.added_tokens)
+                    # print("Injecting new token ...", new_token, self.added_tokens)
                     # TODO: Expand tokenizer here to include the new token if not existent!
                     self.inject_split_token(split_word=token, new_token=new_token)
                     # Finally add it to the added tokens

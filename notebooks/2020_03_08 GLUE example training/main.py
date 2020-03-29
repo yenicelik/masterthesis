@@ -2,12 +2,19 @@
     The main runner to run the GLUE tasks. We will start with a simple one.
 
     Depending on the model, we will need a different "augmented" class for the corpus
+
+    This has a guide on how to do additional fine-tuning on an existing model
+
+    https://mccormickml.com/2019/09/19/XLNet-fine-tuning/
+
+
 """
 import glob
 import logging
 
 # I de-activated caching, because we are playing around with the tokenizer..
 from src.config import args
+from src.glue.additional_pretrainer import LineByLineTextDataset
 from src.glue.evaluate import load_and_cache_examples, evaluate
 from src.glue.logger import logger
 import os
@@ -158,15 +165,71 @@ def main():
     if args.model_type in ("bernie_meaning"):
         tokenizer.output_meaning_dir = args.output_meaning_dir
 
+    pretrain_args = {
+
+    }
 
     # TODO: Do some additional pre-training if BERnie PoS or Meaning!
     if args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos"):
         # Set only part of the embeddings as trainable
 
-        # 1. Load the corpus dataset (
-        corpus =
+        print("Additional pre-training!!!")
 
-        pass
+        print("\n\n\n BEFORE TRAIN")
+        print("Re-loaded splitwords are: ")
+        print(tokenizer.split_tokens)
+        print(tokenizer.replace_dict)
+        print(tokenizer.added_tokens)
+        print("Embedding sizes")
+        print(model.bert.embeddings.word_embeddings.weight.shape)
+
+        # 1. Generate the additional pre-training corpus
+        if args.local_rank not in [-1, 0]:
+            torch.distributed.barrier()  # Barrier to make sure only the first process in distributed training process the dataset, and the others will use the cache
+
+        train_dataset = LineByLineTextDataset(
+            tokenizer=tokenizer,
+            args=pretrain_args,
+            file_path=os.getenv("EN_CORPUS")
+        )
+
+        if args.local_rank == 0:
+            torch.distributed.barrier()
+
+        model.to(args.device)
+
+        global_step, tr_loss = train(args, train_dataset, model, tokenizer)
+        logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
+
+        # 2. Fix any parameters you do not want to further train with BERT
+
+        print("Successful training!")
+
+        # 3.
+
+        # 1. Load the corpus dataset (
+        # corpus =
+
+        old_split_tokens = tokenizer.split_tokens
+        old_replace_dict = tokenizer.replace_dict
+        old_matr_shape = model.bert.embeddings.word_embeddings.weight.shape
+        old_added_tokens = tokenizer.added_tokens
+
+        print("\n\n\n BEFORE SAVE")
+        print("Re-loaded splitwords are: ")
+        print(tokenizer.split_tokens)
+        print(tokenizer.replace_dict)
+        print(tokenizer.added_tokens)
+        print("Embedding sizes")
+        print(model.bert.embeddings.word_embeddings.weight.shape)
+
+        # Put it back to CPU for now
+        model.to(0)
+
+    else:
+        print("Will not do additional pre-training")
+
+    print("DONE TRAINING LULULULU")
 
     ##########################################################
     #                                                        #
@@ -192,46 +255,83 @@ def main():
 
     ##########################################################
     #                                                        #
-    # Training                                               #
-    #                                                        #
-    ##########################################################
-    if args.do_train:
-        # TODO: Do the dataset augmentation here!
-        # TODO: Make sure cached is somehow turned off!!!
-        train_dataset = load_and_cache_examples(args, args.task_name, tokenizer, evaluate=False)
-        # print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
-        global_step, tr_loss = train(args, train_dataset, model, tokenizer)
-        logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
-        # print("Added tokens for the tokenizer are (2): ", tokenizer.added_tokens)
-
-    ##########################################################
-    #                                                        #
     # Saving the model and re-loading it                     #
     #                                                        #
     ##########################################################
-    if args.do_train and (args.local_rank == -1 or torch.distributed.get_rank() == 0):
+    print("Condition is: ", args.do_train and (args.local_rank == -1 or torch.distributed.get_rank() == 0))
+    print(args.do_train)
+    print(args.local_rank)
+    # print(args.torch.distributed.get_rank())
+    #  or torch.distributed.get_rank() == 0
+    # TODO: Do this saving (and loading ..) only right th pre-training!
+    if args.do_train and (args.local_rank == -1):
         # Create output directory if needed
+        print("Inside lala")
         if not os.path.exists(args.output_dir) and args.local_rank in [-1, 0]:
+            print("Saving a model!!!", args.output_dir)
             os.makedirs(args.output_dir)
+            logger.info("Saving model checkpoint to %s", args.output_dir)
+            # Save a trained model, configuration and tokenizer using `save_pretrained()`.
+            # They can then be reloaded using `from_pretrained()`
+            model_to_save = (
+                model.module if hasattr(model, "module") else model
+            )  # Take care of distributed/parallel training
+            model_to_save.save_pretrained(args.output_dir)
+            tokenizer.save_pretrained(args.output_dir)
+            if args.model_type in ("bernie_meaning"):
+                print("Saving special items ...")
+                tokenizer.save_bernie_specifics(args.output_dir)
 
-        logger.info("Saving model checkpoint to %s", args.output_dir)
-        # Save a trained model, configuration and tokenizer using `save_pretrained()`.
-        # They can then be reloaded using `from_pretrained()`
-        model_to_save = (
-            model.module if hasattr(model, "module") else model
-        )  # Take care of distributed/parallel training
-        model_to_save.save_pretrained(args.output_dir)
-        tokenizer.save_pretrained(args.output_dir)
+            # Good practice: save your training arguments together with the trained model
+            torch.save(args, os.path.join(args.output_dir, "training_args.bin"))
+        else:
+            # If path exists, load the model
+            # # Load a trained model and vocabulary that you have fine-tuned
+            print("Loading a model!!!", args.output_dir)
+            model = model_class.from_pretrained(args.output_dir)
+            tokenizer = tokenizer_class.from_pretrained(args.output_dir)
+            if args.model_type in ("bernie_meaning"):
+                tokenizer.load_bernie_specifics(args.output_dir, bernie_model=model)
 
-        # Good practice: save your training arguments together with the trained model
-        # torch.save(args, os.path.join(args.output_dir, "training_args.bin"))
-        #
-        # # Load a trained model and vocabulary that you have fine-tuned
-        # model = model_class.from_pretrained(args.output_dir)
-        # tokenizer = tokenizer_class.from_pretrained(args.output_dir)
-        # # TODO: Split words must be saved and re-loaded as well!!!
-        # # TODO: Replace-dict needs to be saved and re-loaded as well!!!
         model.to(args.device)
+
+        if args.model_type in ("bernie_meaning"):
+            # Do a bunch of asserts
+            print("\n\n\n AFTER SAVE")
+            print("Re-loaded splitwords are: ")
+            print(tokenizer.split_tokens)
+            print(tokenizer.replace_dict)
+            print(tokenizer.added_tokens)
+            print("Embedding sizes")
+            print(model.bert.embeddings.word_embeddings.weight.shape)
+
+            # Assert that model was loaded successfully
+            assert old_split_tokens == tokenizer.split_tokens, (old_split_tokens, tokenizer.split_tokens)
+            assert old_replace_dict == tokenizer.replace_dict, (old_replace_dict, tokenizer.replace_dict)
+            assert old_matr_shape == model.bert.embeddings.word_embeddings.weight.shape, (old_matr_shape, model.bert.embeddings.word_embeddings.weight.shape)
+            assert old_added_tokens == tokenizer.added_tokens, (old_added_tokens, tokenizer.added_tokens)
+
+    else:
+        print("Outside lolo")
+
+    exit(0)
+
+    ##########################################################
+    #                                                        #
+    # Training                                               #
+    #                                                        #
+    ##########################################################
+    # TODO: Uncomment!
+    if args.do_train:
+        # TODO: Do the dataset augmentation here!
+        # TODO: Make sure cached is somehow turned off!!!
+
+        train_dataset = load_and_cache_examples(args, args.task_name, tokenizer, evaluate=False)
+
+        # print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
+        # global_step, tr_loss = train(args, train_dataset, model, tokenizer)
+        # logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
+        # print("Added tokens for the tokenizer are (2): ", tokenizer.added_tokens)
 
     ##########################################################
     #                                                        #

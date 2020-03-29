@@ -43,6 +43,5 @@ class BernieMeaningModel(BertModel):
 
         # No need to return anything, because this model will be used as an "end-product"
 
-
 if __name__ == "__maine__":
     print("Testing if the model resizing works well!")

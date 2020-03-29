@@ -11,10 +11,8 @@ import argparse
 import glob
 import logging
 import os
-import pickle
 import random
 import re
-import shutil
 from typing import Dict, List, Tuple
 
 import numpy as np
@@ -62,12 +60,6 @@ class LineByLineTextDataset(Dataset):
 
     def __getitem__(self, i):
         return torch.tensor(self.examples[i], dtype=torch.long)
-
-
-def load_and_cache_examples(args, tokenizer, evaluate=False):
-    file_path = os.getenv("EN_CORPUS") if evaluate else os.getenv("EN_CORPUS")
-    return LineByLineTextDataset(tokenizer, args, file_path=file_path, block_size=args.block_size)
-
 
 def set_seed(args):
     random.seed(args.seed)
@@ -607,4 +599,8 @@ def main():
 
 
 if __name__ == "__main__":
+
+    # Run the BEREnie tokenizer here
+
+
     main()

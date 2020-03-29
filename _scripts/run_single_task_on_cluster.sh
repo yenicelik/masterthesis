@@ -99,10 +99,12 @@ done 2>&1 | tee $SAVEDIR/sst2_bernie_pos_models_glue_20200319_s101.txt
 # Dis one
 #       --device 0 \
 #       --no_cuda
+export CUDA_LAUNCH_BLOCKING=1
 CUDA_LAUNCH_BLOCKING=1
 # for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 # for TASK in  'WNLI' 'RTE' 'QNLI' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
-for TASK in  'MNLI' 'SNLI' 'QQP' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
+#for TASK in  'MNLI' 'SNLI' 'QQP' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
+for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
     echo bernie-meaning;\
     echo $TASK; \
@@ -111,6 +113,7 @@ do
       --model_name_or_path bert-base-uncased \
       --task_name $TASK \
       --do_train \
+      --additional_pretraining True \
       --do_eval \
       --do_lower_case \
       --data_dir $GLUE_DIR/$TASK/ \
@@ -122,8 +125,8 @@ do
       --overwrite_cache \
       --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/_bernie_meaning-$TASK-20200328-101;
-done 2>&1 | tee $SAVEDIR/_big_task_bernie_meaning_models_glue_20200328-101.txt
+      --output_dir $SAVEDIR/saveload_test;
+done 2>&1 | tee $SAVEDIR/saveload_test.txt
 
 for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do

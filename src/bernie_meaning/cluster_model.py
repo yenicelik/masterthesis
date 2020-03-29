@@ -93,7 +93,10 @@ def predict_meaning_cluster(word, embedding, clustermodel_savedir, knn_n=10):
     # Transform to PCA
     # also do standardization
     # TODO: Come back to this line ...
-    embedding_hat = standardize_model.transform(embedding.to("cpu").reshape(1, -1))
+    if args.local_rank == 0:
+        torch.distributed.barrier()
+
+    embedding_hat = standardize_model.transform(embedding.cpu().reshape(1, -1))
     embedding_hat = pca_model.transform(embedding_hat) # .to(args.device)
 
     # Predict using this corpus
