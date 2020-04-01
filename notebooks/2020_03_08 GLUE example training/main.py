@@ -149,8 +149,8 @@ def main():
 
         print("Using BERNIE model")
 
-        # Inject model to the tokenizer
-        tokenizer.inject_model(model)
+        # Inject the base model to the tokenizer
+        tokenizer.inject_model(model.bert)
 
         # Inject the split tokens, s.t. new tokens are created for these over time
         polysemous_words = get_polysemous_splitup_words()

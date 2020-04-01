@@ -69,7 +69,7 @@ class BernieMeaningTokenizer(BertTokenizer):
         """
         assert bernie_model is not None, bernie_model
 
-        self.bernie_model = bernie_model
+        self.pretrained_bernie_model = bernie_model
 
         if not os.path.isdir(pretrained_model_name_or_path):
             print("Saving directory ({}) should be a directory".format(pretrained_model_name_or_path))
@@ -306,7 +306,7 @@ class BernieMeaningTokenizer(BertTokenizer):
         self.nlp = spacy.load("en_core_web_sm")
 
         # what are the target words
-        self.bernie_model = None
+        self.pretrained_bernie_model = None
         self.output_meaning_dir = output_meaning_dir
 
         self.bert_embedding_retriever_model = BertWrapper()
@@ -335,7 +335,7 @@ class BernieMeaningTokenizer(BertTokenizer):
             This allows for just-in-time insertion of new tokens that are not within the replace-dict!
         :return:
         """
-        self.bernie_model = bernie_model
+        self.pretrained_bernie_model = bernie_model
 
     def inject_split_token(self, split_word, new_token):
         """
@@ -347,7 +347,7 @@ class BernieMeaningTokenizer(BertTokenizer):
         :return:
         """
 
-        assert self.bernie_model is not None, (
+        assert self.pretrained_bernie_model is not None, (
             "BernieModel must be injected before this dynamic tokenizer can be used!")
         assert len(split_word) > 0, ("Split word is empty", split_word)
 
@@ -399,14 +399,14 @@ class BernieMeaningTokenizer(BertTokenizer):
             print(f"Word {word} was skipped!")
             return
 
-        self.bernie_model.bert.inject_split_token(
+        self.pretrained_bernie_model.inject_split_token(
             new_total_vocabulary_size=new_vocab_size,
             token_idx=token_idx,
             number_new_tokens=number_new_additional_tokens
         )
 
-        assert new_vocab_size == self.bernie_model.bert.embeddings.word_embeddings.weight.shape[0], (
-        new_vocab_size, self.bernie_model.bert.embeddings.word_embeddings.weight.shape)
+        assert new_vocab_size == self.pretrained_bernie_model.embeddings.word_embeddings.weight.shape[0], (
+        new_vocab_size, self.pretrained_bernie_model.embeddings.word_embeddings.weight.shape)
 
     def tokenize(self, text, **kwargs):
         # assert self.split_tokens, ("Must inject new tokens before you can use the Bernie tokenizer!")

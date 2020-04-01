@@ -12,6 +12,7 @@ class BernieMeaningForPreTraining(BertForMaskedLM):
     def __init__(self, config):
         super().__init__(config)
 
+        # Blatantly remove the config to check if this still works ...
         self.bert = BernieMeaningModel(config)
         self.cls = BertOnlyMLMHead(config)
 
