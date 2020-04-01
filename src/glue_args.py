@@ -5,7 +5,7 @@
 import argparse
 
 from transformers import BertConfig, BertTokenizer, BertForSequenceClassification, AlbertTokenizer, \
-    AlbertForSequenceClassification, AlbertConfig
+    AlbertForSequenceClassification, AlbertConfig, BertForPreTraining, BertForMaskedLM
 
 from src.bernie_meaning.bernie_meaning_configuration import BernieMeaningConfig
 from src.bernie_meaning.bernie_meaning_sequence_model import BernieMeaningForSequenceClassification
@@ -28,8 +28,12 @@ ALL_MODELS = sum(
 )
 
 MODEL_CLASSES = {
-    "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
+    # "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
     "bernie_pos": (BerniePoSConfig, BerniePoSForSequenceClassification, BerniePoSTokenizer),
+    # "bernie_meaning": (BernieMeaningConfig, BernieMeaningForSequenceClassification, BernieMeaningTokenizer),
+
+    "bert": (BertConfig, BertForMaskedLM, BertTokenizer),  # From this checkpoint, load a BertForSequenceClassification later on
     "bernie_meaning": (BernieMeaningConfig, BernieMeaningForSequenceClassification, BernieMeaningTokenizer),
-    "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
+
+    # "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
 }

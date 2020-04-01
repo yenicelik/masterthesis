@@ -111,12 +111,12 @@ class LineByLineTextDataset(Dataset):
             ]
 
         # Need to add padding whenever possible I guess ... ?
-        self.examples = tokenizer.batch_encode_plus(lines, add_special_tokens=True, max_length=block_size)["input_ids"]
+        self.examples = tokenizer.batch_encode_plus(lines, add_special_tokens=True, max_length=block_size, pad_to_max_length=True)["input_ids"]
         # TODO: These need to be uniform for BERT at a later stage!!! (to be taken as input training data..)
         # TODO: Append with "PAD" whenevre it is not at maximum length
         max_example_length = max([len(x) for x in self.examples])
         print(len(self.examples))
-        self.examples = [x + [tokenizer.pad_token_id, ] * (max_example_length - len(x)) for x in self.examples]
+        # self.examples = [x + [tokenizer.pad_token_id, ] * (max_example_length - len(x) - 1) for x in self.examples]
         # Take out any items that are bigger than 500 items
         print("Self examples are: ")
         print(len(self.examples))
@@ -168,7 +168,7 @@ def mask_tokens(inputs: torch.Tensor, tokenizer: PreTrainedTokenizer, args) -> T
 
     labels = inputs.clone()
     # We sample a few tokens in each sequence for masked-LM training (with probability args.mlm_probability defaults to 0.15 in Bert/RoBERTa)
-    probability_matrix = torch.full(labels.shape, args.mlm_probability)
+    probability_matrix = torch.full(labels.shape, 0.15)  # Specifies the mask probability
     special_tokens_mask = [
         tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels.tolist()
     ]
@@ -192,12 +192,12 @@ def mask_tokens(inputs: torch.Tensor, tokenizer: PreTrainedTokenizer, args) -> T
     return inputs, labels
 
 
-def train(args, train_dataset, model: PreTrainedModel, tokenizer: PreTrainedTokenizer) -> Tuple[int, float]:
+def pretrain(args, train_dataset, model: PreTrainedModel, tokenizer: PreTrainedTokenizer) -> Tuple[int, float]:
     """ Train the model """
     if args.local_rank in [-1, 0]:
         tb_writer = SummaryWriter()
 
-    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
+    args.train_batch_size = args.per_gpu_train_batch_size
 
     def collate(examples: List[torch.Tensor]):
         if tokenizer._pad_token is None:
@@ -308,11 +308,12 @@ def train(args, train_dataset, model: PreTrainedModel, tokenizer: PreTrainedToke
                 steps_trained_in_current_epoch -= 1
                 continue
 
-            inputs, labels = mask_tokens(batch, tokenizer, args) if args.mlm else (batch, batch)
+            inputs, labels = mask_tokens(batch, tokenizer, args)
             inputs = inputs.to(args.device)
             labels = labels.to(args.device)
             model.train()
-            outputs = model(inputs, masked_lm_labels=labels) if args.mlm else model(inputs, labels=labels)
+            # print("Model is: ", model)
+            outputs = model(inputs, masked_lm_labels=labels)
             loss = outputs[0]  # model outputs are always tuple in transformers (see doc)
 
             if args.n_gpu > 1:
@@ -324,6 +325,9 @@ def train(args, train_dataset, model: PreTrainedModel, tokenizer: PreTrainedToke
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
             else:
+                # print("Loss is: ")
+                # print(loss)
+                # print(loss.shape)
                 loss.backward()
 
             tr_loss += loss.item()
@@ -415,12 +419,16 @@ def evaluate(args, model: PreTrainedModel, tokenizer: PreTrainedTokenizer, prefi
     model.eval()
 
     for batch in tqdm(eval_dataloader, desc="Evaluating"):
-        inputs, labels = mask_tokens(batch, tokenizer, args) if args.mlm else (batch, batch)
+        inputs, labels = mask_tokens(batch, tokenizer, args)
         inputs = inputs.to(args.device)
         labels = labels.to(args.device)
 
+        print("Inputs and labels are")
+        print(inputs)
+        print(labels)
+
         with torch.no_grad():
-            outputs = model(inputs, masked_lm_labels=labels) if args.mlm else model(inputs, labels=labels)
+            outputs = model(inputs, masked_lm_labels=labels)
             lm_loss = outputs[0]
             eval_loss += lm_loss.mean().item()
         nb_eval_steps += 1

@@ -3,10 +3,19 @@
 """
 
 from torch import nn
-from transformers import BertForSequenceClassification
+from transformers import BertForSequenceClassification, BertPreTrainedModel
+from transformers.modeling_bert import BertPreTrainingHeads, BertForPreTraining, BertOnlyMLMHead, BertForMaskedLM
 
 from src.bernie_meaning.bernie_meaning_model import BernieMeaningModel
 
+class BernieMeaningForPreTraining(BertForMaskedLM):
+    def __init__(self, config):
+        super().__init__(config)
+
+        self.bert = BernieMeaningModel(config)
+        self.cls = BertOnlyMLMHead(config)
+
+        self.init_weights()
 
 class BernieMeaningForSequenceClassification(BertForSequenceClassification):
 

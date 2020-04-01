@@ -125,8 +125,33 @@ do
       --overwrite_cache \
       --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/saveload_test;
-done 2>&1 | tee $SAVEDIR/saveload_test.txt
+      --output_dir $SAVEDIR/saveload_test_1;
+done 2>&1 | tee $SAVEDIR/saveload_test_1.txt
+
+# JUST SOME TEST
+for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+do
+    echo bert;\
+    echo $TASK; \
+    python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
+      --model_type bert \
+      --model_name_or_path bert-base-uncased \
+      --task_name $TASK \
+      --do_train \
+      --additional_pretraining True \
+      --do_eval \
+      --do_lower_case \
+      --data_dir $GLUE_DIR/$TASK/ \
+      --max_seq_length 128 \
+      --per_gpu_train_batch_size 32 \
+      --learning_rate 2e-5 \
+      --num_train_epochs 3.0 \
+      --overwrite_output_dir \
+      --overwrite_cache \
+      --seed 101 \
+      --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
+      --output_dir $SAVEDIR/saveload_test_1;
+done 2>&1 | tee $SAVEDIR/saveload_test_1.txt
 
 for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do

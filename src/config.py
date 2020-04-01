@@ -94,7 +94,9 @@ model_parser.add_argument(
 model_parser.add_argument(
     "--do_lower_case", action="store_true", help="Set this flag if you are using an uncased model.",
 )
-
+model_parser.add_argument(
+    "--train_batch_size", default=32, type=int, help="Batch size per GPU/CPU for training.",
+)
 model_parser.add_argument(
     "--per_gpu_train_batch_size", default=32, type=int, help="Batch size per GPU/CPU for training.",
 )

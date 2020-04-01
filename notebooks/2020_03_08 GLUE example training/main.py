@@ -14,7 +14,7 @@ import logging
 
 # I de-activated caching, because we are playing around with the tokenizer..
 from src.config import args
-from src.glue.additional_pretrainer import LineByLineTextDataset
+from src.glue.additional_pretrainer import LineByLineTextDataset, pretrain
 from src.glue.evaluate import load_and_cache_examples, evaluate
 from src.glue.logger import logger
 import os
@@ -166,7 +166,7 @@ def main():
         tokenizer.output_meaning_dir = args.output_meaning_dir
 
     # TODO: Do some additional pre-training if BERnie PoS or Meaning!
-    if args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos"):
+    if True or (args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos")):
 
         # TODO: Uncomment this at a later stage!
         # Try to load the tokenizer and model if this is possible
@@ -204,13 +204,13 @@ def main():
 
         print("Additional pre-training!!!")
 
-        print("\n\n\n BEFORE TRAIN")
-        print("Re-loaded splitwords are: ")
-        print(tokenizer.split_tokens)
-        print(tokenizer.replace_dict)
-        print(tokenizer.added_tokens)
-        print("Embedding sizes")
-        print(model.bert.embeddings.word_embeddings.weight.shape)
+        # print("\n\n\n BEFORE TRAIN")
+        # print("Re-loaded splitwords are: ")
+        # print(tokenizer.split_tokens)
+        # print(tokenizer.replace_dict)
+        # print(tokenizer.added_tokens)
+        # print("Embedding sizes")
+        # print(model.bert.embeddings.word_embeddings.weight.shape)
 
         # 1. Generate the additional pre-training corpus
         if args.local_rank not in [-1, 0]:
@@ -223,28 +223,21 @@ def main():
             block_size=50  # This is the default BERT block size
         )
 
-        # TODO: Fix all but the new vocabulary's embeddings
-
-        # 3.
-
-        # 1. Load the corpus dataset (
-        # corpus =
-
-        old_split_tokens = tokenizer.split_tokens
-        old_replace_dict = tokenizer.replace_dict
-        old_matr_shape = model.bert.embeddings.word_embeddings.weight.shape
-        old_added_tokens = tokenizer.added_tokens
-
-        print("\n\n\n BEFORE SAVE")
-        print("Re-loaded splitwords are: ")
-        print(tokenizer.split_tokens)
-        print(tokenizer.replace_dict)
-        print(tokenizer.added_tokens)
-        print("Embedding sizes")
-        print(model.bert.embeddings.word_embeddings.weight.shape)
+        # old_split_tokens = tokenizer.split_tokens
+        # old_replace_dict = tokenizer.replace_dict
+        # old_matr_shape = model.bert.embeddings.word_embeddings.weight.shape
+        # old_added_tokens = tokenizer.added_tokens
+        #
+        # print("\n\n\n BEFORE SAVE")
+        # print("Re-loaded splitwords are: ")
+        # print(tokenizer.split_tokens)
+        # print(tokenizer.replace_dict)
+        # print(tokenizer.added_tokens)
+        # print("Embedding sizes")
+        # print(model.bert.embeddings.word_embeddings.weight.shape)
 
         # Put it back to CPU for now
-        model.to(0)
+        model.to('cpu')
 
     else:
         print("Will not do additional pre-training")
@@ -284,8 +277,9 @@ def main():
     # print(args.torch.distributed.get_rank())
     #  or torch.distributed.get_rank() == 0
     # TODO: Do this saving (and loading ..) only right th pre-training!
-    if args.do_train and (args.local_rank == -1):
+    if False and args.do_train and (args.local_rank == -1):
         # Create output directory if needed
+
         print("Inside lala")
         if not os.path.exists(args.output_dir) and args.local_rank in [-1, 0]:
             print("Saving a model!!!", args.output_dir)
@@ -296,6 +290,8 @@ def main():
             model_to_save = (
                 model.module if hasattr(model, "module") else model
             )  # Take care of distributed/parallel training
+            print("We are saving: ", model_to_save)
+            print(model_to_save.bert.embeddings.word_embeddings.weight.size)
             model_to_save.save_pretrained(args.output_dir)
             tokenizer.save_pretrained(args.output_dir)
             if args.model_type in ("bernie_meaning"):
@@ -336,19 +332,26 @@ def main():
 
 
     print("Now going into training...")
-    if args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos"):
+    if True or (args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos")):
 
         if args.local_rank == 0:
             torch.distributed.barrier()
 
         model.to(args.device)
 
-        global_step, tr_loss = train(args, train_dataset, model, tokenizer)
+        print("Train datasete is: (1) ", train_dataset)
+
+        # Send the actual underlying BERT model, not the BERTforSequenceClassification model
+        global_step, tr_loss = pretrain(args, train_dataset, model, tokenizer)
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
+
+    # TODO!!!! Dont add new tokens after pretraining!! (which makes sense...) but deactivate this functionality
+
+    exit(0)
 
 
     # Save for a second time after pre-training is done:
-    if args.do_train and (args.local_rank == -1):
+    if False and args.do_train and (args.local_rank == -1):
         # Create output directory if needed
         print("Inside lala")
         if not os.path.exists(args.output_dir + "pretrained/") and args.local_rank in [-1, 0]:

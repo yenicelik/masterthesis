@@ -118,13 +118,8 @@ def train(args, train_dataset, model, tokenizer):
         epochs_trained, int(args.num_train_epochs), desc="Epoch") # disable=args.local_rank not in [-1, 0]
     set_seed(args)  # Added here for reproductibility
     for _ in train_iterator:
-        print("Train dataloadeer at this point is: ")
-        print(train_dataloader)
-        print(type(train_dataloader.dataset))
-        print(train_dataloader.dataset)
-        print(train_dataloader.dataset.examples)
+
         epoch_iterator = tqdm(train_dataloader, desc="Iteration") # disable=args.local_rank not in [-1, 0]
-        print("Epoch iterator is: ", epoch_iterator)
         for step, batch in enumerate(epoch_iterator):
 
             # Skip past any already trained steps if resuming training
@@ -137,8 +132,9 @@ def train(args, train_dataset, model, tokenizer):
             inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3]}
             if args.model_type != "distilbert":
                 inputs["token_type_ids"] = (
-                    batch[2] if args.model_type in ["bert", "xlnet", "albert"] else None
+                    batch[2] if args.model_type in ["bernie_meaning", "bernie_pos", "bert", "xlnet", "albert"] else None
                 )  # XLM, DistilBERT, RoBERTa, and XLM-RoBERTa don't use segment_ids
+
             outputs = model(**inputs)
             loss = outputs[0]  # model outputs are always tuple in transformers (see doc)
 
