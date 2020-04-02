@@ -13,6 +13,7 @@ import logging
 
 # I de-activated caching, because we are playing around with the tokenizer..
 from src.config import args
+from src.functional.saveload import save_model, load_model
 from src.glue.additional_pretrainer import LineByLineTextDataset, pretrain
 from src.glue.evaluate import load_and_cache_examples, evaluate
 from src.glue.logger import logger
@@ -140,35 +141,6 @@ def run_pretrain_on_dataset(model, tokenizer, train_dataset):
 
     # TODO!!!! Dont add new tokens after pretraining!! (which makes sense...) but deactivate this functionality
     return model
-
-def load_model(path, model_class, tokenizer_class):
-    # If path exists, load the model
-    # # Load a trained model and vocabulary that you have fine-tuned
-    print("Loading a model!!!", path)
-    model = model_class.from_pretrained(path)
-    tokenizer = tokenizer_class.from_pretrained(path)
-    if args.model_type in ("bernie_meaning"):
-        tokenizer.load_bernie_specifics(path, bernie_model=model)
-
-def save_model(path, model, tokenizer):
-    print("Saving a model!!!", path)
-    os.makedirs(path)
-    logger.info("Saving model checkpoint to %s", path)
-    # Save a trained model, configuration and tokenizer using `save_pretrained()`.
-    # They can then be reloaded using `from_pretrained()`
-    model_to_save = (
-        model.module if hasattr(model, "module") else model
-    )  # Take care of distributed/parallel training
-    print("We are saving: ", model_to_save)
-    print(model_to_save.bert.embeddings.word_embeddings.weight.size)
-    model_to_save.save_pretrained(path)
-    tokenizer.save_pretrained(path)
-    if args.model_type in ("bernie_meaning"):
-        print("Saving special items ...")
-        tokenizer.save_bernie_specifics(path)
-
-    # Good practice: save your training arguments together with the trained model
-    torch.save(args, os.path.join(path, "training_args.bin"))
 
 def pretrain_bernie_meaning():
     prepare_runs()
@@ -356,9 +328,9 @@ def main():
 
         print("Inside lala")
         if not os.path.exists(args.output_dir) and args.local_rank in [-1, 0]:
-            save_model(path=args.output_dir, tokenizer=tokenizer, model=model)
+            save_model(args=args, path=args.output_dir, tokenizer=tokenizer, model=model)
         else:
-            load_model(path=args.output_dir, model_class=model_class, tokenizer_class=tokenizer_class)
+            load_model(args=args, path=args.output_dir, model_class=model_class, tokenizer_class=tokenizer_class)
 
         model.to(args.device)
 
@@ -374,9 +346,9 @@ def main():
         # Create output directory if needed
         print("Inside lala")
         if not os.path.exists(args.output_dir + "pretrained/") and args.local_rank in [-1, 0]:
-            save_model(path=args.output_dir + "pretrained/", model=model, tokenizer=tokenizer)
+            save_model(args=args, path=args.output_dir + "pretrained/", model=model, tokenizer=tokenizer)
         else:
-            load_model(path=args.output_dir + "pretrained/", model_class=model_class, tokenizer_class=tokenizer_class)
+            load_model(args=args, path=args.output_dir + "pretrained/", model_class=model_class, tokenizer_class=tokenizer_class)
 
         model.to(args.device)
 
