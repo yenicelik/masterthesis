@@ -12,6 +12,8 @@ import glob
 import logging
 
 # I de-activated caching, because we are playing around with the tokenizer..
+from src.bernie_meaning.bernie_meaning_sequence_model import BernieMeaningForSequenceClassification, \
+    BernieMeaningForMaskedLM
 from src.config import args
 from src.functional.saveload import save_model, load_model
 from src.glue.additional_pretrainer import LineByLineTextDataset, pretrain
@@ -25,7 +27,7 @@ from transformers import glue_output_modes as output_modes
 from transformers import glue_processors as processors
 
 from src.glue.trainer import set_seed, train
-from src.glue_args import MODEL_CLASSES
+from src.glue_args import MODEL_CLASSES, MODEL_CLASSES_PRETRAIN
 
 from src.resources.split_words import get_polysemous_splitup_words
 
@@ -87,17 +89,20 @@ def prepare_runs():
     set_seed(args)
 
 
-def load_model_and_tokenizer(num_labels, finetuning_task):
+def load_model_and_tokenizer(num_labels, finetuning_task, model_classes=None):
     ##########################################################
     #                                                        #
     # Load the model and tokenizer                           #
     #                                                        #
     ##########################################################
+    if model_classes is None:
+        model_classes = MODEL_CLASSES
+
     args.model_type = args.model_type.lower()
     print("args model type is: ", args.model_type)
     print(MODEL_CLASSES)
     # TODO: Replace by our own BERT (alternatively, allow import through this as well...
-    config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
+    config_class, model_class, tokenizer_class = model_classes[args.model_type]
     config = config_class.from_pretrained(
         args.config_name if args.config_name else args.model_name_or_path,
         num_labels=num_labels,
@@ -139,35 +144,138 @@ def run_pretrain_on_dataset(model, tokenizer, train_dataset):
         global_step, tr_loss = pretrain(args, train_dataset, model, tokenizer)
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
 
-    # TODO!!!! Dont add new tokens after pretraining!! (which makes sense...) but deactivate this functionality
+    # Dont add new tokens after pretraining!! (which makes sense...) but deactivate this functionality
+    tokenizer.set_split_tokens(split_tokens={})
     return model
 
 def pretrain_bernie_meaning():
     prepare_runs()
+    processor, label_list, num_labels = prepare_glue_tasks()
 
     # TODO: Not suree what num_labels should be
     # Load model
-    tokenizer, model, config, model_class, tokenizer_class = load_model_and_tokenizer(num_labels=None, finetuning_task=args.task_name)
+    tokenizer, seq_model, config, model_class, tokenizer_class = load_model_and_tokenizer(
+        num_labels=num_labels,
+        finetuning_task=args.task_name,
+        model_classes=None
+    )
 
     # Inject tokens
-    tokenizer, model = inject_tokens_into_bert(tokenizer, model)
+    tokenizer, seq_model = inject_tokens_into_bert(tokenizer, seq_model)
+    # Inject BERnie Tokenizer
+    tokenizer.inject_model(seq_model.bert)
 
-    # Instead of the original configs, use the modified configs that include the language files!
+    print("DONE TRAINING LULULULU")
+    # # Try to load the tokenizer and model if this is possible
+    # if args.do_train and (args.local_rank == -1):
+    #     # Create output directory if needed
+    #
+    #     print("Inside lala")
+    #     if os.path.exists(args.output_dir) and args.local_rank in [-1, 0]:
+    #         load_model(path=args.output_dir, model_class=model_class, tokenizer_class=tokenizer_class)
+    #
+    #     seq_model.to(args.device)
+    #
+    #     # Do a bunch of asserts
+    #     print("\n\n\n AFTER SAVE")
+    #     print("Re-loaded splitwords are: ")
+    #     print(tokenizer.split_tokens)
+    #     print(tokenizer.replace_dict)
+    #     print(tokenizer.added_tokens)
+    #     print("Embedding sizes")
+    #     print(seq_model.bert.embeddings.word_embeddings.weight.shape)
+    #
+    #     # Assert that model was loaded successfully
+    #
+    # else:
+    #     print("Outside lolo")
+    # Set only part of the embeddings as trainable
 
+    print("Additional pre-training!!!")
+
+    if args.model_type in ("bernie_meaning", "bernie_pos"):
+        print("\n\n\n BEFORE TRAIN")
+        print("Re-loaded splitwords are: ")
+        print(tokenizer.split_tokens)
+        print(tokenizer.replace_dict)
+        print(tokenizer.added_tokens)
+        print("Embedding sizes")
+        print(seq_model.bert.embeddings.word_embeddings.weight.shape)
+
+    # 1. Generate the additional pre-training corpus
+    if args.local_rank not in [-1, 0]:
+        torch.distributed.barrier()  # Barrier to make sure only the first process in distributed training process the dataset, and the others will use the cache
+
+    train_dataset = LineByLineTextDataset(
+        tokenizer=tokenizer,
+        args=args,
+        file_path=os.getenv("EN_CORPUS"),
+        block_size=50  # This is the default BERT block size
+    )
+
+    if args.model_type in ("bernie_meaning", "bernie_pos"):
+        old_split_tokens = tokenizer.split_tokens
+        old_replace_dict = tokenizer.replace_dict
+        old_matr_shape = seq_model.bert.embeddings.word_embeddings.weight.shape
+        old_added_tokens = tokenizer.added_tokens
+
+        print("\n\n\n BEFORE SAVE")
+        print("Re-loaded splitwords are: ")
+        print(tokenizer.split_tokens)
+        print(tokenizer.replace_dict)
+        print(tokenizer.added_tokens)
+        print("Embedding sizes")
+        print(seq_model.bert.embeddings.word_embeddings.weight.shape)
+
+    # Put it back to CPU for now
+    seq_model.to('cpu')
+
+
+    # Instead of the original configs, use the modified configs!
+    # Modify the config by vocab-size
+    # Now spawn BernieMeaningForSequenceClassification
+    config['architectures'] = ["BernieForSequenceClassification"]
+    config['finetuning_task'] = None
+    config['bernie_meaning'] = None
+    # TODO: Do I have to manually add these tokens? // Check this out ..
+    config['vocab_size'] = tokenizer.vocab_size + len(tokenizer.added_tokens_decoder)
+
+    # TODO: Check embeddings of underlying BERT model
+
+    print("Tokens before passing data through tokenizer is: ")
+    print(config)
+
+    # TODO: Instantiate BertMaskedLMModel by this config
+    model = BernieMeaningForMaskedLM(config)
+    model.bert = seq_model.bert
+    # The rest stay the same
+
+
+    # TODO: Save the trained BERT model
+    # TODO: Load this saved BERT model (or pass it on ...)
+    # Pass through dataset, then pre-traing
+    # TODO: Re-create the model
     # Run the tokenizer through the dataset
-    if args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos"):
 
-        # TODO: Uncomment this at a later stage!
-        # Try to load the tokenizer and model if this is possible
-        if args.do_train and (args.local_rank == -1):
-            # Create output directory if needed
+    # TODO: Do the actual pre-training
+    model = run_pretrain_on_dataset(model, tokenizer, train_dataset)
 
-            print("Inside lala")
-            if os.path.exists(args.output_dir) and args.local_rank in [-1, 0]:
-                load_model(path=args.output_dir, model_class=model_class, tokenizer_class=tokenizer_class)
+    # Now take it, and put it back into the original model
+    seq_model.bert = model.bert
 
-            model.to(args.device)
+    # Save for a second time after pre-training is done:
+    if args.do_train and (args.local_rank == -1):
+        # Create output directory if needed
+        print("Inside lala")
+        if not os.path.exists(args.output_dir + "pretrained/") and args.local_rank in [-1, 0]:
+            save_model(args=args, path=args.output_dir + "pretrained/", model=model, tokenizer=tokenizer)
+        else:
+            load_model(args=args, path=args.output_dir + "pretrained/", model_class=model_class,
+                       tokenizer_class=tokenizer_class)
 
+        model.to(args.device)
+
+        if args.model_type in ("bernie_meaning", "bernie_pos"):
             # Do a bunch of asserts
             print("\n\n\n AFTER SAVE")
             print("Re-loaded splitwords are: ")
@@ -178,71 +286,16 @@ def pretrain_bernie_meaning():
             print(model.bert.embeddings.word_embeddings.weight.shape)
 
             # Assert that model was loaded successfully
+            assert old_split_tokens == tokenizer.split_tokens, (old_split_tokens, tokenizer.split_tokens)
+            assert old_replace_dict == tokenizer.replace_dict, (old_replace_dict, tokenizer.replace_dict)
+            assert old_matr_shape == model.bert.embeddings.word_embeddings.weight.shape, (
+            old_matr_shape, model.bert.embeddings.word_embeddings.weight.shape)
+            assert old_added_tokens == tokenizer.added_tokens, (old_added_tokens, tokenizer.added_tokens)
 
         else:
             print("Outside lolo")
 
-        # Set only part of the embeddings as trainable
 
-        print("Additional pre-training!!!")
-
-        if args.model_type in ("bernie_meaning", "bernie_pos"):
-            print("\n\n\n BEFORE TRAIN")
-            print("Re-loaded splitwords are: ")
-            print(tokenizer.split_tokens)
-            print(tokenizer.replace_dict)
-            print(tokenizer.added_tokens)
-            print("Embedding sizes")
-            print(model.bert.embeddings.word_embeddings.weight.shape)
-
-        # 1. Generate the additional pre-training corpus
-        if args.local_rank not in [-1, 0]:
-            torch.distributed.barrier()  # Barrier to make sure only the first process in distributed training process the dataset, and the others will use the cache
-
-        train_dataset = LineByLineTextDataset(
-            tokenizer=tokenizer,
-            args=args,
-            file_path=os.getenv("EN_CORPUS"),
-            block_size=50  # This is the default BERT block size
-        )
-
-        if args.model_type in ("bernie_meaning", "bernie_pos"):
-            old_split_tokens = tokenizer.split_tokens
-            old_replace_dict = tokenizer.replace_dict
-            old_matr_shape = model.bert.embeddings.word_embeddings.weight.shape
-            old_added_tokens = tokenizer.added_tokens
-
-            print("\n\n\n BEFORE SAVE")
-            print("Re-loaded splitwords are: ")
-            print(tokenizer.split_tokens)
-            print(tokenizer.replace_dict)
-            print(tokenizer.added_tokens)
-            print("Embedding sizes")
-            print(model.bert.embeddings.word_embeddings.weight.shape)
-
-        # Put it back to CPU for now
-        model.to('cpu')
-
-    else:
-        print("Will not do additional pre-training")
-
-    print("DONE TRAINING LULULULU")
-
-    # TODO: Pass through dict
-
-    # TODO: Modify the config by vocab-size
-
-    # TODO: Instantiate BertMaskedLMModel by this config
-
-    # TODO: Do the actual pre-training
-
-    # TODO: Save the trained BERT model
-
-    # TODO: Load this saved BERT model (or pass it on ...)
-
-
-    # Pass through dataset, then pre-traing
-    # TODO: Re-create the model
     if args.model_type in ("bernie_meaning"):
         # Do a bunch of asserts
         print("\n\n\n AFTER SAVE")
@@ -261,7 +314,8 @@ def pretrain_bernie_meaning():
         assert set(old_replace_dict.keys()) == set(tokenizer.replace_dict.keys()), (
             old_replace_dict, tokenizer.replace_dict)
 
-    model = run_pretrain_on_dataset(model, tokenizer, train_dataset)
+    # This is the newly pretrained sequence model
+    return seq_model
 
 
 def inject_tokens_into_bert(tokenizer, model):
@@ -341,37 +395,6 @@ def main():
 
     # TODO: I guess only save the underlying BERT model, and not together with the wrapper...?
 
-    # Save for a second time after pre-training is done:
-    if False and args.do_train and (args.local_rank == -1):
-        # Create output directory if needed
-        print("Inside lala")
-        if not os.path.exists(args.output_dir + "pretrained/") and args.local_rank in [-1, 0]:
-            save_model(args=args, path=args.output_dir + "pretrained/", model=model, tokenizer=tokenizer)
-        else:
-            load_model(args=args, path=args.output_dir + "pretrained/", model_class=model_class, tokenizer_class=tokenizer_class)
-
-        model.to(args.device)
-
-        # if args.model_type in ("bernie_meaning", "bernie_pos"):
-        #     # Do a bunch of asserts
-        #     print("\n\n\n AFTER SAVE")
-        #     print("Re-loaded splitwords are: ")
-        #     print(tokenizer.split_tokens)
-        #     print(tokenizer.replace_dict)
-        #     print(tokenizer.added_tokens)
-        #     print("Embedding sizes")
-        #     print(model.bert.embeddings.word_embeddings.weight.shape)
-        #
-        #     # Assert that model was loaded successfully
-        #     assert old_split_tokens == tokenizer.split_tokens, (old_split_tokens, tokenizer.split_tokens)
-        #     assert old_replace_dict == tokenizer.replace_dict, (old_replace_dict, tokenizer.replace_dict)
-        #     assert old_matr_shape == model.bert.embeddings.word_embeddings.weight.shape, (
-        #     old_matr_shape, model.bert.embeddings.word_embeddings.weight.shape)
-        #     assert old_added_tokens == tokenizer.added_tokens, (old_added_tokens, tokenizer.added_tokens)
-
-    else:
-        print("Outside lolo")
-
     # 2. Fix any parameters you do not want to further train with BERT
 
     print("Successful training!")
@@ -426,6 +449,8 @@ if __name__ == "__main__":
     print("Starting to train and evaluate the model")
 
     # Manually assign these variables ...?
-    # pretrain_bernie_meaning()
 
-    main()
+    if args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos"):
+        pretrain_bernie_meaning()
+
+    # main()
