@@ -175,7 +175,7 @@ def pretrain_bernie_meaning():
 
     # TODO: Not suree what num_labels should be
     # Load model
-    tokenizer, model, config, model_class, tokenizer_class = load_model_and_tokenizer(num_labels=None, finetuning_task=args.task)
+    tokenizer, model, config, model_class, tokenizer_class = load_model_and_tokenizer(num_labels=None, finetuning_task=args.task_name)
 
     # Inject tokens
     tokenizer, model = inject_tokens_into_bert(tokenizer, model)
@@ -340,7 +340,7 @@ def main():
     prepare_runs()
 
     processor, label_list, num_labels = prepare_glue_tasks()
-    tokenizer, model, config, model_class, tokenizer_class = load_model_and_tokenizer(num_labels=num_labels, finetuning_task=args.task)
+    tokenizer, model, config, model_class, tokenizer_class = load_model_and_tokenizer(num_labels=num_labels, finetuning_task=args.task_name)
     tokenizer, model = inject_tokens_into_bert(tokenizer, model)
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
@@ -416,10 +416,10 @@ def main():
 
         train_dataset = load_and_cache_examples(args, args.task_name, tokenizer, evaluate=False)
 
-        print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
+        # print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
         global_step, tr_loss = train(args, train_dataset, model, tokenizer)
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
-        print("Added tokens for the tokenizer are (2): ", tokenizer.added_tokens)
+        # print("Added tokens for the tokenizer are (2): ", tokenizer.added_tokens)
 
     ##########################################################
     #                                                        #
@@ -454,6 +454,6 @@ if __name__ == "__main__":
     print("Starting to train and evaluate the model")
 
     # Manually assign these variables ...?
-    pretrain_bernie_meaning()
+    # pretrain_bernie_meaning()
 
-    # main()
+    main()

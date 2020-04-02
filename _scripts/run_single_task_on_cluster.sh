@@ -109,7 +109,7 @@ do
     echo bernie-meaning;\
     echo $TASK; \
     python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
-      --model_type bernie_meaning \
+      --model_type bert \
       --model_name_or_path bert-base-uncased \
       --task_name $TASK \
       --do_train \
@@ -145,7 +145,7 @@ do
       --max_seq_length 128 \
       --per_gpu_train_batch_size 32 \
       --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
+      --num_train_epochs 1.0 \
       --overwrite_output_dir \
       --overwrite_cache \
       --seed 101 \

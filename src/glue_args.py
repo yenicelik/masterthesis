@@ -27,12 +27,15 @@ ALL_MODELS = sum(
     (),
 )
 
-MODEL_CLASSES = {
-    # "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
-    "bernie_pos": (BerniePoSConfig, BerniePoSForSequenceClassification, BerniePoSTokenizer),
-    # "bernie_meaning": (BernieMeaningConfig, BernieMeaningForSequenceClassification, BernieMeaningTokenizer),
-
+MODEL_CLASSES_PRETRAIN = {
     "bert": (BertConfig, BertForMaskedLM, BertTokenizer),  # From this checkpoint, load a BertForSequenceClassification later on
+    "bernie_meaning": (BernieMeaningConfig, BernieMeaningForSequenceClassification, BernieMeaningTokenizer),
+
+}
+
+MODEL_CLASSES = {
+    "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
+    "bernie_pos": (BerniePoSConfig, BerniePoSForSequenceClassification, BerniePoSTokenizer),
     "bernie_meaning": (BernieMeaningConfig, BernieMeaningForSequenceClassification, BernieMeaningTokenizer),
 
     # "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
