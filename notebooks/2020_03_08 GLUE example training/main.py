@@ -145,12 +145,57 @@ def run_pretrain_on_dataset(model, tokenizer, train_dataset):
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
 
     # Dont add new tokens after pretraining!! (which makes sense...) but deactivate this functionality
-    tokenizer.set_split_tokens(split_tokens={})
+    # tokenizer.set_split_tokens(split_tokens={})
     return model
 
+def inject_tokens_into_bert(tokenizer, model):
+    # For all the split words, introduce the split token
+
+    # TODO: Do all this here just-in-time ..
+
+    if args.model_type in ("bernie_pos", "bernie_meaning"):
+
+        print("Using BERNIE model")
+
+        # Inject the base model to the tokenizer
+        tokenizer.inject_model(model.bert)
+
+        # Inject the split tokens, s.t. new tokens are created for these over time
+        polysemous_words = get_polysemous_splitup_words()
+        tokenizer.set_split_tokens(polysemous_words)
+
+        print("Polysemous words are!", polysemous_words)
+
+        tokenizer.output_meaning_dir = args.output_meaning_dir
+
+    else:
+        print("Not using bernie_pos model!!!")
+        print(args.model_type)
+
+    return tokenizer, model
+
+def prepare_glue_tasks():
+    ##########################################################
+    #                                                        #
+    # Prepare GLUE task                                      #
+    #                                                        #
+    ##########################################################
+    args.task_name = args.task_name.lower()
+    if args.task_name not in processors:
+        raise ValueError("Task not found: %s" % (args.task_name))
+    processor = processors[args.task_name]()
+    args.output_mode = output_modes[args.task_name]
+    label_list = processor.get_labels()
+    num_labels = len(label_list)
+
+    return processor, label_list, num_labels
+
 def pretrain_bernie_meaning():
+    print("pew")
     prepare_runs()
+    print("This")
     processor, label_list, num_labels = prepare_glue_tasks()
+    print("Done")
 
     # TODO: Not suree what num_labels should be
     # Load model
@@ -159,6 +204,7 @@ def pretrain_bernie_meaning():
         finetuning_task=args.task_name,
         model_classes=None
     )
+    print("Duq")
 
     # Inject tokens
     tokenizer, seq_model = inject_tokens_into_bert(tokenizer, seq_model)
@@ -234,11 +280,11 @@ def pretrain_bernie_meaning():
     # Instead of the original configs, use the modified configs!
     # Modify the config by vocab-size
     # Now spawn BernieMeaningForSequenceClassification
-    config['architectures'] = ["BernieForSequenceClassification"]
-    config['finetuning_task'] = None
-    config['bernie_meaning'] = None
+    config.architectures = ["BernieForSequenceClassification"]
+    config.finetuning_task = None
+    config.bernie_meaning = None
     # TODO: Do I have to manually add these tokens? // Check this out ..
-    config['vocab_size'] = tokenizer.vocab_size + len(tokenizer.added_tokens_decoder)
+    config.vocab_size = tokenizer.vocab_size + len(tokenizer.added_tokens_decoder)
 
     # TODO: Check embeddings of underlying BERT model
 
@@ -246,6 +292,7 @@ def pretrain_bernie_meaning():
     print(config)
 
     # TODO: Instantiate BertMaskedLMModel by this config
+    # TODO: Or just create a new config..
     model = BernieMeaningForMaskedLM(config)
     model.bert = seq_model.bert
     # The rest stay the same
@@ -263,37 +310,39 @@ def pretrain_bernie_meaning():
     # Now take it, and put it back into the original model
     seq_model.bert = model.bert
 
+    # Skip the saving etc right now ..
+
     # Save for a second time after pre-training is done:
-    if args.do_train and (args.local_rank == -1):
-        # Create output directory if needed
-        print("Inside lala")
-        if not os.path.exists(args.output_dir + "pretrained/") and args.local_rank in [-1, 0]:
-            save_model(args=args, path=args.output_dir + "pretrained/", model=model, tokenizer=tokenizer)
-        else:
-            load_model(args=args, path=args.output_dir + "pretrained/", model_class=model_class,
-                       tokenizer_class=tokenizer_class)
-
-        model.to(args.device)
-
-        if args.model_type in ("bernie_meaning", "bernie_pos"):
-            # Do a bunch of asserts
-            print("\n\n\n AFTER SAVE")
-            print("Re-loaded splitwords are: ")
-            print(tokenizer.split_tokens)
-            print(tokenizer.replace_dict)
-            print(tokenizer.added_tokens)
-            print("Embedding sizes")
-            print(model.bert.embeddings.word_embeddings.weight.shape)
-
-            # Assert that model was loaded successfully
-            assert old_split_tokens == tokenizer.split_tokens, (old_split_tokens, tokenizer.split_tokens)
-            assert old_replace_dict == tokenizer.replace_dict, (old_replace_dict, tokenizer.replace_dict)
-            assert old_matr_shape == model.bert.embeddings.word_embeddings.weight.shape, (
-            old_matr_shape, model.bert.embeddings.word_embeddings.weight.shape)
-            assert old_added_tokens == tokenizer.added_tokens, (old_added_tokens, tokenizer.added_tokens)
-
-        else:
-            print("Outside lolo")
+    # if args.do_train and (args.local_rank == -1):
+    #     # Create output directory if needed
+    #     print("Inside lala")
+    #     if not os.path.exists(args.output_dir + "pretrained/") and args.local_rank in [-1, 0]:
+    #         save_model(args=args, path=args.output_dir + "pretrained/", model=model, tokenizer=tokenizer)
+    #     else:
+    #         load_model(args=args, path=args.output_dir + "pretrained/", model_class=model_class,
+    #                    tokenizer_class=tokenizer_class)
+    #
+    #     model.to(args.device)
+    #
+    #     if args.model_type in ("bernie_meaning", "bernie_pos"):
+    #         # Do a bunch of asserts
+    #         print("\n\n\n AFTER SAVE")
+    #         print("Re-loaded splitwords are: ")
+    #         print(tokenizer.split_tokens)
+    #         print(tokenizer.replace_dict)
+    #         print(tokenizer.added_tokens)
+    #         print("Embedding sizes")
+    #         print(model.bert.embeddings.word_embeddings.weight.shape)
+    #
+    #         # Assert that model was loaded successfully
+    #         assert old_split_tokens == tokenizer.split_tokens, (old_split_tokens, tokenizer.split_tokens)
+    #         assert old_replace_dict == tokenizer.replace_dict, (old_replace_dict, tokenizer.replace_dict)
+    #         assert old_matr_shape == model.bert.embeddings.word_embeddings.weight.shape, (
+    #         old_matr_shape, model.bert.embeddings.word_embeddings.weight.shape)
+    #         assert old_added_tokens == tokenizer.added_tokens, (old_added_tokens, tokenizer.added_tokens)
+    #
+    #     else:
+    #         print("Outside lolo")
 
 
     if args.model_type in ("bernie_meaning"):
@@ -316,50 +365,6 @@ def pretrain_bernie_meaning():
 
     # This is the newly pretrained sequence model
     return seq_model
-
-
-def inject_tokens_into_bert(tokenizer, model):
-    # For all the split words, introduce the split token
-
-    # TODO: Do all this here just-in-time ..
-
-    if args.model_type in ("bernie_pos", "bernie_meaning"):
-
-        print("Using BERNIE model")
-
-        # Inject the base model to the tokenizer
-        tokenizer.inject_model(model.bert)
-
-        # Inject the split tokens, s.t. new tokens are created for these over time
-        polysemous_words = get_polysemous_splitup_words()
-        tokenizer.set_split_tokens(polysemous_words)
-
-        print("Polysemous words are!", polysemous_words)
-
-        tokenizer.output_meaning_dir = args.output_meaning_dir
-
-    else:
-        print("Not using bernie_pos model!!!")
-        print(args.model_type)
-
-    return tokenizer, model
-
-def prepare_glue_tasks():
-    ##########################################################
-    #                                                        #
-    # Prepare GLUE task                                      #
-    #                                                        #
-    ##########################################################
-    args.task_name = args.task_name.lower()
-    if args.task_name not in processors:
-        raise ValueError("Task not found: %s" % (args.task_name))
-    processor = processors[args.task_name]()
-    args.output_mode = output_modes[args.task_name]
-    label_list = processor.get_labels()
-    num_labels = len(label_list)
-
-    return processor, label_list, num_labels
-
 
 def main():
     print("Will now run the GLUE tasks")

@@ -1,6 +1,6 @@
 export PYTHONPATH=/Users/david/GoogleDrive/_MasterThesis # $(pwd)
 export GLUE_DIR=/Users/david/GoogleDrive/_MasterThesis/data/GLUE
-export SAVEDIR=/Users/david/GoogleDrive/_MasterThesis/savedir/
+export SAVEDIR=/Users/david/GoogleDrive/_MasterThesis/savedir
 
 # All tasks which have low resources!
 export PYTHONPATH=/home/david/_MasterThesis # From the root folder of this repo
@@ -109,7 +109,7 @@ do
     echo bernie-meaning;\
     echo $TASK; \
     python notebooks/2020_03_08\ GLUE\ example\ training/main.py \
-      --model_type bert \
+      --model_type bernie_meaning \
       --model_name_or_path bert-base-uncased \
       --task_name $TASK \
       --do_train \
@@ -120,7 +120,7 @@ do
       --max_seq_length 128 \
       --per_gpu_train_batch_size 32 \
       --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
+      --num_train_epochs 1.0 \
       --overwrite_output_dir \
       --overwrite_cache \
       --seed 101 \
