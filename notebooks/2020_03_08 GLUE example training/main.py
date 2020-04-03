@@ -145,7 +145,7 @@ def run_pretrain_on_dataset(model, tokenizer, train_dataset):
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
 
     # Dont add new tokens after pretraining!! (which makes sense...) but deactivate this functionality
-    # tokenizer.set_split_tokens(split_tokens={})
+    tokenizer.set_split_tokens(split_tokens={})
     return model
 
 def inject_tokens_into_bert(tokenizer, model):
@@ -356,7 +356,6 @@ def pretrain_bernie_meaning():
         print(model.bert.embeddings.word_embeddings.weight.shape)
 
         # Assert that model was loaded successfully
-        assert set(old_split_tokens) == set(tokenizer.split_tokens), (old_split_tokens, tokenizer.split_tokens)
         assert old_matr_shape == model.bert.embeddings.word_embeddings.weight.shape, (
             old_matr_shape, model.bert.embeddings.word_embeddings.weight.shape)
         assert set(old_added_tokens) == set(tokenizer.added_tokens), (old_added_tokens, tokenizer.added_tokens)
