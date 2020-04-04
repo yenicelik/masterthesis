@@ -106,7 +106,7 @@ class LineByLineTextDataset(Dataset):
         with open(file_path, encoding="utf-8") as f:
             lines = [
                 line
-                for line in f.read().splitlines()[:100]
+                for line in f.read().splitlines()
                 if (len(line) > 0 and not line.isspace()) and (len(line.split()) < (block_size))
             ]
 

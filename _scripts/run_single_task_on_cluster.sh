@@ -125,8 +125,8 @@ do
       --overwrite_cache \
       --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/saveload_test_1;
-done 2>&1 | tee $SAVEDIR/saveload_test_1.txt
+      --output_dir $SAVEDIR/bernie_meaning_20200404;
+done 2>&1 | tee $SAVEDIR/bernie_meaning_20200404_1.txt
 
 # JUST SOME TEST
 for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
@@ -150,8 +150,8 @@ do
       --overwrite_cache \
       --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/saveload_test_1;
-done 2>&1 | tee $SAVEDIR/saveload_test_1.txt
+      --output_dir $SAVEDIR/bernie_meaning_20200404;
+done 2>&1 | tee $SAVEDIR/bernie_meaning_20200404.txt
 
 for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do

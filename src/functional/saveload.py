@@ -15,10 +15,13 @@ def load_model(args, path, model_class, tokenizer_class):
     tokenizer = tokenizer_class.from_pretrained(path)
     if args.model_type in ("bernie_meaning"):
         tokenizer.load_bernie_specifics(path, bernie_model=model)
+    return model, tokenizer
 
 def save_model(args, path, model, tokenizer):
     print("Saving a model!!!", path)
-    os.makedirs(path)
+    if not os.path.exists(path):
+        print("Watch out!!! PATH EXISTS ALREADY", path)
+        os.makedirs(path)
     logger.info("Saving model checkpoint to %s", path)
     # Save a trained model, configuration and tokenizer using `save_pretrained()`.
     # They can then be reloaded using `from_pretrained()`
