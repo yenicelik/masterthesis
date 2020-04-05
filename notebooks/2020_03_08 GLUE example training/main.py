@@ -211,7 +211,7 @@ def pretrain_bernie_meaning():
         Pretrains the BERnie meaning embeddings after additional tokens were injectd
     :return:
     """
-    exit(0)  # Safety line so we don't accidentaly overwrite the savemodel
+    # exit(0)  # Safety line so we don't accidentaly overwrite the savemodel
     prepare_runs()
     processor, label_list, num_labels = prepare_glue_tasks()
 
@@ -283,7 +283,7 @@ def pretrain_bernie_meaning():
     config.architectures = ["BernieForSequenceClassification"]
     config.finetuning_task = None
     config.bernie_meaning = None
-    # TODO: Do I have to manually add these tokens? // Check this out ..
+    old_vocab = config.vocab_size  # Later on use this to fix all prior vectors (and just train the newly generated vectors
     config.vocab_size = tokenizer.vocab_size + len(tokenizer.added_tokens_decoder)
 
     # TODO: Check embeddings of underlying BERT model
@@ -351,7 +351,6 @@ def main():
     processor, label_list, num_labels = prepare_glue_tasks()
     tokenizer, model, config, model_class, tokenizer_class = load_model_and_tokenizer(num_labels=num_labels, finetuning_task=args.task_name)
     tokenizer, model = inject_tokens_into_bert(tokenizer, model)
-    model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
 
     # Load model ...
@@ -361,48 +360,21 @@ def main():
     config.vocab_size = tokenizer.vocab_size + len(tokenizer.added_tokens)
     print(config)
 
-    print(tokenizer.vocab_size, len(tokenizer.added_tokens), model.bert.embeddings.word_embeddings.weight.shape)
-    # Finally, print the number of predictor's output items ...
+    model.to(args.device)
 
-    exit()
-    ##########################################################
-    #                                                        #
-    # Saving the model and re-loading it                     #
-    #                                                        #
-    ##########################################################
-    # TODO: Do this saving (and loading ..) only right th pre-training!
-    # if False and args.do_train and (args.local_rank == -1):
-    #     # Create output directory if needed
-    #
-    #     print("Inside lala")
-    #     if not os.path.exists(args.output_dir) and args.local_rank in [-1, 0]:
-    #         save_model(args=args, path=args.output_dir, tokenizer=tokenizer, model=model)
-    #     else:
-    #         load_model(args=args, path=args.output_dir, model_class=model_class, tokenizer_class=tokenizer_class)
-    #
-    #     model.to(args.device)
-    #
-    # else:
-    #     print("Outside lolo")
+    print(tokenizer.vocab_size, len(tokenizer.added_tokens), model.bert.embeddings.word_embeddings.weight.shape)
 
     print("Now going into training...")
 
-    # TODO: I guess only save the underlying BERT model, and not together with the wrapper...?
-
     # 2. Fix any parameters you do not want to further train with BERT
-
-    print("Successful training!")
+    print("Successful loading ..")
 
     ##########################################################
     #                                                        #
     # Training                                               #
     #                                                        #
     ##########################################################
-    # TODO: Uncomment!
     if args.do_train:
-        # TODO: Do the dataset augmentation here!
-        # TODO: Make sure cached is somehow turned off!!!
-
         train_dataset = load_and_cache_examples(args, args.task_name, tokenizer, evaluate=False)
 
         # print("Added tokens for the tokenizer are (1) : ", tokenizer.added_tokens)
@@ -435,6 +407,21 @@ def main():
             result = evaluate(args, model, tokenizer, prefix=prefix)
             result = dict((k + "_{}".format(global_step), v) for k, v in result.items())
             results.update(result)
+
+    ##########################################################
+    #                                                        #
+    # Saving the fine-tuned and trained model                #
+    #                                                        #
+    ##########################################################
+    # TODO: Do this saving (and loading ..) only right th pre-training!
+    if False and args.do_train and (args.local_rank == -1):
+        print("Inside lala")
+        if not os.path.exists(args.output_dir) and args.local_rank in [-1, 0]:
+            save_model(args=args, path=args.output_dir + str(args.task_name), tokenizer=tokenizer, model=model)
+
+        # Test loading  ...
+        load_model(args=args, path=args.output_dir + str(args.task_name), model_class=model_class, tokenizer_class=tokenizer_class)
+        model.to(args.device)
 
     return results
 

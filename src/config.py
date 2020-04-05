@@ -163,6 +163,14 @@ model_parser.add_argument(
 )
 model_parser.add_argument("--local_rank", type=int, default=-1, help="For distributed training: local_rank")
 model_parser.add_argument("--device", type=int, default=1, help="If 0, uses CPU only. If 1, will use GPU when possible")
+model_parser.add_argument(
+    "--only_finetune_newly_added_embeddings", default=False, type=str,
+    help="Boolean flag to determine if only the newly added embeddings should be finetune",
+)
+model_parser.add_argument(
+    "--old_vocab_size", default=30522, type=str,
+    help="Boolean flag to determine if only the newly added embeddings should be finetune",
+)
 
 
 #########################

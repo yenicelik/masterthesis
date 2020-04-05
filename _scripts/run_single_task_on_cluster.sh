@@ -104,7 +104,7 @@ CUDA_LAUNCH_BLOCKING=1
 # for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 # for TASK in  'WNLI' 'RTE' 'QNLI' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
 #for TASK in  'MNLI' 'SNLI' 'QQP' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
-for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 do
     echo bernie-meaning;\
     echo $TASK; \
@@ -120,13 +120,13 @@ do
       --max_seq_length 128 \
       --per_gpu_train_batch_size 32 \
       --learning_rate 2e-5 \
-      --num_train_epochs 1.0 \
+      --num_train_epochs 3.0 \
       --overwrite_output_dir \
       --overwrite_cache \
       --seed 101 \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/bernie_meaning_20200404;
-done 2>&1 | tee $SAVEDIR/bernie_meaning_20200404_1.txt
+      --output_dir $SAVEDIR/bernie_meaning_20200405_101;
+done 2>&1 | tee $SAVEDIR/bernie_meaning_20200405_101.txt
 
 # JUST SOME TEST
 for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
