@@ -108,7 +108,7 @@ class LineByLineTextDataset(Dataset):
                 line
                 for line in f.read().splitlines()
                 if (len(line) > 0 and not line.isspace()) and (len(line.split()) < (block_size))
-            ][:100]
+            ]
 
         # Need to add padding whenever possible I guess ... ?
         self.examples = tokenizer.batch_encode_plus(lines, add_special_tokens=True, max_length=block_size, pad_to_max_length=True)["input_ids"]
@@ -334,7 +334,7 @@ def pretrain(args, train_dataset, model: PreTrainedModel, tokenizer: PreTrainedT
             # TODO Before applying "backward", we need to optionally zero out any gradients of parameters that we are not interested in...
             # Fix all gradients if old embedding-vectors!
             if args.only_finetune_newly_added_embeddings:
-                logger.info("ONLY FINETUNING NEWLY ADDED EMBEDDINGS")
+                # logger.info("ONLY FINETUNING NEWLY ADDED EMBEDDINGS")
                 # Fix all embeddings except the ones we newly added!
                 # Now 0 out all gradients except the ones you want to update..
                 # logger.info("Grad before")

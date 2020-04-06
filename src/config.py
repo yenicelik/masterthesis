@@ -147,7 +147,7 @@ model_parser.add_argument(
     help="The output directory where the meaning-cluster model trains and caches the cluster-models for each word individually.",
 )
 
-model_parser.add_argument("--seed", type=int, default=101, help="random seed for initialization")
+model_parser.add_argument("--seed", type=int, default=42, help="random seed for initialization")
 
 model_parser.add_argument(
     "--fp16",
@@ -164,7 +164,7 @@ model_parser.add_argument(
 model_parser.add_argument("--local_rank", type=int, default=-1, help="For distributed training: local_rank")
 model_parser.add_argument("--device", type=int, default=1, help="If 0, uses CPU only. If 1, will use GPU when possible")
 model_parser.add_argument(
-    "--only_finetune_newly_added_embeddings", default=False, type=str,
+    "--only_finetune_newly_added_embeddings", default=True, type=str,
     help="Boolean flag to determine if only the newly added embeddings should be finetune",
 )
 model_parser.add_argument(

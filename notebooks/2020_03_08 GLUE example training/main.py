@@ -64,7 +64,7 @@ def prepare_runs():
     ##########################################################
     if args.local_rank == -1 or args.no_cuda:
         device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-        args.n_gpu = 0 if args.no_cuda else torch.cuda.device_count()
+        args.n_gpu = 0 if args.no_cuda else 1  # torch.cuda.device_count()
     else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
         torch.cuda.set_device(args.local_rank)
         device = torch.device("cuda", args.local_rank)
@@ -159,6 +159,11 @@ def run_pretrain_on_dataset(model, tokenizer, train_dataset):
         print("Train datasete is: (1) ", train_dataset)
 
         # Send the actual underlying BERT model, not the BERTforSequenceClassification model
+        print("Inputs are: ")
+        print("args: ", args)
+        print("train dataset: ", train_dataset)
+        print("model is: ", model)
+        print("tokenizer is: ", tokenizer)
         global_step, tr_loss = pretrain(args, train_dataset, model, tokenizer)
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
 
@@ -433,5 +438,4 @@ if __name__ == "__main__":
 
     # if args.additional_pretraining and args.model_type in ("bernie_meaning", "bernie_pos"):
     #     pretrain_bernie_meaning()
-
     main()

@@ -123,10 +123,11 @@ do
       --num_train_epochs 3.0 \
       --overwrite_output_dir \
       --overwrite_cache \
-      --seed 101 \
+      --seed 42 \
+      --only_finetune_newly_added_embeddings True \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
-      --output_dir $SAVEDIR/bernie_meaning_20200405_101;
-done 2>&1 | tee $SAVEDIR/bernie_meaning_20200405_101.txt
+      --output_dir $SAVEDIR/bernie_meaning_20200405_finetuned_42;
+done 2>&1 | tee $SAVEDIR/bernie_meaning_20200405_finetuned_42.txt
 
 # JUST SOME TEST
 for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
