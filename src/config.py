@@ -38,28 +38,28 @@ model_parser.add_argument('--additional_pretraining', default=False, help='If th
 
 # Required parameters
 model_parser.add_argument(
-    "--data_dir", default=None, type=str, required=True,
+    "--data_dir", default=None, type=str, required=False,  # previously required
     help="The input data dir. Should contain the .tsv files (or other data files) for the task.",
 )
 model_parser.add_argument(
-    "--model_type", default=None, type=str, required=True,
+    "--model_type", default=None, type=str, required=False,  # previously required
     help="Model type selected in the list: " + ", ",
 )
 model_parser.add_argument(
     "--model_name_or_path",
     default=None,
     type=str,
-    required=True,
+    required=False,  # previously required
     help="Path to pre-trained model or shortcut name selected in the list: ",
 )
-model_parser.add_argument("--task_name", default=None, type=str, required=True,
+model_parser.add_argument("--task_name", default=None, type=str, required=False,  # previously required
                     help="The name of the task to train selected in the list: " + ", ".join(processors.keys()),
                     )
 model_parser.add_argument(
     "--output_dir",
     default=None,
     type=str,
-    required=True,
+    required=False,  # previously required
     help="The output directory where the model predictions and checkpoints will be written.",
 )
 

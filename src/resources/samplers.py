@@ -39,11 +39,11 @@ def sample_naive_data(tgt_word, n=None):
     return X, sentences
 
 
-def sample_semcor_data(tgt_word):
+def sample_semcor_data(tgt_word, n=None):
     corpus = CorpusSemCor()
     lang_model = BertEmbedding(corpus=corpus)
 
-    tuples, true_cluster_labels, sentences = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word)
+    tuples, true_cluster_labels, sentences = get_bert_embeddings_and_sentences(model=lang_model, corpus=corpus, tgt_word=tgt_word, n=n)
 
     if args.cuda:
         # Just concat all to one big matrix
