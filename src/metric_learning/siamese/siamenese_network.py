@@ -6,10 +6,18 @@
 
     Hopefully we can create a general representation using this.
 """
+import random
+import numpy as np
+
 import torch
+from matplotlib.markers import MarkerStyle
+from sklearn.decomposition import PCA
 from torch import nn, optim
 from torch.distributions import Categorical
 
+
+# TODO: we need to make sure approx 50% of images are in the same class
+# I think this is the reason I get so much nan ..
 
 class Siamese(nn.Module):
 
@@ -18,10 +26,17 @@ class Siamese(nn.Module):
 
         # Let's just use linear layers ..
         self.fc1 = nn.Sequential(
-            nn.Linear(input_dim, latent_dim),
+            nn.Linear(input_dim, latent_dim, bias=False),  # Should not require bias ...
             # nn.ReLU(inplace=True),
-            # nn.Linear(latent_dim, 10),
-            # nn.Linear(10, 2)
+            # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
+            # nn.ReLU(inplace=True),
+            # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
+            # nn.ReLU(inplace=True),
+            # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
+            # nn.ReLU(inplace=True),
+            # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
+            # nn.ReLU(inplace=True),
+            # nn.Linear(latent_dim*3, latent_dim, bias=False)
         )
 
         # Probably should have a much bigger latent dimensionality
@@ -40,8 +55,100 @@ class Siamese(nn.Module):
         # returns a squared distance metric
         return distance, output1, output2
 
+def create_dataset(X, y, batch_size):
+    """
+        Creates tuples of 'batch_size' over which you can iterate,
+        which have balanced pairs of datasets
+    :param X:
+    :param y:
+    :param batch_size:
+    :return:
+    """
+    categorical = Categorical(
+        torch.ones(size=(len(np.unique(y)),)) / float(len(np.unique(y)))
+    )
+
+    out = []
+
+    def _sample_base_positive_negative(base_idx, X, y):
+        # Just fckn use numpy
+        base_class = y[base_idx]
+        pos_idx = np.random.choice(np.arange(y.shape[0])[y == base_class])
+        neg_idx = np.random.choice(np.arange(y.shape[0])[y != base_class])
+        return X[base_idx], y[base_idx], X[pos_idx], y[pos_idx], X[neg_idx], y[neg_idx],
+
+    # Prepare triplets
+    X_triples = [
+        _sample_base_positive_negative(x, X, y)
+        for x in range(X.shape[0])
+    ]
+
+    print(X_triples)
+    print("X triplets are")
+    print(len(X_triples))
+
+
+    exit()
+
+
+    for i in range(0, X.shape[0], batch_size):
+
+        # Do the full following mechanism twice, so we have contrastive loss!
+
+        # Is it ok if we are always focusing on only one class?
+        # I think sampling over multiple classes is also a good idea ...
+        # (We could concatenate in this case ...)
+
+        ################
+        # Base samples
+        ################
+        majority_class = categorical.sample()
+        print("Majority class is: ", majority_class)
+        # Select one "majority" class
+        pos_idx = torch.where(y == majority_class)[0]
+        neg_idx = torch.where(y != majority_class)[0]
+
+        # This will cause a variable batch size! (which is fine when we use pytorch..)
+        k = min(len(pos_idx), batch_size)
+        k = min(k, len(neg_idx))
+
+        print("Positive and negative idx are: ")
+        print(pos_idx)
+        print(neg_idx)
+
+        # Choose "base", i.e. items that we will be comparing to ..
+        base_perm = torch.randperm(pos_idx.size(0))
+        base_idx = pos_idx[pos_perm[:batch_size // 2]]
+
+        # Choose positive-examples (low distance)
+        pos_perm = torch.randperm(pos_idx.size(0))
+        pos_idx = pos_idx[pos_perm[:batch_size // 2]]
+
+        # Choose negative-examples (high distance)
+        neg_perm = torch.randperm(neg_idx.size(0))
+        neg_idx = neg_idx[neg_perm[:batch_size // 2]]
+
+        # samples = tensor[idx]
+        X_batch = torch.cat([X[pos_idx], X[neg_idx]], 0)
+        y_batch = torch.cat([y[pos_idx], y[neg_idx]], 0)
+
+        print("Select pos neg idx are")
+        print(pos_idx)
+        print(neg_idx)
+
+        print("X and y shapes are")
+        print(X_batch)
+        print(y_batch)
+        print(X_batch.shape)
+        print(y_batch.shape)
+
+        out.append(X_batch, y_batch)
+
+    return out
+
+
 # Write a short training loop
-def siamese_train(model, X, y, epochs, optimizer):
+def siamese_train(model, X_tpl, y_tpl, epochs, optimizer):
     """
         X_tpl is a tuple.
 
@@ -63,68 +170,57 @@ def siamese_train(model, X, y, epochs, optimizer):
     :return:
     """
     model.train()
+    assert len(X_tpl) == len(y), (len(X), len(y))
 
-    print("Training the siamese network (1)")
-
-    batch_size = 4
-
-    assert X.shape[0] == y.shape[0], (X.shape, y.shape)
-    assert len(y.shape) == 1, ("Y should be 1-dimensional!", y.shape)
-
-    print("Training the siamese network (1.1)")
-
-    # indices = torch.arange(X.shape[0])
-    print(torch.ones(size=(batch_size, X.shape[0],)) / float(X.shape[0]))
-    categorical = Categorical(torch.ones(size=(batch_size, X.shape[0],)) / float(X.shape[0]))
-
-    print("Training the siamese network (1.2)")
-
-    criterion = nn.MSELoss()
-
-    print("Training the siamese network (2)")
+    m = 10.
 
     # Prepare the batches here
     for e in range(epochs):
 
         # SemCor really does not have many labels lol
         # As such, the batch size is very small
-        for batch_idx in range(0, X.shape[0], batch_size):
+        for X_batch, y_batch in zip(X_tpl, y_tpl):
+
+            assert X.shape[0] == y[0].shape[0], (X.shape, y.shape)
+            assert len(y.shape) == 1, ("Y should be 1-dimensional!", y.shape)
 
             # Zero our any previous gradients
             optimizer.zero_grad()
 
-            # Select indices twice
-            inp1_indices = categorical.sample()
-            inp2_indices = categorical.sample()
+            # TODO: Must sample in such a way, that the y consists of uniform
 
-            print("Input 1 and 2 indices are: ")
-            print(inp1_indices)
-            print(inp2_indices)
+            # A label of "1" means that the two elements are in the
+            # same class of some sort
+            label = torch.ones(batch_size)
+            label[torch.eq(y[inp1_indices], y[inp2_indices])] = 0.
 
-            inp1 = X[inp1_indices]
-            inp2 = X[inp2_indices]
+            print("Labels are: ", label)
+            print(np.count_nonzero(label))
 
-            print("Input 1 and 2 are: ")
-            print(inp1)
-            print(inp2)
+            # print("Inputs are: ")
+            # print(inp1, inp2)
 
-            # the distance should be determined by whether or not the comparands
-            # are in the same "cluster"
-            # Create a log-likelihood loss from here indeed
-            distance = torch.zeros(batch_size)
-            print("A")
-            print(y[inp1_indices], y[inp2_indices])
-            print(torch.eq(y[inp1_indices], y[inp2_indices]))
-            print("Distance size is: ", distance)
-            distance[torch.eq(y[inp1_indices], y[inp2_indices])] = 1.
+            distance, _, _ = model(inp1, inp2)
+            # print("Distance is:", distance)
+            loss = (1. - label) * 0.5 * torch.pow(distance, 2)
+            # print("Loss is: ", loss)
+            loss += label * 0.5 * torch.pow(torch.clamp(m - distance, 0., 12.), 2)
 
-            distance_hat, _, _ = model(inp1, inp2)
+            # print("Loss is: ", loss)
+
+            # take mean for the batch-wise loss
+            # print("Loss shape is: ", loss.shape)
+            loss = torch.mean(loss)
 
             # Create a zero-matrix whenever the above condition is fulfilled (else one!)
             # # Difference between the predicted and the real distance
-            loss = criterion(distance, distance_hat)
+            # Let's check if the loss function can be reverted back lol
+
+            # need to run optimizer.backwards
 
             print("Loss is: {:.5f}".format(loss.item()))
+            loss.backward()
+            optimizer.step()
 
     print("Training the siamese network (3)")
 
@@ -135,13 +231,33 @@ def siamese_train(model, X, y, epochs, optimizer):
 if __name__ == "__main__":
     print("Starting siamese network")
 
-    dim = 5
+    from sklearn import datasets
+    from sklearn.model_selection import train_test_split
+
+    digits = datasets.load_digits()
+    n_samples = len(digits.images)
+    X = digits.images.reshape((n_samples, -1))
+    y = digits.target
+
+    X, _, y, _ = train_test_split(
+        X, y, test_size=0.95, shuffle=True)
+
+    n_samples = X.shape[0]
+
+    print("Number of data samples are: ", X.shape)
+
+
+    dim = X.shape[1]
     latent_dim = 2  # Let's project this on a 2-D plane for better visualization
-    samples = 10
+    samples = n_samples
+    n_classes = len(np.unique(y))
+    print("Number of classes are: ", n_classes)
+
+    # Use MNIST data perhaps
 
     net = Siamese(dim, latent_dim)
-    matr1 = torch.rand((10, dim))
-    matr2 = torch.rand((10, dim))
+    matr1 = torch.rand((samples, dim))
+    matr2 = torch.rand((samples, dim))
 
     # forward pass through network
     out = net.forward(matr1, matr2)[0]
@@ -149,9 +265,77 @@ if __name__ == "__main__":
     print("Output is: ", out.shape)
 
     # Data matr:
-    X = torch.rand((2*samples, dim))
-    y = torch.Tensor(2*samples).random_(0, 5)  # Up to five different classes
+    # X = torch.rand((2*samples, dim))
+    # y = torch.Tensor(2*samples).random_(0, n_classes)  # Up to five different classes
+    X = torch.from_numpy(X).float()
+    y = torch.from_numpy(y).float()
+
+    X_tpls, y_tpls = create_dataset(X, y, batch_size=16)
 
     # Use ADAM optimizer instead ..
-    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-    siamese_train(model=net, X=X, y=y, epochs=1, optimizer=optimizer)
+    # optimizer = optim.SGD(net.parameters(), lr=0.00001, momentum=0.5)
+    optimizer = optim.Adam(net.parameters(), lr=0.0005, weight_decay=0.95)
+    # Increase number of epochs ..
+    siamese_train(model=net, X_tpl=X_tpls, y_tpl=y_tpls, epochs=1, optimizer=optimizer)
+
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    # Use the projected X to arrive at the actual dataset
+
+    # visualize assuming a 2-dimensional latent space if this is going to work
+    print("Passing through final")
+    X_hat = net.fc1.forward(X).detach().numpy()
+    X_pca = PCA(n_components=latent_dim).fit_transform(X)
+    print(X_hat.shape)
+
+    markers = [
+        # MarkerStyle(marker=x)
+        # for x in ['o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X']
+        x for x in range(10)
+    ]
+
+    colors = [np.random.rand(3,) for _ in np.unique(y)]
+
+    # plt_markers = [
+    #     markers[idx % len(markers)]
+    #     for _, idx in enumerate(range(X.shape[0]))
+    # ]
+
+    plt_colors = [
+        colors[int(label) % len(colors)]
+        for label in y
+    ]
+    # print("Labels are")
+    # tmp = [
+    #     int(label) % len(colors)
+    #     for label in y
+    # ]
+    # print(tmp)
+
+    print("y is: ", y)
+    print("Colors are: ", plt_colors)
+
+    # Set a cmap perhaps
+    plt.scatter(
+        x=X_pca[:, 0],
+        y=X_pca[:, 1],
+        c=plt_colors,
+        # marker=plt_markers
+    )
+    plt.title("Using the raw PCA")
+
+    plt.show()
+    plt.clf()
+
+    # Set a cmap perhaps
+    plt.scatter(
+        x=X_hat[:, 0],
+        y=X_hat[:, 1],
+        c=plt_colors,
+        # marker=plt_markers
+    )
+    plt.title("Using the metric learning Siamese Network")
+
+    plt.show()
+
