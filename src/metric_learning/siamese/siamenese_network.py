@@ -30,8 +30,8 @@ class Siamese(nn.Module):
             # nn.ReLU(inplace=True),
             # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
             # nn.ReLU(inplace=True),
-            # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
-            # nn.ReLU(inplace=True),
+            # # nn.Linear(latent_dim, latent_dim, bias=False),
+            # # nn.ReLU(inplace=True),
             # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
             # nn.ReLU(inplace=True),
             # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
@@ -50,7 +50,10 @@ class Siamese(nn.Module):
         output1 = self.fc1(input1)
         output2 = self.fc1(input2)
         # print output1 - output2
-        distance = torch.sqrt(torch.sum((output1 - output2) * (output1 - output2), 1))
+        # Remove the sqrt!
+        distance = torch.sqrt(
+            torch.sum((output1 - output2) * (output1 - output2), 1) + 0.01
+        )
 
         # returns a squared distance metric
         return distance, output1, output2
@@ -65,59 +68,55 @@ def create_dataset(X, y, shuffle=True):
     :return:
     """
 
-    # def _sample_pos(base_idx, X, y):
-    #     base_class = y[base_idx]
-    #
-    # def _sample_neg(base_idx, X, y):
-    #     base_class = y[base_idx]
-
-    def _sample_base_positive_negative(base_idx, X, y):
-        # Just fckn use numpy
+    def _sample_pos(base_idx, X, y):
         base_class = y[base_idx]
         pos_idx = np.random.choice(np.arange(y.shape[0])[y == base_class])
+        return X[base_idx], X[pos_idx], torch.Tensor([1.])  # 0 siganlises that it is the same class!
+
+    def _sample_neg(base_idx, X, y):
+        base_class = y[base_idx]
         neg_idx = np.random.choice(np.arange(y.shape[0])[y != base_class])
-        return X[base_idx], y[base_idx], X[pos_idx], y[pos_idx], X[neg_idx], y[neg_idx],
+        return X[base_idx], X[neg_idx], torch.Tensor([0.])  # 0 siganlises that it is the same class!
+
+    # Prepare final dataset items
+    X1s, X2s, ys = [], [], []
 
     # Prepare triplets
-    base_Xs, base_ys, pos_Xs, pos_ys, neg_Xs, neg_ys = [], [], [], [], [], []
     idx = [x for x in range(X.shape[0])]
     if shuffle:
         random.shuffle(idx)
     for i in idx:
-        base_X, base_y, pos_X, pos_y, neg_X, neg_y = _sample_base_positive_negative(i, X, y)
+        # Add one positive example
+        base_X1, pos_X, pos_y = _sample_pos(i, X, y)
+        # Add one negative example
+        base_X2, neg_X, neg_y = _sample_neg(i, X, y)
 
-        base_Xs.append(base_X.reshape(1, -1))
-        base_ys.append(base_y.reshape(1,))
-        pos_Xs.append(pos_X.reshape(1, -1))
-        pos_ys.append(pos_y.reshape(1,))
-        neg_Xs.append(neg_X.reshape(1, -1))
-        neg_ys.append(neg_y.reshape(1,))
+        assert torch.all(torch.eq(base_X1, base_X2))
+
+        X1s.append(base_X1.reshape(1, -1))
+        X2s.append(pos_X.reshape(1, -1))
+        ys.append(pos_y.reshape(1, ))
+        X1s.append(base_X2.reshape(1, -1))
+        X2s.append(neg_X.reshape(1, -1))
+        ys.append(neg_y.reshape(1, ))
 
     # Create the datasets, so you can slice them into batches in a bit
-    base_Xs, base_ys = torch.cat(base_Xs, 0), torch.cat(base_ys)
-    pos_Xs, pos_ys = torch.cat(pos_Xs, 0), torch.cat(pos_ys)
-    neg_Xs, neg_ys = torch.cat(neg_Xs, 0), torch.cat(neg_ys)
+    X1s, X2s, ys = torch.cat(X1s, 0), torch.cat(X2s, 0), torch.cat(ys, 0)
 
-    # Shapes are:
-    print("Final shapes are.")
-    print(base_Xs.shape)
-    print(base_ys.shape)
-    print(pos_Xs.shape)
-    print(pos_ys.shape)
-    print(neg_Xs.shape)
-    print(neg_ys.shape)
+    assert len(X1s) == len(X2s)
+    assert len(X2s) == len(ys)
 
-    return base_Xs, base_ys, pos_Xs, pos_ys, neg_Xs, neg_ys
+    return X1s, X2s, ys
 
 
 # Write a short training loop
-def siamese_train(model, base_Xs, base_ys, pos_Xs, pos_ys, neg_Xs, neg_ys, optimizer):
+def siamese_train(model, X1s, X2s, ys, optimizer, batch_size=32):
     """
         X_tpl is a tuple.
 
         Each element in the array consists of samples,
         which are specific to one class.
-        If samples are in the same class, they should be pushed toghether.
+        If samples are in the same class , they should be pushed toghether.
         If samples are not within the same class, they should be pushed away.
 
         In other words,
@@ -133,46 +132,42 @@ def siamese_train(model, base_Xs, base_ys, pos_Xs, pos_ys, neg_Xs, neg_ys, optim
     :return:
     """
     model.train()
-    assert len(base_Xs) == len(base_ys)
-    assert len(base_ys) == len(pos_Xs)
-    assert len(pos_Xs) == len(pos_ys)
-    assert len(pos_ys) == len(neg_Xs)
-    assert len(neg_Xs) == len(neg_ys)
+    assert len(X1s) == len(X2s)
+    assert len(X2s) == len(ys)
 
-    m = 10.
-    batch_size = 16
+    m = 10.0
 
     # SemCor really does not have many labels lol
     # As such, the batch size is very small
-    for idx in range(base_Xs.shape):
-        base_Xs, base_ys, = base_Xs[idx:idx + batch_size], base_ys
-        pos_Xs, pos_ys = pos_Xs, pos_ys
-        neg_Xs, neg_ys =  neg_Xs, neg_ys
+    for idx in range(0, X1s.shape[0], batch_size):
+        inp1, inp2, labels = X1s[idx:idx+batch_size, :], X2s[idx:idx+batch_size, :], ys[idx:idx+batch_size]
 
-        assert X.shape[0] == y[0].shape[0], (X.shape, y.shape)
-        assert len(y.shape) == 1, ("Y should be 1-dimensional!", y.shape)
-
-        # Zero our any previous gradients
-        optimizer.zero_grad()
+        assert inp1.shape[0] == inp2.shape[0], (inp1.shape, inp2.shape)
+        assert inp1.shape[0] == labels.shape[0], (inp1.shape, labels.shape)
+        assert len(labels.shape) == 1, ("Y should be 1-dimensional!", labels.shape)
 
         # TODO: Must sample in such a way, that the y consists of uniform
 
         # A label of "1" means that the two elements are in the
         # same class of some sort
-        label = torch.ones(batch_size)
-        label[torch.eq(y[inp1_indices], y[inp2_indices])] = 0.
-
-        print("Labels are: ", label)
-        print(np.count_nonzero(label))
+        # print("shapes are")
+        # print(labels.shape)
+        # print(inp1.shape)
+        # print(inp2.shape)
+        # print("Labels are: ", labels)
+        # print(np.count_nonzero(labels))
 
         # print("Inputs are: ")
         # print(inp1, inp2)
 
         distance, _, _ = model(inp1, inp2)
         # print("Distance is:", distance)
-        loss = (1. - label) * 0.5 * torch.pow(distance, 2)
+        loss = labels * torch.pow(distance, 2)
         # print("Loss is: ", loss)
-        loss += label * 0.5 * torch.pow(torch.clamp(m - distance, 0., 12.), 2)
+        loss += (1. - labels) * torch.pow(torch.max(torch.Tensor([0.]), m - distance), 2)
+
+        # Weights are:
+        # print(model.fc1[0].weight)
 
         # print("Loss is: ", loss)
 
@@ -189,6 +184,8 @@ def siamese_train(model, base_Xs, base_ys, pos_Xs, pos_ys, neg_Xs, neg_ys, optim
         print("Loss is: {:.5f}".format(loss.item()))
         loss.backward()
         optimizer.step()
+        # Zero our any previous gradients
+        optimizer.zero_grad()
 
     print("Training the siamese network (3)")
 
@@ -241,15 +238,13 @@ if __name__ == "__main__":
 
     # Use ADAM optimizer instead ..
     # optimizer = optim.SGD(net.parameters(), lr=0.00001, momentum=0.5)
-    optimizer = optim.Adam(net.parameters(), lr=0.0005, weight_decay=0.95)
-    for epoch in range(1):
+    print("Net parameters are: ")
+    optimizer = optim.Adam(net.parameters(), lr=0.001)
+    for epoch in range(10):
         # Increase number of epochs ..
-        base_Xs, base_ys, pos_Xs, pos_ys, neg_Xs, neg_ys = create_dataset(X, y)
-        siamese_train(
-            model=net,
-            base_Xs=base_Xs, base_ys=base_ys, pos_Xs=pos_Xs, pos_ys=pos_ys, neg_Xs=neg_Xs, neg_ys=neg_ys,
-            optimizer=optimizer
-        )
+        # print([x for x in net.parameters()])
+        X1s, X2s, ys = create_dataset(X, y)
+        siamese_train(model=net, X1s=X1s, X2s=X2s, ys=ys, optimizer=optimizer)
 
     import matplotlib
     import matplotlib.pyplot as plt
@@ -286,7 +281,7 @@ if __name__ == "__main__":
     # ]
     # print(tmp)
 
-    print("y is: ", y)
+    # print("y is: ", y)
     print("Colors are: ", plt_colors)
 
     # Set a cmap perhaps
@@ -311,4 +306,3 @@ if __name__ == "__main__":
     plt.title("Using the metric learning Siamese Network")
 
     plt.show()
-
