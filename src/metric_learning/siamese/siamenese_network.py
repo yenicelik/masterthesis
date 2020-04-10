@@ -26,6 +26,7 @@ class Siamese(nn.Module):
 
         # Let's just use linear layers ..
         self.fc1 = nn.Sequential(
+            nn.BatchNorm1d(input_dim),
             nn.Linear(input_dim, latent_dim, bias=False),  # Should not require bias ...
             # nn.ReLU(inplace=True),
             # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),

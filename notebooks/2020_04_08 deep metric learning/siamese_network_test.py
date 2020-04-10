@@ -16,6 +16,7 @@ from sklearn.model_selection import train_test_split
 
 from src.metric_learning.siamese.siamenese_network import create_dataset, siamese_train, Siamese
 from src.resources.samplers import sample_semcor_data
+from src.utils.create_experiments_folder import randomString
 
 
 def load_bert_embeddings_with_labels():
@@ -46,7 +47,25 @@ if __name__ == "__main__":
     print("Starting siamese network")
     tgt_word = ' was '
 
-    X, y = load_target_word_embedding_with_oversampling(tgt_word)
+    rnd_str = randomString(additonal_label=f"_siamase_bn_") + "/"
+
+    # Concat multiple words to arrive at the X that we gun train
+    Xs, ys = [], []
+    for idx, tgt_word in enumerate([
+        ' know ',
+        ' one ',
+        ' have ',
+        ' live ',
+        ' report ',
+        ' use ',
+        ' was '
+    ]):
+        X_tmp, y_tmp = load_target_word_embedding_with_oversampling(tgt_word)
+        Xs.append(X_tmp)
+        ys.append(y_tmp + idx * 100)
+
+    X = np.concatenate(Xs, axis=0)
+    y = np.concatenate(ys, axis=0)
 
     n_samples = X.shape[0]
 
@@ -103,6 +122,8 @@ if __name__ == "__main__":
         x for x in range(10)
     ]
 
+    # TODO: Do a per-word training ... (currently you mixx all words together ..)
+
     colors = [np.random.rand(3,) for _ in np.unique(y)]
 
     # plt_markers = [
@@ -132,6 +153,7 @@ if __name__ == "__main__":
         # marker=plt_markers
     )
     plt.title(f"Using the raw PCA for '{tgt_word}'")
+    plt.savefig(rnd_str + f"pca_{tgt_word}")
 
     plt.show()
     plt.clf()
@@ -144,5 +166,63 @@ if __name__ == "__main__":
         # marker=plt_markers
     )
     plt.title(f"Using the metric learning Siamese Network for '{tgt_word}'")
+    plt.savefig(rnd_str + f"trained_siamese_{tgt_word}")
 
     plt.show()
+    plt.clf()
+
+    # Also check for other words if this embedding is generalizable
+    for comparand in [
+        # ' know ',
+        # ' one ',
+        # ' have ',
+        # ' live '
+        # ' report ',
+        # ' use ',
+        # ' concern ',
+        # ' allow ',
+        ' state ',
+        # ' key ',
+        # ' arms ',
+        ' thought ',
+        ' pizza ',
+        ' made ',
+        ' thought ',
+        ' only ',
+        # ' central ',
+        ' pizza ',
+        # ' bank ',
+        # ' cold ',
+        # ' table ',
+        ' good ',
+        ' mouse ',
+        # ' was ',
+
+    ]:
+        try:
+            X_comparand, y_comparand = load_target_word_embedding_with_oversampling(comparand)
+            y_comparand = y_comparand.tolist()
+            y_comparand = np.asarray([int(x) for x in y_comparand])
+            X_comparand = torch.from_numpy(X_comparand).float()
+            X_comparand = net.fc1.forward(X_comparand).detach().numpy()
+
+            plt_colors = [
+                colors[int(label) % len(colors)]
+                for label in y_comparand
+            ]
+
+            # Set a cmap perhaps
+            plt.scatter(
+                x=X_comparand[:, 0],
+                y=X_comparand[:, 1],
+                c=plt_colors,
+                # marker=plt_markers
+            )
+            plt.title(f"Using the metric learning Siamese Network for '{comparand}'")
+            plt.savefig(rnd_str + f"domain_adapt_siamese_{comparand}")
+
+            plt.show()
+            plt.clf()
+        except Exception as e:
+            print("Error with: ", comparand)
+            print(e)
