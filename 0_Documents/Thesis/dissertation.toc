@@ -1,42 +1,51 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}% 
 \contentsline {section}{\numberline {1.1}Scope of Work}{1}% 
-\contentsline {chapter}{\numberline {2}Background}{5}% 
-\contentsline {section}{\numberline {2.1}Word Embeddings}{5}% 
-\contentsline {section}{\numberline {2.2}Generating "static" word-embeddings through contextual embeddings}{6}% 
-\contentsline {section}{\numberline {2.3}Gaussian Embeddings}{8}% 
-\contentsline {subsubsection}{Word representations via Gaussian Embeddings}{9}% 
-\contentsline {paragraph}{Symmetric similarity: expected likelihood or probability product kernel}{10}% 
-\contentsline {paragraph}{Asymmetric divergence: KL-Divergence}{10}% 
-\contentsline {paragraph}{Uncertainty calculation:}{11}% 
-\contentsline {section}{\numberline {2.4}General random information}{12}% 
-\contentsline {section}{\numberline {2.5}Normalising Flows}{13}% 
-\contentsline {subsubsection}{Planar Flow}{20}% 
-\contentsline {subsubsection}{Real NVP (2017)}{20}% 
-\contentsline {subsubsection}{Inverse AR Flow (2017)}{21}% 
-\contentsline {subsubsection}{Non-Linear Independent Components Estimation (NICE)}{21}% 
-\contentsline {subsubsection}{Glow: Generative Flows with Invertible 1x1 Convolutions (2018)}{22}% 
-\contentsline {subsubsection}{Flow++ (2019)}{22}% 
-\contentsline {chapter}{\numberline {3}Related Work}{25}% 
-\contentsline {paragraph}{Pseudo-Cross-Label}{27}% 
-\contentsline {paragraph}{online data}{28}% 
-\contentsline {paragraph}{offline data}{28}% 
-\contentsline {section}{\numberline {3.1}Discrete Methods }{28}% 
-\contentsline {subsection}{\numberline {3.1.1}Loss in Translation}{28}% 
-\contentsline {subsection}{\numberline {3.1.2}MUSE Facebook using a Min-Max objective}{29}% 
-\contentsline {section}{\numberline {3.2}Methods using Normalising Flows}{32}% 
-\contentsline {subsection}{\numberline {3.2.1}Density Matching for Bilingual Word Embeddings (Zhou 2019)}{32}% 
-\contentsline {section}{\numberline {3.3}Methods viewing this problem as an Optimal Transport (OT) Problem}{35}% 
-\contentsline {subsection}{\numberline {3.3.1}Gromov-Wasserstein Alignment of Word Embedding Spaces}{35}% 
-\contentsline {subsubsection}{Supervised Case: Procrustes}{36}% 
-\contentsline {subsubsection}{Unsupervised Maps: Optimal Transport}{37}% 
-\contentsline {subsection}{\numberline {3.3.2}Graph translation using normalizing flows}{38}% 
-\contentsline {subsection}{\numberline {3.3.3}Using monolingual word-embeddings to map one to another}{39}% 
-\contentsline {subsubsection}{Cross-lingual word-mappings (Artetxe 2018)}{39}% 
-\contentsline {subsubsection}{Bilingual Lexicon Induction through Unsupervised Machine Translation (Artetxe 2019)}{40}% 
-\contentsline {section}{\numberline {3.4}Gaussian Embeddings and Token matching in other applications}{40}% 
-\contentsline {subsection}{\numberline {3.4.1}Creating Gaussian Embeddings to represent Graphs}{40}% 
-\contentsline {chapter}{\numberline {4}Analysis of the current state of the art}{41}% 
-\contentsline {chapter}{\numberline {5}Our Method}{43}% 
-\contentsline {chapter}{\numberline {6}Further Work}{45}% 
-\contentsline {chapter}{\numberline {7}Evaluation}{47}% 
-\contentsline {chapter}{\numberline {8}Conclusion}{49}% 
+\contentsline {chapter}{\numberline {2}Motivation}{5}% 
+\contentsline {chapter}{\numberline {3}Background}{7}% 
+\contentsline {section}{\numberline {3.1}Word Embeddings}{7}% 
+\contentsline {subsection}{\numberline {3.1.1}Static Word Embeddings}{9}% 
+\contentsline {subsubsection}{Word2Vec}{9}% 
+\contentsline {subsubsection}{GLoVe}{10}% 
+\contentsline {subsubsection}{Gaussian Embeddings}{10}% 
+\contentsline {paragraph}{Symmetric similarity: expected likelihood or probability product kernel}{11}% 
+\contentsline {paragraph}{Asymmetric divergence: KL-Divergence}{11}% 
+\contentsline {paragraph}{Uncertainty calculation:}{12}% 
+\contentsline {subsection}{\numberline {3.1.2}Context Embeddings}{13}% 
+\contentsline {subsubsection}{The Transformer Architecture}{13}% 
+\contentsline {subsubsection}{ELMo}{13}% 
+\contentsline {subsubsection}{BERT}{13}% 
+\contentsline {subsubsection}{GPT and GPT-2}{13}% 
+\contentsline {subsection}{\numberline {3.1.3}Other methods}{13}% 
+\contentsline {subsubsection}{Generating "static" word-embeddings through contextual embeddings}{13}% 
+\contentsline {chapter}{\numberline {4}Related Work}{17}% 
+\contentsline {section}{\numberline {4.1}Structure inside BERT}{17}% 
+\contentsline {section}{\numberline {4.2}Metric Learning and Disentanglement}{19}% 
+\contentsline {section}{\numberline {4.3}Zero shot and One shot learning }{19}% 
+\contentsline {section}{\numberline {4.4}Clustering Algorithms}{19}% 
+\contentsline {section}{\numberline {4.5}Applications of word vector}{19}% 
+\contentsline {subsubsection}{Word2Vec}{20}% 
+\contentsline {chapter}{\numberline {5}Related Work}{23}% 
+\contentsline {paragraph}{Pseudo-Cross-Label}{25}% 
+\contentsline {paragraph}{online data}{26}% 
+\contentsline {paragraph}{offline data}{26}% 
+\contentsline {section}{\numberline {5.1}Discrete Methods }{26}% 
+\contentsline {subsection}{\numberline {5.1.1}Loss in Translation}{26}% 
+\contentsline {subsection}{\numberline {5.1.2}MUSE Facebook using a Min-Max objective}{27}% 
+\contentsline {section}{\numberline {5.2}Methods using Normalising Flows}{30}% 
+\contentsline {subsection}{\numberline {5.2.1}Density Matching for Bilingual Word Embeddings (Zhou 2019)}{30}% 
+\contentsline {section}{\numberline {5.3}Methods viewing this problem as an Optimal Transport (OT) Problem}{33}% 
+\contentsline {subsection}{\numberline {5.3.1}Gromov-Wasserstein Alignment of Word Embedding Spaces}{33}% 
+\contentsline {subsubsection}{Supervised Case: Procrustes}{34}% 
+\contentsline {subsubsection}{Unsupervised Maps: Optimal Transport}{35}% 
+\contentsline {subsection}{\numberline {5.3.2}Graph translation using normalizing flows}{36}% 
+\contentsline {subsection}{\numberline {5.3.3}Using monolingual word-embeddings to map one to another}{37}% 
+\contentsline {subsubsection}{Cross-lingual word-mappings (Artetxe 2018)}{37}% 
+\contentsline {subsubsection}{Bilingual Lexicon Induction through Unsupervised Machine Translation (Artetxe 2019)}{38}% 
+\contentsline {section}{\numberline {5.4}Gaussian Embeddings and Token matching in other applications}{38}% 
+\contentsline {subsection}{\numberline {5.4.1}Creating Gaussian Embeddings to represent Graphs}{38}% 
+\contentsline {chapter}{\numberline {6}Metric learning on BERT embedding}{39}% 
+\contentsline {chapter}{\numberline {7}Analysis of the current state of the art}{41}% 
+\contentsline {chapter}{\numberline {8}Our Method}{43}% 
+\contentsline {chapter}{\numberline {9}Further Work}{45}% 
+\contentsline {chapter}{\numberline {10}Evaluation}{47}% 
+\contentsline {chapter}{\numberline {11}Conclusion}{49}% 
