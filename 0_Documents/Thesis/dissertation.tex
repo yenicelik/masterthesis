@@ -27,6 +27,7 @@
 \usepackage{epsfig,graphicx,verbatim,parskip,tabularx,setspace,xspace}
 \usepackage{amsmath, amsfonts}
 \usepackage{bbm}
+
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{tabularx,booktabs}
 
@@ -190,6 +191,8 @@ If we describe this by a loss-measure we would like to minimize, this would resu
 \end{equation}{\label{eq:basic_equation_log_maximization}}
 
 where $\mathbf{w} = w^{(1)}, \dots, w^{(T)} $ is the sequence of words whose probability we wish to estimate (and maximize if this is in the given training dataset), $\mathcal{I}=\{-R, \ldots,-1,1, \ldots, R\}$ is the so-called \textit{context window} which includes all the words that $R$ index units to the left, and $R$ index units to the right of the word of interest $w^(t)$.
+
+%TODO rephrase the structuring of the n-grams. I don't like how it is introduced here
 
 If $p_\theta$ is a parametric function, one can then optimize for the most optimal $\hat{\theta} = \text{argmax}_\theta \mathcal{L}(\theta ; \mathbf{w})$ using a maximum likelihood estimation approach.
 
@@ -393,16 +396,122 @@ Now that we have seen a few methods that aim to capture one embedding $x_w$ for 
 
 Context embeddings are more modern applications of embeddings which 
 
-\subsubsection{The Transformer Architecture}
+A single transformer takes as input a sequence $x$ and outputs softmax probabilites.
+In the context of sentences, it is able to take as input a full sequence of words.
+This has implications for the complexity of the model.
+Instead of calculating the raw probability of \eqref{naive_sequential_probability}, and even using a markovian assumption because computation power is expensive, the transformer architecture implicitly calculates the joint probability of an entire sequence of words withouth any explicit conditioning
 
-All of the below presented models use the transformer architecture (cite the paper "attention is all you need!")
+%TODO: Rephrase this part
+
+\begin{align}
+p(w^{(t-d)}) &= p(w^{(t)}, \ldots, w^{(t-d + 1)}, w^{(t-d - 1)}, \ldots, w^{(1)})
+\end{align}{\label{eq:transformer_probability}}
+
+where $p(w^{(t-d)})$ is the probability of the target word $w^{(t-d)}$ which we want to calculate.
+
+This modifies our initial ask of calculating $p(w, w^{\prime})$ to not including only a single context word $w^{\prime}$, but rather a wider context \\ (i.e. $w^{(t)}, \ldots, w^{(t-d + 1)}, w^{(t-d - 1)}, \ldots, w^{(1)}$).
+Theoretically, and because we want to arrive at some distance measure, $p(w, w^{\prime})$ can still be calculated by marginalizing out all the context-variables except the one of interest.
+Specifically, if we are interested in word $w$, we can marginalize out all input words except $w^{\prime}$.
+Practically this is infeasible due to the high space, and as such, we make use of some other mechanisms that we will talk about in the "BERT" section below.
+
+%TODO How to marginalize these over?
+%TODO Talk about what kind of input these take-in
+%TODO Look at bit more closely into the attention mechanism?
+%TODO Can draw some more inspiration from this here
+
+Because the following models not merely static word embeddings, but language models, we shall provide a short comparison between for downstream tasks between the individual language models after a short introduction on the details of each language models.
 
 \subsubsection{ELMo}
 
+The simplest idea of context embeddings, which take into account more than just a single word, but all tokens from a predefined context is the \textit{Embeddings from Language Models} (ELMo) model proposed in \cite{peters17}.
+
+In its underlying architecture, ELMo is using LSTMs.
+LSTMs are sequential recurrent neural networks .
+%TODO how do you best explain LSTMs?
+
+Specifically, LSTMs \cite{hochreiter97} are good at estimating the probability of word $w^{(t)}$ occurring given a previous history of words $w^{(t-1)}, \ldots w^{(1)}$.
+In practice, the LSTM is a popular choice for sequence modeling tasks, as it is able to capture very well the following probability distribution.
+
+\begin{equation}
+p\left(w_{1},  w_{2}, \ldots, w_{N} \right)=\prod_{k=1}^{N} p\left(w_{k} | w_{k-1}, \ldots, w_{2}, w_{1}\right)
+\end{equation}
+
+The ELMo language model now makes use of a backward LSTM, which does not evaluate the probability of a certain token occuring with its \textit{past} words (i.e. the context with context tokens $w^{(k)}$ with $k < t$ for a word $w^{(t)}$ whose probability we want to estimate), but rather considers only the \textit{future context}.
+Specifically, this results in 
+
+%TODO Insert an example of what this could look like
+\begin{equation}
+p\left(w_{1},  w_{2}, \ldots, w_{N} \right)=\prod_{k=1}^{N} p\left(w_{k} | w_{k+1}, w_{k+2}, \ldots, w_{N}\right)
+\end{equation}
+
+A bidirectional language model (biLM) combines the above two LSTM models, thus jointly maximizing the log likelihood of the forwards, as well as backward directions.
+
+\begin{align} 
+\sum_{k=1}^{N} &\left(\log p\left(w_{k} | w_{k-1}, \ldots, w_{1} ; \Theta_{x}, \vec{\Theta}_{L S T M}, \Theta_{s}\right)\right.\\
++&\left.\log p\left(w_{k} | w_{k+1}, \ldots, w_{N}; \Theta_{x}, \overleftarrow{\Theta}_{L S T M}, \Theta_{s}\right)\right) 
+\end{align}
+
+Because the output of a sequential neural network - which the LSTM is part of - includes $2L + 1$ output representations, we receive the following set of vectors, one for each input token, which we now consider the \textit{context embeddings}.
+Each context embeddings outputs a vector representing $x_{k}$ for the word token $w^{(k)}$, given its context $ w_{1}, \ldots, w_{k-1}  w_{k+1}, \ldots, w_{N}$.
+
+\begin{align} 
+R_{k} &=\left\{\mathbf{x}_{k}^{L M}, \overrightarrow{\mathbf{h}}_{k, j}^{L M}, \overleftarrow{\mathbf{h}}_{k, j}^{L M} | j=1, \ldots, L\right\} \\ &=\left\{\mathbf{h}_{k, j}^{L M} | j=0, \ldots, L\right\} 
+\end{align}
+
+Notice that one can stack the above biLM such that the output of one module is taken as input to another module.
+The biLM module is stacked twice ELMo.
+If a downstream task is trained end-to-end, the all output vectors can be stacked together and provided as input to a final downstrea-specific neural network module.
+
+\subsubsection{The Transformer Architecture}
+
+All of the below presented models use the transformer architecture which initially was presented in \cite{vaswani17}, which shows how far simple \textit{attention} modules can go.
+
+%TODO Go into what attention is
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/background/transformer_module.png}
+  \caption{Figure taken from \cite{vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+
+
+The following architectures are all based on the transformer module.
+
 \subsubsection{BERT}
+
+As introduced in \cite{devlin18}, the Bidirectional Encoder Representations from Transformers model (BERT) combines the above concepts of forward and backwards sequential models with attention, as marked in the transformer architecture above.
+
+\cite{devlin18} argue that the main limitations is that standard language models are unidirection, and that .
+
+BERT introduces itself as a pre-trained language model.
+Specifically, it shall be used to fine-tune on specific downstream tasks.
+
+BERT is pre-trained on %TODO 
+multiple gigabytes of text .
+
+%TODO talk about masked training
+
+%TODO Talk about tokenizer (wordpiece)
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/background/BERT_multiple_input_tokens.png}
+  \caption{Figure taken from \cite{devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+
+Multiple versions of BERT are provided, including $BERT_{LARGE}$ which includes %TODO input number of parameters
+, and $BERT_{BASE}$ which includes %TODO number of parameters
+
 
 \subsubsection{GPT and GPT-2}
 
+First proposed in \cite{radford18} and further extended in \cite{radford19}.
+
+%TODO read the two papers and take out anything significantly different to BERT.
 
 
 \subsection{Other methods}
@@ -503,6 +612,12 @@ the cosine similarity between these vectors seem pretty well-done!
 \subsubsection{News dataset}
 
 \subsubsection{GLUE benchmark dataset}
+
+
+
+
+
+
 
 \chapter{Related Work}
 
@@ -647,19 +762,34 @@ Specifically, the experiment setup looks as follows.
 
 \begin{algorithm}[H]
 \SetAlgoLined
-\KwResult{Write here the result }
- initialization\;
- \While{While condition}{
-  instructions\;
-  \eIf{condition}{
-   instructions1\;
-   instructions2\;
-   }{
-   instructions3\;
-  }
- }
- \caption{How to write algorithms}
+\SetKwInOut{Input}{Input}
+\Input{A target word $w_{\text{target}}$; The latent dimensionality $k$for PCA;}
+\KwResult{Accuracy of a logistic regression classifier}
+ $\mathbf{D}, \mathbf{y} \leftarrow $  sample up to 500 sentences (as much as available) from the SemCor corpus which include the word $w_{\text{target}}$, along with the corresponding WordNet meaning-id\;
+
+$ \mathbf{X} \leftarrow BERT( \mathbf{D} )$ i.e. pass each sentence through BERT and retrieve the resulting word embedding $x_w$ as defined in the above section\;
+ 
+$ \mathbf{X} \leftarrow oversample( \mathbf{X}, \mathbf{y} )$ such that we don't have dominating classes\;
+ 
+$ \mathbf{X_\text{train}}, \mathbf{X_\text{test}}, \mathbf{y_\text{train}}, \mathbf{y_\text{test}} \leftarrow trainTestSplit( \mathbf{X}, \mathbf{y}, testProportion=0.4 )$ \;
+
+$ \mathbf{X_\text{train}} \leftarrow StandardScaler( \mathbf{X_\text{train}})$ such that all the data is normalized\;
+
+$ \mathbf{X_\text{train}} \leftarrow PCA( \mathbf{X_\text{train}}, k )$ such that all the data is normalized\;
+
+$ model \leftarrow LogisticRegression( \mathbf{X_\text{train}}, \mathbf{y_\text{train}} )$ \;
+    
+$ \mathbf{\hat{y}_\text{test}} \leftarrow model.predict(\mathbf{X_\text{test}})$ \;
+
+$ accuracy, confusionMatrix \leftarrow loss(\mathbf{y_\text{test}}, \mathbf{\hat{y}_\text{test}}) $ \;
+    
+return $ accuracy, confusionMatrix $\;
+    
+ \caption{Checks sampled BERT vectors for linear interpretability by meaning}
 \end{algorithm}
+
+We use a binary 
+%TODO what is the formal name of the loss function that we are using..?
 
 First of all, we sample $n=500$ sentences from the news corpus for a target word $\hat{w}$, which has index $i$ in sentence $s$.
 
@@ -675,10 +805,44 @@ This is the vector at the output embedding layer of BERT, which has the same loc
 
 \subsection{Results}
 
+We run the above experiment for a set of different $k$ to build up an intuition of how well different dimensionalites still capture the meaning in different locations of the vector space. 
+
+
 \section{On the Clusterability of meaning within sampled BERT vectors}
 
 \subsection{Motivation}
 \subsection{Experiment setup}
+
+%TODO include optimization loop over all models
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\SetKwInOut{Input}{Input}
+\Input{A target word $w_{\text{target}}$; The latent dimensionality $k$for PCA;}
+\KwResult{The associated cluster-id with each sampled sentence}
+ $\mathbf{D}, \mathbf{y} \leftarrow $  sample up to 500 sentences from the SemCor corpus which include the word $w_{\text{target}}$, along with the corresponding WordNet meaning-id, and compensate more sentences by sampling from the news corpus if less than 500 sentences are available in the SemCor sentence\;
+
+$ \mathbf{X} \leftarrow BERT( \mathbf{D} )$ i.e. pass each sentence through BERT and retrieve the resulting word embedding $x_w$ as defined in the above section\;
+ 
+$ \mathbf{X} \leftarrow oversample( \mathbf{X}, \mathbf{y} )$ such that we don't have dominating classes\;
+ 
+$ \mathbf{X_\text{train}}, \mathbf{X_\text{test}}, \mathbf{y_\text{train}}, \mathbf{y_\text{test}} \leftarrow trainTestSplit( \mathbf{X}, \mathbf{y}, testProportion=0.4 )$ \;
+
+$ \mathbf{X_\text{train}} \leftarrow StandardScaler( \mathbf{X_\text{train}})$ such that all the data is normalized\;
+
+$ \mathbf{X_\text{train}} \leftarrow PCA( \mathbf{X_\text{train}}, k )$ such that all the data is normalized\;
+
+$ model \leftarrow LogisticRegression( \mathbf{X_\text{train}}, \mathbf{y_\text{train}} )$ \;
+    
+$ \mathbf{\hat{y}_\text{test}} \leftarrow model.predict(\mathbf{X_\text{test}})$ \;
+
+$ accuracy, confusionMatrix \leftarrow loss(\mathbf{y_\text{test}}, \mathbf{\hat{y}_\text{test}}) $ \;
+    
+return $ accuracy, confusionMatrix $\;
+    
+ \caption{Checks sampled BERT vectors for clusters by  meaning}
+\end{algorithm}
+
 \subsection{Results}
 
 \section{Correlation between Part of Speech and Context within BERT}
