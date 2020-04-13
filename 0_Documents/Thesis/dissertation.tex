@@ -27,6 +27,10 @@
 \usepackage{epsfig,graphicx,verbatim,parskip,tabularx,setspace,xspace}
 \usepackage{amsmath, amsfonts}
 \usepackage{bbm}
+\usepackage{amsfonts}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{tabularx,booktabs}
@@ -102,6 +106,47 @@ TODO: Take some more from here
 - cite paper "meaning is classified by its context"
 
 Chronologically, the following data structures are manifestations of the above idea of defining a word by it's neighbourhood.
+
+\section{Linguistic Features}
+Polysemy:
+a word may have multiple meanings.
+in a cross-lingual embedding space, this feeling is amplified.
+there's some work in multi-sense embedding.
+this should enable to capture more fine-grained embeddings embeddings.
+
+Over the past decades, linguists have tried to inject structure into language. 
+Similar to features in machine learning, there are properties in language. 
+There is a vast number of linguistic features, going from phonological features, morphological and syntactic features to semantic features.
+To keep this analysis concise, we will give a short introduction of what features that are relevant for the topic of finding suitable word embeddings.
+
+\paragraph{Lexical features} include word classes, such as nouns, verbs and adjectives, which follow certain grammatical rules in western languages.
+Whenever we are looking to parse for such lexical features, we use the python spaCy package \cite{spacy}.
+As defined in \cite{spacyb}, some of the linguistic features that are available to us include but are not limited to
+
+\begin{enumerate}
+\item adjectives \textit{ADJ}
+\item adposition \textit{ADP}
+\item adverbs \textit{ADV}
+\item auxiliary \textit{AUX}
+\item conjunction \textit{CONJ}
+\item coordinating conjunction \textit{CCONJ}
+\item determiner \textit{DET}
+\item interjection noun \textit{INTJ}
+\item noun \textit{NOU}
+\item numeral \textit{NUM}
+\item particle \textit{PART}
+\item pronoun\textit{PRON}
+\item proper noun \textit{PROPN}
+\item punctuation \textit{PUNCT}
+\item subordinating conjunction \textit{SCONJ}
+\item symbol \textit{SYM}
+\item verb \textit{VERB}
+\end{enumerate}
+
+These features can alter as we look at different languages
+%TODO turn this into a multi-column table
+
+\paragraph{}
 
 \section{Word Embeddings}
 
@@ -470,7 +515,7 @@ All of the below presented models use the transformer architecture which initial
 
 \begin{figure}[h]
 	\center
-  \includegraphics[width=0.6\linewidth]{./assets/background/transformer_module.png}
+  \includegraphics[width=0.4\linewidth]{./assets/background/transformer_module.png}
   \caption{Figure taken from \cite{vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.}
   \label{fig:cbow_skipgram}
 \end{figure}
@@ -713,14 +758,7 @@ At what point do we overfit, and at what point do we generalize?
 - Then use FastAlign to use parallel corpus to align words
 - 
 
-\chapter{Analysis of the current state of the art}
-- Hubness problem (MUSE, and CSLS)
-
-Polysemy:
-a word may have multiple meanings.
-in a cross-lingual embedding space, this feeling is amplified.
-there's some work in multi-sense embedding.
-this should enable to capture more fine-grained embeddings embeddings.
+\chapter{Analysing the current state of the art}
 
 Upadhyay et al. argue that the choice of data is more important than the actual algorithm.
 
@@ -741,8 +779,9 @@ When we sample BERT embeddings for a single word $w$ for $n=500$ sentences.
 Let us restrict the choice of words $w$ on polysemous and ambigious words which carry multiple meanings. 
 Specifically, $w$ is chosen in such a way that each meaning has more than 30 samples in each class when chosen from within the SemCor dataset. 
 
-\begin{center}
+%TODO beautify this table
 
+\begin{center}
 % Words used to test BERT-sampled vectors for linear separability of lexical features
 \begin{tabular}{ | c | c | c | }
 \hline
@@ -769,13 +808,13 @@ Specifically, the experiment setup looks as follows.
 
 $ \mathbf{X} \leftarrow BERT( \mathbf{D} )$ i.e. pass each sentence through BERT and retrieve the resulting word embedding $x_w$ as defined in the above section\;
  
-$ \mathbf{X} \leftarrow oversample( \mathbf{X}, \mathbf{y} )$ such that we don't have dominating classes\;
+$ \mathbf{X}, \mathbf{y} \leftarrow oversample( \mathbf{X}, \mathbf{y} )$ such that we don't have dominating classes\;
  
 $ \mathbf{X_\text{train}}, \mathbf{X_\text{test}}, \mathbf{y_\text{train}}, \mathbf{y_\text{test}} \leftarrow trainTestSplit( \mathbf{X}, \mathbf{y}, testProportion=0.4 )$ \;
 
 $ \mathbf{X_\text{train}} \leftarrow StandardScaler( \mathbf{X_\text{train}})$ such that all the data is normalized\;
 
-$ \mathbf{X_\text{train}} \leftarrow PCA( \mathbf{X_\text{train}}, k )$ such that all the data is normalized\;
+$ \mathbf{X_\text{train}} \leftarrow PCA( \mathbf{X_\text{train}}, k )$ such that all the data is projected to a lower latent dimensionality $k$\;
 
 $ model \leftarrow LogisticRegression( \mathbf{X_\text{train}}, \mathbf{y_\text{train}} )$ \;
     
@@ -802,68 +841,507 @@ This is the vector at the output embedding layer of BERT, which has the same loc
 
 %TODO insert graphic of which embedding is used..
 
+We apply t-fold cross validation, and measure the mean accuracy as well as the standard deviation of the accuracy. 
+We also note down the variance kept after projecting PCA on the lower dimensionality $k$.
+This is the sum of the first $k$ largest normalized eigenvalues.
+
 
 \subsection{Results}
 
+The number of words we can use to realiably estimate a planar separation of semantics within the sampled BERT vectors is small.
+
 We run the above experiment for a set of different $k$ to build up an intuition of how well different dimensionalites still capture the meaning in different locations of the vector space. 
+
+\begin{center}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{was}.}
+\begin{tabular}{SSSSSSSS} \toprule
+    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
+     10  & 0.27 & 0.82 / $\pm$ 0.03 \\ \midrule
+     20  & 0.41 & 0.81 / $\pm$ 0.04  \\ \midrule
+     30  & 0.50 & 0.85 / $\pm$ 0.03  \\ \midrule
+     50  & 0.63 & 0.92 / $\pm$ 0.03 \\ \midrule
+     75  & 0.73 & 0.94 / $\pm$ 0.02 \\ \midrule
+    100 & 0.81 & 0.95 / $\pm$ 0.02  \\ \midrule
+\end{tabular}
+\end{center}
+
+% -> show which two different word meanings are sampled
+
+% Also perhaps show the confusion matrix
+
+\begin{center}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{is}.}
+\begin{tabular}{SSSSSSSS} \toprule
+    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
+       2  & 0.09 & 0.57 / $\pm$ 0.02 \\ \midrule
+     10  & 0.29 & 0.82 / $\pm$ 0.03  \\ \midrule
+     20  & 0.42 & 0.82 / $\pm$ 0.04  \\ \midrule
+     30  & 0.51 & 0.83 / $\pm$ 0.03  \\ \midrule
+     50  & 0.72 & 0.85 / $\pm$ 0.04 \\ \midrule
+     75  & 0.78 & 0.84 / $\pm$ 0.04 \\ \midrule
+    100 & 0.79 & 0.85 / $\pm$ 0.03  \\ \midrule
+\end{tabular}
+\end{center}
+
+% -> show which two different word meanings are sampled
+
+\begin{center}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{one}.}
+\begin{tabular}{SSSSSSSS} \toprule
+    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
+       2  & 0.10 & 0.55 / $\pm$ 0.10 \\ \midrule
+       3  & 0.14 & 0.51 / $\pm$ 0.05 \\ \midrule
+     10  & 0.34 & 0.59 / $\pm$ 0.08  \\ \midrule
+     20  & 0.50 & 0.76 / $\pm$ 0.03  \\ \midrule
+     30  & 0.62 & 0.77 / $\pm$ 0.02  \\ \midrule
+     50  & 0.76 & 0.83 / $\pm$ 0.06 \\ \midrule
+     75  & 0.87 & 0.87 / $\pm$ 0.05 \\ \midrule
+    100 & 0.94 & 0.87 / $\pm$ 0.05  \\ \midrule
+\end{tabular}
+\end{center}
+
+There are many permutations 
+We now also employ multi-class classificiation.
+
+\begin{center}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit{was}.}
+\begin{tabular}{SSSSSSSS} \toprule
+    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
+       2  & 0.08 & 0.38 / $\pm$ 0.03 \\ \midrule
+       3  & 0.11 & 0.38 / $\pm$ 0.04 \\ \midrule
+     10  & 0.28 & 0.65 / $\pm$ 0.03  \\ \midrule
+     20  & 0.43 & 0.76 / $\pm$ 0.04  \\ \midrule
+     30  & 0.53 & 0.83 / $\pm$ 0.03  \\ \midrule
+     50  & 0.67 & 0.93 / $\pm$ 0.01 \\ \midrule
+     75  & 0.77 & 0.95 / $\pm$ 0.01 \\ \midrule
+    100 & 0.83 & 0.95 / $\pm$ 0.01  \\ \midrule
+\end{tabular}
+\end{center}
+
+We get very similar accuracies for "time", "made", "thought".
+However, these tables are left out as we do not deem these to be statistically significant.
+
+%TODO re-run these experiments and print out the respective ids
+
+%TODO Inseert confusion matrix here maybe
+
+
 
 
 \section{On the Clusterability of meaning within sampled BERT vectors}
 
 \subsection{Motivation}
+
+%TODO Talk about different ways to determine if a dataset is clusteerable, but mention that in the end we want a practical approach, thus we brute-force search
+%TODO 
+
 \subsection{Experiment setup}
 
+The general algorithm to cluster the dataset is shown below.
+
 %TODO include optimization loop over all models
+
+%TODO Define and show what the random adjusted index is
 
 \begin{algorithm}[H]
 \SetAlgoLined
 \SetKwInOut{Input}{Input}
-\Input{A target word $w_{\text{target}}$; The latent dimensionality $k$for PCA;}
-\KwResult{The associated cluster-id with each sampled sentence}
- $\mathbf{D}, \mathbf{y} \leftarrow $  sample up to 500 sentences from the SemCor corpus which include the word $w_{\text{target}}$, along with the corresponding WordNet meaning-id, and compensate more sentences by sampling from the news corpus if less than 500 sentences are available in the SemCor sentence\;
+\Input{
+$w_{\text{target}}$: The target word whose BERT vectors we want to cluster; \\ 
+$DimRed$: The dimensionality reduction method; \\
+$k$ : The latent dimensionality for the dimensionality reduction method; \\ 
+$ClusterAlgorithm$: The clustering algorithm to use;
+%TODO insert optional l1/l2 normalization
+}
+\KwResult{The associated cluster-id with each sampled sentence, and the adjusted random index.}
+
+ $\mathbf{D}, \mathbf{y} \leftarrow $  sample up to 500 sentences from the SemCor corpus which include the word $w_{\text{target}}$, along with the corresponding WordNet meaning-id, and compensate more sentences by sampling from the news corpus if less than 500 sentences are available in the SemCor sentence.
+We set y = -1 whenever no labeling information is available, which is the case if we don't sample data from the SemCor corpus.\;
 
 $ \mathbf{X} \leftarrow BERT( \mathbf{D} )$ i.e. pass each sentence through BERT and retrieve the resulting word embedding $x_w$ as defined in the above section\;
  
-$ \mathbf{X} \leftarrow oversample( \mathbf{X}, \mathbf{y} )$ such that we don't have dominating classes\;
+$ \mathbf{X}, \mathbf{y} \leftarrow oversample( \mathbf{X}, \mathbf{y} )$ such that we don't have dominating classes (all except for $y = -1$).\;
  
-$ \mathbf{X_\text{train}}, \mathbf{X_\text{test}}, \mathbf{y_\text{train}}, \mathbf{y_\text{test}} \leftarrow trainTestSplit( \mathbf{X}, \mathbf{y}, testProportion=0.4 )$ \;
+$ \mathbf{X} \leftarrow StandardScaler( \mathbf{X})$ such that all the data is normalized\;
 
-$ \mathbf{X_\text{train}} \leftarrow StandardScaler( \mathbf{X_\text{train}})$ such that all the data is normalized\;
+$ \mathbf{X} \leftarrow DimRed( \mathbf{X}, k )$ such that all the data is projected to a lower latent dimensionality $k$\;
 
-$ \mathbf{X_\text{train}} \leftarrow PCA( \mathbf{X_\text{train}}, k )$ such that all the data is normalized\;
+$ model \leftarrow ClusterAlgorithm( \mathbf{X})$ \;
 
-$ model \leftarrow LogisticRegression( \mathbf{X_\text{train}}, \mathbf{y_\text{train}} )$ \;
-    
-$ \mathbf{\hat{y}_\text{test}} \leftarrow model.predict(\mathbf{X_\text{test}})$ \;
+$ \mathbf{\hat{y}} \leftarrow model.predict(\mathbf{X}) $ \;
 
-$ accuracy, confusionMatrix \leftarrow loss(\mathbf{y_\text{test}}, \mathbf{\hat{y}_\text{test}}) $ \;
-    
-return $ accuracy, confusionMatrix $\;
+$ score \leftarrow AdjustedRandomIndex(\mathbf{\hat{y}}, \mathbf{y}) $ \;
+
+return $ score, \mathbf{\hat{y}}$\;
     
  \caption{Checks sampled BERT vectors for clusters by  meaning}
 \end{algorithm}
 
+However, because some simple algor.
+
+We had a few constraints.
+When clustering, we are not given the number of cluster to be found. 
+Thus, the algorithm must solve the multi-modal detection problem intrinsically, which is considered a hard problem in machine learning, as it falls in the same category as global probability density estimation.
+Also, because we use the lexical distinction of semantics as defined in WordNet, our algorithm needs to adapt to the granularity that was defined by linguists.
+
+Because we want to evaluate how well our clustering method can mimick the semantic definitions in WordNet, but also generalize to unseen words, we train on an unsupervised dataset. 
+We then test our resulting clustering on a labeled datasetet using the random adjusted index \cite{rand71}, \cite{hubert85}.
+
+The adjusted random index calculates the overlap and as such the similarity between two clustering assignments.
+Specifically, 
+
+\begin{equation}
+A R I=\frac{\sum_{i j}\left(^{n_{i j}}\right)-\left[\sum_{i}\left(\begin{array}{c}a_{i} \\ 2\end{array}\right) \sum_{j}\left( \begin{array}{c}b_{j} \\ 2\end{array} \right)\right] /\left(\begin{array}{c}n \\ 2\end{array}\right)}{\frac{1}{2}\left[\sum_{i}\left(\begin{array}{c}a_{i} \\ _{2}\end{array}\right)+\sum_{j}\left(\begin{array}{l}b_{j} \\ 2\end{array}\right)\right]-\left[\sum_{i}\left(\begin{array}{c} a_{i} \\ 2\end{array}\right) \sum_{j}\left(\begin{array}{l}b_{j} \\ 2\end{array}\right)\right] /\left(\begin{array}{l}n \\ 2\end{array}\right)}
+\end{equation}{\label{eq:adjustedrandomindex}}
+
+%TODO read this up again!
+where $n_{i,j}$ is the number of items that are present in both clustering assignment, $a_i = \sum_j n_{i,j}$ , $b_j = \sum_i n_{i,j}$ for two clustering $a$ and $b$.
+
+where the resulting score is between $[-1.0, 1.0]$, where a score of $0$ implies completely assignment of cluster-labels into random buckets, $-1.0$ implies a negative correlation, and $1.0$ implies perfect similarity.
+The adjusted random index is adjusted for chance, by taking all possible permutations of the labels that the clustering algorithm can have.
+
+
+
+
+Although we will not go into too much detail with the algorithm descriptions here, we will 
+
+
+The general algorithm to cluster the dataset is shown below.
+
+
+
+\begin{enumerate}
+\item s
+\end{enumerate}
+
+%TODO talk about the chinese whispers algorithm bcs this is custom-made
+
 \subsection{Results}
+
+%\begin{center}
+%\captionof{table}{Adjusted Random Index between the predicted cluster labels and the true underlying cluster labels. 
+%Cluster labels correspond to the different meanings in WordNet.
+%BERT vectors are sampled for the word "use". 
+%We sample 500 vectors and project these to 50 dimensions before clustering.
+%}
+%\begin{tabular}{SSSSSSSS} \toprule
+%    {model} & {best adjusted random score} & {best adjusted random score)}  \\ \midrule
+%       Affinity Propagation  & 0.001 & 0.38 / $\pm$ 0.03 \\ \midrule
+%       DBScan                     & 0.000 & 0.38 / $\pm$ 0.04 \\ \midrule
+%      HDBScan                    & 0.328 & 0.65 / $\pm$ 0.03  \\ \midrule
+%     MeanShift                   & 0.004 & 0.76 / $\pm$ 0.04  \\ \midrule
+%     Optics                        & 0.000 & 0.83 / $\pm$ 0.03  \\ \midrule
+%\end{tabular}
+%\end{center}
+
+\newcolumntype{b}{X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {model} & {ARI)}  \\ \hline
+        Affinity Propagation     & 0.001     \\ \hline
+        DBScan                        & 0.000      \\ \hline
+        HDBScan                      & 0.328     \\ \hline
+        MeanShift                    & 0.004      \\ \hline
+        Optics                         & 0.000      \\ \hline
+    \end{tabularx}
+\end{table}
+
+Repeating the experiment with 1000 datapoint does not change the results by much.
+
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {model} & {ARI)}  \\ \hline
+        Affinity Propagation     & 0.000     \\ \hline
+        DBScan                        & 0.139      \\ \hline
+        HDBScan                      & 0.271     \\ \hline
+        MeanShift                    & 0.005      \\ \hline
+        Optics                         & 0.070      \\ \hline
+    \end{tabularx}
+\end{table}
+
+Repeating the experiment with 1000 items and projecting PCA to 100 results in 
+
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {model} & {ARI)}  \\ \hline
+        Affinity Propagation     & 0.000     \\ \hline
+        DBScan                        & 0.215      \\ \hline
+        HDBScan                      & 0.359     \\ \hline
+        MeanShift                    & 0.003      \\ \hline
+        Optics                         & 0.000      \\ \hline
+    \end{tabularx}
+\end{table}
+
+We see that including more dimensions make the clustering better w.r.t. the adjusted random score.
+
+%TODO Move to 
+Here, we also introduce the chinese whispers algorithm.
+The chinese whispers algorithm was used to cluster for word-senses in the context of static word embeddings, such as in
+\cite{pelevina16}.
+
+We now apply forceful clustering using Bayesian Optimization.
+
+%TODO: Move some to Appendix (especially when it is not very successful...
+100 latent dimensions, 500 samples
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {model} & {ARI)}  \\ \hline
+        Affinity Propagation     & 0.168     \\ \hline
+        Chinese Whispers        & 0.298     \\ \hline
+        DBScan                        & 0.201      \\ \hline
+        HDBScan                      & 0.242     \\ \hline
+        MeanShift                    & 0.167      \\ \hline
+        Optics                         & 0.167      \\ \hline
+    \end{tabularx}
+\end{table}
+
+
+100 components, 1000 samples
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {model} & {ARI)}  \\ \hline
+        Affinity Propagation     & 0.170     \\ \hline
+        Chinese Whispers        & 0.249     \\ \hline
+        DBScan                        & 0.260      \\ \hline
+        HDBScan                      & 0.234     \\ \hline
+        MeanShift                    & 0.167      \\ \hline
+        Optics                         & 0.197      \\ \hline
+    \end{tabularx}
+\end{table}
+
+
+Projecting to lower dimensions increases accuracy strongly.
+20 components, 1000 samples
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {model} & {ARI)}  \\ \hline
+        Affinity Propagation     & 0.165     \\ \hline
+        Chinese Whispers        & 0.349     \\ \hline
+        DBScan                        & 0.167      \\ \hline
+        HDBScan                      & 0.273     \\ \hline
+        MeanShift                    & 0.226      \\ \hline
+        Optics                         & 0.167      \\ \hline
+    \end{tabularx}
+\end{table}
+
+
+
+Projecting to lower dimensions increases accuracy strongly.
+and now we add a SEP token
+20 components, 1000 samples
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {model} & {ARI}  \\ \hline
+        Affinity Propagation     & 0.316     \\ \hline
+        Chinese Whispers        & 0.457     \\ \hline
+        DBScan                        & 0.170      \\ \hline
+        HDBScan                      & 0.298     \\ \hline
+        MeanShift                    & 0.251      \\ \hline
+        Optics                         & 0.167      \\ \hline
+    \end{tabularx}
+\end{table}
+
+We now analyse the embeddings manually
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/run_pca.png}
+  \caption{1a}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/run_umap.png}
+  \caption{1b}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/block_pca.png}
+  \caption{1a}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/block_umap.png}
+  \caption{1b}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/cold_pca.png}
+  \caption{1a}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/cold_umap.png}
+  \caption{1b}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
+
+
+Can see that this can be used for biased and insecure AI applications!
 
 \section{Correlation between Part of Speech and Context within BERT}
 
 \subsection{Motivation}
+
+%TODO think about why you did this lol
+Because there are more resources in NLP with Part of Speech (PoS) tags, as compared to semantics, we want to analyse to what extent BERT sees similarities between PoS and, and because we assume a strong correlation between PoS and semantics, we analyse to what extent this is visible within BERT vectors.
+
 \subsection{Experiment setup}
+
+We test the hypothesis "semantics implies PoS" by conductin the following experiment.
+For a chosen target word $w_t$, we fixate one of the wordnet meanings.
+We then sample $n$ sentences for the target word $w_t$ where $w_t$ has semantic meaning $m$ in the occurring sentence.
+After we have sampled all the sentences, we determine the PoS for the target word $w_t$.
+We then calculate the percentage occurrence of the majority PoS class and record this as a percentage.
+If all of the sampled target words $w_t$ for all the sentences have the same assigned PoS tag, then the score results in a value of $1.0$.
+If the dominant PoS tag occurs only half the time, this number decreases to $0.5$.
+Please notice that in this experiment, we only view simple PoS tags (i.e. "noun", "verb", "adjective", "pronoun"), and not the more complex ones listed above.
+
+%TODO perhaps give an example
+%TODO explain again
+
 \subsection{Results}
 
 It is apparent that there is a strong relation between PoS and meaning. 
 Especially "erstarrte" Verben are a strong part of this
 
+
+%TODO make another plot which is more coarse
+
 %\chapter{Evaluation} 
 \chapter{Our Method}
 
+We introduce \textit{split-words}, for which we will be generating more detailed embeddings.
+The idea behind this is that introducing more specialized embeddings for certain tokens will allow to model more complex distributions.
+
+Because the non-modified (vanilla) BERT model uses a certain workflow, we will shortly introduce BERTs pipeline.
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_vanilla_BERT.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+
 \subsection{BERnie PoS}
+
 \subsubsection{Motivation}
+
 \subsubsection{Experiment setup}
 
+BERnie PoS introduces one new embedding vector for each possible PoS configuration of the split-words.
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS_initialization.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
 \subsection{BERnie Meaning}
+
 \subsubsection{Motivation}
+
 \subsubsection{Experiment setup}
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning_embedding.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png}
+  \caption{}
+  \label{fig:cbow_skipgram}
+\end{figure}
+
 
 \subsection{BERnie Meaning with additional pre-training}
 \subsubsection{Motivation}
