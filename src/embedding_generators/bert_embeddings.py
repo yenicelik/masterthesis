@@ -14,7 +14,6 @@ import torch
 from src.config import args
 from src.functional.string_searchers import find_all_indecies_subarray
 from src.language_models.model_wrappers.bert_wrapper import BertWrapper
-from src.resources.corpus import Corpus
 from src.resources.corpus_semcor import CorpusSemCor
 
 
@@ -52,7 +51,7 @@ class BertEmbedding:
         self.wrapper = BertWrapper()
         self.bert_layer = 1  # Which BERT layer to take the embeddings from
 
-    def get_embedding(self, word, sample_sentences=None):
+    def get_embedding(self, word: str, sample_sentences: list=None):
         """
             For a given word (or concept), we want to generate an embedding.
             The question is also, do we generate probabilistic embeddings or static ones (by pooling..?)
@@ -60,7 +59,11 @@ class BertEmbedding:
         :param token:
         :return:
         """
-        assert isinstance(word, str), ("Word is not of type string", word)
+        assert isinstance(word, str), ("Word is not of type string", type(word), word)
+        assert isinstance(sample_sentences, list), ("Sentence is not of type list!", type(sample_sentences), sample_sentences)
+        if sample_sentences is not None:
+            assert len(sample_sentences) > 0
+            assert isinstance(sample_sentences[0], str), ("First sentence is not of type str!", type(sample_sentences), sample_sentences)
 
         word = word.lower()
 
@@ -92,9 +95,11 @@ class BertEmbedding:
                 print("Sentence and tokenized word is")
                 print(tokenized_word)
                 print(sentence)
-            # print("Tokenized word and sentence is: ")
-            print("Tokenized word and sentence is: ", tokenized_word, sentence)
-            tokenized_word_idx = find_all_indecies_subarray(tokenized_word, sentence, self.corpus)[0]
+            tokenized_word_idx = find_all_indecies_subarray(
+                subarray=tokenized_word,
+                array=sentence,
+                fn_stem=self.corpus.stemmer.stem if self.corpus.stemmer is not None else None
+            )[0]
 
             # Now convert to pytorch tensors..
             tokens_tensor = torch.tensor([indexed_tokens])

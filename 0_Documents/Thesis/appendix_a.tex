@@ -1,0 +1,924 @@
+
+As such, the aim of this project is to find a model based on normalising flows which is able to find an an invertible mapping $f$ from $\mathcal{X}$ to $\mathcal{\hat{X}}$.
+To keep the discussion focused, this thesis deals with the problem of finding a model for bilingual lexicon matching.
+
+
+
+
+
+In Natural Language Processing (NLP), bilingual lexical induction (BLI) is a problem of inferring word-to-word mapping between two languages.
+While supervised BLI may be learned trivially from a dictionary, unsupervised BLI is highly non-trivial, and serves as a backbone to many unsupervised Neural Machine Translation (NMT) systems, without which the overall MT performance drastically drops \cite{dropping_perf1} \cite{dropping_perf2}.
+In addition to the unsupervised setting, words in a source language A often do not carry a one-to-one correspondence with words in a target language B.
+This further increases the difficulty of finding a (bijective) mapping between the two embedding spaces.
+
+\section{Scope of Work}
+
+
+Continuing where \cite{density_matching} left off, we want to investigate the performance of using normalising flows to model unsupervised lexicon matching between two probability distributions, which are defined by Gaussian emebddings, which have a one-to-one correspondence to tokens in the respective languages.
+We aim to use Gaussian embeddings for the robustness, and better integration into the probabilistic perspective.
+The method discussed in the paper also relies a lot on the (semi-)supervised loss component.
+We aim to investigate why this is the case, and would like to revise a method which is more robust in the fully unsupervised setting.\\
+
+\textbf{Minimal goals:} We propose the following steps on achieving this goal.
+
+
+\begin{enumerate}
+    \item Replicate the algorithms and models which can generate through Gaussian embedding \cite{gaussian_embedding}. Do one sanity check by doing a sanity check on one of (SimLex / WordSim)
+    \item Replicate "Density matching for bilingual word embedding" to setup a baseline normalising flow between vector-word-embeddings \cite{density_matching}.
+    \item Define loss between predicted and target embeddings (if change in definition is necessary)
+    \item Change the embeddings in point 2. to use Gaussian embeddings. Implement Loss functions found in point 3.
+\end{enumerate}
+
+\textbf{Extended goals:} If the above points provide good performance , we would like to expand on the below points.
+
+\begin{enumerate}
+    \item Implement a fully unsupervised extension by investigating the shortcomings of \cite{density_matching}.
+    \item Investigate "deeper" normalising flows than the linear flow in \cite{density_matching} as such \cite{flowpp} \cite{neuralsplineflow}.
+\end{enumerate}
+
+
+\textbf{Contingency Plan / Further extended goals:} Implementing the following points would allow for an applied perspective of this approach, showing that this methodology allows for more robust mapping, also outside the field of NLP.
+
+
+\begin{enumerate}
+    \item Train embeddings for job-systems ESCO and AUGOV using Skip-Gram or Co-Occurence-matrix based. Do a sanity check.
+    \item Train Gaussian embeddings for job-systems. Do a sanity check.
+    \item Generate a small validation dataset between the European- and Australian job-system.
+    \item Setup some baseline algorithms based on NLP, graph-matching, colinear-PCA for matching as a non-NLP benchmark environment. Compare against above-proposed methods.
+    \item Find a normlising flow model to transform one job system into another.
+\end{enumerate}
+
+%TODO : Fill out at the very end!
+
+
+
+
+\section{Normalising Flows}
+
+In machine learning, we usually distinguish between fully observed models and latent variable models, where we have exclusively observed variables or both observed and unobserved variables.
+
+In general, a generative model can be described as 
+
+\begin{equation}
+p(x, z, \theta) = p(\theta) \sum_{i=1}^N p(x_i | z_i, \theta) \pi(z_i)
+\end{equation}
+
+And then the model is supplemented by a learning principle such as gradient-based learning (backpropagation), or structural learning (model selection using Monte-Carlo).
+In general, we want to estimate a probability density distribution by using a stochastic gradient estimator.
+
+\begin{align}
+\nabla_\phi E_{q_\phi(z)}  \left[ f_\theta(z) \right] &= \nabla \int q_\phi(z) f_\theta(z)dz \\
+&= \mathbf{E} \left[ \nabla f_\theta (g( \epsilon, \phi ) \right]
+\end{align}
+
+\begin{equation}
+q(z^\prime) = q(z) \left| \text{det} \frac{\delta f}{\delta z} \right|^{-1}
+\end{equation}
+
+We can now stack multiple bijective and invertible functions together to go from a complex distribution to a simple one (and vice-versa).
+
+(CITE REZENDE ET AL TUTORIAL ON DEEP GENERATIVE MODELS)
+
+\begin{equation}
+z_K = f_K \circ \ldots \circ f_2 \circ f_1(z_0)
+\end{equation}
+
+where the mass-preserving transformation of each function is
+
+\begin{equation}
+\text{log} q_K(z_k) = \text{log} q_0(z_0) - \sum_{k=1}^{K} \text{log det} \left| \frac{\delta f_k}{\delta z_k} \right|
+\end{equation}
+
+The loss function which we try to maximize as a product of this then becomes (through the use of expected stochastic gradients.
+
+\begin{equation}
+\mathcal{L} =  \mathbf{E}_{q_0}(z_0) \left[ \text{log} p(x, z_K) \right]- \mathbf{E}_{q_0}(z_0) \left[ \text{log} p(x, z_K) \right]
+\end{equation}
+
+%  
+
+Where we used the reparametrization trick in the second equality. We can then use gradient-estimates to miminize the respective log-likelihood.
+
+
+------
+
+The REINFORCE (reparametrization trick) has been used in reinforcement learning
+
+\begin{equation}
+\nabla_\theta \mathbf{E}_{x \approx p_\theta(x)} \left[ f(x) \right] \\
+\nabla_\theta p_\theta(x) = p_\theta(x) \nabla \nabla_\theta \text{log} p_\theta(x)
+\end{equation}
+
+
+-------
+
+Rich families of posteriors can be formed.
+
+Generally, if we have $N$ variables, then 3 possible posteriors are (1) the fully connected graph which describes correlations between all variables, (2) a structured approximation model and (3) a fully factored model.
+
+The posterior probabilities of these items respectively are:
+
+\begin{enumerate}
+\item $$ q^* (z | x) \propto p(x|z)p/z)$$
+\item $$ q(z) = \prod_k q_k(z_k | {z_j}_{j \neq k}  $$
+\item $$ q(z|x) = \prod_k q(z_k) $$
+\end{enumerate}
+
+(Rezende 2015) A simple distribution is transformed into a more complex one by applying a sequence of invertible transformations until a desired level of complexity is attained.\\
+
+In the above equation, the KL-divergence is the loss between the approximate posterior and the prior distribution (which acts as a regualizer). The second term, which is the expected log-likelihood is the reconstruction error.\\
+
+Inference with normalizing flows provides a tighter, modified variational lower bound with additional terms that only add terms with linear time complexity.\\
+
+in the asymptotic regime, this is able to recover the true posterioir distribution \\
+
+Approximate posterior distribution of the latent variables $q_\phi(z|x)$ 
+\begin{align}
+\text{log} p_{\theta}(x) 
+&= \text{log} \int{ p_{\theta}(x|z)p(z) dz } \\
+&= \text{log} \int{ \frac{q_{\theta}(z|x)}{q_{\theta}(z|x)}p_{\theta}(x|z) p(z) dz } \\
+&= \text{log} \int{ \frac{p(z)}{q_{\theta}(z|x)}p_{\theta}(x|z) q_{\theta}(z|x) dz } \\
+&= \mathbb{D}_{KL} \left[ q_{\phi}(z|x) || p(z) \right] + \mathbb{E}_q \left[ \text{log} p_{\theta}(x|z) \right] \\
+&\geq -\mathcal{F}(x)
+\end{align}
+TODO: WHERE DOES THE LAST $q_\theta(z|x)$ disappear to?
+where $-\mathbf{F}(x)$ is a free energy function, and where we used Jensen's inequality to obtain the final equation (through $log E_q\left[ \frac{p(x, z)}{q(z)} \right] \geq log E_q\left[ \text{log} \frac{p(x, z)}{q(z)} \right] $).
+$p_\theta(x|z)$ is a likelihood function and $p(z)$ is a prior over latent variables, and $q_\theta(z|x)$ is a (simple) model distribution with which we want to approximate $p(x|z)$.
+item We try to minimize this loss \\
+
+To train the model, we need to efficiently (1) compute the derivatives of the expected log-likelihood  $ \nabla \phi \mathbb{E}_{q_\phi(z)}\left[ p_\theta(x|z) \right]$ and (2) choose the richest, computationally-feasible approximate posterior distribution $q(\dot)$. \\
+
+Using Monte Carlo gradient estimation and inference networks, which (when used together), they call \textit{amortized variational inference}.
+TODO: TIMO SAID THAT THIS IS WRONGLY APPROXIMATING THE TRUE DISTRIBUTION? WHAT ABOUT PSI? \\
+
+For stochastic backpropagation, we make use of two techniques:
+
+\begin{itemize}
+\item Reparameterization: The latent variable is reparametrized in terms of a known base distribution and a differentiable transofmration.
+As an example, if $q_\phi(z)$ is a Gaussian distribution $\mathbf{N}(z| \mu, \sigma^2)$ with trainable parameters $\phi = {\mu, \sigma^2}$, then we can reparametrize the variable $z$ as 
+
+\begin{equation}
+	z \sim \mathbf{N}(z | \mu, \sigma^2) \iff z = \sigma + \sigma \epsilon, \epsilon \sim \mathbf{N}(0, 1)
+\end{equation}
+
+\item Backpropagation with Monte Carlo. We backpropagated w.r.t. the parameters $\phi$ of the variational distribution using a Monte Carlo apprxoimation. 
+This is our samples batch.
+
+\begin{equation}
+\nabla\phi \mathbb{E}_{q_\phi(z)}\left[ f_\theta(z) \right] 
+\iff 
+\nabla\phi \mathbb{E}_{\mathbf{N} (\epsilon | 0, 1)}\left[ \nabla_{\phi} f_\theta (\mu +  \sigma \epsilon) \right]
+\end{equation}
+
+where we have simply rewritten z using the reparametrization trick.
+
+\end{itemize}
+
+For continuous latent variables, it has the lowest variance among competing estimators [CITEEE].
+
+Normalizing flows are most often used in the context of inference network. 
+An inference network learns an inverse map from observations to latent variables.
+The simplest latent variable is a Gaussian distribution. \\
+
+Rezende 2015 propose a \textit{Deep Latent Gaussian Model}, which consists of a hierarchy of $L$ layers of Gaussian latent variables $z_l$ for layer $l$.
+
+\begin{equation}
+p(x, z_1, \ldots, z_L) = p(x | f_0(z_1)) \prod_{l=1}^{L} p(z_l | f_l(z_{l+1}))
+\end{equation}
+
+We induce priors over each latent variable $p(z_l) = \mathbf{N}(0, I)$, and the observatoin distribution $p_\theta(x|z)$ is any distribution that is conditioned on $z_1$ and is parametrized by a neural network. \\
+
+This model is very general, and captures includes other models, such as factor analysis and PCA; non-linear factor analyiss, and non-linear Gaussian belif networks as special cases (Rezende 2014, cited in Rezende 2015) \\
+
+We know that $\mathbf{D}_{KL}\left[ q || p\right] = 0$ is achived when $q_\phi(z|x) = p_\theta(z|x)$ (i.e. the approximate q matches the true posterior distribution). IS THIS THE ONLY TIME THIS CAN BE ACHIEVED? \\
+
+A normalising flow captures more flexibel distributions.
+
+Summary normalising flows:
+
+A normalizing flow is a set of basic rules for transofmration of densiities, considers an invertible, smooth mapping
+
+$$
+f : \mathbf{R}^d \rightarrow \mathbf{R}^d
+$$
+
+where the input dimensioinality $d_0$ and output dimensionalities  $d_L$ match.
+The inverse is denoted $f^{-1} = g$, i.e. the composition $g \circ f(z) = z$.
+When we want to transform a random variable $z^\prime = f(z)$, we receive the following distribution:
+
+
+%%\begin{equation}
+%%q(z^\prime) = q(z) \left| \text{ \frac{\delta %%f^{-1}}{\delta z^\prime} } \right| = q(z) \left| det \frac{\delta f}{\delta z}^{-1} \right|
+%%\end{equation}
+
+This stems from the Identity that the probability mass must be conversed amongst operations:
+
+\begin{equation}
+p_x(x) = \frac{p_z(z) V_Z}{V_X}
+\end{equation}
+
+\begin{align}
+	z^\prime &= f(z) \\
+	\frac{z^\prime}{ q(z^\prime) } &= \frac{f(z)}{ q(z) }
+\end{align}
+
+WHERE DOES THE PRIME COME FROM
+
+We can then construct arbitrarily complex densities by composing several simple maps and successively applying the above mass-preserving operation.
+
+\begin{equation}
+z_K = f_K \circ \ldots \circ f_2 \circ f_1 (z_0)
+\end{equation}
+
+We then apply the log-function to have tractable probability functions.
+
+Probability mass must be conserved.
+From the change of variable formula, we know that taking infinitesimal c:hanges toward the direction of the final probabiliity distribution, we get
+
+\begin{align}
+\int z^\prime q(z^\prime) dz^\prime &= \int f(z) q(z) dz \\
+q(z^\prime) &= q(z) \text{ln} \left| det \frac{\delta f(z)}{\delta z^\prime} \right|
+\end{align} \\
+
+There are different ways to use normalising flows:
+
+Although computing the above gradient is expensive ($O(n^3)$ complexity), we can use the Matrix determinant lemma, and construct out mapping matrices in a special way as follows
+(https://blog.evjang.com/2018/01/nf1.htm)\\
+
+\begin{align}
+det(A) & = det(L + V \cdot D \cdot V^T) \\
+		& = det(L) (1 + (VD^{\frac{1}{2}})^T (L^{-1} D^{\frac{1}{2}}V))
+\end{align}
+
+\begin{equation}
+W = PL (U + diag(s))
+\end{equation}
+Then the cost of computing $det(W)$ becomes $O(c)$ instead of $O(c^3)$.
+(CITING GLOW Glow : Generative Flow with Invertible 1 x 1 Convolutions)
+
+where we have used the Matrix Determiinant Lemma for the second equality, with $L$ is a lower triangular matrix, and $D$ is a diagonal matrix.
+
+
+subsection{Extensions on Normalising Flows}
+
+(https://www.shakirm.com/slides/DeepGenModelsTutorial.pdf)
+
+Ever since Normalising flows were proposed, a number of modified versions were presented by [CITE].
+
+Each one calculates the consecutive flow based on a different composition of the previous latent variables $z_k$.
+
+\subsubsection{Planar Flow}
+
+The planar flow is a simple sequential flow with invertible piecewise linear transformations.
+
+\begin{equation}
+z_k = z_{k-1} + uh (w^T z_{k-1} + b)
+\end{equation}
+
+\subsubsection{Real NVP (2017)}
+
+The input for each step is split into two parts.
+The intuition behind this is similar to a residual network, which includes logic that allows the gradient to flow back easier.
+
+\begin{align}
+y_{1:d} &= z_{k-1, 1:d} \\
+y_{d+1:D} &= t(z_{k-1, 1:d}) + z_{d+1:D} \odot \text{exp}(s(z_{k-1, 1:d}))
+\end{align}
+
+Here, $t$ and $s$ are arbitrary functions, such as deep neural networks or simple linear transforms.
+
+
+Provides a set of stably invertible and learnable transformations.
+
+
+This results in an exact log-likelihood calculation.
+
+In the paper, they for the networks $s$ and $t$, they use residual network with batchnorm and weight normalization.
+
+
+
+
+\subsubsection{Inverse AR Flow (2017)}
+
+According to the authors, this method scales well to high dimensional latent spaces.
+Each transformation inside the flow is based on an autoregressive neural network.
+
+At each timestep, all prior variables are taken into consideration.
+
+\begin{equation}
+z_k = \frac{z_{k-1} - \mu_k (z_{\lq k}, x) }{\sigma_k(z_{\lq k}, x)}
+\end{equation}
+
+\subsubsection{Non-Linear Independent Components Estimation (NICE)}
+
+Another volume-preserving flow is the NICE flow.
+First, we arbitrarily partition the latent vector into two components $z = (z_A, z_B)$.
+
+\begin{align}
+f(z)  &= (z_A, z_B + h_\lambda(z_A) ) \\
+g(z^\prime) &= (z^\prime_A, z^\prime_B + h_\lambda(z^\prime_A) )
+\end{align}
+
+Here, $h_\lambda$ can be chosen in such a way that $h$ is a deep neural network with parameters $\lambda$
+
+LOL, COULD WE JUST CREATE A NEW ONE WITH MORE PROPERTIES??
+
+
+Multiple
+
+Normalising flows \cite{variational_inference_using_normalized_flows}, \cite{normalising_flows} 
+are a statistical technique where a series of invertible transformations $f_t$ are applied to a simple distribution $z_0 \sim q_0(z)$, to yield increasingly complex distributions $z_t = f_t(z_{t-1})$, s.t. the last iterate $z_T$ has the desired and more flexible distribution.
+As long as we can efficiently compute the Jacobian determinant of the transformation bijection $f_t$, we can both (1) evaluate the density of our data (by applying an inverse transformation and computing the density in the base distribution), and 
+(2) sample from our complex distribution (by sampling from the base distribution and applying the forward transformation)
+These can be used for classification and clustering \cite{normalising_flows},  [variational inference tasks \cite{iaf} such as image-generation \cite{nvp}], enriching the posterior (and prior!) \cite{variational_inference_using_normalized_flows}, and density estimation \cite{glow}.
+
+\subsubsection{Glow: Generative Flows with Invertible 1x1 Convolutions (2018)}
+
+We use 1x1 convolutional layers as a generalization of the permutation in sequential flows with lower triangular learnable rotation matrices (assuming that the number of input and output channels are equivalent). 
+
+TODO: Convolution operators and reduction to permutation operators
+
+\begin{equation}
+\text{log} \left| \text{det} \left( \frac{d \text{conv2D}(h; W) }{dh} \right) \right| = h  \cdot  w \cdot \text{log} | \text{det} (W)  |
+\end{equation}
+
+% \text{log} = \dot \text{log}  \text{log}  = \dot \text{log} |\text{det} (W) |
+
+
+(read the paper a bit more before citing this, but cite this: https://arxiv.org/pdf/1901.08624.pdf) 
+
+The authors cite strong qualitative experimental results in generating faces, thus empirically proving that higher dimensional flows ($R^d$) are effective and learn a continuous latent space.
+
+
+\subsubsection{Flow++ (2019)}
+
+The Flow++ model describes three problems with existing methods.
+
+\begin{enumerate}
+\item uniform noise is a suboptimal dequantization which hurts training loss and generatlization (i.e. training points are mapped to discrete points in space which have the full probability mass)
+\item the current models are not expressive enough
+\item convolutional layers in coupling are not powerful enough
+\end{enumerate}
+
+The authors respectively propose three ways to
+
+\begin{enumerate}
+\item variational flow-based quantizatioin (WUT?)
+\item logistic mixture CDF coupling flows (WUT?)
+\item self-attention in conditioning of networks
+\end{enumerate}
+
+The coupling layers can be described as
+
+\begin{align}
+y_1 &= x_1 \\
+y_2 &= x_2 \cdot exp( a_\theta( x_1 ) ) + b_\theta(x_1)
+\end{align}
+
+where the functions $a_\theta$ and $b_\theta$ are learnable functions (possibly normalizing flows which ). 
+These have to be invertible affine transformations
+
+It is the first model which starts to close the gap between autoregressive models and flow-based models.
+
+
+
+
+
+Not sure if optimal transport is the solution. The i.e. counterexample on a 2-d space, where "one boot" (italy topology) and another boot are rotated by 180 degrees.
+Then optimal transport would find a wrong solution (because minimal transport!)...
+
+Wasserstein seems to work well, and any measure that incorporate intra-correlation (Artetxe), which can be seen as a generalization to wasserstein.
+However, optimal transport I'm a bit skeptic of. 
+Especially for distant measures it does not deliver nice results.
+
+
+
+As outlined by (https://ruder.io/cross-lingual-embeddings/) the task of finding cross-lingual embedding models fall within one of the four categories:
+
+\begin{enumerate}
+\item Monolingual mapping: Here we train the embedding for each language separately, and the try to find a mapping from one space into another.
+The learned mapping is usually linear.
+\item Pseudo-cross-lingual: Here, a pseudo-language is created by mixing corpus from different languages.
+The cross-lingual context is used to learn the shared embedding space.
+[To what extent is this applicable?]
+\item Cross-lingual training: parallel corpus used to train combined embeddings. Similar words will be mapped close to each other in same embedding space.
+\item Joint optimization: Optimizing a combination of cross-lingual and monolingual losses.
+\end{enumerate}
+
+For parallel data, we can have different types of data:
+
+\begin{enumerate}
+\item Word-aligned data
+\item Sentence-aligned data
+\item Document aligned data
+\item Lexicon (translations between multiple language-tables)
+\item No parallel data (only monolingual resources)
+\end{enumerate}
+
+These are the ways to train word-embeddings (amongst others):
+
+\begin{itemize}
+\item word2vec variants
+\item skip-gram with negative sampling (SGNS)
+\item continuous bag-of-words (CBOW)
+\item GloVe matrix factorization approach
+\end{itemize}
+
+Learning a linear projection from monolingual embeddings and parallel data.
+
+Projection via CCA (Canonical component analysis).
+A transformative matrix is learned for each language, the mapped space is the same space across different languages.
+Using 80\% of projection vectors and using top k components generally yield highest performance.
+
+Normalisation and orthogonal transport.
+Product similarity measure (correlation) can be seen as Wasserstein distance (because it measures how much data points are away from each other) $c^Tc$.
+Vectors are normalised during training with unit vector.
+Because unit length, we can solve this by an orthogonal matrix.
+(Does any information go away? Maybe it's good to regualrize even further so that we know that the mapping is indeed possible?)
+
+Max-margin intrudercs.
+Linear least squares leads to the hubness problem. 
+Words tend to appear as nearest neighbors of many other words
+(-> perhaps some non-random sampling is best here? to move away).
+Use a ranking loss (sounds like optimal transport again...)
+Ranking loss is also used in wasserstein context.
+
+Alignment based projection:
+Count number of times each word in source language is aligned with each word in target language document / sentence.
+
+Adversarial autoencoder
+Autoencoder learns to re-create the embedding, while discriminator learns to maximize the projection
+
+Orthogonal transformation, normalisation, mean centering
+Relation between the constraints is not clear.
+Starting with basic optimization objective, they add regualizers and loss functions as intuitively make sense.
+-> Dot-products need to be maintained after the mapping (as much as possible) constraint ( i dont like )
+-> equal contribution to objective done by normaliizing the embedding..
+-> two randomly selected words should in general not be similar
+
+\paragraph{Pseudo-Cross-Label}
+Captures interactions between words in different languages.
+Mostly skipped because brain capacity...
+
+Joing training with 2 x 2000 dimensional input (one for each job-system)... can then translate each one in one latent space to another.
+How do we find parallel logic here, however..?
+
+
+(-> Perhaps it makes sense to draw all the literature in the context of wassetstein, to do a probabilistic and principled analysis from there on.)
+
+
+
+
+
+
+
+
+Observation (FRAGE: Frequency-Agnostic Word Representation): It is a feature that most-frequent words are embedded to different locations than non-most-embedded features.
+Xing et al argue there is a mismatch between the way it is learned, and the projection and loss-function.
+Tries to find a uniform theory across the three components.
+
+
+
+
+
+
+If we use monolingual resources only, the common approach is
+
+I focus on work which solely includes as input the bilingual word-embeddings.
+Because I want to devise an algorithm which can map from any "matrix column" to any other "matrix column" (i.e. token to token, or item to item), I will not include papers which take as input NLP sentences / corpora used to build the embeddings. 
+
+This work deals with some summary on how unsupervised bilingual lexicon matching was achieved in past papers.
+
+I will give a short summary of papers sorted by year of appearance, and what additional contributions and observation were added since the last iteration.
+
+Some terminiology before we start
+
+\paragraph{online data} implies that some sort of parallel corpora is available
+\paragraph{offline data} implies that we use pre-trained monolingual embeddings to arrive at a toen-translation task
+
+The general goal of bilingual lexicon matching is to learn a shared embedding space where words possessing simiilar meanings are projected to nearby points.
+
+Most existing methods focus on minimizing the distance between the two token-datasets using some (variation) of Wassterstein, Jensen-Shannon divergence, etc.
+
+What are datasets that we can use for benchmarking
+
+\begin{itemize}
+\item MUSE dataset (as used in Zhou 2019 et al
+\item 
+\end{itemize}
+
+Instead of mapping one system into another, we can also allow for joint-training of the word-embeddings.
+
+(This resource is great!!!
+https://ruder.io/cross-lingual-embeddings/
+)
+
+
+
+
+
+\section{Discrete Methods }
+
+\subsection{Loss in Translation}
+
+Finding a non-orthogonal mapping is more effective, especially with distance dictionaries
+
+Orthogonality preserves distances between word-pairs.
+
+Euclidean closest nearest neighbor is taken as the translation pair.
+
+Hubs are words that appear too frequently close to other words.
+This retrieval criterion suffers from the hubness problem.
+
+Removing the loss creates a discrepancy between inference and training.
+
+(-> Why should a loss-function be symmetric, not be symmetric?)
+
+(-> especially with chinese. perhaps the non-orthogonality captures the ambigious tokens..?)
+
+From the original problem of finding an orthogonal projection, we assimilate the auxiliary problem of
+
+the CSLS criterion looks as follows:
+
+\begin{equation}
+CSLS(x, y) = - 2 \text{cos}(x, y) + \frac{1}{k} \sum_{\mathbf{y}^{\prime} \in \mathcal{N}_{Y}(\mathbf{x})} \cos \left(\mathbf{x}, \mathbf{y}^{\prime}\right)+\frac{1}{k} \sum_{\mathbf{x}^{\prime} \in \mathcal{N}_{X}(\mathbf{y})} \cos \left(\mathbf{x}^{\prime}, \mathbf{y}\right)
+\end{equation}
+
+We then use the objective function of a relaxed 
+
+\begin{align} 
+\min _{\mathbf{W} \in \mathcal{O}_{d}} \frac{1}{n} & \sum_{i=1}^{n}-2 \mathbf{x}_{i}^{\top} \mathbf{W}^{\top} \mathbf{y}_{i} \\+& \frac{1}{k} \sum_{\mathbf{y}_{j} \in \mathcal{N}_{Y}\left(\mathbf{W} \mathbf{x}_{i}\right)} \mathbf{x}_{i}^{\top} \mathbf{W}^{\top} \mathbf{y}_{j} \\+& \frac{1}{k} \sum_{\mathbf{W} \mathbf{x}_{j} \in \mathcal{N}_{X}\left(\mathbf{y}_{i}\right)} \mathbf{x}_{j}^{\top} \mathbf{W}^{\top} \mathbf{y}_{i} 
+\end{align}
+
+The optimization is over a convex manifold.
+
+
+
+\subsection{MUSE Facebook using a Min-Max objective}
+
+CSLS used in the training objective directly instead of using it just during retrieval.
+
+Mikolov et. al learn a mapping between the two sets of $Y$ and $X$:
+
+\begin{equation}
+W^{\star} = \text{argmin}_{W \in M_d(\mathbf{R})} \norm{WX - Y}_F
+\end{equation}
+
+Translation of any source token $s$ to a target token $t$ is defined as 
+
+$$
+t = \text{argmax}_t \text{cos} (Wx_s, y_t)
+$$
+
+(i.e. we just create a mapping between $x$ and $t$ using a linear interpolation matrix and take the maximal scalar product.
+
+Mikolov et al do not observe improved loss when using more advanced neural networks..
+
+Enforcing an orthogonality constraint, this boils down to the procrustes problem as given by
+
+\begin{equation}
+W^\star = \text{argmin}_{W \in O_d(\mathbf{R}) } \norm {WX - Y}_F = UV^T 
+\end{equation}
+
+where $U$ and $V^T$ respectively the left and right Eigenvectors of $YX^T$.
+
+We can create an adversarial unsupervised approach by taking random samples from 
+
+$ X = \{ x_1, \dots, x_n \} $ and $ Y = \{ y_1, \dots, y_m \} $
+
+where the discriminator has to detect which of the two datasets the sample stemmed from.
+The "generator" (not really a generator) $W$ is trained to prevent the discriminator from making accurate decisions.
+Specifically, this is modeled as a two-player game, where $WX$ and $Y$ should be as similar as possible.
+
+As such, the discriminator objective is: 
+
+\begin{align}
+\mathcal{L}_D(\theta_D | W) &= \\ 
+&= -\frac{1}{n} \sum_{i=1}^n \text{log} P_{\theta_D}  (\text{source} = 1 | W x ) \\ &-  \frac{1}{m} \sum_{i=1}^n \text{log} P_{\theta_D}  (\text{source} = 0 | W x )
+\end{align}
+
+and the generator objective is:
+
+\begin{align}
+\mathcal{L}_W(W|\theta_D) &= \\
+&= -\frac{1}{n} \sum_{i=1}^{n} \log P_{\theta_{D}}\left(\text { source }=0 | W x_{i}\right) \\ 
+&-  \frac{1}{m} \sum_{i=1}^{m} \log P_{\theta_{D}}\left(\text { source }=1 | y_{i}\right)
+\end{align}
+
+Here, the discriminator is trained on the labels whether the word came from the first embedding, or the second embedding.
+
+(-> Is there a mathematical way to simply this..?)
+
+The resulting rotation matrix is not on-par with supervised approaches.
+As such, the authors propose to make use of the frequencies as additional information.
+As such, we use the most common words as anchors.
+
+We then generate a dictionary from the two embeddings.
+Then we solve the procrustres to arrive at the final orthogonal matrix.
+
+Use of the CSLS
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Methods using Normalising Flows}
+
+\subsection{Density Matching for Bilingual Word Embeddings (Zhou 2019)}
+
+Zhou et. al consider the problem by creating two smooth embedding spaces.
+
+For simplicity, I will refer to embedding space $\mathcal{X} \in \mathbf{R}^d$ as the source embeddings, and the embedding space $\mathcal{Y} \in \mathbf{R}^d$ as the target embeddings. 
+
+We denote $ x_i $ and $y_j$ as the individual words with respective embeddings $x \in \mathcal{X}$ and $y \in \mathcal{Y}$.
+
+--------
+
+The general approach of the authors is as follows:
+
+We learn two mapping functions $f_{xy} : \mathcal{X} \rightarrow \mathcal{Y}$, $f_{yx} : \mathcal{Y} \rightarrow \mathcal{X}$
+
+We maximize the density of data points in the source space. 
+We use a log-likelihood term in the loss-function.
+
+For monolingual embeddings, we define tractable density functions $p(x)$, $p(y)$.
+
+We use gaussian embeddings, where each single gaussian module represents a single word.
+
+\begin{equation}
+p(x) \approx p(y) \approx GMM
+\end{equation}
+
+This implies that for both $\forall x \in \mathcal{X}$ and $\forall y \in \mathcal{Y}$ we have
+
+\begin{equation}
+p(x) = \sum_{i \in {1, \ldots, N_x} } \pi(x_i) \tilde{p}(x|x_i)
+\end{equation}
+
+where the final probability term $$\tilde{p}(x|x_i) = \mathcal{N}(x | x_i, \sigma^2_x I) $$ describes the probability density of the single word-embedding, represented through a Gaussian in this case, and $N_x$ defines the total number of components / words in dictionary $\mathcal{C}$.
+
+To initiate the embeddings, the authors use the word2vec (WAS IT WORD2VEC) point-vector as the mean of the Gaussian distribution, and use a fixed variance term $\sigma^2$ for all Gaussians.
+
+Furthermore, instead of using a uniform prior over the mixture weights $\pi(x_i)$, the authors use the observation that frequencies may give bettern information, as as such initiate the priors as the relative frequencies of the words, i.e. $$ \pi(x_i) = \frac{ \text{freq} (x_i) }{\sum_j \text{freq} (x_j) } $$ .
+
+This implies that the experiment is not executed in a manner where the Gaussian Mixutres are carefully chose, but rather by augmenting and generalizing the word2vec point vectors to Gaussian distributions.
+This has the effect that the resulting probability space becomes smooth (rather than a discrete space of point-vectors) [CITE??? SMOOTHNESS]
+Another assumption made is that a gaussian distribution is best-able to capture this mixtures.
+
+--------
+
+Every training step obtains samples form the Gaussian mixture space.
+
+The density calculation can be defined by using volume-preserving invertible transformations. 
+Perhaps it could make sense to also apply convolutional operators?
+
+To stabilize the unsupervised training, the author employs the following methods.
+
+\begin{enumerate}
+\item back-translation-loss to train both directions (this is conceptually similar to the cyclic dependency in GANs.
+\item  the author uses a weakly loss. identical text-strings in both languages are mapped to similar places in the space. 
+\item frequency of the words is used as a prior to the GMM prior weights.
+\end{enumerate}
+
+The authors indicate robust training which is not strongly dependent on initialization
+
+
+------
+
+The training functions in such as a way as to increase the log-probability density.
+The general approach is:
+
+\begin{enumerate}
+\item A continuous vector $x$ is sampled from the GMM. 
+Specifically,
+\begin{equation}
+x_i \sim \pi(x_i), x \sim \tilde{p}(x|x_i) 
+\end{equation}
+\item We then apply $f_{xy}$ to get the inferred target embedding $y = f_{xy}(x)$.
+Specifically, we define the mapping operation as: 
+\begin{equation}
+f_{xy}(\cdot) = W_{xy} \cdot
+\end{equation}
+We choose $W$ as an invertible matrix, thus, the inverse function is defined as 
+\begin{equation}
+x = f(y) = W_{xy}^{-1} y
+\end{equation}
+setting the volume of this operation to $$ J(f^{-1}(x)) = W_{xy} $$ which is used for the log-density calculations.
+Specifically
+\begin{equation}
+\text{log} p(x; W_{xy}) = \text{log} p(y) + \text{log} \absdet{\text{det}(W_{xy})}
+\end{equation}
+\item We then maximize the log-likelihood, which equivalent to minimizing the expectation of the KL-divergence between the prior and modal distributions.
+\begin{equation}
+KL ( p(x) || p(x; W_{xy} )
+\end{equation}
+We arrive at the conditional unsupervised mapping-loss function of (incorporating the observation that each mixture represents a single word token)
+\begin{equation}
+\mathcal{L}_{xy} = \mathbf{E}{x \sim p(x)} \bracket{ \text{log} p(y) + \text{log} \absdet{ \text{det} (W_{xy})} }
+\end{equation}
+Where the first term is the log-density of the data, and the second term describes a regualizer (prior) over the sample model which we use for the mapping. 
+This equation corresponds to the normalising flow which is volume-preserving.
+\end{enumerate}
+
+The maximum log-likelihood is proportional to the minimum expectation of the KL-divergence between the prior and modal distribution. (DAFUQ IS THIS MODAL DISTRIBUTION)
+
+\section{Methods viewing this problem as an Optimal Transport (OT) Problem}
+
+\subsection{Gromov-Wasserstein Alignment of Word Embedding Spaces}
+
+The problem of aligning word embedding spaces can also be seen as an Optimal Transport (\textit{\textbf{OT}}) problem.
+
+Some work in using the Gromov-Wasserstein distance function has been proposed (CITE Jaakkola). 
+
+The authors argue that the supervised case is 
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwResult{Write here the result }
+ initialization\;
+ \While{While condition}{
+  instructions\;
+  \eIf{condition}{
+   instructions1\;
+   instructions2\;
+   }{
+   instructions3\;
+  }
+ }
+ \caption{How to write algorithms}
+\end{algorithm}
+
+
+\subsubsection{Supervised Case: Procrustes}
+
+Assuming we have
+
+$$
+T : \mathcal{X} \rightarrow \mathcal{Y}
+$$
+
+such that 
+
+$$
+T(x^(i)) \approx y^{j}
+$$
+
+where $w_j^y$ is a translation of $w_i^x$.
+
+Let $\mathbf{X}$ and $\mathbf{Y}$ be the matrices with the column-vectors describing the word-embeddings.
+
+We can then find $T$ by solving the equation
+
+\begin{equation}
+\text{min}_{T \in \mathcal{F}} \norm{X - T(Y)}_F^2
+\end{equation}
+
+THe quality of the resulting alignment depends on how well we can find $T$, as well as on the choice of the space $\mathcal{F}$.
+
+$T$ orthogonal matrix is a popoular choice, results iin the orthogonal Procrustes problem
+
+\begin{equation}
+\text{min}_{P \in O(n)} \norm{X - PY}_F^2
+\end{equation}
+
+with $O(n) = {P \in \mathbf{R}^{n x n} | P^T P = I}$.
+
+In this case, we can find a closed-form solution in terms of the SVD of PX and Y.
+Given an SVD of $U \Sigma V^T$ of $XY^T$, the solution is given by $P^* = UV^T$.
+
+Because the loss must be able to be measured, it only solves the supervised problem.
+
+
+\subsubsection{Unsupervised Maps: Optimal Transport}
+
+Optimal transport formalizes the problem of finding a minimum cost mapping between two point sets, viewed as discrete distributions.
+
+We assume two empirical delta-distributions over embeddings (which are as such equivalent to point-vectors).
+
+WHAT WAS THIS SYMBOL AGAIN WHICH LOOKS LIKE A V
+\begin{equation}
+\mu = \sum_{i=1}^n p_i \delta_{x^(i)}, v = \sum_{j=1}^m q_j \delta_{y^(i)}
+\end{equation}
+
+where $p_i$ and $q_j$ can be considered as the prior distributions, usually set to the uniform distribution or word-frequency.
+
+The transport problem is then realized as 
+
+% CHECK WHAT ROUTE IS...
+\begin{equation}
+\text{inf}_T  \lbrace c(x, T(x)) d \mu(x) | T \mu = v \rbrace
+\end{equation}
+%  d \mu(x) | T_{#} \mu = v
+
+where the cost is usually simply defined as $\norm{x - T(x)}$ and $T \mu = v$ implies that the source points must exactly map to the target points.
+
+We use Kantorovich's relaxed formulation, where the set of transportation plans is a polytope:
+
+%multiplication symbol is: 
+\begin{equation}
+\prod(p, q) = \lbrace \Gamma \in \mathbf{R}_+^{n \times m} | \Gamma \mathbbm{1}_n = p, \Gamma^T \mathbbm{1}_n = q \rbrace
+\end{equation}
+
+In the end, this is just a matrix-factorization problem of the type, including a regularization on the total entropy $H$ of the loss:
+
+\begin{equation}
+\text{min}_{\Gamma \in \prod(p, q)} \langle \Gamma, C \rangle - \lambda H(\gamma)
+\end{equation}
+
+The authors propose "Transport across unaligned spaces", addressing the need for vectors across two spaces.
+Instead of samples between two spaces, we now focus on the distance of the two spaces as a whole.
+
+
+Upsides:
+\begin{enumerate}
+\item Discrete Vectors
+\item Some formulation of "minimal" rotation
+\end{enumerate}
+
+Shortcoming:
+\begin{enumerate}
+\item An overall single rotation will most likely not solve this issue
+\end{enumerate}
+
+
+
+How do we now proceed with using the distances between two functions as the main information to map the two words.
+
+
+\subsection{Graph translation using normalizing flows}
+
+This follows from the observation that any document x token matrix can be modelled as a graph.
+
+
+
+\subsection{Using monolingual word-embeddings to map one to another}
+
+\subsubsection{Cross-lingual word-mappings (Artetxe 2018)}
+
+Extension of work for more distant language pairs for looking at tokens.
+
+Artetxe does the following series of oprations
+
+\begin{enumerate}
+\item Embedding normalization: Normalizes the length of the word-embeddings and then mean-center each dimension.
+\item Fully unsupervised initialization: Uses distances to measure similarity ($M_X=X^TX$ and $M_Y=Y^TY$). 
+Common alternatives include finding common letters and numerals across two words.
+Distances should be isometric up to some permutation. Main assumption: Distance between the two spaces must be equivalent, else unsupervised is not possible!
+Compute sorted($\sqrt{M_X}$, $\sqrt{M_Y}$ ).
+This didnt quite work, so we randomly keep some elements with probability $p$.
+This allows for easier matching because there are many ways to generate this..
+[This is basically like batch-sampling for training, no? This noise (if batchsize is chosen well), should be able to well-solve this].
+We only focus on the top 20000 words in each language for simplicity.
+Instead of kNN, we use the CLSL retrieval.
+Use bidirectional learning to avoid local optima where one word is not available in another language.
+\item Re-weighting [What??] by whitening the cross-correlation matrix. 
+Ultimately, this again also just performs on distances.
+$$ USV^T =  X^TDZ $$ looking at $ W_X = US^\frac{1}{2} $, then we whiten by $$ U^T (X^T X)^{\frac{1}{2}} U $$. 
+\end{enumerate}
+
+
+CSLS often used because of the "hubness" problem
+[Perhaps we can copy all these oprations in a probabilistic context with Wassterstein?]
+
+\subsubsection{Bilingual Lexicon Induction through Unsupervised Machine Translation (Artetxe 2019)}
+
+Uses machine translation to build a lexicon induction model.
+
+Input to algorithm:
+
+\begin{enumerate}
+\item Monolingual corpora fasttext through vecmap and the corpora used to train.
+\item 400'000 most common bigrams and 400'000 most common tri-grams.
+\item To find most similar pairs, instead of using kNN CLSL, proposed is
+$$
+	\phi(\bar{f} | \bar{e})=\frac{\exp (\cos (\bar{e}, \bar{f}) / \tau)}{\sum_{\bar{f}^{\prime}} \exp \left(\cos \left(\bar{e}, \bar{f}^{\prime}\right) / \tau\right)}
+$$
+to extract the top 100 sentences
+5-gram language model.
+\item The proposed method increases this by at least 10 percent points (P@1).
+\item underlying language model uses 2000 sentences from each monolingual corpora, a language modeling loss, and combines this with a cyclic consistency loss.
+\end{enumerate}
+
+\section{Gaussian Embeddings and Token matching in other applications}
+
+\subsection{Creating Gaussian Embeddings to represent Graphs}
+(DEEP GAUSSIAN EMBEDDING OF GRAPHS: UNSUPERVISED INDUCTIVE LEARNING VIA RANKING)
+
+
+\chapter{Metric learning on BERT embedding}
+
+The question is, do we need to apply domain adaptation method for BERT embeddings.
+
+I would say no as a first response, as the clustering methods seem to work well across dimensions (they dont fail).
+
+However, they could be better. 
+We will see if a learned distance measure will facilitate with this.
+

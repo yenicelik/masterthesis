@@ -9,7 +9,7 @@ from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.models.cluster.chinesewhispers import MTChineseWhispers
 from src.models.cluster.dbscan import MTDbScan
 from src.resources.corpus import Corpus
-from src.resources.samplers import retrieve_data
+from src.resources.samplers import retrieve_data_pos
 from src.utils.create_experiments_folder import randomString
 from src.utils.thesaurus_io import print_thesaurus
 from src.visualize.pairplots import visualize_true_cluster_embeddings, visualize_predicted_cluster_embeddings
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # TODO: Do this same visualization for the meaning-clusters!
 
     for tgt_word in polypos_words:
-        X, sentences, labels = retrieve_data(nlp, tgt_word=tgt_word)
+        X, sentences, labels = retrieve_data_pos(nlp, tgt_word=tgt_word)
 
         # Check if adding oversampling logic (kmeans SMOTE) helps
         if args.dimred == "pca" and args.dimred_dimensions == 20:

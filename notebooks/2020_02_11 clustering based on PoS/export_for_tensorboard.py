@@ -9,7 +9,7 @@ import pandas as pd
 from src.config import args
 from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.resources.corpus import Corpus
-from src.resources.samplers import retrieve_data
+from src.resources.samplers import retrieve_data_pos
 from src.utils.create_experiments_folder import randomString
 
 if __name__ == "__main__":
@@ -201,7 +201,7 @@ if __name__ == "__main__":
     # Export the retrieved data to tensorboard
 
     for tgt_word in polypos_words:
-        X, sentences, labels = retrieve_data(nlp, tgt_word=tgt_word)
+        X, sentences, labels = retrieve_data_pos(nlp, tgt_word=tgt_word)
 
         # Save as a numpy array
         np.savetxt(rnd_str + f"/{tgt_word}_matr.tsv", X, delimiter="\t")

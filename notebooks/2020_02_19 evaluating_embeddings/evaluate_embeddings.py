@@ -14,7 +14,7 @@ from src.embedding_generators.bert_embeddings import BertEmbedding
 from src.functional.pdf import pdf_gaussian, pdf_gmm_diagional_covariance
 from src.models.cluster.chinesewhispers import MTChineseWhispers
 from src.resources.corpus import Corpus
-from src.resources.samplers import retrieve_data
+from src.resources.samplers import retrieve_data_pos
 from src.resources.similarity.get_corpus_words import get_words_in_benchmarks
 from src.utils.create_experiments_folder import randomString
 

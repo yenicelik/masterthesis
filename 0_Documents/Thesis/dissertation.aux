@@ -1,88 +1,230 @@
 \relax 
 \providecommand \oddpage@label [2]{}
-\citation{dropping_perf1}
-\citation{dropping_perf2}
-\citation{density_matching}
+\citation{mikolov13}
+\citation{mikolov13b}
+\citation{vaswani17}
+\citation{devlin18}
+\citation{kudugunta18}
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{1}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {1.1}Scope of Work}{1}\protected@file@percent }
-\citation{gaussian_embedding}
-\citation{density_matching}
-\citation{density_matching}
-\citation{density_matching}
-\citation{flowpp}
-\citation{neuralsplineflow}
-\@writefile{toc}{\contentsline {chapter}{\numberline {2}Background}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Motivation}{3}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {2.1}Word Embeddings}{5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.2}Generating "static" word-embeddings through contextual embeddings}{6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}Gaussian Embeddings}{8}\protected@file@percent }
-\citation{variational_inference_using_normalized_flows}
-\citation{nvp}
-\@writefile{toc}{\contentsline {subsubsection}{Word representations via Gaussian Embeddings}{9}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Symmetric similarity: expected likelihood or probability product kernel}{10}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Asymmetric divergence: KL-Divergence}{10}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Uncertainty calculation:}{11}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.4}General random information}{12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.5}Normalising Flows}{13}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Planar Flow}{20}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Real NVP (2017)}{20}\protected@file@percent }
-\citation{variational_inference_using_normalized_flows}
-\citation{normalising_flows}
-\citation{normalising_flows}
-\citation{iaf}
-\citation{nvp}
-\citation{variational_inference_using_normalized_flows}
-\citation{glow}
-\@writefile{toc}{\contentsline {subsubsection}{Inverse AR Flow (2017)}{21}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Non-Linear Independent Components Estimation (NICE)}{21}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Glow: Generative Flows with Invertible 1x1 Convolutions (2018)}{22}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Flow++ (2019)}{22}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Related Work}{25}\protected@file@percent }
+\citation{harris54}
+\citation{harris54}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Background}{5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {paragraph}{Pseudo-Cross-Label}{27}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{online data}{28}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{offline data}{28}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Discrete Methods }{28}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Loss in Translation}{28}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}MUSE Facebook using a Min-Max objective}{29}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Methods using Normalising Flows}{32}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Density Matching for Bilingual Word Embeddings (Zhou 2019)}{32}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Methods viewing this problem as an Optimal Transport (OT) Problem}{35}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Gromov-Wasserstein Alignment of Word Embedding Spaces}{35}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces How to write algorithms}}{36}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Supervised Case: Procrustes}{36}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Unsupervised Maps: Optimal Transport}{37}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Graph translation using normalizing flows}{38}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Using monolingual word-embeddings to map one to another}{39}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Cross-lingual word-mappings (Artetxe 2018)}{39}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Bilingual Lexicon Induction through Unsupervised Machine Translation (Artetxe 2019)}{40}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}Gaussian Embeddings and Token matching in other applications}{40}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Creating Gaussian Embeddings to represent Graphs}{40}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Analysis of the current state of the art}{41}\protected@file@percent }
+\citation{spacy}
+\citation{spacyb}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Linguistic Features}{6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Lexical features}{6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Word Embeddings}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Word-Embeddings}{7}\protected@file@percent }
+\newlabel{map:embedding_mapping}{{3.2}{7}}
+\citation{bengio03}
+\@writefile{toc}{\contentsline {paragraph}{Distance}{8}\protected@file@percent }
+\newlabel{def:distance}{{3.2}{8}}
+\@writefile{toc}{\contentsline {paragraph}{Learning a distance}{8}\protected@file@percent }
+\citation{bengio03}
+\@writefile{toc}{\contentsline {paragraph}{Going from the distributional structure of sentences to learning distances between words.}{9}\protected@file@percent }
+\newlabel{eq:naive_sequential_probability}{{3.2}{9}}
+\citation{harris54}
+\citation{mikolov13}
+\citation{mikolov13}
+\newlabel{eq:naive_sequential_probability}{{3.2}{10}}
+\@writefile{toc}{\contentsline {paragraph}{However, we do not need to only look at only the previous words}{10}\protected@file@percent }
+\newlabel{eq:basic_equation_log_maximization}{{3.2}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite  {mikolov13}. The CBOW architecture predicts the current word based on the context. The Skip-gram predicts surrounding words given the current word.\relax }}{11}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:cbow_skipgram}{{3.1}{11}}
+\newlabel{eq:basic_equation_log_maximization_skipgram}{{3.2}{11}}
+\citation{mikolov13}
+\citation{mikolov13b}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Static Word Embeddings}{12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Basic Model}{12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{12}\protected@file@percent }
+\citation{mikolov13b}
+\citation{mikolov13b}
+\citation{pennington14}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Figure taken from \cite  {mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.\relax }}{13}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{3.2}{13}}
+\citation{vilnis14}
+\@writefile{toc}{\contentsline {subsubsection}{GloVe}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Gaussian Embeddings}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Symmetric similarity: expected likelihood or probability product kernel}{15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Asymmetric divergence: KL-Divergence}{16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Uncertainty calculation:}{16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Context Embeddings}{18}\protected@file@percent }
+\newlabel{eq:transformer_probability}{{3.2.2}{18}}
+\citation{peters17}
+\citation{hochreiter97}
+\@writefile{toc}{\contentsline {subsubsection}{ELMo}{19}\protected@file@percent }
+\citation{vaswani17}
+\citation{vaswani17}
+\citation{vaswani17}
+\citation{devlin18}
+\@writefile{toc}{\contentsline {subsubsection}{The Transformer Architecture}{20}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{BERT}{20}\protected@file@percent }
+\citation{devlin18}
+\citation{devlin18}
+\citation{devlin18}
+\citation{sanh19}
+\citation{shen19}
+\citation{radford18}
+\citation{radford19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Figure taken from \cite  {vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.\relax }}{21}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{3.3}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Figure taken from \cite  {devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.\relax }}{22}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{3.4}{22}}
+\@writefile{toc}{\contentsline {subsubsection}{GPT and GPT-2}{22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Other methods}{22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Generating "static" word-embeddings through contextual embeddings}{22}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Resources and Datasets}{25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{WordNet}{25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{SemCor dataset}{25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{News dataset}{25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{GLUE benchmark dataset}{25}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Related Work}{27}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Our Method}{43}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Structure inside BERT}{27}\protected@file@percent }
+\citation{peters18}
+\citation{may19}
+\citation{jentzsch19}
+\citation{hu19}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Attention mechanism}{29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}From token-vectors to word-vectors}{29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Bias in BERT vectors}{29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.4}Change of meanings over time}{29}\protected@file@percent }
+\citation{zhu18}
+\citation{chen19}
+\citation{kudugunta18}
+\citation{vaswani17}
+\citation{kudugunta18}
+\citation{kudugunta18}
+\citation{lample18}
+\citation{ma19}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.5}Clinical concept extration}{30}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.6}Discovering for semantics}{30}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.7}Embeddings for translation}{30}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces From \cite  {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{31}\protected@file@percent }
+\newlabel{fig:embeddings_by_language}{{4.1}{31}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Metric Learning and Disentanglement}{31}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Zero shot and One shot learning }{31}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Clustering Algorithms}{31}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Applications of word vector}{31}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{32}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Analysing the current state of the art}{35}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Further Work}{45}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}On the Linear Separability of meaning within sampled BERT vectors}{35}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Motivation}{35}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Experiment setup}{35}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Checks sampled BERT vectors for linear interpretability by meaning\relax }}{36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Results}{37}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{37}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {is}.\relax }}{38}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {one}.\relax }}{38}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{38}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}On the Clusterability of meaning within sampled BERT vectors}{39}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Motivation}{39}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Experiment setup}{39}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{40}\protected@file@percent }
+\citation{rand71}
+\citation{hubert85}
+\newlabel{eq:adjustedrandomindex}{{5.2.2}{41}}
+\citation{pelevina16}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Results}{42}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Qualitative evaluation}{43}\protected@file@percent }
+\newlabel{fig:sfig1}{{5.1a}{44}}
+\newlabel{sub@fig:sfig1}{{a}{44}}
+\newlabel{fig:sfig2}{{5.1b}{44}}
+\newlabel{sub@fig:sfig2}{{b}{44}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces plots of....\relax }}{44}\protected@file@percent }
+\newlabel{fig:fig}{{5.1}{44}}
+\newlabel{fig:sfig1}{{5.2a}{44}}
+\newlabel{sub@fig:sfig1}{{a}{44}}
+\newlabel{fig:sfig2}{{5.2b}{44}}
+\newlabel{sub@fig:sfig2}{{b}{44}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces plots of....\relax }}{44}\protected@file@percent }
+\newlabel{fig:fig}{{5.2}{44}}
+\newlabel{fig:sfig1}{{5.3a}{45}}
+\newlabel{sub@fig:sfig1}{{a}{45}}
+\newlabel{fig:sfig2}{{5.3b}{45}}
+\newlabel{sub@fig:sfig2}{{b}{45}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces plots of....\relax }}{45}\protected@file@percent }
+\newlabel{fig:fig}{{5.3}{45}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces A famous equation\relax }}{45}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces A famous equation\relax }}{46}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces A famous equation\relax }}{46}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces A famous equation\relax }}{47}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.8}{\ignorespaces A famous equation\relax }}{47}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.9}{\ignorespaces A famous equation\relax }}{48}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.10}{\ignorespaces A famous equation\relax }}{48}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.11}{\ignorespaces A famous equation\relax }}{49}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.12}{\ignorespaces A famous equation\relax }}{49}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.13}{\ignorespaces A famous equation\relax }}{50}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.14}{\ignorespaces A famous equation\relax }}{50}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.15}{\ignorespaces A famous equation\relax }}{51}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.16}{\ignorespaces A famous equation\relax }}{51}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.17}{\ignorespaces A famous equation\relax }}{52}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.18}{\ignorespaces A famous equation\relax }}{52}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.19}{\ignorespaces A famous equation\relax }}{53}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.20}{\ignorespaces A famous equation\relax }}{53}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Correlation between Part of Speech and Context within BERT}{54}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Motivation}{54}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Experiment setup}{54}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Results}{54}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Our Method}{55}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Evaluation}{47}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces \relax }}{55}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.1}{55}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.1}BERnie PoS}{56}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Motivation}{56}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{56}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces \relax }}{56}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.2}{56}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces \relax }}{56}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.3}{56}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces \relax }}{57}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.4}{57}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.2}BERnie Meaning}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Motivation}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.3}BERnie Meaning with additional pre-training}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Motivation}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.4}Compressing the non-lexical out}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Motivation}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{57}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces \relax }}{58}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.5}{58}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces \relax }}{58}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.6}{58}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces \relax }}{59}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.7}{59}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.8}{\ignorespaces \relax }}{59}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.8}{59}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.9}{\ignorespaces \relax }}{60}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.9}{60}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Evaluation}{61}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{61}\protected@file@percent }
 \bibstyle{unsrt}
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Conclusion}{49}\protected@file@percent }
+\bibdata{dissertation}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Conclusion}{65}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}

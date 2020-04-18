@@ -34,8 +34,8 @@ class Corpus:
                     "[CLS] " + x + " [SEP]"
                 )
         out = out[:n]
-        print("Self data is. ")
-        print(out)
+        # print("Self data is. ")
+        # print(out)
         # print(self.data)
         # Must not allow any words that happen less than 5 times!
         assert len(out) >= 1, ("Not enough examples found for this word!", out, word)
@@ -57,6 +57,8 @@ class Corpus:
         self.stemmer = None
 
         self.data = self._load_corpus()
+        # TODO: BERT does not allow for sentences which have more than 512 tokens!!!
+        self.data = [x for x in self.data if len(x.split()) < (512 - 100)]
 
     def _load_corpus(self):
         """^

@@ -1,0 +1,20 @@
+
+                                                                                               ------
+[CLS] The standard biopic takes a musician and shows his ups and downs, with the happy music in good times, the sad music in bad; it locks him into an identity. [SEP]
+                                                                                               ------
+                                                                        [CLS] There are so many good teams in the league. [SEP]
+                                                                      [CLS] Yes, they are still good things to do today, but then and in the 70’s they were our peer-related choice of activities –not part of an organized adult-child or parent-child activity. [SEP]
+                                                                           [CLS] “It was such a good dream, Mom,” she told me. [SEP]
+                                                           [CLS] The chart on the right gives a good summary in numbers (click on it to get a bigger version). [SEP]
+                                                                   [CLS] And Rooney knew what a good person Dungy was, but there was concern before he joined the coaching staff. [SEP]
+                                                                                               ------
+
+                                                                                                                                                                                              ------
+                                                                                                                                                                                   [CLS] Well, good for you, Dick Cavett. [SEP]
+                                                                                                                                                                                              ------
+                                                                                                                                                                               [CLS] Is this a good idea? [SEP]
+                                                                                                                                                      [CLS] But as it turns out, that might be good news for tax-minded investors. [SEP]
+                                                                                                 [CLS] But I can say that I am no longer anxiety-ridden about migraines and feel that I have a good amount of control over the experience. [SEP]
+                                                  [CLS] It may be hard to imagine anything like Bon art flourishing in a skeptical modern world ruled by consumerism and narcissism, but it is good to have it as an inspirational model of what art can be and do. [SEP]
+[CLS] They were standing around in the glaring sunlight on the stone-strewn grounds when Mr. Edwards arrived; he took a basketball from some kids and shot three clean, consecutive baskets, a good omen, he said, for his campaign. [SEP]
+                                                                                                                                                                                              ------

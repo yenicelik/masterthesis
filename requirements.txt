@@ -10,14 +10,18 @@ pandas==0.25.3
 python-dotenv==0.10.3
 sklearn
 spacy==2.2.3
-transformers==2.1
-tensorflow==1.14
-tensorflow_probability==0.7.0
+transformers==2.5.1
+# tensorflow_probability==0.7.0
 torch==1.3.1
 umap-learn==0.3.10
 chinese-whispers==0.6.1
 ax-platform==0.1.8
 hdbscan==0.8.24
 imbalanced-learn==0.6.1
+pydml==
 pyyaml==5.3
 seaborn==0.10.0
+
+# tensorflow==1.14
+tensorflow==2.1.0
+tensorflow-datasets==2.1.0
