@@ -104,7 +104,7 @@ CUDA_LAUNCH_BLOCKING=1
 # for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
 # for TASK in  'WNLI' 'RTE' 'QNLI' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
 #for TASK in  'MNLI' 'SNLI' 'QQP' # 'STS-B' 'SST-2' 'MRPC' 'CoLA' #
-for TASK in 'CoLA' 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'
+for TASK in 'WNLI' 'RTE' 'QNLI' 'STS-B'   # 'CoLA' 'MRPC' 'SST-2'
 do
     echo bernie-meaning;\
     echo $TASK; \
@@ -127,7 +127,7 @@ do
       --only_finetune_newly_added_embeddings True \
       --output_meaning_dir $SAVEDIR/bernie_meaning_cache \
       --output_dir $SAVEDIR/bernie_meaning_20200405_finetuned_42;
-done 2>&1 | tee $SAVEDIR/bernie_meaning_20200405_finetuned_42.txt
+done 2>&1 | tee $SAVEDIR/bernie_meaning_20200413_finetuned_42.txt
 
 # JUST SOME TEST
 for TASK in 'CoLA' # 'MRPC' 'SST-2' 'STS-B' 'QNLI' 'RTE' 'WNLI'

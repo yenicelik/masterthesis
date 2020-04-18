@@ -1,0 +1,10 @@
+
+                                                                           -----
+               [CLS] But he added that demand for properties near the water was still healthy. [SEP]
+                                                                           -----
+                                     [CLS] Standing in the clearing of what was once the house's great living room, she has dark curls and a preternatural gaze. [SEP]
+                                                            [CLS] Mr. Lidle was a novice pilot who had bought the plane in 2005 for $187,000. [SEP]
+        [CLS] They made the world seem friendly somehow , though he knew it was not . [SEP]
+[CLS] To Julian’s bewilderment, it turns out sex wasn’t the lure at all; it was “Nightline.” [SEP]
+                                    [CLS] Dan Topping, not his brother Bob, was the co-owner of the Yankees at the time, but Dan laughed along with everybody else there. [SEP]
+                                                                           -----

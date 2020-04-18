@@ -31,6 +31,9 @@
 \usepackage{siunitx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{empheq}
+\usepackage{float}
+
 
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{tabularx,booktabs}
@@ -62,6 +65,7 @@
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\bracket}[1]{\left[#1\right]}
 \newcommand{\absdet}[1]{\left|#1\right|}
+\newcommand{\bftab}{\fontseries{b}\selectfont}
 %% START OF MAIN TEXT 
 
 %\chapter{Introduction}
@@ -551,6 +555,11 @@ multiple gigabytes of text .
 Multiple versions of BERT are provided, including $BERT_{LARGE}$ which includes %TODO input number of parameters
 , and $BERT_{BASE}$ which includes %TODO number of parameters
 
+Ever since BERT came out, a wide variety of similar models came out that mimick the main logic of BERT, and improve upon it, such as DistillBERT \cite{sanh19}.
+
+Numerous works have been published on making BERT representations more compact, for it to be used for on-device text-processing applications, such as more compact sentence-representations \cite{shen19}.
+
+
 
 \subsubsection{GPT and GPT-2}
 
@@ -712,6 +721,75 @@ I guess this is because we need static embeddings which represent the individual
 -> perhaps create a GMM for each concept, based on how many modals we identify? how to estimate the number of clusters? by graph-clustering perhaps! (this could be very consuming)
 
 -> Adversarial autoencoder on BERTs last models to enforce it to some better distribution
+
+
+\subsection{Attention mechanism}
+
+Some analysis has been done with looking at the similarity between the produced context-vectors for biLM \cite{peters18}.
+
+\subsection{From token-vectors to word-vectors}
+
+\cite{may19} analyse the social biases that are part of the context embeddings and show that depending on the language model (ELMo, BERT), the amount of social bias deviates. 
+Because context embeddings capture more than just semantics, bias is a natural implication of context vectors.
+A by-product of their research includes aggregating token-embeddings (i.e. aggregating the tokens $hav$ and $\#\#\#ing$ to result at the word $having$).
+Although not very extensive on the topic of aggregation, the authors  use techniques of mean-pooling, max-pooling, and last-pooling to determine arrive at a single context-vector, if the given token is intrinsically split-up by the language-model tokenizer (incl. BERT, ELMo, GPT).
+
+Finally, evaluation on the corpora also yield inclusion of human-like biases \cite{jentzsch19} by names, races, male-vs-female.
+
+\subsection{Bias in BERT vectors}
+
+
+\subsection{Change of meanings over time}
+
+\cite{hu19} analyse how meanings quantitatvely using corpora from different historical epochs, including the 1890s, 1940s, 1960s, 1970s, 1990s and 2000s. 
+Specifically, they measure the similarity scores for given context-vectors based on differently trained corpora.
+They demonstrate through examples of the word \textit{gay} and \textit{alien} that the similarity between context-vectors change.
+
+\subsection{Clinical concept extration}
+
+The task of concept-extration is heavily applied in the field in the clinical domain.
+
+\cite{zhu18} trains a LSTM-Conditional-Random-Field to extract concepts.
+They used annotated corpora from doctors notes to train the model and model this as a named-entity-recognition task.
+
+%TODO \cite{tenney19} Look more closely at this paper
+
+\subsection{Discovering for semantics}
+
+
+\cite{chen19} apply a co-clustering framework that discovery multiple semantic and visual senses of a given noun phrase.
+They use an structure-EM-like algorithm to achive this.
+
+\subsection{Embeddings for translation}
+
+A lot of work is done in the field of analysing embeddings for translation tasks, to further mitigate the black-box behvaior of neural network.
+
+This includes \cite{kudugunta18} who use singular value canonical correlation analysis to compare hidden representations of language models between different languages.
+To arrive at a sentence-representation, they do mean-pooling over the outputted embedding-vectors of a sentence. 
+They find interesting behavior in the arrangement of context-embedding in the Transfoerm-Big architecture proposed in the \cite{vaswani17} paper, which is also inherently used in BERT and GPT.
+Interestingly, they show that different languages do not project into similar spaces, thus making zero-shot learning tasks between languages difficult.
+
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/relatedwork/embeddings_by_language.png}
+  \caption{From \cite{kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.}
+  \label{fig:embeddings_by_language}
+\end{figure}
+
+%TODO What language model do they use? I dont see anything about BERT
+
+
+\cite{lample18} uses a cyclic loss to apply unsupervised machine translation suign monolingual corpora only. 
+Here, sentence-embeddings are learned over time, which follow the cyclic loss constraint, and minimize the sunsupervised translation loss.
+
+Other work tries to disentangle the different linguisitc, visual and audio-based features by supplying multi-modal input at once \cite{ma19}.
+A translation model is learned which can not only translate between different domains, but also between different modalities (i.e. from image to audio, audio to text, and any such combination).
+
+
+
+
+
 
 \section{Metric Learning and Disentanglement}
 
@@ -1221,8 +1299,287 @@ We now analyse the embeddings manually
 \label{fig:fig}
 \end{figure}
 
+\subsubsection{Qualitative evaluation}
+
+Given that the above numbers likely don't mean anything, here are some clusters found for the best model configuration (chinese whispers), applied on a set of words.
+
+
 
 Can see that this can be used for biased and insecure AI applications!
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                                  } & \text{- - - -} \nonumber \\
+\text{Ms. Gotbaum tried to slide her handcuffed } & \text{arms from her back to her front} \nonumber \\
+\text{                                                                  } & \text{- - - -} \nonumber \\
+               \text{That magisterial use of the upper body and } & \text{arms is her physical signature} \nonumber \\
+\text{entered the stage in pairs and forcefully stretched their } & \text{arms and legs} \nonumber \\ 
+                                    \text{ripped from patients’ } & \text{arms as they were carried away} \nonumber \\
+                                    \text{                                                                  } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                              } & \text{- - - -} \nonumber \\
+\text{She swooped him up into her } & \text{arms and kissed him madly} \nonumber \\
+\text{                                              } & \text{- - - -} \nonumber \\
+\text{I place my son in her } & \text{arms and I pray that it somehow comforts her} \nonumber \\
+\text{perfect babies \ldots into the loving } & \text{arms of middle class+ Americans} \nonumber \\
+\text{which he falls back into her } & \text{arms like a baby} \nonumber \\
+\text{Sometimes I took it into my } & \text{arms and felt its surprising heft} \nonumber \\
+\text{                                              } & \text{- - - -} \nonumber
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                              } & \text{- - - -} \nonumber \\
+\text{and shuttle robotic } & \text{arms of a solar array and truss}  \nonumber\\
+\text{                              } & \text{- - - -} \nonumber \\
+\text{a contingent of young } & \text{arms that will allow us to win now}  \nonumber\\
+\text{By and large, those } & \text{arms remained as fictional as those in "The War \ldots"}  \nonumber\\
+\text{and extensive use of robotic } & \text{arms operating at their limits}  \nonumber\\
+\text{staff of strong young } & \text{arms that might have tamed the National League East} \nonumber \\
+\text{                              } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                   } & \text{- - - -} \nonumber \\
+\text{this country is so polarized that people spring to } & \text{arms against any proposal} \nonumber \\
+\text{                                                   } & \text{- - - -} \nonumber \\
+                        \text{At least they are carrying } & \text{arms to protect themselves} \nonumber \\
+                 \text{His organization issued a call to } & \text{arms} \nonumber \\
+      \text{he shoves it in the faces of his comrades in } & \text{arms} \nonumber \\
+                           \text{people who had taken up } & \text{arms against the United States} \nonumber \\
+                    \text{Mostly non-Arab rebels took up } & \text{arms in early 2003} \nonumber \\
+\text{                                                   } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                   } & \text{- - - -} \nonumber \\
+                      \text{The classic years of the} & \text{arms race, the 1950s and ’60s before} \nonumber \\
+                      \text{                                                   } & \text{- - - -} \nonumber \\
+                    \text{that concerns over nuclear} & \text{arms proliferation in the Middle East} \nonumber \\
+                  \text{Russian adherence to another} & \text{arms control treaty} \nonumber \\
+       \text{he will press for peace and an eventual} & \text{arms cut for the states} \nonumber \\
+       \text{payments to the companies that supplied} & \text{arms to Iraq were often delayed} \nonumber \\
+\text{Mr. Safar denies any wrongdoing, including any} & \text{arms dealings} \nonumber \\
+\text{                                                   } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                              } & \text{- - - -} \nonumber \\
+           \text{leaned back in his chair and, with} & \text{ arms crossed,} \nonumber \\
+\text{                                              } & \text{- - - -} \nonumber \\
+\text{God, fully in name, is at the bottom with his} & \text{ arms out wide.} \nonumber \\
+    \text{If you feel yourself falling, spread your} & \text{ arms} \nonumber \\
+                                   \text{Agamemnon,} & \text{ arms raised ... barely contained violence} \nonumber \\
+                       \text{Mr. James sat with his} & \text{ arms folded, his head lowered} \nonumber \\
+      \text{she felt tears in her eyes and held her} & \text{ arms out in simple joy} \nonumber \\
+\text{                                             } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+NOW MOVING OVER TO THE BANK EXAMPLE
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{heavy withdrawals from the British} & \text{ bank Northern Rock reignited concern} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{credit card and other consumer loans, forcing the} & \text{ bank to set aside \$3.4 billion} \nonumber \\
+\text{by a mainland Chinese commercial bank in a U.S.} & \text{ bank} \nonumber \\
+\text{Investors fear the} & \text{ bank will be forced to write down} \nonumber \\
+\text{investors hoped that the} & \text{ bank had disclosed the} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                              } & \text{- - - -} \nonumber \\
+\text{I would expect the} & \text{ bank by the trail to the left of the road to have been broken down} \nonumber \\
+\text{                                              } & \text{- - - -} \nonumber \\
+\text{The current slowed and swirled alongside a mud} & \text{ bank where cows had trodden to the water} \nonumber \\
+\text{But the} & \text{ bank had positioned itself well} \nonumber \\
+\text{provide plant scientists and farmers with a} & \text{ bank of genes} \nonumber \\
+\text{Upstairs at the large} & \text{ bank of cashiers} \nonumber \\
+\text{                                              } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{of their family’s naturalization —} & \text{ bank deposit by bank deposit} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{12 that the company might suffer a run on the} & \text{ bank because of mortgage concerns} \nonumber \\
+\text{Third, per several} & \text{ bank managers of major national banks} \nonumber \\
+\text{Local party bosses gained broad powers over state} & \text{ bank lending, taxes} \nonumber \\
+\text{government contracts, and a web of} & \text{ bank accounts} \nonumber \\
+\text{Prince Bandar’s Washington} & \text{ bank accounts} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                    } & \text{- - - -} \nonumber \\
+ \text{to lift some of the mystery surrounding the central} & \text{ bank and improve communications with Wall Street} \nonumber \\
+\text{                                                    } & \text{- - - -} \nonumber \\
+\text{many economists had predicted that the} & \text{ bank would not cut its rate} \nonumber \\
+\text{expectations that the central} & \text{ bank will raise interest} \nonumber \\
+\text{a hint that the central} & \text{ bank plans to hold rates} \nonumber \\
+\text{China’s central} & \text{ bank has stepped up its already huge purchases of dollar-denominated securities} \nonumber \\
+\text{fertilizer prices in African countries, but that the} & \text{ bank itself had often failed to recognize} \nonumber \\
+\text{                                                    } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                              } & \text{- - - -} \nonumber \\
+\text{citing challenges for the investment} & \text{ bank and the potential for an above-average credit burden} \nonumber \\
+\text{                                              } & \text{- - - -} \nonumber \\
+\text{93 percent drop in profits at its investment} & \text{ bank last week} \nonumber \\
+\text{UBS said it did not expect its investment} & \text{ bank to return to profitability} \nonumber \\
+\text{defrauded by the investment} & \text{ bank in 1998 when} \nonumber \\
+\text{said in an interview that the investment} & \text{ bank approached him last month \nonumber} \\
+\text{said the leaders of Citigroup’s investment} & \text{ bank and alternative} \nonumber \\
+\text{                                            } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+EXAMPLES FOR KEY CLUSTERING
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{Many of the} & \text{ key Arab states } \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{in two months and Australia's} & \text{ key S\&P ASX 200 shed 1.9 percent } \nonumber \\
+\text{Wall Street rebounded Wednesday after} & \text{ key earnings reports from JPMorgan Chase \& Co.} \nonumber \\
+\text{The Democratic candidate hires a} & \text{ key strategist} \nonumber \\
+\text{[CLS] Mr. Jones “quickly established a good rapport with} & \text{ key donors” } \nonumber \\
+\text{able to meet the two} & \text{ key officials in the government} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{former president of Trinity College, who played a} & \text{ key role in designing the test} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{seen in the West as a} & \text{ key yardstick of the fairness of an election} \nonumber \\
+\text{treat ... as a} & \text{ key factor in its decisions about regulatory issues} \nonumber \\
+\text{which policy makers have called the} & \text{ key test for deciding whether to lower interest rates} \nonumber \\
+\text{9. 11. as a} & \text{ key element in pitch meetings} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{Interstate 5 is a} & \text{ key route connecting Southern and Northern California} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{ A} & \text{ key piece of new functionality for Ops Center } \nonumber \\
+\text{Youssef Squali at Jefferies \& Co. says two} & \text{ key factors are driving the stock up} \nonumber \\
+\text{transforming connection with believers is a} & \text{ key element of evangelical Christianity} \nonumber \\
+\text{What would you say was the} & \text{ key element of your management style that allowed you to stabilize H.P.} \nonumber \\
+\text{is a} & \text{ key indicator of retailer performance} \nonumber \\
+\text{in the West the} & \text{ key players were not a small group of intellectuals reading Greek sources } \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+\begin{figure}[H]
+\begin{align}
+ \text{                                                 } & \text{- - - -} \nonumber \\
+\text{times change and technology advances, the} & \text{ key to the city symbolizes } \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{And an official, five-and-three-quarters-inch-long gold-plated pewter} & \text{ key to prove it} \nonumber \\
+\text{but it is small enough to fit onto a} & \text{ key chain} \nonumber \\
+\text{In it lay three keys on a} & \text{ key chain in the shape of a red speedboat} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{The Red Sox will now have all their} & \text{ key players from their 2007 championship team} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{Mike Green scored 12 points and had a} & \text{ key assist in overtime as No. 22 Butler beat Virginia Tech} \nonumber \\
+\text{or taking the chance of losing a} & \text{ key player to injury} \nonumber \\
+\text{But they never led, could not get a} & \text{ key basket at crucial times and played like a team } \nonumber \\
+  \text{but Cam Long stole the ball near the top of the} & \text{ key and ran out the clock} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{align}
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{Three of their} & \text{ key players played more than 40 minutes in Sacramento} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\text{A} & \text{ key for the Giants on Sunday} \nonumber \\
+\text{chemical reactions on solid surfaces, which are} & \text{ key to understanding questions like why the ozone layer is thinning} \nonumber \\
+\text{but is she part of the conspiracy or the} & \text{ key to Sim’s salvation?} \nonumber \\
+\text{whose ability to play on a sprained ankle against the Eagles} & \text{ key to that matchup} \nonumber \\
+\text{Horses have been the lifelong} & \text{ key to satisfying the real feminine needs for me and my daughter} \nonumber \\
+\text{Connecticut cornerback said the} & \text{ key to defeating Louisville would be pressuring Brohm} \nonumber \\
+\text{                                                 } & \text{- - - -} \nonumber \\
+\end{align}
+\caption{A famous equation}
+\end{figure}
+
+
+
+
+
 
 \section{Correlation between Part of Speech and Context within BERT}
 
@@ -1351,13 +1708,110 @@ BERnie PoS introduces one new embedding vector for each possible PoS configurati
 \subsubsection{Motivation}
 \subsubsection{Experiment setup}
 
-\chapter{Further Work}
-
-Can be used for more unstructured data, like graphs.
-
 \
 %\chapter{Summary and Conclusions} 
 \chapter{Evaluation}
+
+We evaluate the models of the previous experiments.
+
+\begin{center}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit{was}.}
+\begin{tabular}{SSSSSSSS} \toprule
+    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
+       2  & 0.08 & 0.38 / $\pm$ 0.03 \\ \midrule
+       3  & 0.11 & 0.38 / $\pm$ 0.04 \\ \midrule
+     10  & 0.28 & 0.65 / $\pm$ 0.03  \\ \midrule
+     20  & 0.43 & 0.76 / $\pm$ 0.04  \\ \midrule
+     30  & 0.53 & 0.83 / $\pm$ 0.03  \\ \midrule
+     50  & 0.67 & 0.93 / $\pm$ 0.01 \\ \midrule
+     75  & 0.77 & 0.95 / $\pm$ 0.01 \\ \midrule
+    100 & 0.83 & 0.95 / $\pm$ 0.01  \\ \midrule
+\end{tabular}
+\end{center}
+
+%TODO Write section for GLUE tasks
+\scalebox{0.9}{
+\begin{tabular}{
+ l % left aligned column
+ l % left aligned column
+ *{5}{S[table-format=4.0]} % three columns with numeric data       
+}
+\toprule
+%TODO MRPC has one aligned, and one unaligned test
+&&\textbf{BERT} & \textbf{BERnie PoS} & \textbf{BERnie} \\
+\midrule
+CoLA  & Accuracy  &  \textbf{0.5739} & 0.5263 &  0.5457 \\
+
+MRPC & Accuracy &  \textbf{0.8223} & 0.8199 &  0.8064 \\
+          & F1           &  \textbf{0.8778} & 0.8614  &  0.8684 \\
+          & Mixed     &  0.8501 & \textbf{0.8579}  &  0.8374 \\
+          
+SST-2 & Accuracy  &  0.9214 & 0.9203 &  \textbf{0.9266} \\
+
+STS-B & Correlation &  \textbf{0.8841} & 0.8615 &  0.8574 \\
+      & Pearson & \textbf{0.8860} & 0.8621         & 0.8587 \\
+      & Spearman & \textbf{0.8822} & 0.8601      & 0.8567 \\
+      
+QNLI & Accuracy &  \textbf{0.9126} & 0.9090    &  0.9020 \\
+
+RTE & Accuracy &  \textbf{0.6462} & 0.6083     &  0.5722 \\
+
+WNLI & Accuracy &  0.35915 & 0.39465 &  \textbf{0.4649} \\
+
+MNLI & Accuracy &  0.8453 &              &  0.8334 \\
+
+SNLI & Accuracy &  \textbf{0.8461} &              &  0.8367 \\
+
+QQP & Accuracy &  \textbf{0.9113} &              &  0.9042 \\
+      & F1     & \textbf{0.8809} &                       & 0.8732 \\
+      & Mixed & \textbf{0.8961} &                    & 0.8887 \\
+      
+\bottomrule
+\end{tabular}
+}
+
+All values are the average of two runs. 
+Weights which are instantiated specifically for the GLUE tasks are once instantiated with a random seed of 42, and once with a random seed of 101.
+
+Although most experimental results are similar between standard BERT and the modified BERnie PoS and BERnie models, the WNLI and RTE experiments are considerably deviating in performance through the addition of the additional embedding vectors.
+For the BERnie model, WNLI performs \textbf{10.56\%} better than standard BERT, and RTE performs  \textbf{-7.40\%} worse than the standard BERT implementation.
+Similar results are observable for the difference between the unmodified BERT and the BERnie PoS model with \textbf{3.52\%} improvement for WLNI and \textbf{-3.79\%} decline in performance for the RTE task.
+
+%TODO : Describe what kind of task WNLI is
+%TODO : Describe what kind of task RTE is
+
+%TODO we use the GLUE tasks to understanding how introducing more embedding vectors affects the performance of our search models.
+
+
+To train an ablation study, whether or not additional pre-training improves the instantiated word-vectors, we conduct the following experiment.
+We instantiate the additional embeddings as described in the previous section.
+We then run one full epoch of training with the same training parameters as used for GLUE on the news.corpus.2007 dataset using a masked languag emodel methodology .
+%TODO cite BERT training methodology
+We save this model and load it for the GLUE tasks.
+BERnie full Pre-training trains the entire embeddings, whereas BERnie partial Pre-Training fixates all embedding vectors except the ones for the ones that were newly added.
+
+%TODO Write section for GLUE tasks
+\scalebox{0.9}{
+\begin{tabular}{
+ l % left aligned column
+ l % left aligned column
+ *{3}{S[table-format=4.0]} % three columns with numeric data       
+}
+\toprule
+%TODO MRPC has one aligned, and one unaligned test
+&& \textbf{BERnie} & \textbf{BERnie full\- Pre}  & \textbf{BERnie partial\- Pre}\\
+\midrule
+CoLA  & Accuracy  &  0.5457 & 0.5418 & 0.5731 \\
+MRPC & Accuracy &  0.8064 & 0.3824 & 0.3162\\
+          & F1           &  0.8684 & 0.1720 & 0.0000 \\
+          & Mixed     &  0.8374 & 0.2775 & 0.1581 \\          
+SST-2 & Accuracy  &  0.9266 & 0.9169 & 0.9266 \\
+QNLI & Accuracy & 0.9020 & 0.5374 & 0.6700 \\
+RTE & Accuracy &  0.5722 & 0.4784 & 0.4729 \\
+WNLI & Accuracy & 0.4649 & 0.4225 & 0.4507 \\
+\bottomrule
+\end{tabular}
+}
 
 \chapter{Conclusion}
 
