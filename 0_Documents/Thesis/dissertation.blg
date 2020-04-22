@@ -1,0 +1,58 @@
+This is BibTeX, Version 0.99d (TeX Live 2019)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: dissertation.aux
+The style file: unsrt.bst
+Database file #1: dissertation.bib
+Warning--empty journal in kudugunta18
+Warning--empty journal in conneau17
+Warning--empty journal in sanh19
+Warning--empty journal in shen19
+Warning--empty journal in peters18
+Warning--empty journal in may19
+Warning--empty journal in hu19
+Warning--empty journal in zhu18
+Warning--empty journal in chen19
+Warning--empty journal in ma19
+Warning--empty journal in alvarez18
+You've used 33 entries,
+            1791 wiz_defined-function locations,
+            577 strings with 8338 characters,
+and the built_in function-call counts, 6663 in all, are:
+= -- 510
+> -- 453
+< -- 5
++ -- 163
+- -- 130
+* -- 374
+:= -- 1157
+add.period$ -- 99
+call.type$ -- 33
+change.case$ -- 33
+chr.to.int$ -- 0
+cite$ -- 44
+duplicate$ -- 320
+empty$ -- 543
+format.name$ -- 130
+if$ -- 1449
+int.to.chr$ -- 0
+int.to.str$ -- 33
+missing$ -- 31
+newline$ -- 168
+num.names$ -- 32
+pop$ -- 116
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 181
+stack$ -- 0
+substring$ -- 157
+swap$ -- 78
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 11
+while$ -- 43
+width$ -- 35
+write$ -- 329
+(There were 11 warnings)

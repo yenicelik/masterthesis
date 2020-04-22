@@ -1,84 +1,33 @@
-Title: From Context Embeddings to Meaning Embeddings
-- Introduction 
-- Motivation 
-	- Word embeddings are the underlying data structures which associate individual tokens with meaning
-	- Most fundamental unit in NLP and NLU (for downstream tasks)
-	- However, shortcoming especially in translation tasks
-		- one word is often represented by a static token (loss of information, as multiple meanings can be entailed)
-		- one token does not only correspond with meaning but full context entailing other linguistic features (too much information)
-	- We conjecture that translation tasks beenfit most from meaning information
+Title: Understanding and Exploiting subspace organization in contextual word embeddings
 - Background
-	- The concept of meaning and its relation to tokens ## gotta find a CogSci paper / linguistic paper here on meaning
     - (Static) Word Embeddings
-    	- Word2Vec
-    	- GLoVe
-    	- Fast Text
-    	- Gaussian Embeddings
-    	- ## more
+    	- FastText
     - Context Embeddings
-    	- ELMo
-    	- BERT
     	- GPT-2
-    - Generating static word-embeddings through contextual embeddings ##
-    - General random information ##
-    - Normalising Flows ##
-    - WordNet
     - SemCor
 - Related Work
+    - Structure inside BERT
+        - Looking for structure inside BERT
+		    - Parse-Tree in BERT
 	- Clustering Algorithms
 		- Clustering for synsets on Word2Vec using EGO networks
 		- Chinese whispers
-	- Looking for structure inside BERT
-		- Parse-Tree in BERT
 	- Metric Learning & Disentanglement
 		- pyDML algorithms (from the survey)
 		- siamese networks
 		- siamese triplet networks ##
-	- Zero shot & One shot learning ## 
-	- Applications
-		- Translation
-			- Loss in Translation
-			- MUSE Facebook using a Min-Max objective
-			- Density matching for Bilingual word embeddings ##
-			- OT Gromov-Wasserstein Alignment of Word Embeddings
-			- Using monolingual word-embeddings to map one to another
-- Analysis on the current state of the art
-	- Linear Separability of BERT context vectors by meaning
-		- Motivation
-		- Experiment setup
-		- Results
-	- Clusterability of context BERT context vectors by meaning
-		- Motivation
-		- Experiment setup
-		- Results
-	- Correlation between Part of Speech (PoS) and Context within BERT
-		- Motivation
-		- Experiment seetup
-		- Results
-- Our Method
-	- BERnie PoS producting meaning vectors distinguished by PoS
+Exploiting subspace organization of semantics of BERT embeddings
+	- Introducing interpretable semantics embedding vectors for BERT
+    - BERnie PoS producing meaning vectors distinguished by PoS
+		- Experiment setup 
+	- BERnie Meaning producing meaning vectors
 		- Motivation
 		- Experiment setup 
-	- BERnie Meaning producting meaning vectors
+	- BERnie Meaning with Pre-training producing meaning vectors
 		- Motivation
 		- Experiment setup 
-	- BERnie Meaning with Pre-training producting meaning vectors
-		- Motivation
-		- Experiment setup 
+	- Results
 	- Metric Learning for lossy meaning vectors
 		- Motivation
 		- Experiment setup 
-- Evaluation 
-	- BERnie PoS producing meaning vectors distinguished by PoS
 		- Results
-	- BERnie Meaning producting meaning vectors distinguished
-		- Results
-	- BERnie Meaning with Pre-training producting for meaning vectors distinguished
-		- Results
-	- Metric Learning for lossy meaning vectors
-		- Results
-- Conclusion 
-	- TBD
-	- Future Work
-		- Similar analysis can be done for sentiment given an appropriate dataset
-		- Instead of static vectors, we can push more into finding probability distributions for meanings (rather than static representations)

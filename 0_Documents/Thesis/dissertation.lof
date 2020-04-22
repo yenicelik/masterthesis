@@ -2,41 +2,43 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite {mikolov13}. The CBOW architecture predicts the current word based on the context. The Skip-gram predicts surrounding words given the current word.\relax }}{11}% 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Figure taken from \cite {mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.\relax }}{13}% 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Figure taken from \cite {vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.\relax }}{21}% 
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Figure taken from \cite {devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.\relax }}{22}% 
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Figure taken from \cite {mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.\relax }}{14}% 
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Figure taken from \cite {vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.\relax }}{22}% 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Figure taken from \cite {devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.\relax }}{23}% 
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Figure taken from \cite {miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.\relax }}{27}% 
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.\relax }}{28}% 
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.\relax }}{29}% 
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Hello\relax }}{30}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces From \cite {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{31}% 
+\contentsline {figure}{\numberline {4.1}{\ignorespaces From \cite {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{37}% 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Taken from \cite {conneau17}. Each \relax }}{38}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces plots of....\relax }}{44}% 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces plots of....\relax }}{44}% 
-\contentsline {figure}{\numberline {5.3}{\ignorespaces plots of....\relax }}{45}% 
-\contentsline {figure}{\numberline {5.4}{\ignorespaces A famous equation\relax }}{45}% 
-\contentsline {figure}{\numberline {5.5}{\ignorespaces A famous equation\relax }}{46}% 
-\contentsline {figure}{\numberline {5.6}{\ignorespaces A famous equation\relax }}{46}% 
-\contentsline {figure}{\numberline {5.7}{\ignorespaces A famous equation\relax }}{47}% 
-\contentsline {figure}{\numberline {5.8}{\ignorespaces A famous equation\relax }}{47}% 
-\contentsline {figure}{\numberline {5.9}{\ignorespaces A famous equation\relax }}{48}% 
-\contentsline {figure}{\numberline {5.10}{\ignorespaces A famous equation\relax }}{48}% 
-\contentsline {figure}{\numberline {5.11}{\ignorespaces A famous equation\relax }}{49}% 
-\contentsline {figure}{\numberline {5.12}{\ignorespaces A famous equation\relax }}{49}% 
-\contentsline {figure}{\numberline {5.13}{\ignorespaces A famous equation\relax }}{50}% 
-\contentsline {figure}{\numberline {5.14}{\ignorespaces A famous equation\relax }}{50}% 
-\contentsline {figure}{\numberline {5.15}{\ignorespaces A famous equation\relax }}{51}% 
-\contentsline {figure}{\numberline {5.16}{\ignorespaces A famous equation\relax }}{51}% 
-\contentsline {figure}{\numberline {5.17}{\ignorespaces A famous equation\relax }}{52}% 
-\contentsline {figure}{\numberline {5.18}{\ignorespaces A famous equation\relax }}{52}% 
-\contentsline {figure}{\numberline {5.19}{\ignorespaces A famous equation\relax }}{53}% 
-\contentsline {figure}{\numberline {5.20}{\ignorespaces A famous equation\relax }}{53}% 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces A famous equation\relax }}{52}% 
+\contentsline {figure}{\numberline {5.2}{\ignorespaces A famous equation\relax }}{53}% 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces A famous equation\relax }}{53}% 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces A famous equation\relax }}{54}% 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces A famous equation\relax }}{54}% 
+\contentsline {figure}{\numberline {5.6}{\ignorespaces A famous equation\relax }}{55}% 
+\contentsline {figure}{\numberline {5.7}{\ignorespaces A famous equation\relax }}{55}% 
+\contentsline {figure}{\numberline {5.8}{\ignorespaces A famous equation\relax }}{56}% 
+\contentsline {figure}{\numberline {5.9}{\ignorespaces A famous equation\relax }}{56}% 
+\contentsline {figure}{\numberline {5.10}{\ignorespaces A famous equation\relax }}{57}% 
+\contentsline {figure}{\numberline {5.11}{\ignorespaces A famous equation\relax }}{57}% 
+\contentsline {figure}{\numberline {5.12}{\ignorespaces A famous equation\relax }}{58}% 
+\contentsline {figure}{\numberline {5.13}{\ignorespaces A famous equation\relax }}{58}% 
+\contentsline {figure}{\numberline {5.14}{\ignorespaces A famous equation\relax }}{59}% 
+\contentsline {figure}{\numberline {5.15}{\ignorespaces A famous equation\relax }}{59}% 
+\contentsline {figure}{\numberline {5.16}{\ignorespaces A famous equation\relax }}{60}% 
+\contentsline {figure}{\numberline {5.17}{\ignorespaces A famous equation\relax }}{60}% 
+\contentsline {figure}{\numberline {5.18}{\ignorespaces plots of....\relax }}{62}% 
+\contentsline {figure}{\numberline {5.19}{\ignorespaces plots of....\relax }}{62}% 
+\contentsline {figure}{\numberline {5.20}{\ignorespaces plots of....\relax }}{62}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces \relax }}{55}% 
-\contentsline {figure}{\numberline {6.2}{\ignorespaces \relax }}{56}% 
-\contentsline {figure}{\numberline {6.3}{\ignorespaces \relax }}{56}% 
-\contentsline {figure}{\numberline {6.4}{\ignorespaces \relax }}{57}% 
-\contentsline {figure}{\numberline {6.5}{\ignorespaces \relax }}{58}% 
-\contentsline {figure}{\numberline {6.6}{\ignorespaces \relax }}{58}% 
-\contentsline {figure}{\numberline {6.7}{\ignorespaces \relax }}{59}% 
-\contentsline {figure}{\numberline {6.8}{\ignorespaces \relax }}{59}% 
-\contentsline {figure}{\numberline {6.9}{\ignorespaces \relax }}{60}% 
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{64}% 
+\contentsline {figure}{\numberline {6.2}{\ignorespaces The modified pipeline. The BERnie model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. For each target token $t_{\text {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{65}% 
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Inside the embedding layer of BERT, we introduce more specific embeddings \textit {run\_ VERB} and \textit {run\_ NOUN}. The BERT model should intuitively now capture more expressiveness, as the model size increased. The original \textit {run} embedding is removed.\relax }}{66}% 
+\contentsline {figure}{\numberline {6.4}{\ignorespaces plots of....\relax }}{67}% 
+\contentsline {figure}{\numberline {6.5}{\ignorespaces \relax }}{67}% 
+\contentsline {figure}{\numberline {6.6}{\ignorespaces plots of....\relax }}{68}% 
+\contentsline {figure}{\numberline {6.7}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.\relax }}{68}% 
 \addvspace {10\p@ }

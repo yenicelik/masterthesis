@@ -16,7 +16,7 @@
 %% EDIT THE BELOW TO CUSTOMIZE
 %%
 
-\def\authorname{From Context Embeddings to Meaning Embeddings \xspace}
+\def\authorname{Understanding and exploiting subspace organization in contextual word embeddings \xspace}
 \def\authorcollege{David Yenicelik \\ ETH Zürich\xspace}
 \def\authoremail{yedavid@ethz.ch}
 \def\dissertationtitle{}
@@ -33,7 +33,7 @@
 \usepackage{subcaption}
 \usepackage{empheq}
 \usepackage{float}
-
+\usepackage{url}
 
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{tabularx,booktabs}
@@ -63,7 +63,8 @@
 
 % Definition of macros
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
-\newcommand{\bracket}[1]{\left[#1\right]}
+%\newcommand{\bracket}[1]{\left[#1\right]}
+\newcommand{\bracket}[1]{\left|#1\right|}
 \newcommand{\absdet}[1]{\left|#1\right|}
 \newcommand{\bftab}{\fontseries{b}\selectfont}
 %% START OF MAIN TEXT 
@@ -86,7 +87,7 @@
 
 - Because these are the most basic units of text, any shortcomings and properties will propagate over to any downstream task
 - Some properties include that static word vectors like word2vec form a bijection between discrete vectors and word tokens. 
-However, because a single word can entail multiple meanings, such as the polysemous word "bank" ( (1) financial instution, (2) a sitting bench ), this results in a lossy compression
+However, because a single word can entail multiple meanings, such as the polysemous word "bank" ( (1) financial institution, (2) a sitting bench ), this results in a lossy compression
 - Other language models like context embeddings entail too much information, and also include other linguistic features such as semantic information, relatenedness to unrelated concepts.
 These properties can easily introduce bias into any downstream tasks.
 - We conjecture that many language tasks incl. translation will benefit most from meaning information
@@ -149,6 +150,32 @@ As defined in \cite{spacyb}, some of the linguistic features that are available 
 
 These features can alter as we look at different languages
 %TODO turn this into a multi-column table
+
+Other linguistic phenomena are well described in \cite{wang19}, which is one of the benchmarking resources we are using (described below).
+\cite{wang19} records the following linguistic phenomena.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{l l} 
+ \hline
+ Coarse-Grained Categories & Fine-Grained Categories \\ [0.5ex] 
+ \hline
+ Lexical Semantics & Lexical Entailment, Morphological Negation, Factivity, \\
+&  Symmetry/Collectivity, Redundancy, Named Entities, \\
+& Quantifiers, Core
+%Predicate Argument Structure & Core Arguments, Prepositional \\ Phrases, Ellipsis \/ Implicits, \\
+% & Anaphora/Coreference Active/Passive, Nominalization, \\
+% & Genitives/Partitives, Datives, Relative Clauses, \\
+% & Coordination Scope, Intersectivity, Restrictivity \\
+% Logic & Negation, Double Negation, Intervals/Numbers, \\
+%& Conjunction, Disjunction, Conditionals, Universal, Existential Temporal, Upward Monotone \\
+% & Downward Monotone, Non-Monotone \\
+% Knowledge & Common Sense, World Knowledge \\ [1ex] 
+% \hline
+\end{tabular}
+\caption{Taken from \cite{wang19} Table to test captions and labels}
+\label{table:1}
+\end{table}
 
 \paragraph{}
 
@@ -559,7 +586,9 @@ Ever since BERT came out, a wide variety of similar models came out that mimick 
 
 Numerous works have been published on making BERT representations more compact, for it to be used for on-device text-processing applications, such as more compact sentence-representations \cite{shen19}.
 
+%TODO talk about bert tokenizers..
 
+%TODO Hint at the hubness problem \cite{conneau17}
 
 \subsubsection{GPT and GPT-2}
 
@@ -661,14 +690,233 @@ the cosine similarity between these vectors seem pretty well-done!
 
 \subsubsection{WordNet}
 
+The online lexical database WordNet was original introduced in \cite{miller90}.
+WordNet is a reference system whose design is inspired by current psycholinguistic theories of human lexical memory.
+English nounss, verbs and adjectives are organized into synonym sets, each representing one underlying lexical concept.
+Different relations link the synonym sets.
+WordNet 1 contains of 95,600 different word forms (51,500 simple words and 44,100 collocations), and include a total of 70,100 word meanings, or sets of synonyms.
+Compared to a standard dictionary, WordNet divides the lexicon into five categories, namely nouns, verbs, adjectives, adverbs and fucntion words. 
+The authors argue that the rest of language is probably stroed separately as part of the syntactic component of language.
+
+The most ambitious feature of WordNet, however, is to attempt to organize lexical information in terms of word meanings, rather than word forms.
+
+The problem with alphabetical thesaurus is redundant entries. If Word $W_a$ and word $W_b$ are synonyms, the pair should be entered twice.
+The problem with a topical thesaurus is that two look-ups are required, first on an alphabetical list and again in the thesaurus proper.
+
+\paragraph{Lexical matrix:} 
+Word are often referred to both the utterance and to its associated concept.
+As such, \cite{miller90} specify the difference between the two concepts as "word form", which refers to the physical utterance or inscription, and "word meaning", which refers to the lexicalized concept that a form can be used to express.
+
+The following table captures the concept of a lexical matrix, which encodes word-forms (columns), word-meanings (rows), and the existence of the expression of the word-meanings through the corresponding word-form (cell).
+If multiple entries exist for a single column, then the single word-form encode mulitple meanings, implying that the word-form is polysemous (it encodes multiple word-forms).
+If multiple entries exist for a single row, the two words express the same underlying concept, and thus the two words-forms are synonoms.
+
+%TODO Throughouly read miller90
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ | c | c  c  c  c  c | } 
+ \hline
+ Word        &  &  & Word & Forms &  \\ 
+ Meanings & $F_1$ & $F_2$ & $F_3$ & \ldots & $F_n$ \\ 
+ \hline
+ $M_1$     & $E_{1,1}$ & $E_{1,2}$ &  &  &  \\ 
+ $M_2$     &  & $E_{2,2}$ &  &  &  \\ 
+ $M_3$     &  &  & $E_{3, 3}$ &  &  \\ 
+ $\vdots$ &  &  &  & $\ddots$ &  \\ 
+ $M_m$    &  &  &  &  & $E_{m, n}$ \\ 
+ \hline
+\end{tabular}
+\end{center}
+\caption{Figure taken from \cite{miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.}
+\end{figure}
+
+WordNet also includes synonym sets (synsets), which are a collection of word-forms that together determine a single meaning.
+Thus, a meaning is represented as a synset.
+WordNet is organized by semantic relations.
+Thus, WordNet includes a set of semantic relations.
+WordNet defines synonyms as a set of words, where one word is interchangable for another.
+This implies that in terms of substituatbiliy, WordNet clusters words into nouns, verbs, adjectives and adverbs, as the part of speech must be valid at the position of the sentence.
+
+Although the authors mention that synonyms should be best thought of a continuum along which similarity of meaning can be graded, the authors decide to determine similarity in terms of a binary event, something which is either present, or not present.
+
+This is mainly handcrafted by linguistics over the last 2 decades.
+Meanings have different levels of detail.
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ | c | p{11cm} | } 
+ \hline
+ Part of Speech & Definition \\  
+ \hline
+noun     & (sloping land (especially the slope beside a body of water)) "they pulled the canoe up on the bank"; "he sat on the bank of the river and watched the currents"\\ 
+noun     & depository financial institution, bank, banking concern, banking company (a financial institution that accepts deposits and channels the money into lending activities) "he cashed a check at the bank"; "that bank holds the mortgage on my home" \\ 
+ noun     & (an arrangement of similar objects in a row or in tiers) "he operated a bank of switches"  \\ 
+verb & (tip laterally) "the pilot had to bank the aircraft" \\ 
+verb    & (do business with a bank or keep an account at a bank) "Where do you bank in this town?"  \\ 
+ \hline
+\end{tabular}
+\end{center}
+\caption{Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.}
+\end{figure}
+
+Now we go to "was"
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ | c | p{11cm} | } 
+ \hline
+ Part of Speech & Definition \\ 
+ \hline
+noun     & Washington, Evergreen State, WA, Wash. (a state in northwestern United States on the Pacific) \\ 
+verb     & (have the quality of being; (copula, used with an adjective or a predicate noun)) "John is rich"; "This is not a good answer"
+ bank"; "that bank holds the mortgage on my home" \\ 
+ verb     & (an arrangement of similar objects in a row or in tiers) "he operated a bank of switches"  \\ 
+verb & (form or compose) "This money is my only income"; "The stone wall was the backdrop for the performance"; "These constitute my entire belonging"; "The children made up the chorus"; "This sum represents my entire income for a year"; "These few men comprise his entire army" \\ 
+verb    & (work in a specific place, with a specific subject, or in a specific function) "He is a herpetologist"; "She is our resident philosopher"  \\ 
+ \hline
+\end{tabular}
+\end{center}
+\caption{Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.}
+\end{figure}
+
+
+
 \subsubsection{SemCor dataset}
+
+The SemCor 3.0 corpus is a collection of the Brown corpora \cite{francis64}, where each noun, adjective and verb is tagged with the WordNet 3.0 senses.
+
+
+
 
 \subsubsection{News dataset}
 
 \subsubsection{GLUE benchmark dataset}
 
+The GLUE benchmark dataset was first introduced by \cite{wang19}
+
+%TODO Look for superglue for an evaluation.
+
+Additional work has been done through the introduction of SuperGLUE \cite{wang19b} to train for an even bigger variety of language tasks, after most NLU models started surpassing non-expert human performance on the initially-proposed GLUE-tasks.
 
 
+\begin{figure}[H]
+\center
+%TODO Write section for GLUE tasks
+\begin{tabular}{
+ l % left aligned column
+ l % left aligned column
+ l
+ l
+ l
+ l
+ % *{2}{S[table-format=4.0]} % three columns with numeric data       
+}
+\toprule
+%TODO MRPC has one aligned, and one unaligned test
+\textbf{Corpus} & \textbf{ $|$Train$|$ } &\textbf{$|$Test$|$} & \textbf{Task} & \textbf{Metrics} & \textbf{Domain}  \\
+\midrule
+%\multicolumn{6}{ c }{Helllo}
+CoLA  & 8.5k  &  1k   & acceptability & Matthews corr. &  misc \\
+
+SST-2 & 67k &  1.8k  & sentiment &  accuracy &  movie reviews \\
+
+MRPC & 3.7k &  1.7k & paraphrase & accuracy / F1 & news \\
+          
+STS-B & 7k &  1.4k    & sentence similarity & Pearson/Spearman corr. &  misc. \\
+      
+QQP & 364k &  391k & paraphrase  & accuracy / F1  &  social QA questions\\	
+
+MNLI & 393k &  20k  & NLI   & mis-/matched accuracy &  misc \\
+
+QNLI & 105k &  5.4k & QA/NLI   & accuracy &  Wikipedia \\
+
+RTE & 2.5k &  3k      & NLI   &  accuracy &  news, Wikipedia \\
+
+WNLI & 634 &  146   & coreference/NLI & accuracy  & fiction books \\
+
+% SNLI & Accuracy &  0.8461 &              &  0.8367 \\
+      
+\bottomrule
+\end{tabular}
+\caption{Hello}
+\end{figure}
+
+\subsubsection{Single Sentence Tasks}
+
+The Corpus of Linguistic Acceptability \textbf{CoLA} consists of englihs sentences, where the task of the model is to predict whether or not the sentence is a valid english sentence.
+The Matthews correlation evaluates the model from a score of -1 to 1, where 0 corresponds to uniformly random guessing.
+The test set includes out of domain sentences.
+
+%TODO Perhaps show examples?
+%TODO Cite the underlying paper?
+
+The Stanford Sentiment Treebank \textbf{SST-2} consists of sentences from moview reviews and human annotations of their sentiment.
+This is a binary classificaiton (positive / negative) task.
+
+\subsubsection{Similarity and paraphrase tasks}
+
+The Microsoft Research Paraphrase Corpus \textbf{MRPC} is a corpus of sentence pairs automatically extracted from online news sources, with human annotations whether the sentences in the pair are semantically equivalent.
+Here, an F1-score is taken, because the class-sets are imbalanced.
+
+The Quora Question Pairs \textbf{QQP} dataset is a collection of question and answer pairs from the website Quora. 
+The task it to check whether a pair of questions are semantically equivalent.
+Again, the F1-score is taken as a measure because the class-sets are unbalanced.
+
+The Semantic Textual Similarity Benchmark \textbf{STS-B} is a corpus of pairs of news headlines, video and image captions.
+Each pair is annotated with a similarity score from 1 to 5, and the task is to predict these scores.
+The evaluation is done using Pearson and Spearman correlation, as the determining factor is the relative ranking amongst scores.
+
+\subsubsection{Inference Tasks}
+
+The Multi-Genre Natural Language Inference Corpus \textbf{MNLI} is a crowd-sourced collection of sentence pairs with extual entailment annotations.
+For eah premise and hypothesis sentence, the task is to predict whether the premise entails the hypothesis, contradit the hypothesis, or neither.
+Thus, this is a 3-class classification problem.
+The matched MNLI version tests on data which is in the same domain as the training set, while the mis-matched MLNI tests on a training set which is cross-domain.
+
+The Stanford Question Answering Dataset is a question-answering dataset. 
+The authors of GLUE use this dataset, to create the Question answering NLI \textbf{QNLI}, by removing the requirements that the model selects the exact answer.
+On top of that, they also remove the simplifying assumption that the answer is always present in the input and that lexical overlap is a reliable cue.
+The task is to determine whether the context sentence contains the answer to the question. 
+
+The Recognizing Textual Entailment \textbf{RTE} dataset comes from a series of annual textual entailment challenges. 
+Data is combined from RTE1, RTE2, RTE3 and RTE5. 
+The classes to be predicted by the model include \textit{neutral}, \textit{contradiction} and \textit{no entailment}.
+
+
+%TODO do code styling
+\begin{verbatim}
+Oil prices fall back as Yukos oil threat lifted	
+Oil prices rise.
+not_entailment
+\end{verbatim}
+
+\begin{verbatim}
+Money raised from the sale will go into a trust for Hepburn's family.
+Proceeds go to Hepburn's family.	
+entailment
+\end{verbatim}
+
+
+The Winograd NLI \textbf{WNLI} dataset uses the original Winograd Schema Challenge dataset \cite{levesque12}, which is a reading comprehension task where the reader must read a sentence with a pronoun and select the referent of that pronoun from a list of choices. 
+Sentence pairs are constructed by replacing the ambiguous pronoun with each possible referent.
+The task is to predict if the sentence with the pronoun substituted is entailed by the original sentence.
+
+Some example sentences include 
+
+%TODO do code styling
+\begin{verbatim}
+Bob was playing cards with Adam and was way ahead.
+If Adam hadn't had a sudden run of good luck, he would have won.	Adam would have won.
+label:0
+\end{verbatim}
+
+\begin{verbatim}
+Mark told Pete many lies about himself, which Pete included in his book. 
+He should have been more truthful.	
+Mark should have been more truthful.
+label:1
+\end{verbatim}
 
 
 
@@ -788,16 +1036,88 @@ A translation model is learned which can not only translate between different do
 
 
 
-
-
-
 \section{Metric Learning and Disentanglement}
 
-\section{Zero shot and One shot learning }
+%TODO cite the proper definition of Metric learning
+Metric learning is the concept of learning a new space in which distances between data samples 
+
+%TODO mention the survey paper
 
 \section{Clustering Algorithms}
 
+We will later on use different clustering algorithms to evaluate how well semantics is interpretable inside BERT vectors.
+We will give a short introduction on the following clustering algorithms.
+
+\begin{itemize}
+\item Affinity Propagation
+\item Chinese Whispers
+\item DBScan
+\item HDBScan
+\item MeanShift
+\item Optics
+\end{itemize}
+
+%TODO Go a bit into detail with chinese whispers, and the paper where they form EGO networks to find synsets (and thus, meanings...)
+
 \section{Applications of word vector}
+
+%TODO Talk about MUSE paper
+
+Although word-vectors can be used for a variety of tasks, we will focus on some varieties of how these vectors are used for machine translation (of human languages) tasks.
+
+Amongst the most prominent method is the MUSE model introduced by \cite{conneau17}.
+Here, a mapping $W$ is found using either an unsupervised methodology by minimizing the batch-size cosine-distance between sampled word-vectors between two languages $A$ and $B$, or a supervised methodology is devised using the procrustes algorithm.
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/muse.png}
+  \caption{Taken from \cite{conneau17}. Each }
+  \label{fig:muse_translation}
+\end{figure}
+
+Specifically, the following loss-function optimizes over the space of possible mapping matrices $W^*$:
+
+\begin{equation}
+W^{\star}=\underset{W \in O_{d}(\mathbb{R})}{\operatorname{argmin}}\|W X-Y\|_{\mathrm{F}}=U V^{T}, \text { with } U \Sigma V^{T}=\operatorname{SVD}\left(Y X^{T}\right)
+\end{equation}
+
+Unsupervised training is conducted using a discriminator and a mapping function, where the discriminator's task is to identify the origin-distribution, and the mapping function is supposed to fool the discriminator, resulting in a mapping function which maps all word-emebddings into a common global embedding space.
+
+A generalization of these word vectors to point-vector probability-distributions are captured by \cite{alvarez18}.
+Here, the point-vectors are interpreted as point-delta-distributions in the $d+1$ dimensional space.
+Common optimal transport methods are coupled with the Gromov-Wasserstein loss to find an orthogonal mapping which maps from vector-space $X$ to vector space $Y$, and thus from the word-token of one language to another.
+One way to achieve this is to use the supervised loss-metric and solve the procrustes problem, finding correspondences between the columns of X and columns of Y through:
+
+\begin{equation}
+\min _{\mathbf{P} \in O(n)}\|\mathbf{X}-\mathbf{P} \mathbf{Y}\|_{F}^{2}
+\end{equation}
+
+with $O(n)=\left\{\mathbf{P} \in \mathbb{R}^{n \times n} | \mathbf{P}^{\top} \mathbf{P}=\mathbf{I}\right\}$.
+The resulting algorithm achieves similar performance to MUSE while requiring only a fraction of the computational cost, being able to get competitive results on CPU.
+
+The unsupervised approach deals with finding a transportation map $T$ that fulfills
+
+\begin{equation}
+\inf _{T}\left\{\int_{\mathcal{X}} c(\mathbf{x}, T(\mathbf{x})) d \mu(\mathbf{x}) | T_{\#} \mu=\nu\right\}
+\end{equation},
+
+where $\mu$ and $\nu$ are the point-delta distributions describing the word-embeddings in the probability space.
+The relaxed Kantorovich's formulation is then finally used to reduce this problem to finding a set of transportation plans in a polytopes.
+
+$$
+\Pi(\mathbf{p}, \mathbf{q})=\left\{\Gamma \in \mathbb{R}_{+}^{n \times m} | \Gamma \mathbb{1}_{n}=\mathbf{p}, \Gamma^{\top} \mathbf{1}_{n}=\mathbf{q}\right\}
+$$
+
+Finally, the cost function
+
+$$
+\min _{\Gamma \in \Pi(\mathbf{p}, \mathbf{q})}\langle\Gamma, \mathbf{C}\rangle
+$$
+is minimized to find an optimal transportation plan.
+
+
+Another extension is the work by  
+
 
 \newpage
 \subsubsection{Word2Vec}
@@ -1006,12 +1326,19 @@ However, these tables are left out as we do not deem these to be statistically s
 
 
 
-\section{On the Clusterability of meaning within sampled BERT vectors}
+\section{On the Clusterability of meaning within sampled BERT vectors} \label{experiment_BERT_clusterability}
 
 \subsection{Motivation}
 
 %TODO Talk about different ways to determine if a dataset is clusteerable, but mention that in the end we want a practical approach, thus we brute-force search
 %TODO 
+
+
+To see if there is any structure within BERT vectors w.r.t. the different meaning of one word, we ask ourselves whether or not different part of the meaning are at different locations of the embedding space produced by BERT.
+
+This is an extension to linear separability.
+We want to see how obvious these clusterings and differences are.
+
 
 \subsection{Experiment setup}
 
@@ -1243,61 +1570,6 @@ and now we add a SEP token
 \end{table}
 
 We now analyse the embeddings manually
-
-\begin{figure}
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.8\linewidth]{./assets/analysis/run_pca.png}
-  \caption{1a}
-  \label{fig:sfig1}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.8\linewidth]{./assets/analysis/run_umap.png}
-  \caption{1b}
-  \label{fig:sfig2}
-\end{subfigure}
-\caption{plots of....}
-\label{fig:fig}
-\end{figure}
-
-
-
-\begin{figure}
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.8\linewidth]{./assets/analysis/block_pca.png}
-  \caption{1a}
-  \label{fig:sfig1}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.8\linewidth]{./assets/analysis/block_umap.png}
-  \caption{1b}
-  \label{fig:sfig2}
-\end{subfigure}
-\caption{plots of....}
-\label{fig:fig}
-\end{figure}
-
-
-
-\begin{figure}
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.8\linewidth]{./assets/analysis/cold_pca.png}
-  \caption{1a}
-  \label{fig:sfig1}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.8\linewidth]{./assets/analysis/cold_umap.png}
-  \caption{1b}
-  \label{fig:sfig2}
-\end{subfigure}
-\caption{plots of....}
-\label{fig:fig}
-\end{figure}
 
 \subsubsection{Qualitative evaluation}
 
@@ -1581,7 +1853,7 @@ EXAMPLES FOR KEY CLUSTERING
 
 
 
-\section{Correlation between Part of Speech and Context within BERT}
+\section{Correlation between Part of Speech and Context within BERT} \label{correlation_pos_context}
 
 \subsection{Motivation}
 
@@ -1599,142 +1871,239 @@ If all of the sampled target words $w_t$ for all the sentences have the same ass
 If the dominant PoS tag occurs only half the time, this number decreases to $0.5$.
 Please notice that in this experiment, we only view simple PoS tags (i.e. "noun", "verb", "adjective", "pronoun"), and not the more complex ones listed above.
 
-%TODO perhaps give an example
-%TODO explain again
-
 \subsection{Results}
 
 It is apparent that there is a strong relation between PoS and meaning. 
 Especially "erstarrte" Verben are a strong part of this
 
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/run_pca.png}
+  \caption{1a}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/run_umap.png}
+  \caption{1b}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/block_pca.png}
+  \caption{1a}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/block_umap.png}
+  \caption{1b}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/cold_pca.png}
+  \caption{1a}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{./assets/analysis/cold_umap.png}
+  \caption{1b}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
 
 %TODO make another plot which is more coarse
 
 %\chapter{Evaluation} 
-\chapter{Our Method}
+\chapter{Exploiting subspace organization of semantics of BERT embeddings}
 
-We introduce \textit{split-words}, for which we will be generating more detailed embeddings.
-The idea behind this is that introducing more specialized embeddings for certain tokens will allow to model more complex distributions.
+The general pipeline of how BERT processes sentences is as follows.
+We have a sentence $s$ which includes a set of words $w_1$, \ldots, $w_n$.
+This sequence of words is now given as input to the BERT model.
+First, this sequence of words is split into a set of tokens $t_1$, \ldots, $t_m$, where $m \geq n$.
+Now these tokens, which are in the vocabulary of the BERT tokenizer, are converted to indicies, which correspond to index of each individual embedding inside BERT.
 
-Because the non-modified (vanilla) BERT model uses a certain workflow, we will shortly introduce BERTs pipeline.
+%TODO properly define which symbols etc. you want to use ... this should be formally rigorous enough
+
+%TODO Talk about the tokenizer here again
 
 \begin{figure}[h]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_vanilla_BERT.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
+  \caption{The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots, $t_m$ as defined in a given vocabulary $V$.
+Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
+This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.
+}
+  \label{fig:BERT_vanilla_pipeline}
 \end{figure}
 
 
-\subsection{BERnie PoS}
+We introduce \textit{split-words}, for which we will be generating more specific embeddings.
+In particular, 
+The idea behind this is that introducing more specialized embeddings for certain tokens will allow to model more complex distributions.
+
+Because the non-modified (vanilla) BERT model uses a certain workflow, we will shortly introduce BERTs pipeline.
+
+\subsection{BERnie PoS} \label{bernie_pos}
 
 \subsubsection{Motivation}
+
+We want to start with a simple model first.
+Because we have seen in the above section, that there is a strong correlation between semantics and part-of-speech, the initial idea is to introduce additional embedding vectors which are able to capture semantics (rather than just purely word tokens) better.
+In this case, part-of-speech is used as a proxy for semantics.
 
 \subsubsection{Experiment setup}
 
 BERnie PoS introduces one new embedding vector for each possible PoS configuration of the split-words.
 
-\begin{figure}[h]
-	\center
-  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
-\end{figure}
+As an example, instead of having a single embedding vector for the word \textit{run}, we introduce two new embeddings \textit{run\_  VERB} and \textit{run\_ NOUN}, which both replace the intial \textit{run}-embedding. 
+We will refer to \textit{run\_ VERB} and \textit{run\_ NOUN} as \textit{sub-embeddings}, as these exploit the subspace structure of the context embeddings sampled for the word \textit{run}.
+As for the tokenizer, we also introduce a mechanism which turns any occurrence of \textit{run} into one of the sub-embeddings.
 
-\begin{figure}[h]
+Specifically, our desired pipeline would not look as follows.
+
+\begin{figure}[H]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
+  \caption{The modified pipeline. 
+  The BERnie model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots, $t_m$ as defined in a given vocabulary $V$.
+For each target token $t_{\text{target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token.
+In this case, $run$ becomes $run\_ VERB$.
+Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
+This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.
+}
+  \label{fig:BERnie_POS_pipeline}
 \end{figure}
 
-\begin{figure}[h]
-	\center
-  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
-\end{figure}
+
+To identify whether the occurring \textit{run} in an example sentence is a verb or a noun, we use the spaCy part-of-speech tagger \cite{spacyb}, which claims 92.6 \% accuracy for this task.
 
 \begin{figure}[h]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS_initialization.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
+  \caption{Inside the embedding layer of BERT, we introduce more specific embeddings \textit{run\_ VERB} and \textit{run\_ NOUN}. The BERT model should intuitively now capture more expressiveness, as the model size increased. The original \textit{run} embedding is removed.}.
+  \label{fig:BERnie_POS_pipeline}
 \end{figure}
 
-\subsection{BERnie Meaning}
+
+
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png}
+  \caption{1a: The part-of-speech modified tokenizer pipeline}
+  \label{fig:sfig1}
+\end{subfigure}%
+\quad
+\begin{subfigure}{.65\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS.png}
+  \caption{1b: The part-of-speech modified BERT embedding}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
+
+\subsection{BERnie Meaning}\label{experiment_bernie_meaning}
 
 \subsubsection{Motivation}
 
+Similar to the above model, we are introducing new BERT embeddings.
+This time however, we do not introduce new tokens by part-of-speech, as we did in the previous section, but rather by semantics.
+For this, we use the a similar methodology as the model from the section \ref{bernie_pos}.
+However, instead of replacing word by their part-of-speech specizalization, we replace words by some semantic specialization.
+%TODO how to cite sections
+The idea here is to adhere more strongly to the subspace structure as seen in section \ref{correlation_pos_context}.
+
+Thus, we introduce the clustering methodology introduced in \ref{experiment_BERT_clusterability}.
+
 \subsubsection{Experiment setup}
 
-\begin{figure}[h]
-	\center
-  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
-\end{figure}
-
-
-\begin{figure}[h]
-	\center
-  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning_embedding.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
-\end{figure}
-
-
-\begin{figure}[h]
-	\center
-  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
-\end{figure}
-
-
-\begin{figure}[h]
+Again, we start with the standard BERT model, whose pipeline looks as follows.
+\begin{figure}[H]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png}
   \caption{}
   \label{fig:cbow_skipgram}
 \end{figure}
 
+We now modify the tokenizer in such a way, that ambigious and polysemous words are replaced with a more specific token.
+As an example, we want to replace the word $bank$ with a token, which captures whether or not the $bank$ that we refer to implies a 1) financial institution, or 2) a river bank.
 
-\subsection{BERnie Meaning with additional pre-training}
-\subsubsection{Motivation}
-\subsubsection{Experiment setup}
+We use the our clustering approach from \ref{experiment_BERT_clusterability} as the intermediate model to distinguish on which bank the sentence refers to.
+We also introduce new embedding vectors that the new tokens correspond to.
 
-\subsection{Compressing the non-lexical out}
-\subsubsection{Motivation}
-\subsubsection{Experiment setup}
+\begin{figure}[H]
+\center
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning.png}
+  \caption{1a: The part-of-speech modified tokenizer pipeline}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.65\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning_embedding.png}
+  \caption{1b: The part-of-speech modified BERT embedding}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
+\end{figure}
 
-\
-%\chapter{Summary and Conclusions} 
-\chapter{Evaluation}
+After we have concluded these changed, we arrive at the following model, which has a modified tokenizer, and a modified BERT model.
+We call the corresponding model \textbf{BERnie}.
 
-We evaluate the models of the previous experiments.
+\begin{figure}[H]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning.png}
+  \caption{The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots, $t_m$ as defined in a given vocabulary $V$.
+Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
+This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.}
+  \label{fig:cbow_skipgram}
+\end{figure}
 
-\begin{center}
-\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit{was}.}
-\begin{tabular}{SSSSSSSS} \toprule
-    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
-       2  & 0.08 & 0.38 / $\pm$ 0.03 \\ \midrule
-       3  & 0.11 & 0.38 / $\pm$ 0.04 \\ \midrule
-     10  & 0.28 & 0.65 / $\pm$ 0.03  \\ \midrule
-     20  & 0.43 & 0.76 / $\pm$ 0.04  \\ \midrule
-     30  & 0.53 & 0.83 / $\pm$ 0.03  \\ \midrule
-     50  & 0.67 & 0.93 / $\pm$ 0.01 \\ \midrule
-     75  & 0.77 & 0.95 / $\pm$ 0.01 \\ \midrule
-    100 & 0.83 & 0.95 / $\pm$ 0.01  \\ \midrule
-\end{tabular}
-\end{center}
+%TODO Show results here...
+
+\subsubsection{Results}
+
+We now do a short evaluation of the introduced BERnie PoS and BERnie model.
+To understand on a wide scale, we use the GLUE benchmarks to understand what effect the extension of the embedding layer on points of high variance has.
 
 %TODO Write section for GLUE tasks
+\begin{table}
+\center
 \scalebox{0.9}{
 \begin{tabular}{
  l % left aligned column
  l % left aligned column
- *{5}{S[table-format=4.0]} % three columns with numeric data       
+ c
+ c
+ c
+ c
+ c
+ % *{5}{S[table-format=4.0]} % three columns with numeric data       
 }
 \toprule
 %TODO MRPC has one aligned, and one unaligned test
@@ -1754,9 +2123,9 @@ STS-B & Correlation &  \textbf{0.8841} & 0.8615 &  0.8574 \\
       
 QNLI & Accuracy &  \textbf{0.9126} & 0.9090    &  0.9020 \\
 
-RTE & Accuracy &  \textbf{0.6462} & 0.6083     &  0.5722 \\
+RTE & Accuracy &  \textbf{0.6462} & 0.6083     &  \textit{0.5722} \\
 
-WNLI & Accuracy &  0.35915 & 0.39465 &  \textbf{0.4649} \\
+WNLI & Accuracy &  \textit{0.35915} & 0.3947 &  \textbf{0.4649} \\
 
 MNLI & Accuracy &  0.8453 &              &  0.8334 \\
 
@@ -1767,8 +2136,15 @@ QQP & Accuracy &  \textbf{0.9113} &              &  0.9042 \\
       & Mixed & \textbf{0.8961} &                    & 0.8887 \\
       
 \bottomrule
+
 \end{tabular}
 }
+\caption{asj}
+\end{table}
+
+
+One can see that in general, the BERnie models performs slightly worse.
+
 
 All values are the average of two runs. 
 Weights which are instantiated specifically for the GLUE tasks are once instantiated with a random seed of 42, and once with a random seed of 101.
@@ -1777,6 +2153,42 @@ Although most experimental results are similar between standard BERT and the mod
 For the BERnie model, WNLI performs \textbf{10.56\%} better than standard BERT, and RTE performs  \textbf{-7.40\%} worse than the standard BERT implementation.
 Similar results are observable for the difference between the unmodified BERT and the BERnie PoS model with \textbf{3.52\%} improvement for WLNI and \textbf{-3.79\%} decline in performance for the RTE task.
 
+Also, compared to BERnie PoS, the standard BERnie model amplifies the performence-difference to BERT in both the negative and positive direction.
+
+
+\subsection{BERnie Meaning with additional pre-training}
+
+\subsubsection{Motivation}
+In section \ref{experiment_bernie_meaning}, we can see that extending the BERT model generally leads to worse performance.
+
+We assume that the BERnie require additional pre-training, as we are adding more specific embedding vectors, without fine-tuning them.
+We assume that this is necessary, as this is how the weights of BERT are also trained in the original paper \cite{devlin18} through the masked language model approach.
+
+\subsubsection{Experiment setup}
+
+We evaluate the models of the previous experiments.
+
+\begin{center}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit{was}.}
+\begin{tabular}{SSSSSSSS} \toprule
+    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
+       2  & 0.08 & 0.38 / $\pm$ 0.03 \\ \midrule
+       3  & 0.11 & 0.38 / $\pm$ 0.04 \\ \midrule
+     10  & 0.28 & 0.65 / $\pm$ 0.03  \\ \midrule
+     20  & 0.43 & 0.76 / $\pm$ 0.04  \\ \midrule
+     30  & 0.53 & 0.83 / $\pm$ 0.03  \\ \midrule
+     50  & 0.67 & 0.93 / $\pm$ 0.01 \\ \midrule
+     75  & 0.77 & 0.95 / $\pm$ 0.01 \\ \midrule
+    100 & 0.83 & 0.95 / $\pm$ 0.01  \\ \midrule
+\end{tabular}
+\end{center}
+
+%TODO Perhaps leave out the very bad results, or focus on debugging?
+
+%TODO Link above section to this ...
+WNLI is a comprehension task where a model must read a sentence with a pronoun, and select the referent of that pronoun form a list of choices.
+
+Each one is contingent on contextual information provided by a single word or phrase in the sentence. To convert the problem into sentence pair classification, we construct sentence pairs by replacing the ambiguous pronoun with each possible referent.
 %TODO : Describe what kind of task WNLI is
 %TODO : Describe what kind of task RTE is
 
@@ -1795,7 +2207,10 @@ BERnie full Pre-training trains the entire embeddings, whereas BERnie partial Pr
 \begin{tabular}{
  l % left aligned column
  l % left aligned column
- *{3}{S[table-format=4.0]} % three columns with numeric data       
+ c
+ c
+ c
+ %*{3}{S[table-format=4.0]} % three columns with numeric data       
 }
 \toprule
 %TODO MRPC has one aligned, and one unaligned test
@@ -1812,6 +2227,15 @@ WNLI & Accuracy & 0.4649 & 0.4225 & 0.4507 \\
 \bottomrule
 \end{tabular}
 }
+
+\section{Compressing the non-lexical out}
+\subsubsection{Motivation}
+\subsubsection{Experiment setup}
+\subsubsection{Results}
+
+%TODO These experiments are not final yet ...
+
+%TODO Should I include the experimental data from the individual runs in a table in the Appendix?
 
 \chapter{Conclusion}
 

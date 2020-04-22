@@ -1,0 +1,190 @@
+\begin{thebibliography}{10}
+
+\bibitem{mikolov13}
+Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean.
+\newblock Efficient estimation of word representations in vector space.
+\newblock {\em CoRR}, 2013.
+
+\bibitem{mikolov13b}
+Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean.
+\newblock Distributed representations of words and phrases and their
+  compositionality.
+\newblock {\em CoRR}, abs/1310.4546, 2013.
+
+\bibitem{vaswani17}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, Łukasz Kaiser, and Illia Polosukhin.
+\newblock Attention is all you need.
+\newblock {\em Neural Information Processing Systems}, 2017.
+
+\bibitem{devlin18}
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+\newblock Bert: Pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock {\em Arxiv}, 2018.
+
+\bibitem{miller90}
+George~A. Miller, Richard Beckwith, Christiane Fellbaum, Derek Gross, and
+  Katherine~J. Miller.
+\newblock Introduction to wordnet: An on-line lexical database.
+\newblock {\em International Journal of Lexicography}, pages 235--244, 1990.
+
+\bibitem{kudugunta18}
+Sneha Kudugunta, Ankur Bapna, Isaac Caswell, Naveen Arivazhagan, and Orhan
+  Firat.
+\newblock Investigating multilingual nmt representations at scale.
+\newblock 2018.
+
+\bibitem{conneau17}
+Alexis Conneau, Guillaume Lample, Aurelio Ranzato, Ludovic Denoyer, and Hervé
+  Jégou.
+\newblock Word translation without parallel data.
+\newblock 2017.
+
+\bibitem{wang19}
+Alex Wang, Amanpreet Singh, Julian Michael, Felix Hill, Omer Levy, and
+  Samuel~R. Bowman.
+\newblock Glue: A multi-task benchmark and analysis platform for natural
+  language understanding.
+\newblock {\em ICLR}, 2019.
+
+\bibitem{harris54}
+Zellig Harris.
+\newblock Distributional structure.
+\newblock {\em Word}, 10, 1954.
+
+\bibitem{spacy}
+Matthew Honnibal and Ines Montani.
+\newblock {spaCy 2}: Natural language understanding with {B}loom embeddings,
+  convolutional neural networks and incremental parsing.
+\newblock To appear, 2017.
+
+\bibitem{spacyb}
+spacy: Part-of-speech tagging.
+\newblock \url{https://spacy.io/api/annotation#pos-tagging}.
+\newblock Accessed: 2020-04-13.
+
+\bibitem{bengio03}
+Yoshua Bengio, Réjean Ducharme, Pascal Vincent, and Christian Jauvin.
+\newblock A neural probabilistic language model.
+\newblock {\em Journal of Machine Learning Research}, 3:1137--1155, 2003.
+
+\bibitem{pennington14}
+Jeffrey Pennington, Richard Socher, and Christopher Manning.
+\newblock Glove: Global vectors for word representation.
+\newblock {\em EMNLP}, page 1532–1543, 2014.
+
+\bibitem{vilnis14}
+Luke Vilnis and Andrew McCallum.
+\newblock Word representations via gaussian embedding.
+\newblock {\em CoRR}, abs/1412.6623, 2014.
+
+\bibitem{peters17}
+Matthew~E Peters, Mark Neumann, Matt Gardner, Christopher Clark, Kenton Lee,
+  and Luke Zettlemoyer.
+\newblock Deep contextualized word representations.
+\newblock {\em Arxiv}, 2018.
+
+\bibitem{hochreiter97}
+Sepp Hochreiter and Jürgen Schmidhuber.
+\newblock Long short-term memory.
+\newblock {\em Arxiv}, 1997.
+
+\bibitem{sanh19}
+Victor Sanh, Lysandre Debut, Julien Chaumond, and Thomas Wolf.
+\newblock Distilbert, a distilled version of bert: smaller, faster, cheaper and
+  lighter.
+\newblock 2019.
+
+\bibitem{shen19}
+Dinghan Shen, Pengyu Cheng, Dhanasekar Sundararaman, Xinyuan Zhang, Qian Yang,
+  Meng Tang, Asli Celikyilmaz, and Lawrence Carin.
+\newblock Learning compressed sentence representations for on-device text
+  processing.
+\newblock 2019.
+
+\bibitem{radford18}
+Alec Radford, Karthk Narasimhan, Tim Salimans, and Ilya Sutskever.
+\newblock Improving language understanding by generative pre-training.
+\newblock {\em Arxiv}, 2018.
+
+\bibitem{radford19}
+Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya
+  Sutskever.
+\newblock Language models are unsupervised multitask learners.
+\newblock {\em Arxiv}, 2019.
+
+\bibitem{wang19b}
+Alex Wang, Yada Pruksachatkun, Nikita Nangia, Amanpreet Singh, Julian Michael,
+  Felix Hill, Omer Levy, and Samuel~R Bowman.
+\newblock Superglue: A stickier benchmark for general-purpose language
+  understanding systems.
+\newblock {\em NeurIPS}, 2019.
+
+\bibitem{peters18}
+Matthew~E Peters, Mark Neumann, Luke Zettlemoyer, and Wen-Tau Yih.
+\newblock Dissecting contextual word embeddings: Architecture and
+  representation.
+\newblock 2018.
+
+\bibitem{may19}
+Chandler May, Alex Wang, Shikha Bordia, Samuel~R. Bowman, and Rachel Rudinger.
+\newblock On measuring social biases in sentence encoders.
+\newblock 2019.
+
+\bibitem{jentzsch19}
+Sophie Jentzsch, Constantin Rothkopf, and Patrick Schramowski~Kristian
+  Kersting.
+\newblock On measuring social biases in sentence encoders.
+\newblock {\em AIES 2019 - Proceedings of the 2019 AAAI/ACM Conference on AI,
+  Ethics, and Society}, pages 37--44, 2019.
+
+\bibitem{hu19}
+Renfen Hu, Shen Li, and Shichen Liang.
+\newblock Diachronic sense modeling with deep contextualized word embeddings:
+  An ecological view.
+\newblock 2019.
+
+\bibitem{zhu18}
+Henghui Zhu, Ioannis~Ch Paschalidis, and Amir Tahmasebi.
+\newblock Clinical concept extraction with contextual word embedding.
+\newblock 2018.
+
+\bibitem{chen19}
+Xinlei Chen, Alan Ritter, Abhinav Gupta, and Tom Mitchell.
+\newblock Sense discovery via co-clustering on images and text.
+\newblock 2019.
+
+\bibitem{lample18}
+Guillaume Lample, Alexis Conneau, Ludovic Denoyer, and Marc'Aurelio Ranzato.
+\newblock Unsupervised machine translation using monolingual corpora only.
+\newblock {\em ICLR}, 2018.
+
+\bibitem{ma19}
+Shuang Ma, Daniel Mcduff, and Yale Song.
+\newblock M3 d-gan: Multi-modal multi-domain translation with universal
+  attention.
+\newblock 2019.
+
+\bibitem{alvarez18}
+David Alvarez-Melis and Tommi~S. Jaakkola.
+\newblock Gromov-wasserstein alignment of word embedding spaces.
+\newblock 2018.
+
+\bibitem{rand71}
+William~M. Rand.
+\newblock Objective criteria for the evaluation of clustering methods.
+\newblock {\em Journal of the American Statistical Association}, pages
+  846--850, 1971.
+
+\bibitem{hubert85}
+Lawrence Hubert and Phipps Arabie.
+\newblock Comparing partitions.
+\newblock {\em Journal of Classification}, pages 193--218, 1985.
+
+\bibitem{pelevina16}
+Maria Pelevina, Nikolay Arefyev, Chris Biemann, and Alexander Panchenko.
+\newblock Making sense of word embeddings.
+\newblock {\em Journal of Classification}, 2016.
+
+\end{thebibliography}
