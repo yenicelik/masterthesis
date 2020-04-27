@@ -2,9 +2,6 @@ Title: Understanding and Exploiting subspace organization in contextual word emb
 - Background
     - (Static) Word Embeddings
     	- FastText
-    - Context Embeddings
-    	- GPT-2
-    - SemCor
 - Related Work
     - Structure inside BERT
         - Looking for structure inside BERT
@@ -18,16 +15,3 @@ Title: Understanding and Exploiting subspace organization in contextual word emb
 		- siamese triplet networks ##
 Exploiting subspace organization of semantics of BERT embeddings
 	- Introducing interpretable semantics embedding vectors for BERT
-    - BERnie PoS producing meaning vectors distinguished by PoS
-		- Experiment setup 
-	- BERnie Meaning producing meaning vectors
-		- Motivation
-		- Experiment setup 
-	- BERnie Meaning with Pre-training producing meaning vectors
-		- Motivation
-		- Experiment setup 
-	- Results
-	- Metric Learning for lossy meaning vectors
-		- Motivation
-		- Experiment setup 
-		- Results

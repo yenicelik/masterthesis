@@ -1,12 +1,14 @@
 """
     Implementing siamese network for BERT embeddings
 """
-import random
 import numpy as np
 
 import torch
 
 from collections import Counter
+
+import matplotlib
+import matplotlib.pyplot as plt
 
 from sklearn.decomposition import PCA
 from torch import optim
@@ -19,31 +21,8 @@ from src.resources.samplers import sample_semcor_data
 from src.utils.create_experiments_folder import randomString
 
 
+
 def load_bert_embeddings_with_labels():
-    pass
-
-def load_target_word_embedding_with_oversampling(tgt_word):
-    # Use items with more words ...
-    X, y, _ = sample_semcor_data(tgt_word=tgt_word)
-    # Just do more epochs I guess..?
-    print(Counter(y))
-
-    # TODO: Oversample here because highly unbalanced dataset
-    from imblearn.over_sampling import RandomOverSampler
-    ros = RandomOverSampler(random_state=0)
-    X, y = ros.fit_resample(X, y)
-
-    print(Counter(y))
-    print(X.shape, y.shape)
-
-    y = y.tolist()
-    y = np.asarray([int(x) for x in y])
-
-    return X, y
-
-
-if __name__ == "__main__":
-
     print("Starting siamese network")
     tgt_word = ' was '
 
@@ -77,39 +56,29 @@ if __name__ == "__main__":
     n_classes = len(np.unique(y))
     print("Number of classes are: ", n_classes)
 
-    # Use MNIST data perhaps
-
-    net = Siamese(dim, latent_dim)
-    matr1 = torch.rand((samples, dim))
-    matr2 = torch.rand((samples, dim))
-
-    # forward pass through network
-    out = net.forward(matr1, matr2)[0]
-    print("Output is: ", out)
-    print("Output is: ", out.shape)
-
-    # Data matr:
-    # X = torch.rand((2*samples, dim))
-    # y = torch.Tensor(2*samples).random_(0, n_classes)  # Up to five different classes
-    X = torch.from_numpy(X).float()
-    y = torch.from_numpy(y).float()
+    return tgt_word, rnd_str, X, y, n_samples, dim, latent_dim, samples, n_classes
 
 
-    # Use ADAM optimizer instead ..
-    # optimizer = optim.SGD(net.parameters(), lr=0.00001, momentum=0.5)
-    print("Net parameters are: ")
-    optimizer = optim.Adam(net.parameters(), lr=0.001)
-    for epoch in range(30):
-        # Increase number of epochs ..
-        # print([x for x in net.parameters()])
-        X1s, X2s, ys = create_dataset(X, y)
-        siamese_train(model=net, X1s=X1s, X2s=X2s, ys=ys, optimizer=optimizer)
+def load_target_word_embedding_with_oversampling(tgt_word):
+    # Use items with more words ...
+    X, y, _ = sample_semcor_data(tgt_word=tgt_word)
+    # Just do more epochs I guess..?
+    print(Counter(y))
 
-    import matplotlib
-    import matplotlib.pyplot as plt
+    # TODO: Oversample here because highly unbalanced dataset
+    from imblearn.over_sampling import RandomOverSampler
+    ros = RandomOverSampler(random_state=0)
+    X, y = ros.fit_resample(X, y)
 
-    # Use the projected X to arrive at the actual dataset
+    print(Counter(y))
+    print(X.shape, y.shape)
 
+    y = y.tolist()
+    y = np.asarray([int(x) for x in y])
+
+    return X, y
+
+def visualize_siamese_pca(net, X, y, title):
     # visualize assuming a 2-dimensional latent space if this is going to work
     print("Passing through final")
     X_hat = net.fc1.forward(X).detach().numpy()
@@ -124,7 +93,7 @@ if __name__ == "__main__":
 
     # TODO: Do a per-word training ... (currently you mixx all words together ..)
 
-    colors = [np.random.rand(3,) for _ in np.unique(y)]
+    colors = [np.random.rand(3, ) for _ in np.unique(y)]
 
     # plt_markers = [
     #     markers[idx % len(markers)]
@@ -218,11 +187,50 @@ if __name__ == "__main__":
                 c=plt_colors,
                 # marker=plt_markers
             )
-            plt.title(f"Using the metric learning Siamese Network for '{comparand}'")
-            plt.savefig(rnd_str + f"domain_adapt_siamese_{comparand}")
+            plt.title(f"Using the metric learning Siamese Network for '{comparand}' {title}")
+            plt.savefig(rnd_str + f"domain_adapt_siamese_{comparand}_{title}")
 
             plt.show()
             plt.clf()
         except Exception as e:
             print("Error with: ", comparand)
             print(e)
+
+
+if __name__ == "__main__":
+
+    tgt_word, rnd_str, X, y, n_samples, dim, latent_dim, samples, n_classes = load_bert_embeddings_with_labels()
+    # Use MNIST data perhaps
+
+    net = Siamese(dim, latent_dim)
+    matr1 = torch.rand((samples, dim))
+    matr2 = torch.rand((samples, dim))
+
+    # forward pass through network
+    out = net.forward(matr1, matr2)[0]
+    print("Output is: ", out)
+    print("Output is: ", out.shape)
+
+    # Data matr:
+    # X = torch.rand((2*samples, dim))
+    # y = torch.Tensor(2*samples).random_(0, n_classes)  # Up to five different classes
+    X = torch.from_numpy(X).float()
+    y = torch.from_numpy(y).float()
+
+    # TODO: Create a test and training dataseet
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+    # Use ADAM optimizer instead ..
+    # optimizer = optim.SGD(net.parameters(), lr=0.00001, momentum=0.5)
+    print("Net parameters are: ")
+    optimizer = optim.Adam(net.parameters(), lr=0.001)
+    for epoch in range(30):
+        # Increase number of epochs ..
+        # print([x for x in net.parameters()])
+        X1s, X2s, ys = create_dataset(X_train, y_train)
+        siamese_train(model=net, X1s=X1s, X2s=X2s, ys=ys, optimizer=optimizer)
+
+    # Use the projected X to arrive at the actual dataset
+    visualize_siamese_pca(net, X_train, y_train, "train")
+    visualize_siamese_pca(net, X_test, y_test, "test")
+

@@ -34,6 +34,8 @@
 \usepackage{empheq}
 \usepackage{float}
 \usepackage{url}
+\usepackage{fancyvrb} % for "\Verb" macro
+
 
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{tabularx,booktabs}
@@ -463,10 +465,21 @@ We can learn the parameters $\Sigma$ and $\mu$ for each of these embeddings usin
 
 The method shows competitive scores to the Skip-Gram model, although usually only with minor improvements depending on the benchmark-dataset.
 
+%TODO Include a section on FastText! (Mikolov enriching word vectors with subword information)
+
 %TODO Include one part about tokenizers
 
 \newpage
 \subsection{Context Embeddings}
+
+
+%%%
+
+These language models also include capturing the more probablity of $p(\text {output} | \text {input})$
+. The MQAN demonstrates that a single language task is able to infer and perform many different tasks on eexamples wit this type of format.
+%TODO Cite Mccan
+
+%%%
 
 Now that we have seen a few methods that aim to capture one embedding $x_w$ for each word-token, we not turn out attention to context embeddings.
 
@@ -594,7 +607,62 @@ Numerous works have been published on making BERT representations more compact, 
 
 First proposed in \cite{radford18} and further extended in \cite{radford19}.
 
+\cite{radford18} introduces the concept of \textit{generative pre-training} and discriminative fine-tuning \textit{generative pre-training}.
+
+\paragraph{Unsupervised pre-training} consists of an unsupervised corpus of tokens $\mathcal{U} = \{ u_1, \ldots, u_n \}$ and use the common objective of 
+
+\begin{equation}
+L(\mathcal{U}) = \sum_i \log P(u_i | u_{i-k}, \ldots, u_{u-1}; \theta )
+\end{equation}
+
+where $k$ describes a context window, and the conditional probability $P$ is modeled using a neural network wth parameters $\theta$. 
+The transformer decoder \cite{Liu18} is used which is a variant of the transformer \cite{vaswani17}, which introduces a multi-headed self-attention operation over the input context tokens followed by position-wise feedforward layers to produce an output distribution over target tokens as such:
+
+\begin{align}
+h_0 & = UW_e + W_p \\
+h_l & = \text{transformer\_block}(h_{l-1}) \forall i \in [1, n] \\
+P(u) & = \text{softmax}(h_n {W_e}^T)
+\end{align}
+
+where $U=\left(u_{-k}, \ldots, u_{-1}\right)$ is the context vector of tokens, $n$ is the number of layers, $W_e$ is the token embedding matrix, and $W_p$ is the position embedding matrix.
+
+\paragraph{Supervised fine-tuning} consists of leveraging a labeled dataset $\mathcal{C}$, where each instance consists of a sequence of input tokens, $x^1, \ldots, x^m$ along with a label $y$.
+The inputs are passed through the pre-trained model to obtain the final transformer block's activation ${h_l}^m$ which is then fed into an added linear output layer with parameters $W_y$ to predict $y$.
+
+\begin{equation}
+P\left(y | x^{1}, \ldots, x^{m}\right)=\operatorname{softmax}\left(h_{l}^{m} W_{y}\right)
+\end{equation}
+
+which then gives the following objective to maximize:
+
+\begin{equation}
+L_{2}(\mathcal{C})=\sum_{(x, y)} \log P\left(y | x^{1}, \ldots, x^{m}\right)
+\end{equation}
+
+As suggested in \cite{Rei17} and \cite{peters17}, an auxiliary language modeling loss (unsupervised training) is added which accelerates convergence and improves generalization
+
+\begin{equation}
+L_{3}(\mathcal{C})=L_{2}(\mathcal{C})+\lambda * L_{1}(\mathcal{C})
+\end{equation}
+
+with a regularization parameter $\lambda$.
+
+
 %TODO read the two papers and take out anything significantly different to BERT.
+
+GPT-2 improves on the first version of GPT.
+Firs, the training dataset uses a crawled text of all outbound texts from Reddit resulting in the WebText corpus. 
+The crawling als prioritizes documents by quality.
+
+The second major modification is in input representations.
+GPT-2 uses a Byte Pair Encoding (BPE) scheme,
+\cite{sennrich15}, which operates on unicode code points as the most fundamentla unit of language.
+The BPE tokenization is modified by avoiding merging across character categories for any byte sequence (i.e. for words that occur in many variations, such as \Verb#dog.#, \Verb#dog!#, and \Verb#dog?#)
+This is similar to the character level rnns (cite jason).
+
+The base model of GPT is modified by moving the layer normalization \cite{ba16} layer to the input of each sub-block and an additional layer normalization after the final self-attention block. 
+Also, initialization was modified to account for the accumulation of the residual path with model depth.
+Also, vocabulary is expanded to 50257 tokens.
 
 
 \subsection{Other methods}
@@ -785,9 +853,40 @@ verb    & (work in a specific place, with a specific subject, or in a specific f
 \subsubsection{SemCor dataset}
 
 The SemCor 3.0 corpus is a collection of the Brown corpora \cite{francis64}, where each noun, adjective and verb is tagged with the WordNet 3.0 senses.
+It was part of the early WordNet project, initially introduced in \cite{miller94}.
 
+Some example snippets look as follows, where SemCor includes sentences, and each sentence is annotated by WordNet senses.
 
+\begin{verbatim}
+A Texas halfback who does n't even know the team 's plays,
+ Eldon_Moritz, ranks fourth in Soutwest_conference scoring after three games.
+\end{verbatim}
 
+The corresponding part-of-speech labels and wordnet sense ids 
+are
+\begin{verbatim}
+DT, NN, NN, WP, VBZ, RB, RB, VB, DT, NN, 
+POS, NN, NNP, VB, JJ, IN, NNP, VP, IN, JJ, NN
+\end{verbatim}
+
+\begin{verbatim}
+None, 1, 1, None, 0, 1, 7, None, 1, 
+None, 3, 1, 1, 1, None, 1, 1, 1, 1
+\end{verbatim}
+
+%TODO Insert distribution of number of occurences of wordnet ids.
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/background/semcor_skew.png}
+  \caption{Shows that the SemCor data is biased. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5).
+  The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. 
+  This is a cumulative plot over all words with WordNet senses within SemCor 3.0.
+  The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words.
+  }
+  \label{fig:embeddings_by_language}
+\end{figure}
+%TODO Should make this graph again, a bit better titles..
 
 \subsubsection{News dataset}
 
@@ -797,8 +896,7 @@ The GLUE benchmark dataset was first introduced by \cite{wang19}
 
 %TODO Look for superglue for an evaluation.
 
-Additional work has been done through the introduction of SuperGLUE \cite{wang19b} to train for an even bigger variety of language tasks, after most NLU models started surpassing non-expert human performance on the initially-proposed GLUE-tasks.
-
+Additional work has been done through the introduction of SuperGLUE \cite{wang19b} to train for an even bigger variety of language tasks, after most NLU models started surpassing non-expert human performance on the initially-proposed GLUE-tasks .
 
 \begin{figure}[H]
 \center
@@ -848,24 +946,84 @@ The Corpus of Linguistic Acceptability \textbf{CoLA} consists of englihs sentenc
 The Matthews correlation evaluates the model from a score of -1 to 1, where 0 corresponds to uniformly random guessing.
 The test set includes out of domain sentences.
 
+\begin{verbatim}
+label:1
+The professor talked us into a stupor.
+\end{verbatim}
+
+\begin{verbatim}
+label:0	
+The professor talked us.
+\end{verbatim}
+
 %TODO Perhaps show examples?
 %TODO Cite the underlying paper?
 
 The Stanford Sentiment Treebank \textbf{SST-2} consists of sentences from moview reviews and human annotations of their sentiment.
 This is a binary classificaiton (positive / negative) task.
 
+
+\begin{verbatim}
+label:1
+comes from the brave , uninhibited performances
+\end{verbatim}
+
+\begin{verbatim}
+label:0
+excruciatingly unfunny and pitifully unromantic
+\end{verbatim}
+
 \subsubsection{Similarity and paraphrase tasks}
 
 The Microsoft Research Paraphrase Corpus \textbf{MRPC} is a corpus of sentence pairs automatically extracted from online news sources, with human annotations whether the sentences in the pair are semantically equivalent.
 Here, an F1-score is taken, because the class-sets are imbalanced.
 
+
+\begin{verbatim}
+quality:1	
+Prosecutors filed a motion informing Lee they intend to seek the death penalty.	
+He added that prosecutors will seek the death penalty.
+\end{verbatim}
+
+\begin{verbatim}
+quality:0	
+A former teammate , Carlton Dotson , has been charged with the murder.	
+His body was found July 25 , and former teammate Carlton Dotson has been charged in his shooting death .
+\end{verbatim}
+
 The Quora Question Pairs \textbf{QQP} dataset is a collection of question and answer pairs from the website Quora. 
 The task it to check whether a pair of questions are semantically equivalent.
 Again, the F1-score is taken as a measure because the class-sets are unbalanced.
 
+
+\begin{verbatim}
+My Galaxy ace is hang?	
+Why are the people on Staten Island are racist?	
+0
+\end{verbatim}
+
+\begin{verbatim}
+Where can I learn to invest in stocks?	
+How can I learn more about stocks?	
+1
+\end{verbatim}
+
 The Semantic Textual Similarity Benchmark \textbf{STS-B} is a corpus of pairs of news headlines, video and image captions.
 Each pair is annotated with a similarity score from 1 to 5, and the task is to predict these scores.
 The evaluation is done using Pearson and Spearman correlation, as the determining factor is the relative ranking amongst scores.
+
+
+\begin{verbatim}
+The man is riding a horse.	
+A man is riding on a horse.	
+5.000
+\end{verbatim}
+
+\begin{verbatim}
+A man is playing a guitar.
+A girl is playing a guitar.	
+2.800
+\end{verbatim}
 
 \subsubsection{Inference Tasks}
 
@@ -873,11 +1031,25 @@ The Multi-Genre Natural Language Inference Corpus \textbf{MNLI} is a crowd-sourc
 For eah premise and hypothesis sentence, the task is to predict whether the premise entails the hypothesis, contradit the hypothesis, or neither.
 Thus, this is a 3-class classification problem.
 The matched MNLI version tests on data which is in the same domain as the training set, while the mis-matched MLNI tests on a training set which is cross-domain.
+The MNLI contains parse-trees, which is the reason we do not display these here.
 
 The Stanford Question Answering Dataset is a question-answering dataset. 
 The authors of GLUE use this dataset, to create the Question answering NLI \textbf{QNLI}, by removing the requirements that the model selects the exact answer.
 On top of that, they also remove the simplifying assumption that the answer is always present in the input and that lexical overlap is a reliable cue.
 The task is to determine whether the context sentence contains the answer to the question. 
+
+\begin{verbatim}
+Who did the children work beside?	
+In many cases, men worked from home.
+not_entailment
+\end{verbatim}
+
+\begin{verbatim}
+How many alumni does Olin Business School have worldwide?
+Olin has a network of more than 16,000 alumni worldwide.
+entailment
+\end{verbatim}
+
 
 The Recognizing Textual Entailment \textbf{RTE} dataset comes from a series of annual textual entailment challenges. 
 Data is combined from RTE1, RTE2, RTE3 and RTE5. 
@@ -2062,7 +2234,7 @@ We also introduce new embedding vectors that the new tokens correspond to.
   \caption{1a: The part-of-speech modified tokenizer pipeline}
   \label{fig:sfig1}
 \end{subfigure}%
-\begin{subfigure}{.65\textwidth}
+\begin{subfigure}{.55\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning_embedding.png}
   \caption{1b: The part-of-speech modified BERT embedding}
@@ -2203,6 +2375,7 @@ We save this model and load it for the GLUE tasks.
 BERnie full Pre-training trains the entire embeddings, whereas BERnie partial Pre-Training fixates all embedding vectors except the ones for the ones that were newly added.
 
 %TODO Write section for GLUE tasks
+\captionof{table}{Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.}
 \scalebox{0.9}{
 \begin{tabular}{
  l % left aligned column
@@ -2229,6 +2402,7 @@ WNLI & Accuracy & 0.4649 & 0.4225 & 0.4507 \\
 }
 
 \section{Compressing the non-lexical out}
+%TODO Need to run some more experiments ...
 \subsubsection{Motivation}
 \subsubsection{Experiment setup}
 \subsubsection{Results}

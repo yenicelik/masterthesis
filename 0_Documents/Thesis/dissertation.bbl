@@ -114,12 +114,51 @@ Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya
 \newblock Language models are unsupervised multitask learners.
 \newblock {\em Arxiv}, 2019.
 
+\bibitem{Liu18}
+Peter~J. Liu, Mohammad Saleh, Etienne Pot†, Ben Goodrich, Ryan Sepassi,
+  Łukasz Kaiser, and Noam Shazeer.
+\newblock Generating wikipedia by summarizing long sequences.
+\newblock 2018.
+
+\bibitem{Rei17}
+Marek Rei.
+\newblock Semi-supervised multitask learning for sequence labeling.
+\newblock 2017.
+
+\bibitem{sennrich15}
+Rico Sennrich, Barry Haddow, and Alexandra Birch.
+\newblock Neural machine translation of rare words with subword units.
+\newblock {\em arXiv}, 2015.
+
+\bibitem{ba16}
+Jimmy~Lei Ba, Jamie~Ryan Kiros, and Geoffrey~E. Hinton.
+\newblock Layer normalization.
+\newblock {\em arXiv}, 2016.
+
+\bibitem{francis64}
+W.~N. Francis and H.~Kucera.
+\newblock A standard corpus of present-day edited american english, for use
+  with digital computers.
+\newblock 1964.
+
+\bibitem{miller94}
+George~A. Miller, Martin Chodorow, Shari Landes, Claudia Leacock, and Robert~G.
+  Thomas.
+\newblock Using a semantic concordance for sense identification.
+\newblock pages 240--243, 1994.
+
 \bibitem{wang19b}
 Alex Wang, Yada Pruksachatkun, Nikita Nangia, Amanpreet Singh, Julian Michael,
   Felix Hill, Omer Levy, and Samuel~R Bowman.
 \newblock Superglue: A stickier benchmark for general-purpose language
   understanding systems.
 \newblock {\em NeurIPS}, 2019.
+
+\bibitem{levesque12}
+Hector Levesque, Ernest Davis, and Leora Morgenstern.
+\newblock The winograd schema challenge.
+\newblock In {\em Thirteenth International Conference on the Principles of
+  Knowledge Representation and Reasoning}, 2012.
 
 \bibitem{peters18}
 Matthew~E Peters, Mark Neumann, Luke Zettlemoyer, and Wen-Tau Yih.
