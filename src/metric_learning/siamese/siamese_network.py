@@ -26,13 +26,14 @@ class Siamese(nn.Module):
 
         # Let's just use linear layers ..
         self.fc1 = nn.Sequential(
-            nn.BatchNorm1d(input_dim),
+            # nn.BatchNorm1d(input_dim),
             nn.Linear(input_dim, latent_dim, bias=False),  # Should not require bias ...
+            # nn.ReLU(inplace=True),
+            # nn.BatchNorm1d(input_dim // 3),
+            # nn.Linear(input_dim // 3, latent_dim, bias=False),
             # nn.ReLU(inplace=True),
             # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
             # nn.ReLU(inplace=True),
-            # # nn.Linear(latent_dim, latent_dim, bias=False),
-            # # nn.ReLU(inplace=True),
             # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
             # nn.ReLU(inplace=True),
             # nn.Linear(latent_dim * 3, latent_dim*3, bias=False),
@@ -72,15 +73,15 @@ def create_dataset(X, y, shuffle=True):
     def _sample_pos(base_idx, X, y):
         base_class = y[base_idx]
         pos_idx = np.random.choice(np.arange(y.shape[0])[y == base_class])
-        return X[base_idx], X[pos_idx], torch.Tensor([1.])  # 0 siganlises that it is the same class!
+        return X[base_idx], X[pos_idx], torch.Tensor([1.]), base_class  # 0 siganlises that it is the same class!
 
     def _sample_neg(base_idx, X, y):
         base_class = y[base_idx]
         neg_idx = np.random.choice(np.arange(y.shape[0])[y != base_class])
-        return X[base_idx], X[neg_idx], torch.Tensor([0.])  # 0 siganlises that it is the same class!
+        return X[base_idx], X[neg_idx], torch.Tensor([0.]), base_class  # 0 siganlises that it is the same class!
 
     # Prepare final dataset items
-    X1s, X2s, ys = [], [], []
+    X1s, X2s, ys, y_groundtruth = [], [], [], []
 
     # Prepare triplets
     idx = [x for x in range(X.shape[0])]
@@ -88,26 +89,28 @@ def create_dataset(X, y, shuffle=True):
         random.shuffle(idx)
     for i in idx:
         # Add one positive example
-        base_X1, pos_X, pos_y = _sample_pos(i, X, y)
+        base_X1, pos_X, pos_y, pos_yg = _sample_pos(i, X, y)
         # Add one negative example
-        base_X2, neg_X, neg_y = _sample_neg(i, X, y)
+        base_X2, neg_X, neg_y, neg_yg = _sample_neg(i, X, y)
 
         assert torch.all(torch.eq(base_X1, base_X2))
 
         X1s.append(base_X1.reshape(1, -1))
         X2s.append(pos_X.reshape(1, -1))
         ys.append(pos_y.reshape(1, ))
+        y_groundtruth.append(pos_yg.reshape(1, ))
         X1s.append(base_X2.reshape(1, -1))
         X2s.append(neg_X.reshape(1, -1))
         ys.append(neg_y.reshape(1, ))
+        y_groundtruth.append(neg_yg.reshape(1, ))
 
     # Create the datasets, so you can slice them into batches in a bit
-    X1s, X2s, ys = torch.cat(X1s, 0), torch.cat(X2s, 0), torch.cat(ys, 0)
+    X1s, X2s, ys, y_groundtruth = torch.cat(X1s, 0), torch.cat(X2s, 0), torch.cat(ys, 0), torch.cat(y_groundtruth, 0)
 
     assert len(X1s) == len(X2s)
     assert len(X2s) == len(ys)
 
-    return X1s, X2s, ys
+    return X1s, X2s, ys, y_groundtruth
 
 
 # Write a short training loop
@@ -244,7 +247,8 @@ if __name__ == "__main__":
     for epoch in range(10):
         # Increase number of epochs ..
         # print([x for x in net.parameters()])
-        X1s, X2s, ys = create_dataset(X, y)
+        exit(-1)
+        X1s, X2s, ys, _ = create_dataset(X, y)
         siamese_train(model=net, X1s=X1s, X2s=X2s, ys=ys, optimizer=optimizer)
 
     import matplotlib

@@ -6,6 +6,7 @@
 \citation{devlin18}
 \citation{miller90}
 \citation{kudugunta18}
+\citation{kaya19}
 \citation{conneau17}
 \citation{wang19}
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{1}\protected@file@percent }
@@ -151,132 +152,161 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1.5}Clinical concept extration}{40}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1.6}Discovering for semantics}{40}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1.7}Embeddings for translation}{40}\protected@file@percent }
+\citation{moutafis17}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces From \cite  {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{41}\protected@file@percent }
 \newlabel{fig:embeddings_by_language}{{4.1}{41}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.2}Metric Learning and Disentanglement}{41}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Clustering Algorithms}{41}\protected@file@percent }
+\citation{mahalanobis36}
+\citation{chechik10}
+\citation{moutafis17}
+\citation{suarez19}
+\@writefile{toc}{\contentsline {subsubsection}{Non-Deep Metric Learning}{43}\protected@file@percent }
+\citation{suarez19}
+\citation{suarez19}
+\citation{kaya19}
+\citation{kaya19}
+\citation{kaya19}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Taken from \cite  {suarez19}. \relax }}{44}\protected@file@percent }
+\newlabel{fig:BERT_vanilla_pipeline}{{4.2}{44}}
+\@writefile{toc}{\contentsline {subsubsection}{Deep Metric Learning}{44}\protected@file@percent }
+\citation{bromley94}
+\citation{chopra05}
+\citation{hadsell06}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Taken from \cite  {kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.\relax }}{45}\protected@file@percent }
+\newlabel{fig:muse_translation}{{4.3}{45}}
+\citation{dor09}
+\citation{ustinova16}
+\citation{song16}
+\citation{sohn16}
+\citation{rippel16}
+\citation{wang17}
+\citation{ni17}
+\citation{song17}
+\citation{ge18}
+\citation{wang19c}
 \citation{conneau17}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Clustering Algorithms}{47}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Applications of word vector}{47}\protected@file@percent }
 \citation{conneau17}
 \citation{conneau17}
 \citation{alvarez18}
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Applications of word vector}{42}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Taken from \cite  {conneau17}. Each \relax }}{42}\protected@file@percent }
-\newlabel{fig:muse_translation}{{4.2}{42}}
-\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{45}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Analysing the current state of the art}{47}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Taken from \cite  {conneau17}. Each \relax }}{48}\protected@file@percent }
+\newlabel{fig:muse_translation}{{4.4}{48}}
+\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{50}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Analysing the current state of the art}{53}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}On the Linear Separability of meaning within sampled BERT vectors}{47}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Motivation}{47}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Experiment setup}{47}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Checks sampled BERT vectors for linear interpretability by meaning\relax }}{48}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Results}{49}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{49}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {is}.\relax }}{50}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {one}.\relax }}{50}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{50}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}On the Clusterability of meaning within sampled BERT vectors}{51}\protected@file@percent }
-\newlabel{experiment_BERT_clusterability}{{5.2}{51}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Motivation}{51}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Experiment setup}{51}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{52}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}On the Linear Separability of meaning within sampled BERT vectors}{53}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Motivation}{53}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Experiment setup}{53}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Checks sampled BERT vectors for linear interpretability by meaning\relax }}{54}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Results}{55}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{55}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {is}.\relax }}{56}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {one}.\relax }}{56}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{56}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}On the Clusterability of meaning within sampled BERT vectors}{57}\protected@file@percent }
+\newlabel{experiment_BERT_clusterability}{{5.2}{57}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Motivation}{57}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Experiment setup}{57}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{58}\protected@file@percent }
 \citation{rand71}
 \citation{hubert85}
-\newlabel{eq:adjustedrandomindex}{{5.2.2}{53}}
+\newlabel{eq:adjustedrandomindex}{{5.2.2}{59}}
 \citation{pelevina16}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Results}{54}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Qualitative evaluation}{55}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces A famous equation\relax }}{56}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces A famous equation\relax }}{57}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces A famous equation\relax }}{57}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces A famous equation\relax }}{58}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces A famous equation\relax }}{58}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces A famous equation\relax }}{59}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces A famous equation\relax }}{59}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.8}{\ignorespaces A famous equation\relax }}{60}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.9}{\ignorespaces A famous equation\relax }}{60}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.10}{\ignorespaces A famous equation\relax }}{61}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.11}{\ignorespaces A famous equation\relax }}{61}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.12}{\ignorespaces A famous equation\relax }}{62}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.13}{\ignorespaces A famous equation\relax }}{62}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.14}{\ignorespaces A famous equation\relax }}{63}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.15}{\ignorespaces A famous equation\relax }}{63}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.16}{\ignorespaces A famous equation\relax }}{64}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.17}{\ignorespaces A famous equation\relax }}{64}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Correlation between Part of Speech and Context within BERT}{65}\protected@file@percent }
-\newlabel{correlation_pos_context}{{5.3}{65}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Motivation}{65}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Experiment setup}{65}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Results}{65}\protected@file@percent }
-\newlabel{fig:sfig1}{{5.18a}{66}}
-\newlabel{sub@fig:sfig1}{{a}{66}}
-\newlabel{fig:sfig2}{{5.18b}{66}}
-\newlabel{sub@fig:sfig2}{{b}{66}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.18}{\ignorespaces plots of....\relax }}{66}\protected@file@percent }
-\newlabel{fig:fig}{{5.18}{66}}
-\newlabel{fig:sfig1}{{5.19a}{66}}
-\newlabel{sub@fig:sfig1}{{a}{66}}
-\newlabel{fig:sfig2}{{5.19b}{66}}
-\newlabel{sub@fig:sfig2}{{b}{66}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.19}{\ignorespaces plots of....\relax }}{66}\protected@file@percent }
-\newlabel{fig:fig}{{5.19}{66}}
-\newlabel{fig:sfig1}{{5.20a}{66}}
-\newlabel{sub@fig:sfig1}{{a}{66}}
-\newlabel{fig:sfig2}{{5.20b}{66}}
-\newlabel{sub@fig:sfig2}{{b}{66}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.20}{\ignorespaces plots of....\relax }}{66}\protected@file@percent }
-\newlabel{fig:fig}{{5.20}{66}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Exploiting subspace organization of semantics of BERT embeddings}{67}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Results}{60}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Qualitative evaluation}{61}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces A famous equation\relax }}{62}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces A famous equation\relax }}{63}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces A famous equation\relax }}{63}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces A famous equation\relax }}{64}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces A famous equation\relax }}{64}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces A famous equation\relax }}{65}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces A famous equation\relax }}{65}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.8}{\ignorespaces A famous equation\relax }}{66}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.9}{\ignorespaces A famous equation\relax }}{66}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.10}{\ignorespaces A famous equation\relax }}{67}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.11}{\ignorespaces A famous equation\relax }}{67}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.12}{\ignorespaces A famous equation\relax }}{68}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.13}{\ignorespaces A famous equation\relax }}{68}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.14}{\ignorespaces A famous equation\relax }}{69}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.15}{\ignorespaces A famous equation\relax }}{69}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.16}{\ignorespaces A famous equation\relax }}{70}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.17}{\ignorespaces A famous equation\relax }}{70}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Correlation between Part of Speech and Context within BERT}{71}\protected@file@percent }
+\newlabel{correlation_pos_context}{{5.3}{71}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Motivation}{71}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Experiment setup}{71}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Results}{71}\protected@file@percent }
+\newlabel{fig:sfig1}{{5.18a}{72}}
+\newlabel{sub@fig:sfig1}{{a}{72}}
+\newlabel{fig:sfig2}{{5.18b}{72}}
+\newlabel{sub@fig:sfig2}{{b}{72}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.18}{\ignorespaces plots of....\relax }}{72}\protected@file@percent }
+\newlabel{fig:fig}{{5.18}{72}}
+\newlabel{fig:sfig1}{{5.19a}{72}}
+\newlabel{sub@fig:sfig1}{{a}{72}}
+\newlabel{fig:sfig2}{{5.19b}{72}}
+\newlabel{sub@fig:sfig2}{{b}{72}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.19}{\ignorespaces plots of....\relax }}{72}\protected@file@percent }
+\newlabel{fig:fig}{{5.19}{72}}
+\newlabel{fig:sfig1}{{5.20a}{72}}
+\newlabel{sub@fig:sfig1}{{a}{72}}
+\newlabel{fig:sfig2}{{5.20b}{72}}
+\newlabel{sub@fig:sfig2}{{b}{72}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.20}{\ignorespaces plots of....\relax }}{72}\protected@file@percent }
+\newlabel{fig:fig}{{5.20}{72}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Exploiting subspace organization of semantics of BERT embeddings}{73}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{68}\protected@file@percent }
-\newlabel{fig:BERT_vanilla_pipeline}{{6.1}{68}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.1}BERnie PoS}{68}\protected@file@percent }
-\newlabel{bernie_pos}{{6.0.1}{68}}
-\@writefile{toc}{\contentsline {subsubsection}{Motivation}{68}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{68}\protected@file@percent }
-\citation{spacyb}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces The modified pipeline. The BERnie model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{69}\protected@file@percent }
-\newlabel{fig:BERnie_POS_pipeline}{{6.2}{69}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.2}BERnie Meaning}{69}\protected@file@percent }
-\newlabel{experiment_bernie_meaning}{{6.0.2}{69}}
-\@writefile{toc}{\contentsline {subsubsection}{Motivation}{69}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Inside the embedding layer of BERT, we introduce more specific embeddings \textit  {run\_ VERB} and \textit  {run\_ NOUN}. The BERT model should intuitively now capture more expressiveness, as the model size increased. The original \textit  {run} embedding is removed.\relax }}{70}\protected@file@percent }
-\newlabel{fig:BERnie_POS_pipeline}{{6.3}{70}}
-\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{70}\protected@file@percent }
-\newlabel{fig:sfig1}{{6.4a}{71}}
-\newlabel{sub@fig:sfig1}{{a}{71}}
-\newlabel{fig:sfig2}{{6.4b}{71}}
-\newlabel{sub@fig:sfig2}{{b}{71}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces plots of....\relax }}{71}\protected@file@percent }
-\newlabel{fig:fig}{{6.4}{71}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces \relax }}{71}\protected@file@percent }
-\newlabel{fig:cbow_skipgram}{{6.5}{71}}
-\newlabel{fig:sfig1}{{6.6a}{72}}
-\newlabel{sub@fig:sfig1}{{a}{72}}
-\newlabel{fig:sfig2}{{6.6b}{72}}
-\newlabel{sub@fig:sfig2}{{b}{72}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces plots of....\relax }}{72}\protected@file@percent }
-\newlabel{fig:fig}{{6.6}{72}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.\relax }}{72}\protected@file@percent }
-\newlabel{fig:cbow_skipgram}{{6.7}{72}}
-\@writefile{toc}{\contentsline {subsubsection}{Results}{72}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces asj\relax }}{73}\protected@file@percent }
-\citation{devlin18}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.3}BERnie Meaning with additional pre-training}{74}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{74}\protected@file@percent }
+\newlabel{fig:BERT_vanilla_pipeline}{{6.1}{74}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.1}BERnie PoS}{74}\protected@file@percent }
+\newlabel{bernie_pos}{{6.0.1}{74}}
 \@writefile{toc}{\contentsline {subsubsection}{Motivation}{74}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{74}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{74}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.3}{\ignorespaces Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.\relax }}{75}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Compressing the non-lexical out}{75}\protected@file@percent }
+\citation{spacyb}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces The modified pipeline. The BERnie model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{75}\protected@file@percent }
+\newlabel{fig:BERnie_POS_pipeline}{{6.2}{75}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.2}BERnie Meaning}{75}\protected@file@percent }
+\newlabel{experiment_bernie_meaning}{{6.0.2}{75}}
 \@writefile{toc}{\contentsline {subsubsection}{Motivation}{75}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{75}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Results}{75}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Inside the embedding layer of BERT, we introduce more specific embeddings \textit  {run\_ VERB} and \textit  {run\_ NOUN}. The BERT model should intuitively now capture more expressiveness, as the model size increased. The original \textit  {run} embedding is removed.\relax }}{76}\protected@file@percent }
+\newlabel{fig:BERnie_POS_pipeline}{{6.3}{76}}
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{76}\protected@file@percent }
+\newlabel{fig:sfig1}{{6.4a}{77}}
+\newlabel{sub@fig:sfig1}{{a}{77}}
+\newlabel{fig:sfig2}{{6.4b}{77}}
+\newlabel{sub@fig:sfig2}{{b}{77}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces plots of....\relax }}{77}\protected@file@percent }
+\newlabel{fig:fig}{{6.4}{77}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces \relax }}{77}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.5}{77}}
+\newlabel{fig:sfig1}{{6.6a}{78}}
+\newlabel{sub@fig:sfig1}{{a}{78}}
+\newlabel{fig:sfig2}{{6.6b}{78}}
+\newlabel{sub@fig:sfig2}{{b}{78}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces plots of....\relax }}{78}\protected@file@percent }
+\newlabel{fig:fig}{{6.6}{78}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.\relax }}{78}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{6.7}{78}}
+\@writefile{toc}{\contentsline {subsubsection}{Results}{78}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces asj\relax }}{79}\protected@file@percent }
+\citation{devlin18}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.3}BERnie Meaning with additional pre-training}{80}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Motivation}{80}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{80}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{80}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.3}{\ignorespaces Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.\relax }}{81}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Compressing the non-lexical out}{81}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Motivation}{81}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{81}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Results}{82}\protected@file@percent }
 \bibstyle{unsrt}
 \bibdata{dissertation}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Conclusion}{77}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Conclusion}{83}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}

@@ -16,11 +16,14 @@ from torch import optim
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
-from src.metric_learning.siamese.siamenese_network import create_dataset, siamese_train, Siamese
-from src.resources.samplers import sample_semcor_data
+from src.metric_learning.siamese.siamese_network import create_dataset, siamese_train, Siamese
+from src.resources.samplers import load_target_word_embedding_with_oversampling
 from src.utils.create_experiments_folder import randomString
 
 
+
+
+# TODO: Make comparing pairs only within the same word; do not put in a constraint across words!
 
 def load_bert_embeddings_with_labels():
     print("Starting siamese network")
@@ -43,6 +46,8 @@ def load_bert_embeddings_with_labels():
         Xs.append(X_tmp)
         ys.append(y_tmp + idx * 100)
 
+        # TODO: Push the paired dataset creation into here, so we can compare pairs within the same word, but across word no constraint is put.
+
     X = np.concatenate(Xs, axis=0)
     y = np.concatenate(ys, axis=0)
 
@@ -57,26 +62,6 @@ def load_bert_embeddings_with_labels():
     print("Number of classes are: ", n_classes)
 
     return tgt_word, rnd_str, X, y, n_samples, dim, latent_dim, samples, n_classes
-
-
-def load_target_word_embedding_with_oversampling(tgt_word):
-    # Use items with more words ...
-    X, y, _ = sample_semcor_data(tgt_word=tgt_word)
-    # Just do more epochs I guess..?
-    print(Counter(y))
-
-    # TODO: Oversample here because highly unbalanced dataset
-    from imblearn.over_sampling import RandomOverSampler
-    ros = RandomOverSampler(random_state=0)
-    X, y = ros.fit_resample(X, y)
-
-    print(Counter(y))
-    print(X.shape, y.shape)
-
-    y = y.tolist()
-    y = np.asarray([int(x) for x in y])
-
-    return X, y
 
 def visualize_siamese_pca(net, X, y, title):
     # visualize assuming a 2-dimensional latent space if this is going to work
@@ -121,8 +106,8 @@ def visualize_siamese_pca(net, X, y, title):
         c=plt_colors,
         # marker=plt_markers
     )
-    plt.title(f"Using the raw PCA for '{tgt_word}'")
-    plt.savefig(rnd_str + f"pca_{tgt_word}")
+    plt.title(f"Using the raw PCA for '{tgt_word}' {title}")
+    plt.savefig(rnd_str + f"pca_{tgt_word}_{title}")
 
     plt.show()
     plt.clf()
@@ -134,8 +119,8 @@ def visualize_siamese_pca(net, X, y, title):
         c=plt_colors,
         # marker=plt_markers
     )
-    plt.title(f"Using the metric learning Siamese Network for '{tgt_word}'")
-    plt.savefig(rnd_str + f"trained_siamese_{tgt_word}")
+    plt.title(f"Using the metric learning Siamese Network for '{tgt_word}' {title}")
+    plt.savefig(rnd_str + f"trained_siamese_{tgt_word}_{title}")
 
     plt.show()
     plt.clf()
@@ -150,7 +135,7 @@ def visualize_siamese_pca(net, X, y, title):
         # ' use ',
         # ' concern ',
         # ' allow ',
-        ' state ',
+        # ' state ',
         # ' key ',
         # ' arms ',
         ' thought ',
@@ -214,11 +199,13 @@ if __name__ == "__main__":
     # Data matr:
     # X = torch.rand((2*samples, dim))
     # y = torch.Tensor(2*samples).random_(0, n_classes)  # Up to five different classes
-    X = torch.from_numpy(X).float()
-    y = torch.from_numpy(y).float()
 
-    # TODO: Create a test and training dataseet
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+    X_train = torch.from_numpy(X_train).float()
+    y_train = torch.from_numpy(y_train).float()
+    X_test = torch.from_numpy(X_test).float()
+    y_test = torch.from_numpy(y_test).float()
 
     # Use ADAM optimizer instead ..
     # optimizer = optim.SGD(net.parameters(), lr=0.00001, momentum=0.5)
@@ -227,7 +214,7 @@ if __name__ == "__main__":
     for epoch in range(30):
         # Increase number of epochs ..
         # print([x for x in net.parameters()])
-        X1s, X2s, ys = create_dataset(X_train, y_train)
+        X1s, X2s, ys, _ = create_dataset(X_train, y_train)
         siamese_train(model=net, X1s=X1s, X2s=X2s, ys=ys, optimizer=optimizer)
 
     # Use the projected X to arrive at the actual dataset

@@ -1,6 +1,7 @@
 """
     Anything related to sampling different kinds of data
 """
+from collections import Counter
 
 import numpy as np
 import umap
@@ -15,6 +16,25 @@ from src.resources.corpus import Corpus
 from src.resources.corpus_semcor import CorpusSemCor
 from src.sampler.sample_embedding_and_sentences import get_bert_embeddings_and_sentences
 
+
+def load_target_word_embedding_with_oversampling(tgt_word):
+    # Use items with more words ...
+    X, y, _ = sample_semcor_data(tgt_word=tgt_word)
+    # Just do more epochs I guess..?
+    print(Counter(y))
+
+    # TODO: Oversample here because highly unbalanced dataset
+    from imblearn.over_sampling import RandomOverSampler
+    ros = RandomOverSampler(random_state=0)
+    X, y = ros.fit_resample(X, y)
+
+    print(Counter(y))
+    print(X.shape, y.shape)
+
+    y = y.tolist()
+    y = np.asarray([int(x) for x in y])
+
+    return X, y
 
 def sample_naive_data(tgt_word, n=None):
     corpus = Corpus()

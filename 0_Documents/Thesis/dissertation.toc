@@ -46,36 +46,38 @@
 \contentsline {subsection}{\numberline {4.1.6}Discovering for semantics}{40}% 
 \contentsline {subsection}{\numberline {4.1.7}Embeddings for translation}{40}% 
 \contentsline {section}{\numberline {4.2}Metric Learning and Disentanglement}{41}% 
-\contentsline {section}{\numberline {4.3}Clustering Algorithms}{41}% 
-\contentsline {section}{\numberline {4.4}Applications of word vector}{42}% 
-\contentsline {subsubsection}{Word2Vec}{45}% 
-\contentsline {chapter}{\numberline {5}Analysing the current state of the art}{47}% 
-\contentsline {section}{\numberline {5.1}On the Linear Separability of meaning within sampled BERT vectors}{47}% 
-\contentsline {subsection}{\numberline {5.1.1}Motivation}{47}% 
-\contentsline {subsection}{\numberline {5.1.2}Experiment setup}{47}% 
-\contentsline {subsection}{\numberline {5.1.3}Results}{49}% 
-\contentsline {section}{\numberline {5.2}On the Clusterability of meaning within sampled BERT vectors}{51}% 
-\contentsline {subsection}{\numberline {5.2.1}Motivation}{51}% 
-\contentsline {subsection}{\numberline {5.2.2}Experiment setup}{51}% 
-\contentsline {subsection}{\numberline {5.2.3}Results}{54}% 
-\contentsline {subsubsection}{Qualitative evaluation}{55}% 
-\contentsline {section}{\numberline {5.3}Correlation between Part of Speech and Context within BERT}{65}% 
-\contentsline {subsection}{\numberline {5.3.1}Motivation}{65}% 
-\contentsline {subsection}{\numberline {5.3.2}Experiment setup}{65}% 
-\contentsline {subsection}{\numberline {5.3.3}Results}{65}% 
-\contentsline {chapter}{\numberline {6}Exploiting subspace organization of semantics of BERT embeddings}{67}% 
-\contentsline {subsection}{\numberline {6.0.1}BERnie PoS}{68}% 
-\contentsline {subsubsection}{Motivation}{68}% 
-\contentsline {subsubsection}{Experiment setup}{68}% 
-\contentsline {subsection}{\numberline {6.0.2}BERnie Meaning}{69}% 
-\contentsline {subsubsection}{Motivation}{69}% 
-\contentsline {subsubsection}{Experiment setup}{70}% 
-\contentsline {subsubsection}{Results}{72}% 
-\contentsline {subsection}{\numberline {6.0.3}BERnie Meaning with additional pre-training}{74}% 
+\contentsline {subsubsection}{Non-Deep Metric Learning}{43}% 
+\contentsline {subsubsection}{Deep Metric Learning}{44}% 
+\contentsline {section}{\numberline {4.3}Clustering Algorithms}{47}% 
+\contentsline {section}{\numberline {4.4}Applications of word vector}{47}% 
+\contentsline {subsubsection}{Word2Vec}{50}% 
+\contentsline {chapter}{\numberline {5}Analysing the current state of the art}{53}% 
+\contentsline {section}{\numberline {5.1}On the Linear Separability of meaning within sampled BERT vectors}{53}% 
+\contentsline {subsection}{\numberline {5.1.1}Motivation}{53}% 
+\contentsline {subsection}{\numberline {5.1.2}Experiment setup}{53}% 
+\contentsline {subsection}{\numberline {5.1.3}Results}{55}% 
+\contentsline {section}{\numberline {5.2}On the Clusterability of meaning within sampled BERT vectors}{57}% 
+\contentsline {subsection}{\numberline {5.2.1}Motivation}{57}% 
+\contentsline {subsection}{\numberline {5.2.2}Experiment setup}{57}% 
+\contentsline {subsection}{\numberline {5.2.3}Results}{60}% 
+\contentsline {subsubsection}{Qualitative evaluation}{61}% 
+\contentsline {section}{\numberline {5.3}Correlation between Part of Speech and Context within BERT}{71}% 
+\contentsline {subsection}{\numberline {5.3.1}Motivation}{71}% 
+\contentsline {subsection}{\numberline {5.3.2}Experiment setup}{71}% 
+\contentsline {subsection}{\numberline {5.3.3}Results}{71}% 
+\contentsline {chapter}{\numberline {6}Exploiting subspace organization of semantics of BERT embeddings}{73}% 
+\contentsline {subsection}{\numberline {6.0.1}BERnie PoS}{74}% 
 \contentsline {subsubsection}{Motivation}{74}% 
 \contentsline {subsubsection}{Experiment setup}{74}% 
-\contentsline {section}{\numberline {6.1}Compressing the non-lexical out}{75}% 
+\contentsline {subsection}{\numberline {6.0.2}BERnie Meaning}{75}% 
 \contentsline {subsubsection}{Motivation}{75}% 
-\contentsline {subsubsection}{Experiment setup}{75}% 
-\contentsline {subsubsection}{Results}{75}% 
-\contentsline {chapter}{\numberline {7}Conclusion}{77}% 
+\contentsline {subsubsection}{Experiment setup}{76}% 
+\contentsline {subsubsection}{Results}{78}% 
+\contentsline {subsection}{\numberline {6.0.3}BERnie Meaning with additional pre-training}{80}% 
+\contentsline {subsubsection}{Motivation}{80}% 
+\contentsline {subsubsection}{Experiment setup}{80}% 
+\contentsline {section}{\numberline {6.1}Compressing the non-lexical out}{81}% 
+\contentsline {subsubsection}{Motivation}{81}% 
+\contentsline {subsubsection}{Experiment setup}{81}% 
+\contentsline {subsubsection}{Results}{82}% 
+\contentsline {chapter}{\numberline {7}Conclusion}{83}% 

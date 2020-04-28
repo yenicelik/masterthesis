@@ -1210,10 +1210,169 @@ A translation model is learned which can not only translate between different do
 
 \section{Metric Learning and Disentanglement}
 
+Althogh difference metric spaces can be considered, we will be refering to Euclidean spaces for simplicity and unless otherwise stated.
+
 %TODO cite the proper definition of Metric learning
 Metric learning is the concept of learning a new space in which distances between data samples 
 
 %TODO mention the survey paper
+Distance metric learning approaches the problem of learning a similarity metric.
+
+We introduce two sets of data-sample pairs, $S$ and $D$:
+
+\begin{align}
+S &= \{ (x_i, x_j) : x_i and x_j should be similar\} \\
+D &= \{ (x_i, x_j) : x_i and x_j should be dissimilar\}
+\end{align}
+
+As is also mentioned in \cite{moutafis17}, the proximity relation can also be captured through \textit{relation triplets}
+
+\begin{align}
+R &= \{ (x_i, x_j, j_l) : x_i is more similar to x_j than x_l \} \\
+\end{align}
+
+The general notion of a distance in the euclidean space can be defined as 
+\begin{equation}
+d_{E}\left(\boldsymbol{x}_{\boldsymbol{i}}, \boldsymbol{x}_{\boldsymbol{j}}\right)=\sqrt{\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)^{\top}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)}
+\end{equation}
+or equivalents as the $l_2$-norm
+
+\begin{equation}
+d_{E}\left(\boldsymbol{x}_{i}, \boldsymbol{x}_{j}\right)=\left\|\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right\|_{2}
+\end{equation}
+
+Most distance learning techniques propose different ways of learning a Mahalanobis distance \cite{mahalanobis36}
+
+\begin{equation}
+d_{M}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)=\sqrt{\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)^{\top} \boldsymbol{A}^{-1}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)}
+\end{equation}
+
+Because calculating $d^2$ is computationally simpler, and $d^2$ maintains most mathematical properties as calculating $d$, often $d^2$ is used for downstream calculations (i.e. optimization, distance measure), rather than $d$.
+
+In the case of the Mahalanobis distance, $A$ is a linear operator such as a matrix.
+However, $A$ can also be generalized to a nonlinear operator by using the following formulation of the distance metric
+
+\begin{align}
+d_{M}^{2}\left(x_{i}-x_{j}\right) &=\left(x_{i}-x_{j}\right)^{\top} A^{-1}\left(x_{i}-x_{j}\right) \\
+d_{M}^{2}\left(x_{i}-x_{j}\right) &= (L\left(x_{i}-x_{j}\right))^{\top} (L\left(x_{i}-x_{j}\right)) \\
+d_{M}\left(x_{i}-x_{j}\right) &=\left\|L\left(x_{i}-x_{j}\right)\right\|_{2} \\
+d_{M}\left(x_{i}-x_{j}\right) &=\left\|Lx_{i}-Lx_{j}\right\|_{2}
+\end{align}
+
+where $A = L^T L$ and $L$ can now be any function $L \in \mathbf{R}^n -> \mathbf{R}^d$. 
+Whenever, $d < n$, the data is projected to a lower dimensional space $d$, which results in dimensionality reduction, which however breaks the convexity property if $L$ is not invertible.
+In comparison to a dimensionality reduction such as PCA, it has been obsereved that learning a similarity measure can sometimes be more effective \cite{chechik10}.
+
+Specifically, the data is projected into another  \
+%TODO specify this further
+The authors in \cite{moutafis17} argue that due to this property of measuring similarity between pairs, the metric learning models are able to generalize better across classes.
+
+\subsubsection{Non-Deep Metric Learning}
+
+Although we focus on deep metric learning during our experiments, due to the additional flexibility that deep neural networks provide, a good understanding of the underlying mechanisms is useful.
+
+\cite{suarez19} provides a good introduction into the literature of metric learning algorithms.
+
+We first define by a proper definition of a distance
+
+\newtheorem{mydef}{Definition}
+\begin{mydef}
+Let $X$ be a non empty set. A \textit{distance} or \textit{metric} over $X$ is a map $d: X \times X -> \mathbb{R}$ that satisfies the following properties:
+
+\begin{enumerate}
+\item Coincidence: $d(x, y) = 0 \iff x = y,$ for all $x, y \in X$
+\item Symmetry: $d(x, y) = d(y, x)$ for all $x, y \in X$
+\item Triangle inequality: $d(x, z) \leq d(x, y) + d(y, z) $ for all $x, y \in X$
+\end{enumerate}
+The ordered pair $(X, d)$ is called a metric space. 
+We will be assuming a euclidean metric space unless otherwise specified.
+\end{mydef}
+
+Because the coincidence property is not always important to us, but because word-embeddings are more interested in measuring relative distances, we will also consider mappings konwn as \textit{pseudoinstances} which relax the coincidence property to merely fulfill $d(x, x) = 0$.
+In the $d$ dimensional euclidean space, the set of \textit{Mahalanobis distances}, which is parametrized by positive semidefinite matrices are useful.
+
+Using above similarity, dissimilarity and relation triplets, an optimal distance $d$ from a set of distances $\mathcal{D}$ can be found
+
+\begin{equation}
+\min_{d \in \mathcal{D}} l (d, S, D, R)
+\end{equation}
+
+where $l$ is one of the loss metrics shown below.
+
+
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/metric_learning_example.png}
+  \caption{Taken from \cite{suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distancee, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducable with this dimension while still matching the classification accuracy (right).}
+  \label{fig:BERT_vanilla_pipeline}
+\end{figure}
+
+Although we will not go into too much detail, we will outline some algorithms that \cite{suarez19} mentions in their work.
+
+Jllif
+
+
+
+\subsubsection{Deep Metric Learning}
+
+Besides the non-deep proposed in the work above models , in\cite{kaya19} also introduces the deep generalization to these frameworks.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/metric_learning.png}
+  \caption{Taken from \cite{kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.}
+  \label{fig:muse_translation}
+\end{figure}
+
+The most prominent model is the siamese network \cite{bromley94}, \cite{chopra05}, \cite{hadsell06}, where the network consists of two identical sub-networks joined at their outputs. 
+We provide an example the architecture looks that looks as follows:
+
+\begin{verbatim}
+class Siamese:
+
+    def __init__(input_dim, latent_dim):
+        self.fully_connected = nn.Linear(input_dim, latent_dim)
+        
+    def forward(input1, input2):
+        latent_1 = self.fully_connected(input1)
+        latent_2 = self.fully_connected(input2)
+        
+        distance = torch.sqrt(
+            torch.sum((latent_1 - latent_2) * (latent_1 - latent_2))
+        )
+        
+        return distance, latent_1, latent_2
+\end{verbatim}
+
+Two samples are ingested by the neural network simultaneously.
+Both samples are passed through identical weights.
+Training occurs by minimizing the contrastive loss.
+
+\begin{equation}
+L_{\text {Contrastive }}=(Y) \frac{1}{2}\left(D_{W}\right)^{2}+(1-Y) \frac{1}{2}\left\{\max \left(0, m-D_{W}\right)\right\}^{2}
+\end{equation}
+
+where we follow the convention that $Y=1$ whenever the given sample-pairs are of the same class, and $Y=0$ whenever the given sample-pairs are from different classes, and $D_W$ is the output of the above neural network.
+Training can be highly unstable, and as such, the learning rate must be properly set, batches must have a balanced amount of both similar, and dissimilar pairs. 
+Finally, training can fail if a single batch includes multiple domains of data. \\
+
+For the triplet networks \cite{dor09} which makes use of relation triplets, including an input $X$, a point similar to the input $X^p$ and a point dissimilar to the input $X^n$, the following loss can be used for minimization.
+
+\begin{equation}
+L_{\text {Triplet}}=\max \left(0,\left\|G_{W}(X)-G_{W}\left(X^{p}\right)\right\|_{2}-\left\|G_{W}(X)-G_{W}\left(X^{n}\right)\right\|_{2}+\alpha\right)
+\end{equation} 
+
+where $\alpha$ forms a distance margin, similar to the length of the support vector in SVMs.
+
+As the authors suggest, using a triplet logic results in more stable training and bigger margins between similarity classes.
+Analogous logic goes for quadrupel loss etc., but it is unsure to what extend these extensions increase performance.
+This general idea can also be extended to angular distance (using cosine distances), and non-euclidean spaces, however, we will not go into further detail on this as this is not the focus of this work.
+
+Although we will not go into further detail, other loss functions include histogram loss \cite{ustinova16}, the structured loss \cite{song16} n-pair loss \cite{sohn16}, magnet loss \cite{rippel16}, angular loss \cite{wang17}, quadruple loss \cite{ni17}, clustering loss \cite{song17}, hierarchical triplet loss \cite{ge18} and the multi-similarity loss \cite{wang19c}.
+
+%TODO do back-projection to higher dimenisonal space.
+%TODO check performance on some bias prediction task (to see if sentiment is truly gone ..)
 
 \section{Clustering Algorithms}
 
@@ -2405,6 +2564,18 @@ WNLI & Accuracy & 0.4649 & 0.4225 & 0.4507 \\
 %TODO Need to run some more experiments ...
 \subsubsection{Motivation}
 \subsubsection{Experiment setup}
+
+%TODO Project back (using the inverse) to "segment out" the bias and sentiment for downstream tasks
+
+We conduct three experiments.
+
+First, we use a simple algorithm to what extent we can disentangle the semantic space within a single sampled word.
+
+The, we use a simple algorithm to what extent we can disentangle the semantic space within multiple sampled words, where we assume that the underlying semantics should again be mutually exclusive (i.e. the sampled words are not independent towards each other.
+
+Finally, we use a simple algorithm to what extent we can disentangle the semantic space within multiple sampled words, where we don't inject any assumptions upon the underlying semantics of the words, i.e. the words are independent towards each other.
+
+
 \subsubsection{Results}
 
 %TODO These experiments are not final yet ...
