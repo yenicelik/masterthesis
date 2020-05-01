@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     # Siamese network
     net = Siamese(dim, latent_dim)
-    # Instead of doing a random train test split,
+    # TODO Instead of doing a random train test split,
     # splt it by words (i.e. by word_idx)
     X1_train, X1_test, X2_train, X2_test, y_train, y_test, ygs_train, ygs_test = train_test_split(X1, X2, y, ygs, test_size=0.33, random_state=42)
 

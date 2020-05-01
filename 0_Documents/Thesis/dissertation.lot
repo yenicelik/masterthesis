@@ -1,15 +1,14 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Taken from \cite {wang19} Table to test captions and labels\relax }}{7}% 
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Taken from \cite {wang19} Table to test captions and labels\relax }}{7}% 
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {was}.\relax }}{55}% 
+\contentsline {table}{\numberline {4.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {is}.\relax }}{56}% 
+\contentsline {table}{\numberline {4.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {one}.\relax }}{56}% 
+\contentsline {table}{\numberline {4.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{56}% 
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {was}.\relax }}{55}% 
-\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {is}.\relax }}{56}% 
-\contentsline {table}{\numberline {5.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {one}.\relax }}{56}% 
-\contentsline {table}{\numberline {5.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{56}% 
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces asj\relax }}{79}% 
-\contentsline {table}{\numberline {6.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{80}% 
-\contentsline {table}{\numberline {6.3}{\ignorespaces Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.\relax }}{81}% 
+\contentsline {table}{\numberline {5.1}{\ignorespaces asj\relax }}{79}% 
+\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{80}% 
+\contentsline {table}{\numberline {5.3}{\ignorespaces Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.\relax }}{81}% 
 \addvspace {10\p@ }

@@ -1,66 +1,75 @@
 This is BibTeX, Version 0.99d (TeX Live 2019)
 Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: dissertation.aux
-The style file: unsrt.bst
+The style file: plain.bst
 Database file #1: dissertation.bib
-Repeated entry---line 466 of file dissertation.bib
- : @article{peters17
- :                  ,
-I'm skipping whatever remains of this entry
-Warning--empty journal in kudugunta18
+Warning--I didn't find a database entry for "dor09"
+Warning--to sort, need author or key in spacyb
+Warning--empty journal in alvarez18
+Warning--empty journal in bromley94
+Warning--empty journal in chen19
+Warning--empty journal in chopra05
 Warning--empty journal in conneau17
+Warning--empty journal in francis64
+Warning--empty booktitle in ge18
+Warning--empty journal in hadsell06
+Warning--empty journal in hu19
+Warning--empty journal in kudugunta18
+Warning--empty booktitle in Liu18
+Warning--empty journal in ma19
+Warning--empty journal in may19
+Warning--empty booktitle in miller94
+Warning--empty booktitle in ni17
+Warning--empty journal in peters18
+Warning--empty booktitle in Rei17
+Warning--empty booktitle in rippel16
 Warning--empty journal in sanh19
 Warning--empty journal in shen19
-Warning--empty booktitle in Liu18
-Warning--empty booktitle in Rei17
-Warning--empty journal in francis64
-Warning--empty booktitle in miller94
-Warning--empty journal in peters18
-Warning--empty journal in may19
-Warning--empty journal in hu19
+Warning--empty booktitle in sohn16
+Warning--empty booktitle in song17
+Warning--empty booktitle in suarez19
+Warning--empty booktitle in wang17
+Warning--empty booktitle in wang19c
 Warning--empty journal in zhu18
-Warning--empty journal in chen19
-Warning--empty journal in ma19
-Warning--empty journal in alvarez18
-You've used 40 entries,
-            1791 wiz_defined-function locations,
-            609 strings with 9332 characters,
-and the built_in function-call counts, 8089 in all, are:
-= -- 610
-> -- 538
+You've used 58 entries,
+            2118 wiz_defined-function locations,
+            732 strings with 12402 characters,
+and the built_in function-call counts, 18396 in all, are:
+= -- 1647
+> -- 1237
 < -- 6
-+ -- 194
-- -- 154
-* -- 445
-:= -- 1387
-add.period$ -- 120
-call.type$ -- 40
-change.case$ -- 40
++ -- 491
+- -- 428
+* -- 1201
+:= -- 3268
+add.period$ -- 174
+call.type$ -- 58
+change.case$ -- 388
 chr.to.int$ -- 0
-cite$ -- 55
-duplicate$ -- 398
-empty$ -- 692
-format.name$ -- 154
-if$ -- 1772
+cite$ -- 85
+duplicate$ -- 682
+empty$ -- 1192
+format.name$ -- 428
+if$ -- 3678
 int.to.chr$ -- 0
-int.to.str$ -- 40
-missing$ -- 38
-newline$ -- 203
-num.names$ -- 39
-pop$ -- 157
+int.to.str$ -- 58
+missing$ -- 56
+newline$ -- 293
+num.names$ -- 114
+pop$ -- 473
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 330
 quote$ -- 0
-skip$ -- 216
+skip$ -- 502
 stack$ -- 0
-substring$ -- 185
-swap$ -- 94
+substring$ -- 480
+swap$ -- 109
 text.length$ -- 6
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
-warning$ -- 15
-while$ -- 52
-width$ -- 42
-write$ -- 396
-(There was 1 error message)
+type$ -- 232
+warning$ -- 27
+while$ -- 127
+width$ -- 60
+write$ -- 565
+(There were 28 warnings)

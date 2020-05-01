@@ -11,7 +11,5 @@ Title: Understanding and Exploiting subspace organization in contextual word emb
 		- Chinese whispers
 	- Metric Learning & Disentanglement
 		- pyDML algorithms (from the survey)
-		- siamese networks
-		- siamese triplet networks ##
 Exploiting subspace organization of semantics of BERT embeddings
 	- Introducing interpretable semantics embedding vectors for BERT
