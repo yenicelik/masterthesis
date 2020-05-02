@@ -120,58 +120,41 @@ We also show that linguistic features such as sentiment are much more strongly c
 %\chapter{Background} 
 \chapter{Background} 
 
-TODO: Take some more from here
+% TODO: Take some more from here
 %TODO http://da.inf.ethz.ch/teaching/2019/CIL/lecture/CIL2019-05-Word-Embeddings.pdf
 
 \cite{harris54} was one of the early works that argue that that there is inherent structure in language, and that this structure can be formalized.
 They also mention that the relation between the linguistic representation in terms of sounds and tokens are related to the meaning that the representation entail. 
-This representation is often captured in form of a word token $w$, such as \textit{bank} or \textit{cat}.
+This representation is often captured in form of a word token $w$, such as \Verb#bank# or \Verb#cat#.
 However, despite the obvious relationship, the distinction between distributional structure of the language and semantics is not a formal one. 
+For the above case, the token \Verb#bank# may have different meanings $m_\text{bank-financial instution}$, $m_\text{bank-sea bank}$, whereas the token \Verb#cat# will have a more straight-forward semantic interpretation of $m_\text{cat-animal}$.
 \cite{harris54} argues that there is a parallel semantic structure, and argues that this is not a one-to-one relation between vocabulary and different semantic classes.
 Generally, one of the man views of this paper is that the meaning of a word is defined by the context it carries.
-The formalization of language is not a trivial problem to consider, as this also touches base on a philosophical level \cite{hegel17}, \cite{wittgenstein53}, asking the question on the nature of the relation between though and (language)-representation.
+The formalization of language is not a trivial problem to consider, as this also touches base on a philosophical level \cite{hegel17}, \cite{wittgenstein53}, posing the question on the nature of the relation between though and (language)-representation.
 
 \section{Linguistic Features}
-Polysemy:
-a word may have multiple meanings.
-in a cross-lingual embedding space, this feeling is amplified.
-there's some work in multi-sense embedding.
-this should enable to capture more fine-grained embeddings embeddings.
 
-Over the past decades, linguists have tried to inject structure into language. 
-Similar to features in machine learning, there are properties in language. 
 There is a vast number of linguistic features, going from phonological features, morphological and syntactic features to semantic features.
-To keep this analysis concise, we will give a short introduction of what features that are relevant for the topic of finding suitable word embeddings.
+This is not an exhaustive summary, but focusing on the properties of languages relevant to this work. \\
 
-\paragraph{Lexical features} include word classes, such as nouns, verbs and adjectives, which follow certain grammatical rules in western languages.
-Whenever we are looking to parse for such lexical features, we use the python spaCy package \cite{spacy}.
-As defined in \cite{spacyb}, some of the linguistic features that are available to us include but are not limited to
+We will first look at language, specifically at properties that are manifested within languages, called linguistic features.
+These make a formal analysis of our topic easier.
 
-\begin{enumerate}
-\item adjectives \textit{ADJ}
-\item adposition \textit{ADP}
-\item adverbs \textit{ADV}
-\item auxiliary \textit{AUX}
-\item conjunction \textit{CONJ}
-\item coordinating conjunction \textit{CCONJ}
-\item determiner \textit{DET}
-\item interjection noun \textit{INTJ}
-\item noun \textit{NOU}
-\item numeral \textit{NUM}
-\item particle \textit{PART}
-\item pronoun\textit{PRON}
-\item proper noun \textit{PROPN}
-\item punctuation \textit{PUNCT}
-\item subordinating conjunction \textit{SCONJ}
-\item symbol \textit{SYM}
-\item verb \textit{VERB}
-\end{enumerate}
+%TODO perhaps talk about word-tokens
+%TODO perhaps talk about character n-grams
 
-These features can alter as we look at different languages
-%TODO turn this into a multi-column table
+\paragraph{Polysemy} describes the phenomenon that a word token $w$ may have multiple meanings.
+For the above example the number of meanings that \Verb#cat# can entail is $ | M_\text{cat} | = | \{ m_\text{cat-animal} \} |  = 1$, whereas the number of meanings that \Verb#bank# can entail is $ | M_\text{bank} | = | \{ m_\text{bank-financial instution},  m_\text{bank-sea bank}\} |  = 2$.
+These are just examples, but the true numbers vary depending on the granularity chosen by humans (which again is a non-trivial question of when one concept stops, and another distinct concept starts) and the language viewed.
+This definition and investigation is often left to linguists to decide. \\
 
-Other linguistic phenomena are well described in \cite{wang19}, which is one of the benchmarking resources we are using (described below).
-\cite{wang19} records the following linguistic phenomena.
+\paragraph{Part of Speech \textit{PoS}} implies the category of syntactic function of a word.
+These categories include nouns, verbs and adjectives, which follow certain grammatical rules.
+There is a number of such classes, including adjectives \textit{ADJ}, adposition \textit{ADP}, adverbs \textit{ADV}, auxiliary \textit{AUX}, conjunction \textit{CONJ}, coordinating conjunction \textit{CCONJ}, determiner \textit{DET}, interjection noun \textit{INTJ}, noun \textit{NOU}, numeral \textit{NUM}, particle \textit{PART}, pronoun\textit{PRON}, proper noun \textit{PROPN}, punctuation \textit{PUNCT}, subordinating conjunction \textit{SCONJ}, symbol \textit{SYM}, verb \textit{VERB}, as is defined by \cite{spacyb}.
+In this work, we will be using the the spaCy python package  \cite{spacy} whenever we need to apply computation on word-tokens to identify the underlying part of speech class.
+Within this work, we focus on intuitively interpretable aspects, and thus limit our work on nouns, adjectives, adverbs and verbs.
+
+\paragraph{Other linguistic features} are recorded in \cite{wang19} and include
 
 \begin{table}[h!]
 \centering
@@ -181,13 +164,14 @@ Other linguistic phenomena are well described in \cite{wang19}, which is one of 
  \hline
  Lexical Semantics & Lexical Entailment, Morphological Negation, Factivity, \\
 &  Symmetry/Collectivity, Redundancy, Named Entities, \\
-& Quantifiers, Core Predicate Argument Structure \& Core Arguments, Prepositional \\ 
-Phrases, Ellipsis \/ Implicits, \\
+& Quantifiers \\ 
+Predicate Argument Structure & Core Arguments, Prepositional \\ & Phrases, Ellipsis \/ Implicits, \\
 & Anaphora/Coreference Active/Passive, Nominalization, \\
 & Genitives/Partitives, Datives, Relative Clauses, \\
 & Coordination Scope, Intersectivity, Restrictivity \\
 Logic & Negation, Double Negation, Intervals/Numbers, \\
-& Conjunction, Disjunction, Conditionals, Universal, Existential Temporal, Upward Monotone \\
+& Conjunction, Disjunction, Conditionals, Universal, \\
+& Existential Temporal, Upward Monotone \\
 & Downward Monotone, Non-Monotone \\
 Knowledge & Common Sense, World Knowledge \\ [1ex] 
 \hline
@@ -195,6 +179,71 @@ Knowledge & Common Sense, World Knowledge \\ [1ex]
 \caption{Taken from \cite{wang19} Table to test captions and labels}
 \label{table:1}
 \end{table}
+
+
+\subsection{Tokens and n-grams}
+
+The most trivial basic unit of language is considered to be a token $w$.
+In the above sections, we have implicitly made the assumption that this token $w$ is always a word. 
+However, there is a variety of ways that sentences can be encoded into a sequence of tokens.
+In a sentence such as
+
+\begin{verbatim}
+The man travelled down the road.
+\end{verbatim}\label{sentence:man_travelled}
+
+this would constitute the basic units of computation to be the set of 
+
+$$
+\{ \text{the}, \text{man}, \text{travelled}, \text{down}, \text{road} \}
+$$
+
+The way a sentence is split up into indiviudal basic units of language is referred to as \textit{tokenization}.
+As such, the sentence would be tokenized into the sequence (assuming lower-casing is part of the tokenization)
+
+$$
+[the, man, travelled, down, the, road]
+$$
+
+It is important to note that there are also other ways to interpret language tokens. 
+I will provide insights on different formats, as the language models that we will be using use other tokenization methods.
+
+\paragraph{Character}s can be considered as another base unit of language.
+For the sentence \eqref{sentence:man_travelled}, the set of basic units would correspond to the latin alphabet plus whitespace $a - z" "$ (" " denotes whitespace), and the above sentence would be tokenized into the sequence 
+
+$$
+[t, h e, " ", m, a, n, " ", t, r, a, v, e, l, l, e, d, " ", d, o, w, n, " ", t, h, e, " ", r, o, a, d]
+$$
+
+Choosing characters as the basic token levels has shown considerable success and popularity in language modelling \cite{sutskever11} and translation \cite{lee17}.
+
+\paragraph{Byte pair encodings} \cite{gage94} are another popular mechanism to tokenize sentences, and also shows success in the case of language modelling and translation \cite{sennrich16}. 
+Here, the most frequent pair of bytes in a sequence is replaced with the most frequent pair of bytes in a sequence with a single, unused byte.
+
+Depending on what corpus this tokenizer is trained on, the above sentence could be tokenized into the following sequence
+
+$$
+[the., " ", ma., n., " ", t., rav., e., lled., " ", do., w., n., " ", the., " ", r., oa., d.]
+$$
+
+The tokenization of the sentence above implies that the corpus that the tokenizer was trained on includes as a majority of word-occurences the sequence of characters \textit{the}, as well as \textit{lled} and \textit{do}. 
+The $.$ (dot) at the end of each character denotes the end of the byte-pair.
+The main idea behind this tokenization is to construct a vocabulary of frequent subwords.
+
+\paragraph{WordPiece tokenizer} \cite{wu16} follows a similar idea as the byte-pair encoding, and constructs a vocabulary given a corpus by maximizing the entropy.
+The main difference to the byte-pair encoding is that the vocabulary naturally includes a set of the most commonly appearing words in the respective language, and is then aggregated by introducing additional subword units to cover unseen character sequences.
+
+The tokenization of \eqref{sentence:man_travelled} would then look as follows (depending on which implementation and version of the WordPiece tokenizer is used)
+
+$$
+[the, man, travel, \#\#led, down., the, ro,  \#\#ad.]
+$$
+
+where we can see that words such as \Verb#the# and \Verb#down# are not further divided into tokens, and that suffixes such as \Verb!##led! are introduced, because these are rather unregular patterns, which however allow for better generalization.
+
+
+
+
 
 
 \section{Word Embeddings}
@@ -205,21 +254,18 @@ Because in the last few decades, computing power has gradually increased, and po
 In general, we want to find a mapping 
 
 \begin{equation}
-w^t \mapsto (x_w, b_w) \in \mathcal{X}^{d + 1}
+w \mapsto (x_w, b_w) \in \mathcal{X}^{d + 1}
 \end{equation}{\label{map:embedding_mapping}}
 
-where $w^t$ is a token representation from a vocabulary $w^t \in V$ and where this token representation is transformed into a $d$-dimensional vector representation $x_w$, and a bias-term $b_w$ that is specific to the token $w^t$.
-Whenever we will talk about \textit{word-vectors}, \textit{(word)-embeddings}, or \textit{feature-vectors}, we will refer to the image of the above map. 
+where $w$ is a token representation from a vocabulary $w \in V$ and where this token representation is transformed into a $d+1$-dimensional vector representation $x_w$, and a bias-term $b_w$ that is specific to the token $w$.
+Whenever we talk about \textit{word-vectors}, \textit{(word)-embeddings}, or \textit{feature-vectors}, we will refer to the image of the above map. 
 For convenience and unless stated otherwise, we will assume that $x_w$ absorbs the bias term $b_w$ as an additional vector-element.
-Also, for simplicity and unless otherwise stated, we will use the euclidean real-valued vector-space $mathbb{R}^{d+1}$ to described the resulting embedding vectors.
-Please note, however, that the choice of the embedding space $\mathcal{X}$ is not fixed in general, and as such, work in other spaces have also been conducted. 
-%TODO Cite Gerry
+Also, for simplicity and unless otherwise stated, we will use the euclidean real-valued vector-space $\mathbb{R}^{d+1}$ to described the resulting embedding vectors.
+Please note, however, that the choice of the embedding space $\mathcal{X}$ is not fixed in general, and as such, work in other spaces such as hyperbolic spaces  \cite{ganea18} have also been conducted. 
 
-
-\paragraph{Distance} Now our goal is to build an embedding space where the relationship between words are meaningful.
-Specifically, we want to incorporate the notion of \textit{meaning} into these word-embeddings, which should follow following properties.
+\paragraph{Distance:} Our goal is to build an embedding space where the distance between word-embeddings correspond to the relation between words (i.e. the semantics entailed by their tokens).
 Formally, we introduce the concept of \textit{distance} $d : \mathcal{X}  \times \mathcal{X} \mapsto [ 0, \inf )$, which should capture the relation between different elements. 
-For a set of elements $x, y, z \in \mathcal{X}$, following properties must hold for our distance metric to be a valid on:
+For a set of elements $x, y, z \in \mathcal{X}$, following properties must hold for a mapping to be a valid distance metric:
 
 \begin{enumerate}
 \item $d(x, y) \geq 0$ (non-negativity)
@@ -232,7 +278,7 @@ For convenience, whenever I input $a, b, c$ into the distance function $d$, the 
 Also, please notice that I left out the notion of symmetry for distance measures.
 
 \paragraph{Learning a distance}
-Often in machine learning, one wants to maximize a certain probability distribution given some data $\mathbf{X}$.
+A popular paradigm in machine learning is to maximize a certain probability distribution given some data $\mathbf{X}$.
 In the context of word vectors, we want to maximize the probability that $w$ occurs in the context window of $w \prime$ through some parameters $\theta$.
 Implicitly, this corresponds to minimizing the distance between $w$ and $w^{\prime}$, while keeping the distance between $w$ and all other words constant. 
 We call $w \prime$ a \textit{context word} for $w$.
@@ -241,67 +287,66 @@ We call $w \prime$ a \textit{context word} for $w$.
 p \left(w | w^{\prime}\right)
 \end{equation}
 
-and 
+and in the work we focus at, the probabilistic maximization problem corresponds to linear minimization problem
 
 \begin{equation}
 \forall w, w^{\prime} : \hspace{20pt} \text{max } p \left(w | w^{\prime}\right) \iff \text{min } d(w | w^{\prime})
 \end{equation}
 
-\paragraph{Going from the distributional structure of sentences to learning distances between words.} One of the early formalizations of representing the distributional structure of words through was expressed in \cite{bengio03}, which argues that a sequential statistical model can be constructed to estimate this true posterior.  
+Please note that we do not generalize to formalizing a dual-relationship between the two problem-statements, however.
+
+\paragraph{Exploiting the distributional structure of language:} Our goal is to learn distance between words by exploiting the distributional structure of a set of sentences, which make up a \textit{corpus}. 
+One of the early formalizations of representing the distributional structure of words through was expressed in \cite{bengio03}, which argues that a sequential statistical model can be constructed to estimate this true posterior.  
 In it's most naive form, this would imply that we can estimate the probability of a word $w^{(t)}$ after words $w^{(t-1)}, \ldots, w^{(1)}$ as
 
-\begin{align}
-p(\mathbf{w}) &= p(w^{(t)}, \ldots, w^{(1)}) \\
-&= p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \right)
-\end{align}{\label{eq:naive_sequential_probability}}
+\begin{equation}
+p(\mathbf{w}) = \prod_{t=1}^T p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \right)
+\end{equation}{\label{eq:naive_sequential_probability}}
 
 %TODO check the underlying equation again!!
 
 where $\mathbf{w} = w^{(1)}, \dots, w^{(T)} $ is the sequence of words, $p(\mathbf{w})$ the probability of this sentence occurring.
-
-Because inference for the above equation would have been computationally infeasible, the notion of \textit{n-grams} was introduced to estimate this conditional probability, following a markov assumption.
-
-\begin{align}
-p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \right) \approx p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(t - n + 1)} \right)
-\end{align}
-
-Often, the above equation will be simplified even further using the independence of words assumption
-
-However, because we are only interested in the distance between two words at a time (and not the full seqence) \cite{bengio03} simplify the above function using the assumption of marginalized independence of words amongst each other w.r.t. a target word $(t)$ (we can do this because we marginalize over all possible combinations of target words and context words).
+This corresponds to a simple autoregressive model.
+One could for example use (hidden) markov models to model this relation, as we could fix the \textit{context size} $n$ (in this case, only looking at previously occurring words) and include the markov assumption of
 
 \begin{equation}
-p(\mathbf{w})=\prod_{t=1}^{T} \prod_{\triangle < t} p\left( w^{(t)} | w^{(t -\Delta)}\right)
+p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \right) = p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(t - n + 1)} \right)
+\end{equation}{\label{eq:naive_sequential_probability_markovian}}
+
+Fixing the context window to $n$ words for each computation (i.e. convolution), introduces the concept of \textit{n-grams}. 
+\textit{n-grams} can also occur in relation to character, where $n$ characters are fed in to some model at a certain timestep $t$.
+
+Next to a context which only consists of the \textit{previous} $n$ words, one can also regard a context which includes both the previous \textit{and subsequent} $R$ words. 
+
+\begin{equation}
+p(\mathbf{w})=\prod_{t=1}^{T} \prod_{\triangle \in \mathcal{I} } p\left( w^{(t)} | w^{(t +\Delta)}\right)
 \end{equation}{\label{eq:naive_sequential_probability}}
 
+whose probability we wish to estimate (and maximize if this is in the given training dataset), $\mathcal{I}=\{-R, \ldots,-1,1, \ldots, R\}$ is the context window. 
 
- whose probability we wish to estimate (and maximize if this is in the given training dataset), $\mathcal{I}=\{-R, \ldots,-1,1, \ldots, R\}$ is the so-called \textit{context window} which includes all the words that $R$ index units to the left, and $R$ index units to the right of the word of interest $w^(t)$.
-
-\paragraph{However, we do not need to only look at only the previous words}.
-One can consider the full neighbourhood of a word.
-If we describe this by a loss-measure we would like to minimize, this would result in 
+\paragraph{Loss Objective} The above function is a probability estimate of the true underlying distribution.
+However, given that computational power is limited, we are usually interested in learning a parametrized model which captures this underlying distribution.
+One way to learn this parametrized model is to minimize a loss by backpropagating the gradients of the parameters.
+In that case, the loss function would look as follows.
 
 %TODO I guess this is the skip-gram approach, the bag-of-words is again a different one
 
 \begin{equation}
-\mathcal{L}(\theta ; \mathbf{w})=\prod_{t=1}^{T} \prod_{\triangle \in \mathcal{I}} p_{\theta}\left(w^{(t)} | w^{(t +\Delta)}\right)
+\mathcal{L}(\theta ; \mathbf{w})= - \prod_{t=1}^{T} \prod_{\triangle \in \mathcal{I}} p_{\theta}\left(w^{(t)} | w^{(t +\Delta)}\right)
 \end{equation}{\label{eq:basic_equation_log_maximization}}
 
-where $\mathbf{w} = w^{(1)}, \dots, w^{(T)} $ is the sequence of words whose probability we wish to estimate (and maximize if this is in the given training dataset), $\mathcal{I}=\{-R, \ldots,-1,1, \ldots, R\}$ is the so-called \textit{context window} which includes all the words that $R$ index units to the left, and $R$ index units to the right of the word of interest $w^(t)$.
+By minimizing the mean loss over all sentences in a big-enough corpus $\mathcal{C}$, we can arrive at a reliable estimator model with parameters $\theta$, given the model is complex enough and generalizes well.
 
-%TODO rephrase the structuring of the n-grams. I don't like how it is introduced here
+Specifically, if $p_\theta$ is a parametric probability density function, one can then optimize for the most optimal $\hat{\theta} = \text{argmin}_\theta \mathcal{L}(\theta ; \mathbf{w})$ using a maximum likelihood estimation approach.
+One would usually minimize the log-loss as this allows for thee gradients to be more easily computed and avoids numerical issues.
 
-If $p_\theta$ is a parametric function, one can then optimize for the most optimal $\hat{\theta} = \text{argmax}_\theta \mathcal{L}(\theta ; \mathbf{w})$ using a maximum likelihood estimation approach.
+%TODO is this only training, or does this also have other implications..?
+Intuitively the above models flow the idea expressed by \cite{harris54} very well, speaking that the meaning of a word is captured by its neighborhood.
+However, the above equations follow a \textit{continuous bag of words CBOW} approach, which aims at predicting a target word $w^t$ given some context words $w^{\prime}$.
+However, it is also possible to follow a \textit{skip-gram SG} approach, where the aim is to predict context words $w^{\prime}$ given a target word $w^t$.
+Both methods result in the same type of model, which is merely trained differently.
+The skip-gram model is found to work better with rare words, whereas the CBOW model seems to have slightly better accuracy on words that are occuring more frequently.
 
-In general, one does not necessarily need to interpret $\mathbf{w}$ as a sequence of word-tokens, but can also interpret $w^{(1)}, \ldots, w^{(T)}$ as \textit{n-grams}, which are triplets of n-characters forming a token-unit.
-Generally, the definition of a token is open for interpretation. 
-We will generally assume that a single word is a token unless otherwise stated.
-%TODO Cite some Token Paper!!
-
-Intuitively the above models fllw the idea expressed by \cite{harris54} very well, speaking that the meaning of a word is captured by its neighborhood.
-However, the above equations follow a \textit{continuous bag of words } (CBOW) approach.
-A continuous-bag-of-words approach is an approach where we want to predict a target word $w^t$ given some context words $w^{\prime}$.
-However, it is also possible to follow a \textit{skip-gram} approach.
-Here, we want to predict context words $w^{\prime}$ given a target word $w^t$.
 
 \begin{figure}[h]
 	\center
@@ -315,17 +360,16 @@ Using a skip-gram approach, \eqref{eq:basic_equation_log_maximization} for examp
 \mathcal{L}(\theta ; \mathbf{w})=\prod_{t=1}^{T} \prod_{\triangle \in \mathcal{I}} p_{\theta}\left(w^{(t +\Delta)} | w^{(t)}\right)
 \end{equation}{\label{eq:basic_equation_log_maximization_skipgram}}
 
-
-The question now is, how do we parametrize the distribution $p_\theta(w, w^{\prime})$, as well as the word feature vectors $x_w$ and $b_w$. 
-The following will show a few methods of how this can be achieved.
-In the following methods shown, we will aim to provide a loss function that we try to minimize, and interesting properties for each method.
-However, we will not go into too much details, as to how the loss function is optimized, as almost all of these methods can be solved using gradient-based methods.
+Although we have mentioned that the probability density distribution $p$ is often modelled through a parametrized function (due to the sheer amount of data within corpora), we have not presented methods on how this parametrization can be achieved.
+In the following section, we will show how vectors for $x_w$ and $b_w$ can be found, and other ways to parametrize the probability density function $p$.
+We will not go into too much detail as to how these models are trained, as all of them can be trained by applying a gradient-based optimization on the loss term.
 
 \newpage
 \subsection{Static Word Embeddings}
 
-Here we will talk about word-embeddings where each word-token only has a single $x_w$. 
-Specifically, the mapping \eqref{map:embedding_mapping} is not a probabilistic function with an implicit random factor, but rather a deterministic one.
+Here we will talk about word-embeddings where each word-token only has a single embedding $x_w$, i.e. there is a bijection between word-tokens and word-embeddings. 
+Specifically, the mapping \eqref{map:embedding_mapping} is not a probabilistic function with a latent random factor, but rather a deterministic one.
+We will go over the basics of static word embeddings only, as the focus of this work lays in context embeddings which are presented in the subsequent section.
 
 \subsubsection{Basic Model}
 
@@ -348,17 +392,24 @@ where $Z_{\theta}\left(w^{\prime}\right):=\sum_{v \in \mathcal{V}} \exp \left[\l
 %TODO CIL lecture slides
 % http://da.inf.ethz.ch/teaching/2019/CIL/lecture/CIL2019-05-Word-Embeddings.pdf
 
+Because we have $\theta = \forall w \in \mathcal{V} : \{ x_w, b_w \}$, we can use a gradient-based loss-minimizing method which minimizes the cost function for $\theta$, for a word $w$ and all their possible context words $w^{\prime} = w^{(t+\Delta)}$ within a context size $R$.
+
+$$
+\mathcal{L}(\theta ; \mathbf{w})=\sum_{t=1}^{T} \sum_{\Delta \in \mathcal{I}} \log p_{\theta}\left(w^{(t+\Delta)} | w^{(t)}\right)
+$$.
+
+This model basic model comes with certain drawbacks. 
+Amongst others the distance would be minimized if all word-embeddings would collapse onto a single point. 
+%TODO is this true?
+There is no term that forces unrelated words to move away from each other, a property that we are interested in as unrelated words should form embedding vectors that are far from each other.
+
 
 \subsubsection{Word2Vec}
 
 %TODO look at this more closely again
-
-During training, the above basic model comes with certain drawbacks. The distance would be minimized if all word-embeddings would collapse onto a single point. 
-Also, there is no term that forces unrelated words to move away from each other, a property that we are interested in as unrelated words should form embedding vectors that are far from each other.
-
-One of the most prominent example of word vectors manifests itself in the work of \cite{mikolov13} and \cite{mikolov13b}.
+One of the most prominent of word vector models is proposed by \cite{mikolov13, mikolov13b}.
 Here, a neural network with a single embedding layer can be trained to transform one-hot-vectors $\in \{ 0, 1 \}^{| \mathcal{V} |}$ which represents a word $w$ in vocabulary $\mathcal{V}$
-into a latent vector representation $w \in \mathbf{R}^{d + 1}$ using both a continuous bag of word and also a continuous skip-gram approach.
+into a latent vector representation $x_w \in \mathbf{R}^{d + 1}$ using a neural network - which boils down to a linear embedding matrix - $W$ both a continuous bag of word and also a continuous skip-gram approach.
 The skip-gram approach is preferred in practice.
 
 Specifically, the loss-function that is optimized looks as follows
@@ -369,8 +420,8 @@ Specifically, the loss-function that is optimized looks as follows
 & -\log \sum_{v \in \mathcal{V}} \exp \left[\left\langle\mathbf{x}_{v}, \mathbf{x}_{w^{(t)}}\right\rangle+b_{v} \right] 
 \end{align}
 
-As one can see, the loss function takes in the bilinear loss from the basic model, and complements this by adding a term, such that random samples are not put next to each other.
-This principle is often referred to as \textit{negative sampling}.
+As one can see, the loss function takes as input the bilinear loss from the basic model, and complements this by adding a regularizing term , such that random samples are not put next to each other.
+This idea is referred to as \textit{negative sampling}.
 
 \begin{figure}[h]
 	\center
@@ -381,12 +432,21 @@ This principle is often referred to as \textit{negative sampling}.
 
 %TODO include difference between target vocabulary V and context vocabulary C
 
+Backpropagation is used to optimize over the networks weights. 
+Also, highly frequent words are optionally subsampled and their frequency is re-weighted using the formula $$
+P\left(w_{i}\right)=1-\sqrt{\frac{t}{f\left(w_{i}\right)}}
+$$
+
+where $f( \dot )$ is the function that returns the frequency of a word $w_i$.
+
 \subsubsection{GloVe}
 
-For the global vectors for word representation (GloVe) \cite{pennington14}, the authors follow a more straight-forward matrix factorization approach.
+For the global vectors for word representation \textit{GloVe} \cite{pennington14}, the authors follow a more straight-forward matrix factorization approach.
 
 First, a global co-occurence matrix is created $\mathbf{N} = (n_{ij}) \in \mathbb{N}^{|\mathcal{V}| \dot |\mathcal{C}|}$ where each entry $n_{ij}$ is determined by the number of occurrences of word $w_i \in \mathcal{V}$ in context $w_j \in \mathcal{C}$.
 Given that the vocabulary size can exceed multiple thousand items, this practically results in a sparse matrix.
+
+%TODO do i have to cite work i take from lecture slides?
 
 \begin{align}
 \mathcal{H}(\theta ; \mathbf{N}) &=
@@ -394,7 +454,7 @@ Given that the vocabulary size can exceed multiple thousand items, this practica
 &= \sum_{i, j} f\left(n_{i j}\right)(\log n_{i j} - \left\langle x_i, y_j \right\rangle )^{2} \\
 \end{align}
 
-where $f(n_{ij})$ is the weighting function which assigns a weight for each entry in the co-occurence matrix. 
+where $f(n_{ij})$ is the weighting function which assigns a weight for each entry in the co-occurence matrix based on the co-occurence of words $w_i$ and $w_j$. 
 In the second line, we also again use a bilinear probability density model $\tilde{p}_{\theta}\left(w_{i} | w_{j}\right)=\exp \left[\left\langle\mathbf{x}_{i}, \mathbf{y}_{j}\right\rangle+b_{i}+c_{j}\right]$.
 The constants $b_i, c_j$ are left out and are assumed to be absorbed in the embedding vectors.
 
@@ -405,37 +465,48 @@ f(n) = \min \left\lbrace 1, \left(\frac{n}{n_{\max}}\right)^{\alpha} \right\rbra
 $$
 
 with $\alpha \in (0, 1]$.
-The motivation behind this is that frequent words do not receive a weighting which is "too high" (there is a cutoff at some point) and small counts are considered noise and slowly cancelled out.
+The motivation behind this is that frequent words do not receive a word-frequency which is considered too high (there is a cutoff at some point) and small counts are considered noise and slowly cancelled out.
 
+Further extensions which include other basic units of include for example the fastText embeddings \cite{bojanowski17}.
 
 \subsubsection{Gaussian Embeddings}
 
-Gaussian Embeddings have been first proposed in the context of words, although prior work has been adapted in embedding matrix-rows into a mean and standard deviation \cite{vilnis14} 
+Gaussian embeddings is the only type of distribution representation that we cover here. 
+\cite{bengio06} already used distributional representations to embed concepts from natural language processing into embeddings.
 
-It is a continuous probabilistic relaxation of the otherwise common discrete point vectors.
-Each word is represented by a Gaussian distribution in high-dimensional space, with the aim to better capture uncertainty and a representation and it's relationships.
-It can also express asymmetric relations more naturally than dot-products or cosine similarity, and enables for better-parametrized rule between decision boundaries.
+\cite{vilnis14} considers creating a Gaussian representation for each word token, resulting in Gaussian word embeddings.
+This can be interpreted as a probabilistic and continuous extension to the otherwise common discrete point vectors.
+Each word is represented by a Gaussian distribution in high-dimensional space, with the aim to better capture uncertainty when doing algebraic operations on the word-embeddings, resulting in a model which expresses the relation between words and their representations better.
+Because the probabilistic framework is more flexible, it can also express asymmetric relations more naturally than dot-products or cosine similarities do.  
+Specifically, the newly emerging embedding for word $w$ can be modelled by the tuple 
 
-Training is done using an energy function which is incorporated within a loss function that we try to minimize. 
-The energy function describes similarity between two items.
-The authors propose the following energy functions to derive a Gaussian word-embedding.
+$$
+\theta_w = ( \mu_w,  \Sigma_w)
+$$
+
+and the probability density function of the word embedding $x_w$ is expressed by
 
 \begin{equation}
-L_m(w, c_p, c_n) = max(0, m - E_\theta(w, c_p) + E_\theta(w, c_n)
+p(x; w) = \mathcal{N}\left(x ; \mu_{w}, \Sigma_{w}\right)
 \end{equation}
 
-Here, $w$ is the word we want to sample, $c_p$ is a "positive" context word, i.e. a word that co-occurs with the word $w$, and $c_n$ is a "negative" context word, i.e. a word that does not co-occur with the word $w$.
-Usually the negative context words is sampled randomly from the corpus.
-The loss function reminds of a hinge-loss in logistic regression.
+where $x$ is a point in the embedding space. \\
 
-The authors propose two possible ways to learn the mean and variance of the Gaussian embeddings.
-They argue that the empirical covariance is not the most effective method of deriving the words as Gaussian embeddings.
-This does not allow for inclusion between ellipsoids 
+Given that the probability density function is given by a gaussian distribution, the loss functions which is minimized is adapted accordingly:
 
-\paragraph{Symmetric similarity: expected likelihood or probability product kernel}
+\begin{equation}
+L_m(w, c_p, c_n) = - min(0, m - E_\theta(w, c_p) + E_\theta(w, c_n)
+\end{equation}
 
-We can use any kernel (which is symmetric by definition) to derive at an energy function.
-For two Gaussians $f(x)$, $g(x)$, the inner product is defined as:
+where $E$ is the energy function which calculates the distance measure between word $w$, a positive context word $c_p$ (a word that co-occurs with the word $w$, and $c_n$), and a negative-sampled context word $c_n$ (a word that does not co-occur with the word $w$, usually randomly sampled from the set of all words in the vocabulary $\mathcal{V}$).
+
+\cite{vilnis14} proposes two different ways to compute the energy function, using a symmetric similarity, and an asymmetric similarity measure.
+
+
+% Checkpoint
+
+The energy function can be \textbf{symmetric}.
+In this case, the authors use an inner product of two gaussian distributions defined as:
 
 \begin{align}
 E_\theta(w, c) &= \int_{x \in \mathcal{R}^d} f(x)g(x) dx \\
@@ -443,13 +514,14 @@ E_\theta(w, c) &= \int_{x \in \mathcal{R}^d} f(x)g(x) dx \\
 &= \mathcal{N}(0; \mu_w - \mu_c, \Sigma_w + \Sigma_c)
 \end{align}
 
-For numerical feasibility and easy of differentiation, we usually maximize the $\text{log} E_\theta(w, c)$ for a given dataset with $w \in \mathcal{W}, c \in \mathcal{C}$.
+which results in a nice closed form representation. \\
 
-\paragraph{Asymmetric divergence: KL-Divergence}
+For numerical feasibility and easy of differentiation, usually the log-loss $\text{log} E_\theta(w, c_p, c_n)$ is optimized the for a given dataset with $w \in \mathcal{V}, c_p, c_n \in \mathcal{C}$ (usually $\mathcal{V} = \mathcal{C}$, unless the set of context words is different.
 
-We can use more directional supervision to exploit directional supervision, such as a knowledge graph.
+%TODO check if all minimize optimize maximize are correctly termed
 
-Following energy-function is optimized:
+The energy function can also be \textbf{asymmetric}.
+In this case, the authors refer to the KL-divergence, resulting in the following energy function minimized.
 
 \begin{align}
 -E(w_i, c_j) & = D_{KL}(c_j || w_i) \\
@@ -457,154 +529,246 @@ Following energy-function is optimized:
 &= \frac{1}{2}\left(\operatorname{tr}\left(\Sigma_{i}^{-1} \Sigma_{j}\right)+\left(\mu_{i}-\mu_{j}\right)^{\top} \Sigma_{i}^{-1}\left(\mu_{i}-\mu_{j}\right)-d-\log \frac{\operatorname{det}\left(\Sigma_{j}\right)}{\operatorname{det}\left(\Sigma_{i}\right)}\right)
 \end{align}
 
-Because of the loss function, this can entail information such as "y entails x" as a soft form of inclusion between two datasets (if KL divergence is used).
-If a symmetric loss function is used, then this would most likely lead to overlap (IS THIS TRUE...???)
+Because of the loss function, this can entail information such as "y entails x", without necessarily implying "x entails y" (a property that symmetric loss functions cannot model).
 
-%TODO Veerify this statement again
-
-\paragraph{Uncertainty calculation:} In contrast to the empirical standard deviation as an uncertainty measure, we can now calculate the uncertainty of the inner product (i.e. the distribution $P(z=x^T y)$ using the following formula
+Assuming training was conducted by one of the two presented models,  one can use the resulting model parameters for two words $x_{w_1}, x_{w_2}$ to calculate the uncertainty - which intuitively models the similarity between the two words $w_1$ and $w_2$.
+This is analogous to calculating the dot product between the two distributions $P(z=x^T y)$ through the close-form formulation of
 
 \begin{align}
-\mu_z = \mu_x^T \mu_y
-\Sigma_z = \mu_{x}^T \Sigma_{x} \mu_{x}+\mu_{y}^T \Sigma_{y} \mu_{y}+\operatorname{tr}\left(\Sigma_{x} \Sigma_{y}\right)
+\mu_z &= \mu_x^T \mu_y \\
+\Sigma_z &= \mu_{x}^T \Sigma_{x} \mu_{x}+\mu_{y}^T \Sigma_{y} \mu_{y}+\operatorname{tr}\left(\Sigma_{x} \Sigma_{y}\right)
 \end{align}
 
 We then get an uncertainty bound, where $c$ denotes the number of standard deviations away from the mean.
+This uncertainty bound can be interpreted as a hard cutoff to where one concept end, allowing to make calculations between embeddings.
 \begin{equation}
 \mu_{x}^{\top} \mu_{y} \pm c \sqrt{\mu_{x}^{\top} \Sigma_{x} \mu_{x}+\mu_{y}^{\top} \Sigma_{y} \mu_{y}+\operatorname{tr}\left(\Sigma_{x} \Sigma_{y}\right)}
 \end{equation}
 
-We can learn the parameters $\Sigma$ and $\mu$ for each of these embeddings using a simple gradient-based approach, where we set hard constraints on 
+We can learn the parameters $\Sigma$ and $\mu$ for each of these embeddings using a simple gradient-based approach, where we set constraints on 
 
 \begin{align}
-& \norm{ \mu_i }_2  \leq C, \forall i \\
-& m I <  \Sigma_i < M I
+\forall i \quad & \norm{ \mu_i }_2  \leq C\\
+\forall i \quad & m I <  \Sigma_i < M I
 \end{align}
 
+These constraints can be used by using a laplacian regularizer in the loss function which is then optimized using a gradient based approach. 
 The method shows competitive scores to the Skip-Gram model, although usually only with minor improvements depending on the benchmark-dataset.
-
-%TODO Include a section on FastText! (Mikolov enriching word vectors with subword information)
-
-%TODO Include one part about tokenizers
 
 \newpage
 \subsection{Context Embeddings}
 
+Context embeddings follow the idea of the static word embeddings.
+In contrast to static word embeddings, while context embeddings also produce embeddings for words, the produced embedding vector vary depending on the context $\mathbf{c}$ that a word $w$ carries.
 
-%%%
+Specifically, the mapping for word embeddings \eqref{map:embedding_mapping} is adapted in such a way to also take as input the previous context words $c_\text{previous} = w^{(t)}, \ldots, w^{(t-d + 1)}$, and subsequent context word $c_\text{subsequent} = w^{(t-d - 1)}, \ldots, w^{(1)}$ for a given word of interest $w$.
 
-These language models also include capturing the more probablity of $p(\text {output} | \text {input})$
-. The MQAN demonstrates that a single language task is able to infer and perform many different tasks on eexamples wit this type of format.
-%TODO Cite Mccan
+\begin{equation}
+(c_\text{previous}, w, c_\text{subsequent}) \mapsto (x_w) \in \mathcal{X}^{d + 1}
+\end{equation}{\label{map:context_embedding_mapping}}
 
-%%%
+As an example, while static word embeddings would produce the same vector $x_1$ for all occurrences of the word $bank$, the context embedding would produce different embeddings $x_1$ and $x_2$ respectively for the two sentences:
 
-Now that we have seen a few methods that aim to capture one embedding $x_w$ for each word-token, we not turn out attention to context embeddings.
+\begin{verbatim}
+I withdrew some cash at the bank's ATM.
+I walked down the sea bank.
+\end{verbatim}
 
-Context embeddings are more modern applications of embeddings which 
+Up to some exceptions, any deviation of the context will result in a deviation of the resulting context embedding.
 
-A single transformer takes as input a sequence $x$ and outputs softmax probabilites.
-In the context of sentences, it is able to take as input a full sequence of words.
-This has implications for the complexity of the model.
-Instead of calculating the raw probability of \eqref{naive_sequential_probability}, and even using a markovian assumption because computation power is expensive, the transformer architecture implicitly calculates the joint probability of an entire sequence of words withouth any explicit conditioning
+%TODO Make a better transition to the log-probability argument
 
-%TODO: Rephrase this part
+The underlying model is a many-to-one sequence estimator, in general modelling the probability of 
 
+%TODO Is this joint probability given, or is t-d taken out?
 \begin{align}
-p(w^{(t-d)}) &= p(w^{(t)}, \ldots, w^{(t-d + 1)}, w^{(t-d - 1)}, \ldots, w^{(1)})
+p(w^{(t-d)}; c_\text{previous}, w^{t-d}, c_\text{subsequent}) &= p(w^{(t-d)}; w^{(t)}, \ldots, w^{(t-d + 1)}, w^{(t-d)}, w^{(t-d - 1)}, \ldots, w^{(1)})
 \end{align}{\label{eq:transformer_probability}}
 
-where $p(w^{(t-d)})$ is the probability of the target word $w^{(t-d)}$ which we want to calculate.
+instead of independently querying the probability $p(w^{(t-d)})$ without any context words.
 
-This modifies our initial ask of calculating $p(w, w^{\prime})$ to not including only a single context word $w^{\prime}$, but rather a wider context \\ (i.e. $w^{(t)}, \ldots, w^{(t-d + 1)}, w^{(t-d - 1)}, \ldots, w^{(1)}$).
-Theoretically, and because we want to arrive at some distance measure, $p(w, w^{\prime})$ can still be calculated by marginalizing out all the context-variables except the one of interest.
-Specifically, if we are interested in word $w$, we can marginalize out all input words except $w^{\prime}$.
-Practically this is infeasible due to the high space, and as such, we make use of some other mechanisms that we will talk about in the "BERT" section below.
-
-%TODO How to marginalize these over?
-%TODO Talk about what kind of input these take-in
-%TODO Look at bit more closely into the attention mechanism?
-%TODO Can draw some more inspiration from this here
-
-Because the following models not merely static word embeddings, but language models, we shall provide a short comparison between for downstream tasks between the individual language models after a short introduction on the details of each language models.
+There are different ways to achieve modelling this probability, from simple markov models, to LSTMs to transformers.
+We will go over the most prominent models of the past few years, discussing their underlying mechanism.
 
 \subsubsection{ELMo}
 
-The simplest idea of context embeddings, which take into account more than just a single word, but all tokens from a predefined context is the \textit{Embeddings from Language Models} (ELMo) model proposed in \cite{peters17b}.
+%TODO Is ELMo pre-trained???
 
-In its underlying architecture, ELMo is using LSTMs.
-LSTMs are sequential recurrent neural networks .
+The simplest idea of context embeddings, which take into account more than just a single word, but all tokens from the context $\mathbf{c} = (c_\text{previous}, c_\text{subsequent}) $is the \textit{Embeddings from Language Models} (ELMo) model proposed by \cite{peters17b}.
+
+The most basic architecture of ELMo is an extension of the Long Short-Term Memory \textit{LSTM} architecture.
+LSTMs are sequential recurrent neural networks \cite{hochreiter97}.
+LSTMs are an extension of the recurrent neural network \textit{RNN} \cite{rumelhart85}, but introduces a mechanism to solve the problem of error in the backpropagating gradient, and a "sotrage" mechanism which allows part of the RNN cell to be non-changed throughout backpropagation update mechanisms.
 %TODO how do you best explain LSTMs?
+
+The internal cell of the LSTM includes the following mechanisms
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/background/LSTM.png}
+  \caption{Figure taken from \cite{colahLSTM}. The internals of the LSTM cell, and the recurrent flow which is repeated for three consecutive timesteps $t-1, t, t+1$. 
+  The LSTM produces an hidden representation at every steep $h_{t-1}, h_{t}, h_{t+1}$ given some inputs $x_{t-1}, x_t, x_{t+1}$.
+  }
+  \label{fig:lstm_internals}
+\end{figure}
+
+Notice that the flow has a direction, and that in this case, the flow moves towards a positive direction of the sequence (i.e. from $t-1 = 0$ to $t + 1 = 2$ for example).
 
 Specifically, LSTMs \cite{hochreiter97} are good at estimating the probability of word $w^{(t)}$ occurring given a previous history of words $w^{(t-1)}, \ldots w^{(1)}$.
 In practice, the LSTM is a popular choice for sequence modeling tasks, as it is able to capture very well the following probability distribution.
 
+%TODO This formula does not seem very correct ...
 \begin{equation}
-p\left(w_{1},  w_{2}, \ldots, w_{N} \right)=\prod_{k=1}^{N} p\left(w_{k} | w_{k-1}, \ldots, w_{2}, w_{1}\right)
+p\left(w_{1},  w_{2}, \ldots, w_{T} \right)=\prod_{k=1}^{T} p\left(w_{k} | w_{k-1}, \ldots, w_{2}, w_{1}\right)
 \end{equation}
 
-The ELMo language model now makes use of a backward LSTM, which does not evaluate the probability of a certain token occuring with its \textit{past} words (i.e. the context with context tokens $w^{(k)}$ with $k < t$ for a word $w^{(t)}$ whose probability we want to estimate), but rather considers only the \textit{future context}.
-Specifically, this results in 
-
-%TODO Insert an example of what this could look like
-\begin{equation}
-p\left(w_{1},  w_{2}, \ldots, w_{N} \right)=\prod_{k=1}^{N} p\left(w_{k} | w_{k+1}, w_{k+2}, \ldots, w_{N}\right)
-\end{equation}
-
-A bidirectional language model (biLM) combines the above two LSTM models, thus jointly maximizing the log likelihood of the forwards, as well as backward directions.
+When we apply two LSTM layers, one that reads the sequence in the positive direction - as decpicted in \eqref{lstm_internals} - and another one that reads the sequence in a negative direction (i.e. reads in the sequence $[\ldots, x_{t+1}, x_t, x_{t-1}, \ldots]$ in this particular direction), the resulting architecture is called bidirectional LSTM.
+In its underlying architecture, ELMo is using bidirectional Long Short-Term Memory architectures \textit{bi-LSTM}.
+Specifically, a possible loss function results in 
 
 \begin{align} 
-\sum_{k=1}^{N} &\left(\log p\left(w_{k} | w_{k-1}, \ldots, w_{1} ; \Theta_{x}, \vec{\Theta}_{L S T M}, \Theta_{s}\right)\right.\\
-+&\left.\log p\left(w_{k} | w_{k+1}, \ldots, w_{N}; \Theta_{x}, \overleftarrow{\Theta}_{L S T M}, \Theta_{s}\right)\right) 
+\sum_{k=1}^{T} &\left(\log p\left(w_{k} | w_{k-1}, \ldots, w_{1} ; \Theta_{x}, \vec{\Theta}_{L S T M}, \Theta_{s}\right)\right.\\
++&\left.\log p\left(w_{k} | w_{k+1}, \ldots, w_{T}; \Theta_{x}, \overleftarrow{\Theta}_{L S T M}, \Theta_{s}\right)\right) 
 \end{align}
 
-Because the output of a sequential neural network - which the LSTM is part of - includes $2L + 1$ output representations, we receive the following set of vectors, one for each input token, which we now consider the \textit{context embeddings}.
+where $p$ is an LSTM model parametrized by it's weights $\theta$, including softax heads to arrive at a valid probability distribution amongst words in the vocabulary $\mathcal{V}$.
+
+Given that the LSTM is a sequential model, it outputs as many hidden representations as there are timesteps $T$ that are given as input to the model. 
+Each LSTM layer produces one set of such hidden representations.
+ELMo concatenates the hidden representations for both of the bidireectional LSTM layers to arrive at a single hidden representation.
+Within ELMo, each one of these hidden representations are interpreted as one of the context embeddings, which can then be used for downstream tasks.
+As such, we retrieve an embedding vector $x_{w^i} = [h^\text{backward}_{w^i}, h^\text{forward}_{w^i}]$ for word $w^i$
 Each context embeddings outputs a vector representing $x_{k}$ for the word token $w^{(k)}$, given its context $ w_{1}, \ldots, w_{k-1}  w_{k+1}, \ldots, w_{N}$.
 
-\begin{align} 
-R_{k} &=\left\{\mathbf{x}_{k}^{L M}, \overrightarrow{\mathbf{h}}_{k, j}^{L M}, \overleftarrow{\mathbf{h}}_{k, j}^{L M} | j=1, \ldots, L\right\} \\ &=\left\{\mathbf{h}_{k, j}^{L M} | j=0, \ldots, L\right\} 
-\end{align}
+%TODO Mention how training is done here?
 
-Notice that one can stack the above biLM such that the output of one module is taken as input to another module.
-The biLM module is stacked twice ELMo.
-If a downstream task is trained end-to-end, the all output vectors can be stacked together and provided as input to a final downstrea-specific neural network module.
+Formally, one would pre-train this model on a huge corpus in an unsupervised fashion.
+This pre-trained language model would then be extended by another linear layer, for example, to be adapted to a task at hand which has less data.
+This downstream task could be a named entity recognition, part of speech tagging etc.
+The gradients of the ELMo biLSTM weights are backpropagated and updated for the final fine-tuning process.
+
+%CHECKPOINT
+
+%TODO model a probability model which is 1-step markovian, and can only cover 
 
 \subsubsection{The Transformer Architecture}
 
-All of the below presented models use the transformer architecture which initially was presented in \cite{vaswani17}, which shows how far simple \textit{attention} modules can go.
+Although ELMo is able to crerate context embeddings, the performance is limited to LSTMs which can only capture timestep-directed sequences.
 
-%TODO Go into what attention is
+Specifically, the LSTM used within ELMo is a sequential timestep model which covers a storage mechanism within the weights it uses, resulting  in a 1-step markovian probability-assumption
 
-\begin{figure}[h]
+\begin{align}
+p(w_1, \ldots, w_T) &= p(w_T | w_{T-1}; h_{T-1}, \theta) \nonumber  \\
+& \ldots p(w_t | w_{t-1}; h_{t-1}, \theta) p(w_{t-2} | w_{t-2}; h_{t-2}, \theta) \nonumber \\
+& \ldots p(w_0 ; \mathbf{0}, \theta) 
+\end{align}
+
+where $h_{i}$ is the forward-propagation vector outputted by the LSTM cell at timestep $i$, which are supposed to capture some concept of storage together with the models weights $\theta$.
+Although intuitively $h_{T-1}$ is supposed to capture information from many timesteps back, there is no explicit information flow between the LSTM cell at timestep $t+1$ and $t-1$ (i.e. any two cells which are longer than 2 steps away).
+
+This is something where the transformer architecture comes in.
+The first transformer architecture for sequence modelling of text was introduced in \cite{vaswani17}.
+The transformer architecture introduces the concept of attention for modern language models.
+% A single transformer takes as input a sequence $\mathbf{w} = [w_1, \ldots, w_T]$ and outputs a set of hidden.
+It takes the full sample sentence including all timesteps, and calculates a correlation between the hidden representations of each timestep.
+Internally, it calculates hidden representations, uses the attention mechanism to rank similarity between the hidden representations, and then outputs a sample predicted sentence using the output probabilities.
+
+%TODO I am skipping the explanaion of attention. Should I do this?
+
+\begin{figure}[H]
 	\center
-  \includegraphics[width=0.4\linewidth]{./assets/background/transformer_module.png}
+  \includegraphics[width=0.5\linewidth]{./assets/background/transformer_module.png}
   \caption{Figure taken from \cite{vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.}
-  \label{fig:cbow_skipgram}
+  \label{fig:attention_is_all_you_need}
+\end{figure}
+
+In the context of sentences, it is able to take as input a full sequence of words.
+For each word, a vector representation is computed using an embedding layer.
+%TODO what is the key, and what is the value
+For the input sequence, this results in a set of vectors $V$ which represents the values, and $K$ which represents the keys.
+One can then take set of query vectors $Q$ and calculate the inner product $\langle K, Q \rangle$.
+One then applies a softmax this set of dot-products to arrive at a notion of which two vector are similar to each other.
+In the case of self-attention, the query vectors $Q$ are equivalent to $K$.
+This allows for the model to be more attentive between two elements, and allows the model to focus exploit relationships between different tokens within a token-sequence better.
+
+%TODO Not sure if this is well enough written
+
+This has implications for the complexity of the model.
+Instead of calculating the raw probability of \eqref{naive_sequential_probability}, and even using a markovian assumption because computation power is expensive, the transformer architecture implicitly calculates the joint probability of an entire sequence of words, thus decreasing the step of computations through which information flows. \\
+
+We will not go into further detail of how and why the transformer architecture works better than the LSTM to keep focus.
+All of the below presented models use the transformer architecture as a building block instead of the LSTM used in ELMo.
+The following architectures are all based on the transformer module.
+
+\subsubsection{BERT}
+ 
+As introduced in \cite{devlin18}, the Bidirectional Encoder Representations from Transformers model (BERT) combines the above concepts of forward and backwards sequential models with attention, as marked in the transformer architecture above.
+
+Although there are different version of BERT published, the base model of BERT consists of 12 attention layers, which output a 768-dimensional hidden representation of the input sequence, which on the final layer is outputted to work with any target task.
+
+The difference between BERT and ELMo (and GPT which is introduced in the next section) is depicted in the following figure.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=\linewidth]{./assets/background/BERT_GPT_ELMo.png}
+  \caption{Figure taken from \cite{devlin18}. BERT uses a bidirectional transformer, which is not limited to reading in all the input from only left to right or right to left. OpenAI GPT (next section) uses a left-to-right Transformer, while ELMo is using a bidirectional LSTM which naturally captures a direction. }
+  \label{fig:attention_is_all_you_need}
+\end{figure}
+
+%TODO Talk about what kind of input these take-in
+%TODO Look at bit more closely into the attention mechanism?
+%TODO Can draw some more inspiration from this here
+
+As stated in the transformed architecture, the main advantage in BERT is that the information flow between any two tokens is shortened because there is not a intermediate latent representation laying between the flow of hidden representations of any two timesteps.
+Specifically, the attention mechanism allows for a direct comparison of hidden states $h_t$ and $h_k$ with ($|t - k| > 1$), whereas the paradigm of the LSTM would be to capture any relation between the two hidden representations in the weights of the LSTM, as well as the ongoing hidden representation which is passed on at every timestep (i.e. $h_{t-1}$ would have to contain the information about $h_k$ where $k < t - 1$).
+by using multiple attention layers of on top each other, BERT is a deep model, allowing for more complex patterns to be trained. \\
+
+BERT is trained using two phases. 
+The first phase is BERT \textbf{pre-training}, where the model is trained using a masked language model approach. 
+Here, about 15\% of words in a sample are replaced with the "mask" token, and the goal of the model is to predict the word which was replaced by the \Verb#[MASK]# token.
+
+\begin{figure}[H]
+\begin{verbatim}
+[CLS] The man went to [MASK] store. [SEP]
+\end{verbatim}
+\caption{Example from \cite{devlin18}. 
+An input sentence which where 15\% of the tokens are replaced with the [MASK] token. 
+During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words.
+The word to be predicted is \textit{the}
+}
+\end{figure}
+
+The second pre-training task which is trained analogously to the masked language model prediction is the \textbf{next sentence prediction} task.
+Here, the language model is given two sentences, and is supposed to predict whether the second sentence is the continuation of the first one.
+50 \% of the training set here consists of randomly sampled sentences, and the other 50 \% of the training set consists of the actual next sentence for a corpus.
+
+\begin{figure}[H]
+\begin{verbatim}
+[CLS] the man went to [MASK] store [SEP]
+he bought a gallon [MASK] milk [SEP]
+\end{verbatim}
+\caption{Example from \cite{devlin18}. 
+Two input sequences which where 15\% of the tokens are replaced with the [MASK] token. 
+During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words.
+In this case, the second sentence is a continuation of the first one, and thus the label would be \textit{isNext}.
+}
 \end{figure}
 
 
 
-The following architectures are all based on the transformer module.
+%TODO Story cloze task.
 
-\subsubsection{BERT}
-
-As introduced in \cite{devlin18}, the Bidirectional Encoder Representations from Transformers model (BERT) combines the above concepts of forward and backwards sequential models with attention, as marked in the transformer architecture above.
-
-\cite{devlin18} argue that the main limitations is that standard language models are unidirection, and that .
+BERT is also a pre-trained model which is trained on the scraped english wikipedia corpus.
 
 BERT introduces itself as a pre-trained language model.
 Specifically, it shall be used to fine-tune on specific downstream tasks.
 
-BERT is pre-trained on %TODO 
-multiple gigabytes of text .
-
 %TODO talk about masked training
 
-%TODO Talk about tokenizer (wordpiece)
 
 \begin{figure}[h]
 	\center
-  \includegraphics[width=0.6\linewidth]{./assets/background/BERT_multiple_input_tokens.png}
+  \includegraphics[width=\linewidth]{./assets/background/BERT_multiple_input_tokens.png}
   \caption{Figure taken from \cite{devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.}
   \label{fig:cbow_skipgram}
 \end{figure}
@@ -777,16 +941,16 @@ the cosine similarity between these vectors seem pretty well-done!
 \subsubsection{WordNet}
 
 The online lexical database WordNet was original introduced in \cite{miller90}.
-WordNet is a reference system whose design is inspired by current psycholinguistic theories of human lexical memory.
-English nounss, verbs and adjectives are organized into synonym sets, each representing one underlying lexical concept.
+WordNet is a semantic reference system similar to a thesaurus whose design is inspired by current psycholinguistic theories of human lexical memory.
+English nouns, verbs and adjectives are organized into synonym sets, each representing one underlying lexical concept.
 Different relations link the synonym sets.
 WordNet 1 contains of 95,600 different word forms (51,500 simple words and 44,100 collocations), and include a total of 70,100 word meanings, or sets of synonyms.
-Compared to a standard dictionary, WordNet divides the lexicon into five categories, namely nouns, verbs, adjectives, adverbs and fucntion words. 
-The authors argue that the rest of language is probably stroed separately as part of the syntactic component of language.
+Compared to a standard dictionary, WordNet divides the lexicon into five categories, namely nouns, verbs, adjectives, adverbs and function words. 
+The authors argue that the rest of language is probably stored separately as part of the syntactic component of language.
 
-The most ambitious feature of WordNet, however, is to attempt to organize lexical information in terms of word meanings, rather than word forms.
+The most ambitious feature of WordNet, however, is to attempt to organize lexical information in terms of word meanings.
 
-The problem with alphabetical thesaurus is redundant entries. If Word $W_a$ and word $W_b$ are synonyms, the pair should be entered twice.
+The problem with alphabetical thesaurus is redundant entries. If Word $w_a$ and word $w_b$ are synonyms, the pair should be entered twice.
 The problem with a topical thesaurus is that two look-ups are required, first on an alphabetical list and again in the thesaurus proper.
 
 \paragraph{Lexical matrix:} 
@@ -817,7 +981,7 @@ If multiple entries exist for a single row, the two words express the same under
 \caption{Figure taken from \cite{miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.}
 \end{figure}
 
-WordNet also includes synonym sets (synsets), which are a collection of word-forms that together determine a single meaning.
+WordNet also includes synonym sets referred to as \textit{synsets}, which are a collection of word-forms that together determine a single meaning.
 Thus, a meaning is represented as a synset.
 WordNet is organized by semantic relations.
 Thus, WordNet includes a set of semantic relations.
@@ -828,6 +992,7 @@ Although the authors mention that synonyms should be best thought of a continuum
 
 This is mainly handcrafted by linguistics over the last 2 decades.
 Meanings have different levels of detail.
+The two tables depicted below show examples of how WordNet 3.1 introduces different semantic classes for the words \Verb#bank# and \Verb#was#
 
 \begin{figure}[H]
 \begin{center}
@@ -846,8 +1011,6 @@ verb    & (do business with a bank or keep an account at a bank) "Where do you b
 \caption{Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.}
 \end{figure}
 
-Now we go to "was"
-
 \begin{figure}[H]
 \begin{center}
 \begin{tabular}{ | c | p{11cm} | } 
@@ -863,8 +1026,10 @@ verb    & (work in a specific place, with a specific subject, or in a specific f
  \hline
 \end{tabular}
 \end{center}
-\caption{Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.}
+\caption{Example output for WordNet 3.1 noun propositions for the word "was". In total, 18 different concepts are recorded.}
 \end{figure}
+
+In this work, we will often use WordNet as
 
 
 
@@ -906,15 +1071,10 @@ None, 3, 1, 1, 1, None, 1, 1, 1, 1
 \end{figure}
 %TODO Should make this graph again, a bit better titles..
 
-\subsubsection{News dataset}
-
 \subsubsection{GLUE benchmark dataset}
 
-The GLUE benchmark dataset was first introduced by \cite{wang19}
-
-%TODO Look for superglue for an evaluation.
-
-Additional work has been done through the introduction of SuperGLUE \cite{wang19b} to train for an even bigger variety of language tasks, after most NLU models started surpassing non-expert human performance on the initially-proposed GLUE-tasks .
+The GLUE benchmark dataset was first introduced by \cite{wang19}.
+Although additional work has been done through the introduction of SuperGLUE \cite{wang19b} to train for an even bigger variety of language tasks, after most NLU models started surpassing non-expert human performance on the initially-proposed GLUE-tasks, we will only use at the standard GLUE benchmarking dataset, as our base model will be BERT, which does not perform on superhuman leves with the GLUE benchmark yet.
 
 \begin{figure}[H]
 \center
@@ -957,6 +1117,8 @@ WNLI & 634 &  146   & coreference/NLI & accuracy  & fiction books \\
 \end{tabular}
 \caption{Hello}
 \end{figure}
+
+We use an accuracy score for all benchmarking datasets. Because MRPC and QQP have a dominant class, the F1-score is used here. Finally, STS-B is judged using a pearson and spearman correlation due to a ranking being produced, and CoLa is assessed using the Matthews correlation.
 
 \subsubsection{Single Sentence Tasks}
 
@@ -1382,7 +1544,7 @@ where we follow the convention that $Y=1$ whenever the given sample-pairs are of
 Training can be highly unstable, and as such, the learning rate must be properly set, batches must have a balanced amount of both similar, and dissimilar pairs. 
 Finally, training can fail if a single batch includes multiple domains of data. \\
 
-For the triplet networks \cite{dor09} which makes use of relation triplets, including an input $X$, a point similar to the input $X^p$ and a point dissimilar to the input $X^n$, the following loss can be used for minimization.
+For the triplet networks \cite{hoffer14} which makes use of relation triplets, including an input $X$, a point similar to the input $X^p$ and a point dissimilar to the input $X^n$, the following loss can be used for minimization.
 
 \begin{equation}
 L_{\text {Triplet}}=\max \left(0,\left\|G_{W}(X)-G_{W}\left(X^{p}\right)\right\|_{2}-\left\|G_{W}(X)-G_{W}\left(X^{n}\right)\right\|_{2}+\alpha\right)

@@ -59,6 +59,16 @@ W.~N. Francis and H.~Kucera.
   with digital computers.
 \newblock 1964.
 
+\bibitem{gage94}
+Philip Gage.
+\newblock A new algorithm for data compression.
+\newblock {\em The C Users Journal}, 1994.
+
+\bibitem{ganea18}
+Octavian-Eugen Ganea, Gary Becigneul, and Thomas Hofmann.
+\newblock Hyperbolic entailment cones for learning hierarchical embeddings.
+\newblock 2018.
+
 \bibitem{ge18}
 Weifeng Ge, Weilin Huang, Dengke Dong, and Matthew~R. Scott.
 \newblock Deep metric learning with hierarchical triplet loss.
@@ -74,10 +84,20 @@ Zellig Harris.
 \newblock Distributional structure.
 \newblock {\em Word}, 10, 1954.
 
+\bibitem{hegel17}
+W.~F. Hegel.
+\newblock Encyclopedia of the philosophical science: Science of logic.
+\newblock 1817.
+
 \bibitem{hochreiter97}
 Sepp Hochreiter and Jürgen Schmidhuber.
 \newblock Long short-term memory.
 \newblock {\em Arxiv}, 1997.
+
+\bibitem{hoffer14}
+Elad Hoffer and Nir Ailon.
+\newblock Deep metric learning using triplet network.
+\newblock 2014.
 
 \bibitem{spacy}
 Matthew Honnibal and Ines Montani.
@@ -118,6 +138,12 @@ Sneha Kudugunta, Ankur Bapna, Isaac Caswell, Naveen Arivazhagan, and Orhan
 Guillaume Lample, Alexis Conneau, Ludovic Denoyer, and Marc'Aurelio Ranzato.
 \newblock Unsupervised machine translation using monolingual corpora only.
 \newblock {\em ICLR}, 2018.
+
+\bibitem{lee17}
+Jason Lee, Kyunghyun Cho, and Thomas Hofmann.
+\newblock Fully character-level neural machine translation without explicit
+  segmentation.
+\newblock 2017.
 
 \bibitem{levesque12}
 Hector Levesque, Ernest Davis, and Leora Morgenstern.
@@ -247,6 +273,11 @@ Rico Sennrich, Barry Haddow, and Alexandra Birch.
 \newblock Neural machine translation of rare words with subword units.
 \newblock {\em arXiv}, 2015.
 
+\bibitem{sennrich16}
+Rico Sennrich, Barry Haddow, and Alexandra Birch.
+\newblock Neural machine translation of rare words with subword units.
+\newblock 2016.
+
 \bibitem{shen19}
 Dinghan Shen, Pengyu Cheng, Dhanasekar Sundararaman, Xinyuan Zhang, Qian Yang,
   Meng Tang, Asli Celikyilmaz, and Lawrence Carin.
@@ -274,6 +305,11 @@ Juan~Luis Suarez, Salvador Garcia, and Francisco Herrera.
 \newblock A tutorial on distance metric learning: Mathematical foundations,
   algorithms and experiments.
 \newblock 2019.
+
+\bibitem{sutskever11}
+Ilya Sutskever, James Martens, and Geoffrey Hinton.
+\newblock Generating text with recurrent neural networks.
+\newblock 2011.
 
 \bibitem{ustinova16}
 Evgeniya Ustinova and Victor Lempitsky.
@@ -315,6 +351,18 @@ Xun Wang, Xintong Han, Weilin Huang, Dengke Dong, and Matthew~R. Scott.
 \newblock Multi-similarity loss with general pair weighting for deep metric
   learning.
 \newblock 2019.
+
+\bibitem{wittgenstein53}
+Ludwig Wittgenstein.
+\newblock Philosophical investigations.
+\newblock 1953.
+
+\bibitem{wu16}
+Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc~V. Le, and Mohammad~Norouzi et.
+  al.
+\newblock Google’s neural machine translation system: Bridging the gap
+  between human and machine translation.
+\newblock 2016.
 
 \bibitem{zhu18}
 Henghui Zhu, Ioannis~Ch Paschalidis, and Amir Tahmasebi.
