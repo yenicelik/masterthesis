@@ -27,59 +27,64 @@
 \contentsline {subsubsection}{GPT and GPT-2}{30}% 
 \contentsline {paragraph}{Unsupervised pre-training}{30}% 
 \contentsline {paragraph}{Supervised fine-tuning}{31}% 
-\contentsline {subsection}{\numberline {2.2.3}Other methods}{32}% 
-\contentsline {subsubsection}{Generating "static" word-embeddings through contextual embeddings}{32}% 
-\contentsline {section}{\numberline {2.3}Resources and Datasets}{34}% 
-\contentsline {subsubsection}{WordNet}{34}% 
-\contentsline {paragraph}{Lexical matrix:}{35}% 
-\contentsline {subsubsection}{SemCor dataset}{38}% 
-\contentsline {subsubsection}{GLUE benchmark dataset}{39}% 
-\contentsline {subsubsection}{Single Sentence Tasks}{40}% 
-\contentsline {subsubsection}{Similarity and paraphrase tasks}{41}% 
-\contentsline {subsubsection}{Inference Tasks}{42}% 
+\contentsline {subsubsection}{GLUE benchmark dataset}{32}% 
+\contentsline {subsubsection}{Single Sentence Tasks}{33}% 
+\contentsline {subsubsection}{Similarity and paraphrase tasks}{33}% 
+\contentsline {subsubsection}{Inference Tasks}{34}% 
+\contentsline {section}{\numberline {2.3}Metric Learning and Disentanglement}{36}% 
+\contentsline {subsubsection}{Non-Deep Metric Learning}{38}% 
+\contentsline {paragraph}{Dimensionality Reduction}{39}% 
+\contentsline {subsubsection}{Deep Metric Learning}{40}% 
+\contentsline {section}{\numberline {2.4}Clustering Algorithms}{42}% 
+\contentsline {paragraph}{Affinity Propagation}{42}% 
+\contentsline {paragraph}{Chinese Whispers}{42}% 
+\contentsline {paragraph}{DBScan}{42}% 
+\contentsline {paragraph}{HDBScan}{42}% 
+\contentsline {paragraph}{MeanShift}{43}% 
+\contentsline {paragraph}{Optics}{43}% 
 \contentsline {chapter}{\numberline {3}Related Work}{45}% 
 \contentsline {section}{\numberline {3.1}Structure inside BERT}{45}% 
-\contentsline {subsection}{\numberline {3.1.1}Attention mechanism}{47}% 
-\contentsline {subsection}{\numberline {3.1.2}From token-vectors to word-vectors}{47}% 
-\contentsline {subsection}{\numberline {3.1.3}Bias in BERT vectors}{47}% 
-\contentsline {subsection}{\numberline {3.1.4}Change of meanings over time}{47}% 
-\contentsline {subsection}{\numberline {3.1.5}Clinical concept extration}{48}% 
-\contentsline {subsection}{\numberline {3.1.6}Discovering for semantics}{48}% 
-\contentsline {subsection}{\numberline {3.1.7}Embeddings for translation}{48}% 
-\contentsline {section}{\numberline {3.2}Metric Learning and Disentanglement}{49}% 
-\contentsline {subsubsection}{Non-Deep Metric Learning}{51}% 
-\contentsline {paragraph}{Dimensionality Reduction}{53}% 
-\contentsline {subsubsection}{Deep Metric Learning}{53}% 
-\contentsline {section}{\numberline {3.3}Clustering Algorithms}{55}% 
-\contentsline {section}{\numberline {3.4}Applications of word vector}{56}% 
-\contentsline {subsubsection}{Word2Vec}{59}% 
-\contentsline {chapter}{\numberline {4}Analysing the current state of the art}{61}% 
-\contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{61}% 
-\contentsline {subsection}{\numberline {4.1.1}Motivation}{61}% 
-\contentsline {subsection}{\numberline {4.1.2}Experiment setup}{61}% 
-\contentsline {subsection}{\numberline {4.1.3}Results}{63}% 
-\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{65}% 
-\contentsline {subsection}{\numberline {4.2.1}Motivation}{65}% 
-\contentsline {subsection}{\numberline {4.2.2}Experiment setup}{65}% 
-\contentsline {subsection}{\numberline {4.2.3}Results}{68}% 
-\contentsline {subsubsection}{Qualitative evaluation}{69}% 
-\contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{79}% 
-\contentsline {subsection}{\numberline {4.3.1}Motivation}{79}% 
-\contentsline {subsection}{\numberline {4.3.2}Experiment setup}{79}% 
-\contentsline {subsection}{\numberline {4.3.3}Results}{79}% 
-\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{81}% 
-\contentsline {subsection}{\numberline {5.0.1}BERnie PoS}{82}% 
-\contentsline {subsubsection}{Motivation}{82}% 
-\contentsline {subsubsection}{Experiment setup}{82}% 
-\contentsline {subsection}{\numberline {5.0.2}BERnie Meaning}{83}% 
-\contentsline {subsubsection}{Motivation}{83}% 
+\contentsline {subsection}{\numberline {3.1.1}WordNet}{47}% 
+\contentsline {paragraph}{Lexical matrix:}{47}% 
+\contentsline {subsection}{\numberline {3.1.2}SemCor dataset}{50}% 
+\contentsline {subsection}{\numberline {3.1.3}Other methods}{51}% 
+\contentsline {subsubsection}{Generating "static" word-embeddings through contextual embeddings}{52}% 
+\contentsline {subsection}{\numberline {3.1.4}Attention mechanism}{54}% 
+\contentsline {subsection}{\numberline {3.1.5}From token-vectors to word-vectors}{54}% 
+\contentsline {subsection}{\numberline {3.1.6}Bias in BERT vectors}{55}% 
+\contentsline {subsection}{\numberline {3.1.7}Change of meanings over time}{55}% 
+\contentsline {subsection}{\numberline {3.1.8}Clinical concept extration}{55}% 
+\contentsline {subsection}{\numberline {3.1.9}Discovering for semantics}{55}% 
+\contentsline {subsection}{\numberline {3.1.10}Embeddings for translation}{55}% 
+\contentsline {chapter}{\numberline {4}Analysing the current state of the art}{57}% 
+\contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{57}% 
+\contentsline {subsection}{\numberline {4.1.1}Motivation}{57}% 
+\contentsline {subsection}{\numberline {4.1.2}Experiment setup}{57}% 
+\contentsline {subsection}{\numberline {4.1.3}Results}{59}% 
+\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{61}% 
+\contentsline {subsection}{\numberline {4.2.1}Motivation}{61}% 
+\contentsline {subsection}{\numberline {4.2.2}Experiment setup}{61}% 
+\contentsline {subsection}{\numberline {4.2.3}Results}{64}% 
+\contentsline {subsubsection}{Qualitative evaluation}{65}% 
+\contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{75}% 
+\contentsline {subsection}{\numberline {4.3.1}Motivation}{75}% 
+\contentsline {subsection}{\numberline {4.3.2}Experiment setup}{75}% 
+\contentsline {subsection}{\numberline {4.3.3}Results}{75}% 
+\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{77}% 
+\contentsline {subsection}{\numberline {5.0.1}BERnie PoS}{78}% 
+\contentsline {subsubsection}{Motivation}{78}% 
+\contentsline {subsubsection}{Experiment setup}{78}% 
+\contentsline {subsection}{\numberline {5.0.2}BERnie Meaning}{79}% 
+\contentsline {subsubsection}{Motivation}{79}% 
+\contentsline {subsubsection}{Experiment setup}{80}% 
+\contentsline {subsubsection}{Results}{82}% 
+\contentsline {subsection}{\numberline {5.0.3}BERnie Meaning with additional pre-training}{84}% 
+\contentsline {subsubsection}{Motivation}{84}% 
 \contentsline {subsubsection}{Experiment setup}{84}% 
+\contentsline {section}{\numberline {5.1}Compressing the non-lexical out}{85}% 
+\contentsline {subsubsection}{Motivation}{85}% 
+\contentsline {subsubsection}{Experiment setup}{85}% 
 \contentsline {subsubsection}{Results}{86}% 
-\contentsline {subsection}{\numberline {5.0.3}BERnie Meaning with additional pre-training}{88}% 
-\contentsline {subsubsection}{Motivation}{88}% 
-\contentsline {subsubsection}{Experiment setup}{88}% 
-\contentsline {section}{\numberline {5.1}Compressing the non-lexical out}{89}% 
-\contentsline {subsubsection}{Motivation}{89}% 
-\contentsline {subsubsection}{Experiment setup}{89}% 
-\contentsline {subsubsection}{Results}{90}% 
-\contentsline {chapter}{\numberline {6}Conclusion}{91}% 
+\contentsline {chapter}{\numberline {6}Conclusion}{87}% 
+\contentsline {chapter}{\numberline {A}Using word vectors in translation}{95}% 
+\contentsline {subsubsection}{Word2Vec}{97}% 

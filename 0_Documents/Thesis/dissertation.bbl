@@ -5,6 +5,11 @@ spacy: Part-of-speech tagging.
 \newblock \url{https://spacy.io/api/annotation#pos-tagging}.
 \newblock Accessed: 2020-04-13.
 
+\bibitem{colahLSTM}
+Understanding lstms.
+\newblock \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}.
+\newblock Accessed: 2020-05-02.
+
 \bibitem{alvarez18}
 David Alvarez-Melis and Tommi~S. Jaakkola.
 \newblock Gromov-wasserstein alignment of word embedding spaces.
@@ -20,10 +25,37 @@ Yoshua Bengio, Réjean Ducharme, Pascal Vincent, and Christian Jauvin.
 \newblock A neural probabilistic language model.
 \newblock {\em Journal of Machine Learning Research}, 3:1137--1155, 2003.
 
+\bibitem{bengio06}
+Yoshua Bengio, Holger Schwenk, Jean-Sebastien Senecal, Morin Frederic, and
+  Jean-Luc Gauvain.
+\newblock Neural probabilistic language models.
+\newblock {\em Innovations in Machine Learning}, pages 137--186, 2006.
+
+\bibitem{bentivogli2009}
+Luisa Bentivogli, Peter Clark, Ido Dagan, and Danilo Giampiccolo.
+\newblock The fifth pascal recognizing textual entailment challenge.
+\newblock In {\em TAC}, 2009.
+
+\bibitem{bojanowski17}
+Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov.
+\newblock Enriching word vectors with subword information.
+\newblock 2017.
+
+\bibitem{bowman2015}
+Samuel~R Bowman, Gabor Angeli, Christopher Potts, and Christopher~D Manning.
+\newblock A large annotated corpus for learning natural language inference.
+\newblock {\em arXiv preprint arXiv:1508.05326}, 2015.
+
 \bibitem{bromley94}
 Jane Bromley, Isabelle Guyon, and Yann LeCun.
 \newblock Signature verification using a "siamese" time delay neural network.
 \newblock 1994.
+
+\bibitem{cer2017}
+Daniel Cer, Mona Diab, Eneko Agirre, Inigo Lopez-Gazpio, and Lucia Specia.
+\newblock Semeval-2017 task 1: Semantic textual similarity-multilingual and
+  cross-lingual focused evaluation.
+\newblock {\em arXiv preprint arXiv:1708.00055}, 2017.
 
 \bibitem{chechik10}
 Gal Chechik, Varun Sharma, Uri Shalit, and Samy Bengio.
@@ -47,11 +79,23 @@ Alexis Conneau, Guillaume Lample, Aurelio Ranzato, Ludovic Denoyer, and Hervé
 \newblock Word translation without parallel data.
 \newblock 2017.
 
+\bibitem{dagan2005}
+Ido Dagan, Oren Glickman, and Bernardo Magnini.
+\newblock The pascal recognising textual entailment challenge.
+\newblock In {\em Machine Learning Challenges Workshop}, pages 177--190.
+  Springer, 2005.
+
 \bibitem{devlin18}
 Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
 \newblock Bert: Pre-training of deep bidirectional transformers for language
   understanding.
 \newblock {\em Arxiv}, 2018.
+
+\bibitem{dolan2005}
+William~B Dolan and Chris Brockett.
+\newblock Automatically constructing a corpus of sentential paraphrases.
+\newblock In {\em Proceedings of the Third International Workshop on
+  Paraphrasing (IWP2005)}, 2005.
 
 \bibitem{francis64}
 W.~N. Francis and H.~Kucera.
@@ -74,10 +118,24 @@ Weifeng Ge, Weilin Huang, Dengke Dong, and Matthew~R. Scott.
 \newblock Deep metric learning with hierarchical triplet loss.
 \newblock 2018.
 
+\bibitem{giampiccolo2007}
+Danilo Giampiccolo, Bernardo Magnini, Ido Dagan, and Bill Dolan.
+\newblock The third pascal recognizing textual entailment challenge.
+\newblock In {\em Proceedings of the ACL-PASCAL workshop on textual entailment
+  and paraphrasing}, pages 1--9. Association for Computational Linguistics,
+  2007.
+
 \bibitem{hadsell06}
 Raia Hadsell, Sumit Chopra, and Yann LeCun.
 \newblock Dimensionality reduction by learning an invariant mapping.
 \newblock 2006.
+
+\bibitem{bar2006}
+Bar-Roy Haim, Ido Dagan, Bill Dolan, Lisa Ferro, Danilo Giampiccolo, Bernardo
+  Magnini, and Idan Szpektor.
+\newblock The second pascal recognising textual entailment challenge.
+\newblock In {\em Proceedings of the second PASCAL challenges workshop on
+  recognising textual entailment}, volume~6, pages 6--4. Venice, 2006.
 
 \bibitem{harris54}
 Zellig Harris.
@@ -116,6 +174,10 @@ Lawrence Hubert and Phipps Arabie.
 \newblock Comparing partitions.
 \newblock {\em Journal of Classification}, pages 193--218, 1985.
 
+\bibitem{shankar17}
+Shankar Iyer, Nikhil Dandekar, and Kornel Csernai.
+\newblock First quora dataset release: Question pairs, 2017.
+
 \bibitem{jentzsch19}
 Sophie Jentzsch, Constantin Rothkopf, and Patrick Schramowski~Kristian
   Kersting.
@@ -145,7 +207,7 @@ Jason Lee, Kyunghyun Cho, and Thomas Hofmann.
   segmentation.
 \newblock 2017.
 
-\bibitem{levesque12}
+\bibitem{levesque2012}
 Hector Levesque, Ernest Davis, and Leora Morgenstern.
 \newblock The winograd schema challenge.
 \newblock In {\em Thirteenth International Conference on the Principles of
@@ -246,6 +308,11 @@ Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya
 \newblock Language models are unsupervised multitask learners.
 \newblock {\em Arxiv}, 2019.
 
+\bibitem{rajpurkar2016}
+Pranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and Percy Liang.
+\newblock Squad: 100,000+ questions for machine comprehension of text.
+\newblock {\em arXiv preprint arXiv:1606.05250}, 2016.
+
 \bibitem{rand71}
 William~M. Rand.
 \newblock Objective criteria for the evaluation of clustering methods.
@@ -261,6 +328,11 @@ Marek Rei.
 Oren Rippel, Manohar Paluri, Piotr Dollar, and Lubomir Bourdev.
 \newblock Metric learning with adaptive density discrimination.
 \newblock 2016.
+
+\bibitem{rumelhart85}
+David Rumelhart, Geoffrey Hinton, and Ronald Williams.
+\newblock Learning internal representations by error propagation.
+\newblock 1985.
 
 \bibitem{sanh19}
 Victor Sanh, Lysandre Debut, Julien Chaumond, and Thomas Wolf.
@@ -284,6 +356,14 @@ Dinghan Shen, Pengyu Cheng, Dhanasekar Sundararaman, Xinyuan Zhang, Qian Yang,
 \newblock Learning compressed sentence representations for on-device text
   processing.
 \newblock 2019.
+
+\bibitem{socher2013}
+Richard Socher, Alex Perelygin, Jean Wu, Jason Chuang, Christopher~D Manning,
+  Andrew Ng, and Christopher Potts.
+\newblock Recursive deep models for semantic compositionality over a sentiment
+  treebank.
+\newblock In {\em Proceedings of the 2013 conference on empirical methods in
+  natural language processing}, pages 1631--1642, 2013.
 
 \bibitem{sohn16}
 Kihyuk Sohn.
@@ -351,6 +431,20 @@ Xun Wang, Xintong Han, Weilin Huang, Dengke Dong, and Matthew~R. Scott.
 \newblock Multi-similarity loss with general pair weighting for deep metric
   learning.
 \newblock 2019.
+
+\bibitem{warstadt2018}
+Alex Warstadt, Amanpreet Singh, and Samuel~R Bowman.
+\newblock Neural network acceptability judgments.
+\newblock {\em arXiv preprint arXiv:1805.12471}, 2018.
+
+\bibitem{N18-1101}
+Adina Williams, Nikita Nangia, and Samuel Bowman.
+\newblock A broad-coverage challenge corpus for sentence understanding through
+  inference.
+\newblock In {\em Proceedings of the 2018 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies, Volume 1 (Long Papers)}, pages 1112--1122. Association for
+  Computational Linguistics, 2018.
 
 \bibitem{wittgenstein53}
 Ludwig Wittgenstein.
