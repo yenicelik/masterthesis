@@ -28,6 +28,7 @@
 \usepackage{amsmath, amsfonts}
 \usepackage{bbm}
 \usepackage{amsfonts}
+\usepackage{amsmath}
 \usepackage{siunitx}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -35,6 +36,8 @@
 \usepackage{float}
 \usepackage{url}
 \usepackage{fancyvrb} % for "\Verb" macro
+\usepackage{verbatim}
+
 
 
 \usepackage[ruled,vlined]{algorithm2e}
@@ -70,6 +73,9 @@
 \newcommand{\absdet}[1]{\left|#1\right|}
 \newcommand{\bftab}{\fontseries{b}\selectfont}
 %% START OF MAIN TEXT 
+
+\newcolumntype{b}{X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
 
 \pagenumbering{arabic} 
 \setcounter{page}{1} 
@@ -254,8 +260,9 @@ Because in the last few decades, computing power has gradually increased, and po
 In general, we want to find a mapping 
 
 \begin{equation}
+\label{map:embedding_mapping}
 w \mapsto (x_w, b_w) \in \mathcal{X}^{d + 1}
-\end{equation}{\label{map:embedding_mapping}}
+\end{equation}
 
 where $w$ is a token representation from a vocabulary $w \in V$ and where this token representation is transformed into a $d+1$-dimensional vector representation $x_w$, and a bias-term $b_w$ that is specific to the token $w$.
 Whenever we talk about \textit{word-vectors}, \textit{(word)-embeddings}, or \textit{feature-vectors}, we will refer to the image of the above map. 
@@ -773,6 +780,8 @@ Specifically, it shall be used to fine-tune on specific downstream tasks.
   \label{fig:cbow_skipgram}
 \end{figure}
 
+The BERT model takes a sequence of size (up to) 512 elements as input.
+
 
 Multiple versions of BERT are provided, including $BERT_{LARGE}$ which includes %TODO input number of parameters
 , and $BERT_{BASE}$ which includes %TODO number of parameters
@@ -846,7 +855,7 @@ The base model of GPT is modified by moving the layer normalization \cite{ba16} 
 Also, initialization was modified to account for the accumulation of the residual path with model depth.
 Also, vocabulary is expanded to 50257 tokens.
 
-\subsubsection{GLUE benchmark dataset}
+\section{GLUE benchmark dataset}
 
 The GLUE benchmark dataset was first introduced by \cite{wang19}.
 Although additional work has been done through the introduction of SuperGLUE \cite{wang19b} to train for an even bigger variety of language tasks, after most NLU models started surpassing non-expert human performance on the initially-proposed GLUE-tasks, we will only use at the standard GLUE benchmarking dataset, as our base model will be BERT, which does not perform on superhuman leves with the GLUE benchmark yet.
@@ -1046,6 +1055,137 @@ label:1
 \end{verbatim}
 
 
+\section{WordNet}
+
+The online lexical database WordNet was original introduced in \cite{miller90}.
+WordNet is a semantic reference system similar to a thesaurus whose design is inspired by current psycholinguistic theories of human lexical memory.
+English nouns, verbs and adjectives are organized into synonym sets, each representing one underlying lexical concept.
+Different relations link the synonym sets.
+WordNet 1 contains of 95,600 different word forms (51,500 simple words and 44,100 collocations), and include a total of 70,100 word meanings, or sets of synonyms.
+Compared to a standard dictionary, WordNet divides the lexicon into five categories, namely nouns, verbs, adjectives, adverbs and function words. 
+The authors argue that the rest of language is probably stored separately as part of the syntactic component of language.
+
+The most ambitious feature of WordNet, however, is to attempt to organize lexical information in terms of word meanings.
+
+The problem with alphabetical thesaurus is redundant entries. If Word $w_a$ and word $w_b$ are synonyms, the pair should be entered twice.
+The problem with a topical thesaurus is that two look-ups are required, first on an alphabetical list and again in the thesaurus proper.
+
+\paragraph{Lexical matrix:} 
+Word are often referred to both the utterance and to its associated concept.
+As such, \cite{miller90} specify the difference between the two concepts as "word form", which refers to the physical utterance or inscription, and "word meaning", which refers to the lexicalized concept that a form can be used to express.
+
+The following table captures the concept of a lexical matrix, which encodes word-forms (columns), word-meanings (rows), and the existence of the expression of the word-meanings through the corresponding word-form (cell).
+If multiple entries exist for a single column, then the single word-form encode mulitple meanings, implying that the word-form is polysemous (it encodes multiple word-forms).
+If multiple entries exist for a single row, the two words express the same underlying concept, and thus the two words-forms are synonoms.
+
+%TODO Throughouly read miller90
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ | c | c  c  c  c  c | } 
+ \hline
+ Word        &  &  & Word & Forms &  \\ 
+ Meanings & $F_1$ & $F_2$ & $F_3$ & \ldots & $F_n$ \\ 
+ \hline
+ $M_1$     & $E_{1,1}$ & $E_{1,2}$ &  &  &  \\ 
+ $M_2$     &  & $E_{2,2}$ &  &  &  \\ 
+ $M_3$     &  &  & $E_{3, 3}$ &  &  \\ 
+ $\vdots$ &  &  &  & $\ddots$ &  \\ 
+ $M_m$    &  &  &  &  & $E_{m, n}$ \\ 
+ \hline
+\end{tabular}
+\end{center}
+\caption{Figure taken from \cite{miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.}
+\end{figure}
+
+WordNet also includes synonym sets referred to as \textit{synsets}, which are a collection of word-forms that together determine a single meaning.
+Thus, a meaning is represented as a synset.
+WordNet is organized by semantic relations.
+Thus, WordNet includes a set of semantic relations.
+WordNet defines synonyms as a set of words, where one word is interchangable for another.
+This implies that in terms of substituatbiliy, WordNet clusters words into nouns, verbs, adjectives and adverbs, as the part of speech must be valid at the position of the sentence.
+
+Although the authors mention that synonyms should be best thought of a continuum along which similarity of meaning can be graded, the authors decide to determine similarity in terms of a binary event, something which is either present, or not present.
+
+This is mainly handcrafted by linguistics over the last 2 decades.
+Meanings have different levels of detail.
+The two tables depicted below show examples of how WordNet 3.1 introduces different semantic classes for the words \Verb#bank# and \Verb#was#
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ | c | p{11cm} | } 
+ \hline
+ Part of Speech & Definition \\  
+ \hline
+noun     & (sloping land (especially the slope beside a body of water)) "they pulled the canoe up on the bank"; "he sat on the bank of the river and watched the currents"\\ 
+noun     & depository financial institution, bank, banking concern, banking company (a financial institution that accepts deposits and channels the money into lending activities) "he cashed a check at the bank"; "that bank holds the mortgage on my home" \\ 
+ noun     & (an arrangement of similar objects in a row or in tiers) "he operated a bank of switches"  \\ 
+verb & (tip laterally) "the pilot had to bank the aircraft" \\ 
+verb    & (do business with a bank or keep an account at a bank) "Where do you bank in this town?"  \\ 
+ \hline
+\end{tabular}
+\end{center}
+\caption{Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ | c | p{11cm} | } 
+ \hline
+ Part of Speech & Definition \\ 
+ \hline
+noun     & Washington, Evergreen State, WA, Wash. (a state in northwestern United States on the Pacific) \\ 
+verb     & (have the quality of being; (copula, used with an adjective or a predicate noun)) "John is rich"; "This is not a good answer"
+ bank"; "that bank holds the mortgage on my home" \\ 
+ verb     & (an arrangement of similar objects in a row or in tiers) "he operated a bank of switches"  \\ 
+verb & (form or compose) "This money is my only income"; "The stone wall was the backdrop for the performance"; "These constitute my entire belonging"; "The children made up the chorus"; "This sum represents my entire income for a year"; "These few men comprise his entire army" \\ 
+verb    & (work in a specific place, with a specific subject, or in a specific function) "He is a herpetologist"; "She is our resident philosopher"  \\ 
+ \hline
+\end{tabular}
+\end{center}
+\caption{Example output for WordNet 3.1 noun propositions for the word "was". In total, 18 different concepts are recorded.}
+\end{figure}
+
+In this work, we will often use WordNet as this is one of the few resources that quantify language semantics.
+
+\subsection{SemCor dataset}
+
+The SemCor 3.0 corpus is a collection of the Brown corpora \cite{francis64}, where each noun, adjective and verb is tagged with the WordNet 3.0 senses.
+It was part of the early WordNet project, initially introduced in \cite{miller94}.
+
+Some example snippets look as follows, where SemCor includes sentences, and each sentence is annotated by WordNet senses.
+
+\begin{verbatim}
+A Texas halfback who does n't even know the team 's plays,
+ Eldon_Moritz, ranks fourth in Soutwest_conference scoring after three games.
+\end{verbatim}
+
+The corresponding part-of-speech labels and wordnet sense ids 
+are
+\begin{verbatim}
+DT, NN, NN, WP, VBZ, RB, RB, VB, DT, NN, 
+POS, NN, NNP, VB, JJ, IN, NNP, VP, IN, JJ, NN
+\end{verbatim}
+
+\begin{verbatim}
+None, 1, 1, None, 0, 1, 7, None, 1, 
+None, 3, 1, 1, 1, None, 1, 1, 1, 1
+\end{verbatim}
+
+%TODO Insert distribution of number of occurences of wordnet ids.
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/background/semcor_skew.png}
+  \caption{Shows that the SemCor data is biased. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5).
+  The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. 
+  This is a cumulative plot over all words with WordNet senses within SemCor 3.0.
+  The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words.
+  }
+  \label{fig:embeddings_by_language}
+\end{figure}
+%TODO Should make this graph again, a bit better titles..
+
 \section{Metric Learning and Disentanglement}
 
 Althogh difference metric spaces can be considered, we will be refering to Euclidean spaces for simplicity and unless otherwise stated.
@@ -1219,7 +1359,25 @@ Although we will not go into further detail, other loss functions include histog
 %TODO do back-projection to higher dimenisonal space.
 %TODO check performance on some bias prediction task (to see if sentiment is truly gone ..)
 
-\section{Clustering Algorithms}
+
+\chapter{Related Work}
+
+Talke about \cite{mccarthy16}
+
+Talk about community detection 
+Make a subsection "Clustering for semantic structures in word and text embeddings"
+
+\section{Clustering for Semantics}\label{section_clustering}
+
+One of our goals is to identify semantic clusters within a given set of context embeddings.
+Implicitly, this requires the algorithm to solve a multi-modality detection problem, which in itself is hard.
+This implies that we cannot use algorithms such as k-means \cite{lloyd57, macqueen67}, which requires the number of clusters to be identified beforehand.
+Instead, we turn our attention to algorithms, which both find clustering assignments, but also the best number of clusters that the data can be clustered by.
+
+Another constraint we put on ourselves is that the clustering methodology should not allow for the space to be projected into another space.
+Specifically, clustering should be conducted in the span of whatever set of points $X$ is provided.
+There should be no additional function $f$ applied to the points $X$ which transform the space in which this clustering takes place.
+This means that we do not use algorithms which include dimensionality reduction algorithms, such as autoencoders or other neural network based algorithms unless otherwise stated.
 
 We will later on use different clustering algorithms to evaluate how well semantics is interpretable inside BERT vectors.
 We will give a short introduction on the following clustering algorithms.
@@ -1227,40 +1385,21 @@ We will give a short introduction on the following clustering algorithms.
 \paragraph{Affinity Propagation} was first introduced by \cite{frey07}.
 Affinity propagation takes as input measures of similarity between pairs of data points. 
 Real-values messages for multiple iterations are exchanged between data point until clusters start to emerge.
-Initialization happens by assigning the same class to close-enough points as defined by a \textit{preference} threshold.
-
-Two message types are exchanged between the datasamples.  
-The \textit{responsibilities} $r(i, k)$ sent from data sample $i$ to data sample $k$ accounts for the accumulated evidence for how well-suited point $k$ is to serve as an exemplar for point $i$, taking into account other potential exemplars for point $i$.
-The \texit{availability} $a(i, k)$ accounts for the accumulated evidence for how appropriate it would be for data sample $i$ to choose point $k$ as it exemplar, taking into account the support tfrom other points that point $k$ should be an exemplar for.
-
-The responsibilities are calculates using
-
-$$
-r(i, k) \leftarrow s(i, k)-\max _{k^{\prime} \mathbf{s . t . k} \neq k}\left\{a\left(i, k^{\prime}\right)+s\left(i, k^{\prime}\right)\right\}
-$$
-
-The availability is calculates using 
-
-$$
-a(i, k) \leftarrow \min \left\{0, r(k, k)+\sum_{i \text { s.t. } i \notin\{i, k\}} \max \{0, r(i, k)\}\right\}
-$$
-
-When passing passing converges, the algorithm terminates.
-
-\paragraph{Chinese Whispers}
-
-
+Initialization happens by assigning the same class to close-enough points, message passing and the choice of which candidate sample to take on happens as defined by a \textit{preference} threshold.
 
 \paragraph{DBScan} is a density based clustering algorithm \cite{ester96} which initiates by finding representative samples that are in regions of high density, and expands clusters from there on.
-Due to the density criteria, the resulting clusterings don't have to be convex as is the case with k-means for example. \textbf{HDBScan} is a hierarchical extension of the DBScan algorithm \cite{campello13}
+Due to the density criteria, the resulting clusterings don't have to be convex as is the case with k-means for example. \textbf{HDBScan} is a hierarchical extension of the DBScan algorithm \cite{campello13}. \textbf{Optics} \cite{mihael99} is another extension of DBScan which keeps the cluster hierarchy for a variable neighborhood radius.
 
-\paragraph{MeanShift}
+\paragraph{MeanShift} is a centroid-based clustering algorithm \cite{comaniciu02}.
+After cluster-centers are randomly initialized, the centroids are updated by the mean of the cluster until convergence in the cluster-assignments is reached.
+A final post-processing step removes near-duplicate clusters.
 
-\paragraph{Optics}
+\paragraph{The Chinese Whispers} algorithm is one of the more relevant clustering algorithms used in this survey. 
 
+Here, we also introduce the chinese whispers algorithm.
+The chinese whispers algorithm was used to cluster for word-senses in the context of static word embeddings, such as in
+\cite{pelevina16}.
 
-
-\chapter{Related Work}
 
 \section{Structure inside BERT}
 
@@ -1308,138 +1447,6 @@ I guess this is because we need static embeddings which represent the individual
 -> perhaps create a GMM for each concept, based on how many modals we identify? how to estimate the number of clusters? by graph-clustering perhaps! (this could be very consuming)
 
 -> Adversarial autoencoder on BERTs last models to enforce it to some better distribution
-
-\subsection{WordNet}
-
-The online lexical database WordNet was original introduced in \cite{miller90}.
-WordNet is a semantic reference system similar to a thesaurus whose design is inspired by current psycholinguistic theories of human lexical memory.
-English nouns, verbs and adjectives are organized into synonym sets, each representing one underlying lexical concept.
-Different relations link the synonym sets.
-WordNet 1 contains of 95,600 different word forms (51,500 simple words and 44,100 collocations), and include a total of 70,100 word meanings, or sets of synonyms.
-Compared to a standard dictionary, WordNet divides the lexicon into five categories, namely nouns, verbs, adjectives, adverbs and function words. 
-The authors argue that the rest of language is probably stored separately as part of the syntactic component of language.
-
-The most ambitious feature of WordNet, however, is to attempt to organize lexical information in terms of word meanings.
-
-The problem with alphabetical thesaurus is redundant entries. If Word $w_a$ and word $w_b$ are synonyms, the pair should be entered twice.
-The problem with a topical thesaurus is that two look-ups are required, first on an alphabetical list and again in the thesaurus proper.
-
-\paragraph{Lexical matrix:} 
-Word are often referred to both the utterance and to its associated concept.
-As such, \cite{miller90} specify the difference between the two concepts as "word form", which refers to the physical utterance or inscription, and "word meaning", which refers to the lexicalized concept that a form can be used to express.
-
-The following table captures the concept of a lexical matrix, which encodes word-forms (columns), word-meanings (rows), and the existence of the expression of the word-meanings through the corresponding word-form (cell).
-If multiple entries exist for a single column, then the single word-form encode mulitple meanings, implying that the word-form is polysemous (it encodes multiple word-forms).
-If multiple entries exist for a single row, the two words express the same underlying concept, and thus the two words-forms are synonoms.
-
-%TODO Throughouly read miller90
-
-\begin{figure}[H]
-\begin{center}
-\begin{tabular}{ | c | c  c  c  c  c | } 
- \hline
- Word        &  &  & Word & Forms &  \\ 
- Meanings & $F_1$ & $F_2$ & $F_3$ & \ldots & $F_n$ \\ 
- \hline
- $M_1$     & $E_{1,1}$ & $E_{1,2}$ &  &  &  \\ 
- $M_2$     &  & $E_{2,2}$ &  &  &  \\ 
- $M_3$     &  &  & $E_{3, 3}$ &  &  \\ 
- $\vdots$ &  &  &  & $\ddots$ &  \\ 
- $M_m$    &  &  &  &  & $E_{m, n}$ \\ 
- \hline
-\end{tabular}
-\end{center}
-\caption{Figure taken from \cite{miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.}
-\end{figure}
-
-WordNet also includes synonym sets referred to as \textit{synsets}, which are a collection of word-forms that together determine a single meaning.
-Thus, a meaning is represented as a synset.
-WordNet is organized by semantic relations.
-Thus, WordNet includes a set of semantic relations.
-WordNet defines synonyms as a set of words, where one word is interchangable for another.
-This implies that in terms of substituatbiliy, WordNet clusters words into nouns, verbs, adjectives and adverbs, as the part of speech must be valid at the position of the sentence.
-
-Although the authors mention that synonyms should be best thought of a continuum along which similarity of meaning can be graded, the authors decide to determine similarity in terms of a binary event, something which is either present, or not present.
-
-This is mainly handcrafted by linguistics over the last 2 decades.
-Meanings have different levels of detail.
-The two tables depicted below show examples of how WordNet 3.1 introduces different semantic classes for the words \Verb#bank# and \Verb#was#
-
-\begin{figure}[H]
-\begin{center}
-\begin{tabular}{ | c | p{11cm} | } 
- \hline
- Part of Speech & Definition \\  
- \hline
-noun     & (sloping land (especially the slope beside a body of water)) "they pulled the canoe up on the bank"; "he sat on the bank of the river and watched the currents"\\ 
-noun     & depository financial institution, bank, banking concern, banking company (a financial institution that accepts deposits and channels the money into lending activities) "he cashed a check at the bank"; "that bank holds the mortgage on my home" \\ 
- noun     & (an arrangement of similar objects in a row or in tiers) "he operated a bank of switches"  \\ 
-verb & (tip laterally) "the pilot had to bank the aircraft" \\ 
-verb    & (do business with a bank or keep an account at a bank) "Where do you bank in this town?"  \\ 
- \hline
-\end{tabular}
-\end{center}
-\caption{Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\begin{tabular}{ | c | p{11cm} | } 
- \hline
- Part of Speech & Definition \\ 
- \hline
-noun     & Washington, Evergreen State, WA, Wash. (a state in northwestern United States on the Pacific) \\ 
-verb     & (have the quality of being; (copula, used with an adjective or a predicate noun)) "John is rich"; "This is not a good answer"
- bank"; "that bank holds the mortgage on my home" \\ 
- verb     & (an arrangement of similar objects in a row or in tiers) "he operated a bank of switches"  \\ 
-verb & (form or compose) "This money is my only income"; "The stone wall was the backdrop for the performance"; "These constitute my entire belonging"; "The children made up the chorus"; "This sum represents my entire income for a year"; "These few men comprise his entire army" \\ 
-verb    & (work in a specific place, with a specific subject, or in a specific function) "He is a herpetologist"; "She is our resident philosopher"  \\ 
- \hline
-\end{tabular}
-\end{center}
-\caption{Example output for WordNet 3.1 noun propositions for the word "was". In total, 18 different concepts are recorded.}
-\end{figure}
-
-In this work, we will often use WordNet as this is one of the few resources that quantify language semantics.
-
-\subsection{SemCor dataset}
-
-The SemCor 3.0 corpus is a collection of the Brown corpora \cite{francis64}, where each noun, adjective and verb is tagged with the WordNet 3.0 senses.
-It was part of the early WordNet project, initially introduced in \cite{miller94}.
-
-Some example snippets look as follows, where SemCor includes sentences, and each sentence is annotated by WordNet senses.
-
-\begin{verbatim}
-A Texas halfback who does n't even know the team 's plays,
- Eldon_Moritz, ranks fourth in Soutwest_conference scoring after three games.
-\end{verbatim}
-
-The corresponding part-of-speech labels and wordnet sense ids 
-are
-\begin{verbatim}
-DT, NN, NN, WP, VBZ, RB, RB, VB, DT, NN, 
-POS, NN, NNP, VB, JJ, IN, NNP, VP, IN, JJ, NN
-\end{verbatim}
-
-\begin{verbatim}
-None, 1, 1, None, 0, 1, 7, None, 1, 
-None, 3, 1, 1, 1, None, 1, 1, 1, 1
-\end{verbatim}
-
-%TODO Insert distribution of number of occurences of wordnet ids.
-
-\begin{figure}[h]
-	\center
-  \includegraphics[width=0.6\linewidth]{./assets/background/semcor_skew.png}
-  \caption{Shows that the SemCor data is biased. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5).
-  The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. 
-  This is a cumulative plot over all words with WordNet senses within SemCor 3.0.
-  The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words.
-  }
-  \label{fig:embeddings_by_language}
-\end{figure}
-%TODO Should make this graph again, a bit better titles..
-
 
 \subsection{Other methods}
 
@@ -1595,51 +1602,67 @@ A translation model is learned which can not only translate between different do
 
 %TODO Go a bit into detail with chinese whispers, and the paper where they form EGO networks to find synsets (and thus, meanings...)
 
-\chapter{Analysing the current state of the art}
+\chapter{Understanding the semantic subspace organization in BERT}
 
-Upadhyay et al. argue that the choice of data is more important than the actual algorithm.
+We begin our analysis by trying to understanding how BERT organized its semantic subspace.
 
-Definitely also look into this, [Analyzing the Limitations of Cross-lingual Word Embedding Mappings] seems to be an analysis of the difficulties etc. 
+For this, we conduct three experiments.
+The experiments have varying difficulty for the algorithm to understand the subspace organization for a given word $w$.
+We start with a supervised algorithm which should build a discriminative model of the subspace, where labels are different semantic classes as defined by WordNet.
+The second experiment aims to identify a similar subspace organization through an unsupervised algorithm, implicitly identify a multimodal structure within the subspace at which we look at.
+Finally, we check how part-of-speech relates with semantics within the BERT model, hoping to simplify subsequent work by introducing the assumption that part of speech strongly correlates to semantics within the BERT model.
+
+% Upadhyay et al. argue that the choice of data is more important than the actual algorithm.
+
+% Definitely also look into this, [Analyzing the Limitations of Cross-lingual Word Embedding Mappings] seems to be an analysis of the difficulties etc. 
 
 \section{On the Linear Separability of meaning within sampled BERT vectors}
 
-\subsection{Motivation}
-
+The first experiment takes a word of interest $w$, samples a set of sentences $S$ from a corpus (in this case, the above mentioned SemCor corpus and the news corpus \cite{news_corpus} which does not have any WordNet annotated classes).
 To see if there is any structure within BERT vectors w.r.t. the different meaning of one word, we ask ourselves whether or not different part of the meaning are at different locations of the embedding space produced by BERT.
+We test this hypothesis proactively by training a linear classifier which learns a separating hyperplane between the different WordNet classes for $w$.
 
 \subsection{Experiment setup}
 
-Let us regard a word $w$ in sentence $s$ is indexed by $i$.
-When passed through the BERT model, the word $w$ produces an embedding $x_w$.
-When we sample BERT embeddings for a single word $w$ for $n=500$ sentences. 
-
-Let us restrict the choice of words $w$ on polysemous and ambigious words which carry multiple meanings. 
-Specifically, $w$ is chosen in such a way that each meaning has more than 30 samples in each class when chosen from within the SemCor dataset. 
-
-%TODO beautify this table
+To produce a context embedding, we pass through a sequence of words $[w_1, \ldots, w_i, \ldots w_T]$ sampled from $S$, where $w_i$ = $w$ (i.e. $w_i$ coincides with the word of interest).
+The output of BERT is a set of hidden representations which are interpreted as the context embeddings $[x_{w_1}, \ldots, x_{w_i}, \ldots, x_{w_T}]$, where $x_{w_i}$ corresponds to the context embedding of $w_i$.
+Repeating this $n$ times, this results in a feature matrix $X$, where each row corresponds to the sampled sentence, and the columns correspond to the latent dimensions of the context embedding.
+In all of our experiments, we set $n=500$, unless otherwise stated.
+However, there are cases (especially for the SemCor dataset), where we cannot find $n$ number of sentence which include our word of interest $w$. 
+In that case, we sample as many sentences as available in the corpus, making $n=min( S_{\text{available }w}, 500)$.
+We make sure however to conduct our investigation with words that occur often enough and take 30 occurrences per WordNet class as a lower cap.
+Because this experiment requires $w$ to have multiple WordNet classes, we restrict the choice of $w$ to be polysemous as defined by WordNet.
+Due to the restricted resources of SemCor, this limits our analysis to the following set of words.
+Although these words are not the most intuitive polysemous words (as would \Verb#bank# be, for example), the limited "obviousness" should allow this experiment to be stricter w.r.t. not rejecting the hypothesis.
 
 \begin{center}
 % Words used to test BERT-sampled vectors for linear separability of lexical features
-\begin{tabular}{ | c | c | c | }
+\begin{tabular}{ | p{0.33\textwidth} | p{0.33\textwidth} | p{0.33\textwidth} | }
 \hline
 \multicolumn{3}{ | c | }{Words used to test BERT-sampled vectors for linear separability of lexical features} \\
 \hline
  was & is & be \\ 
  \hline
- are & more & one \\  
+ are  & more & one \\  
  \hline
- first & only & time \\
+ first  & only & time \\
  \hline
 \end{tabular}
 \end{center}
 
-When we sample 
-Specifically, the experiment setup looks as follows.
+To arrive at uniform conditions for each sampled matrix of embedding vectors $X$, we apply a standard scalar such that the data is normalized around $0.0$ with standard deviation $1.0$.
+We also allow for dimensionality reduction using all sampled words.
+The reason for this is to have a stricter set of requirements for the separating hyperplane to be drawn.
+If the dimensionality of the data $d$ is high, but the number of samples $n$ is low, then the system of linear equations is underdetermined, as there is an infinite set of solutions possible to find a separating hyperplane.
+Thus, projecting $X$ to a lower dimensionality works like a regularizer in that we restrict the set of hyperplanes to be drawn to be much more limited.
+On a separate note, this also tests if the semantic notion of the context vectors is kept at a lower dimension using a simple model such as PCA.
+
+In summary, the experiment setup is captured by the following algorithm.
 
 \begin{algorithm}[H]
 \SetAlgoLined
 \SetKwInOut{Input}{Input}
-\Input{A target word $w_{\text{target}}$; The latent dimensionality $k$for PCA;}
+\Input{A target word $w_{\text{target}}$; The latent dimensionality $k$ for PCA;}
 \KwResult{Accuracy of a logistic regression classifier}
  $\mathbf{D}, \mathbf{y} \leftarrow $  sample up to 500 sentences (as much as available) from the SemCor corpus which include the word $w_{\text{target}}$, along with the corresponding WordNet meaning-id\;
 
@@ -1664,30 +1687,19 @@ return $ accuracy, confusionMatrix $\;
  \caption{Checks sampled BERT vectors for linear interpretability by meaning}
 \end{algorithm}
 
-We use a binary 
-%TODO what is the formal name of the loss function that we are using..?
-
-First of all, we sample $n=500$ sentences from the news corpus for a target word $\hat{w}$, which has index $i$ in sentence $s$.
-
-Each sentence, we pass through the 
-
-The BERT model takes a sequence of size (up to) 512 elements as input.
-
-We sample $n=500$ vectors from BERT.
-This is the vector at the output embedding layer of BERT, which has the same location as the input to the BERT model.
-
-%TODO insert graphic of which embedding is used..
-
-We apply t-fold cross validation, and measure the mean accuracy as well as the standard deviation of the accuracy. 
-We also note down the variance kept after projecting PCA on the lower dimensionality $k$.
-This is the sum of the first $k$ largest normalized eigenvalues.
-
+We use standard sklearn \cite{scikit-learn} implementations for the Standard Scalar, PCA and Logistic Regression. 
+We use the Hugginface transformers library \cite{Wolf2019} for the this BERT model, and also all subsequent modification of BERT.
+The loss function we use is a binary simple $l1$ manhatten loss function, where the loss for a correct sample is $0$, and for an incorrect class assignment is $1$.
+We apply 5-fold cross validation, and measure the mean accuracy as well as the standard deviation of the accuracy. 
+We also note the variance kept after projecting PCA on the lower dimensionality $k$ to understand how a simple dimensionality reduction technique can affect the separation between semantic classes.
 
 \subsection{Results}
 
-The number of words we can use to realiably estimate a planar separation of semantics within the sampled BERT vectors is small.
+We run the above experiment for a set of different $k$. 
+The variance shown below is a fraction of $1.$. 
+A "variance kept" value of $1.$ corresponds to no information loss in terms of eigenvalues left out.
 
-We run the above experiment for a set of different $k$ to build up an intuition of how well different dimensionalites still capture the meaning in different locations of the vector space. 
+We show the result for 3 of the experiments, for the words \textit{was}, \textit{is} and \textit{one} respectively, as these are the words that have the highest number of occurrences within the SemCor dataset.
 
 \begin{center}
 \captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{was}.}
@@ -1757,35 +1769,41 @@ We now also employ multi-class classificiation.
 
 We get very similar accuracies for "time", "made", "thought".
 However, these tables are left out as we do not deem these to be statistically significant.
-
-%TODO re-run these experiments and print out the respective ids
+To make sure that no inconsistencies happened during testing, we also analysed the confusion matrices, which all were balanced across class-pairs, as the transpose elements were usually off by only 1-4 samples, and the majority of the samples were correctly predicted (and thus on the diagonal of that matrix)  .
 
 %TODO Inseert confusion matrix here maybe
 
-
-
+The reader can see that for a learned hyperplane, the classification accuracy reaches more than 75\% for dimensions of more than 20.
+This is also the case for multiclass classification problems, which removes the possibility that overfitting could have occurred for lower dimensions (due to the sheer amount of permutations that a hyperplane can take place in higher dimensions), which is also supported by the number of samples which is higher than the reduced dimensionality $k$.
 
 \section{On the Clusterability of meaning within sampled BERT vectors} \label{experiment_BERT_clusterability}
 
-\subsection{Motivation}
+Modality-detection can tell us a lot about the nature of a dataset.
+It can tell us what the predominant categories of a dataset are.
+Given a set of clusters amongst vectors $x_1, \ldots, x_n$ organized in a matrix $X$, the different clusters can be interpreted as the different modes of the data.
+This partitioning can be interpreted similarly to what principal components are, and what different categories are possible for these categories.
 
-%TODO Talk about different ways to determine if a dataset is clusteerable, but mention that in the end we want a practical approach, thus we brute-force search
-%TODO 
+There are different ways to check if a set of vectors is clusterable, this includes theoretical ways to determine clusterability, as for example depicted in \cite{ackerman09, mccarthy16}. 
+However, we are most interested in the practical clusterability of BERT, and as such, we decide to follow a brute-force approach to find clusters within BERT.
 
+Because the experiment on linear separability has shown us, that different semantics are at different locations of the embedding space, we now want to investigate how "obvious" this clustering can be found, and whether a clustering can be found in the first place, or if the transitioning between the semantic categories is a smooth transition, or constitutes a hard partinioning amongst context vectors.
 
-To see if there is any structure within BERT vectors w.r.t. the different meaning of one word, we ask ourselves whether or not different part of the meaning are at different locations of the embedding space produced by BERT.
-
-This is an extension to linear separability.
-We want to see how obvious these clusterings and differences are.
-
+This experiment can be seen as an extension to the previous experiment.
+In the previous experiment, we try to train a discriminative model.
+In this experiment, we try to come up with a quasi-generative model which is able to detect modalities of the underlying true distribution, theoretically allowing us to generate new data samples.
 
 \subsection{Experiment setup}
 
-The general algorithm to cluster the dataset is shown below.
+Initially, we tried to cluster the matrix of embedding vectors $X$ using standard approaches with no hyperparameter optimization. 
+However, all of the algorithms we manually tried, and with the default hyperparameters would fail and return $-1$ or similar messages, indicating that no clustering was found.
+We suspect that this is the case as the vectors produced by BERT are very smoothly distributed across the span of $X$. \\
 
-%TODO include optimization loop over all models
-
-%TODO Define and show what the random adjusted index is
+As such, we had to adapt our experiment setup to be more sophisticated and implement a fast brute-force using random search and \cite{bergstra12} and Bayesian optimization \cite{wang13}.
+We use the Pytorch Adaptive Experimentation platform \cite{pyax} which automatically chooses which of the two policies to use, given the dimensionality and number of parameters to search for.
+Specifically, our experiment setup is precisely described by the following algorithm.
+We introduce two algorithm.
+First algorithm calculates the clustering overlap between the predicted clustering $\hat{y}$ and the true cluster labels as defined by the WordNet semantic class labels $y$.
+The input to this algorithm is the clustering model that we want to use, which is one of the algorithms introduced in section \eqref{section_clustering} and the chinese whispers algorithm introduced above, a possible dimensionality to which the embeddings are reduced to using a predefined dimensionality reduction algorithm such as PCA, or UMAP, and finally the target word $w$ for which we want to calculate this overlap score.
 
 \begin{algorithm}[H]
 \SetAlgoLined
@@ -1814,138 +1832,86 @@ $ model \leftarrow ClusterAlgorithm( \mathbf{X})$ \;
 
 $ \mathbf{\hat{y}} \leftarrow model.predict(\mathbf{X}) $ \;
 
-$ score \leftarrow AdjustedRandomIndex(\mathbf{\hat{y}}, \mathbf{y}) $ \;
+$ score \leftarrow AdjustedRandomIndex(\mathbf{\hat{y}[semcor]}, \mathbf{y[semcor]}) $ \;
 
 return $ score, \mathbf{\hat{y}}$\;
     
  \caption{Checks sampled BERT vectors for clusters by  meaning}
 \end{algorithm}
 
-However, because some simple algor.
+Running this over all possible clustering algorithms, and taking the mean across a set of words, we hope to get a reliable estimate of which clustering approach generalizes best across words.
+This is depicted in the following algorithm
 
-We had a few constraints.
-When clustering, we are not given the number of cluster to be found. 
-Thus, the algorithm must solve the multi-modal detection problem intrinsically, which is considered a hard problem in machine learning, as it falls in the same category as global probability density estimation.
-Also, because we use the lexical distinction of semantics as defined in WordNet, our algorithm needs to adapt to the granularity that was defined by linguists.
+%TODO include optimization loop over all models
+\begin{algorithm}[H]
+\SetAlgoLined
+\SetKwInOut{Input}{Input}
+\Input{
+$w_{\text{target}}$: The target word whose BERT vectors we want to cluster; \\
+}
+\KwResult{The model which has the highest adjusted random index score between its predicted clustering, and the true underlying clustering as given by the SemCor WordNet class labels.}
 
-Because we want to evaluate how well our clustering method can mimick the semantic definitions in WordNet, but also generalize to unseen words, we train on an unsupervised dataset. 
-We then test our resulting clustering on a labeled datasetet using the random adjusted index \cite{rand71}, \cite{hubert85}.
+\textbf{for} clusterModelClass in clusterModels:  \\
+\quad \quad \textbf{for} modelConfiguration \textbf{in} clusterModelClass.hyperparNext() :  \\
+\quad \quad \quad \quad \textbf{for} $w$, $X$, numberOfSenses, trueClustering, knownIndices \\
+\quad \quad \quad \quad \textbf{in} crossvalidationDataIterator:  \\
 
-The adjusted random index calculates the overlap and as such the similarity between two clustering assignments.
-Specifically, 
+\quad \quad \quad \quad \quad \quad score $=$ Algorithm2($w$, *configuration) \\
+\quad \quad \quad \quad \quad \quad \textbf{if} score $>$ maxScore: \\
+\quad \quad \quad \quad \quad \quad \quad \quad  maxScore = score \\
+\quad \quad \quad \quad \quad \quad \quad \quad  bestModel = clusterModelClass \\
+\quad \quad \quad \quad \quad \quad \quad \quad  bestConfig = modelConfiguration \\
+
+\textbf{return} maxScore, bestModel, bestConfig
+ 
+ \caption{Algorithm to find the best model with the best fitting parameter configuration.}
+\end{algorithm}
+
+Because SemCor only had limited resources, and often a certain number of samples (more than 10) must be provided per word for the score to be significant enough, we were again limited to choosing some of the most occurring words within SemCor.
+Due to the limited size of SemCor, we also decided to only use words where all of the WordNet classes are present.
+
+This limits us to the following choices for the target words $w$, with number of WordNet classes in paranthesis next to it: 
+\Verb#have# (20), \Verb#live# (19), \Verb#report# (13), \Verb#use# (13), \Verb#test# (13), \Verb#know# (12), \Verb#write# (10), \Verb#tell# (9), \Verb#state# (11), \Verb#limit# (9), \Verb#allow# (10), \Verb#enter# (9), \Verb#concern# (7), \Verb#learn# (6), \Verb#seek# (6), \Verb#final# (5), \Verb#central# (3), \Verb#critic# (3), \Verb#topic# (2), \Verb#obvious# (1), \Verb#kitchen# (1), \Verb#pizza# (1).
+Because one of the implicit goals of the clustering algorithm is detecting the number of modes, we uniformly pick words \Verb#was#, \Verb#thought#, \Verb#made#, \Verb#only#, \Verb#central#, \Verb#pizza#.
+Cross-validating over a different number of cluster classes scores our algorithm in the multi-modality detection aspect of the task.
+Due to the limited size of the SemCor dataset, we aggregate the matrix of context vectors $X$ with sentences from an unsupervised news corpus as well.
+Because we don't have labels for the unsupervised corpus, however, we only apply scoring on the samples for which we have the WordNet labels (i.e. sentences sampled from SemCor). \\
+
+The scoring scheme we use is the random adjusted index \textit{ARI} \cite{rand71}, \cite{hubert85} which compares to what extent two clusterings are identical.
+This is necessary, because clusteres across clustering episodes will not produce the same cluster labels when run repeatedly.
+The ARI is computed by going through all possible permutations of the cluster-labels, and normalizing the score of the match for each permutation by a normalizing value.
+Because all possible permutations are taken into account, the ARI is \textit{adjusted for chance}.
 
 \begin{equation}
 A R I=\frac{\sum_{i j}\left(^{n_{i j}}\right)-\left[\sum_{i}\left(\begin{array}{c}a_{i} \\ 2\end{array}\right) \sum_{j}\left( \begin{array}{c}b_{j} \\ 2\end{array} \right)\right] /\left(\begin{array}{c}n \\ 2\end{array}\right)}{\frac{1}{2}\left[\sum_{i}\left(\begin{array}{c}a_{i} \\ _{2}\end{array}\right)+\sum_{j}\left(\begin{array}{l}b_{j} \\ 2\end{array}\right)\right]-\left[\sum_{i}\left(\begin{array}{c} a_{i} \\ 2\end{array}\right) \sum_{j}\left(\begin{array}{l}b_{j} \\ 2\end{array}\right)\right] /\left(\begin{array}{l}n \\ 2\end{array}\right)}
 \end{equation}{\label{eq:adjustedrandomindex}}
 
-%TODO read this up again!
 where $n_{i,j}$ is the number of items that are present in both clustering assignment, $a_i = \sum_j n_{i,j}$ , $b_j = \sum_i n_{i,j}$ for two clustering $a$ and $b$.
 
-where the resulting score is between $[-1.0, 1.0]$, where a score of $0$ implies completely assignment of cluster-labels into random buckets, $-1.0$ implies a negative correlation, and $1.0$ implies perfect similarity.
-The adjusted random index is adjusted for chance, by taking all possible permutations of the labels that the clustering algorithm can have.
-
-
-
-
-Although we will not go into too much detail with the algorithm descriptions here, we will 
-
-
-The general algorithm to cluster the dataset is shown below.
-
-
-
-\begin{enumerate}
-\item s
-\end{enumerate}
+The resulting score is between $[-1.0, 1.0]$, where a score of $0$ implies completely assignment of cluster-labels into random buckets, $-1.0$ implies a negative correlation, and $1.0$ implies perfect similarity.
 
 %TODO talk about the chinese whispers algorithm bcs this is custom-made
 
 \subsection{Results}
 
-%\begin{center}
-%\captionof{table}{Adjusted Random Index between the predicted cluster labels and the true underlying cluster labels. 
-%Cluster labels correspond to the different meanings in WordNet.
-%BERT vectors are sampled for the word "use". 
-%We sample 500 vectors and project these to 50 dimensions before clustering.
-%}
-%\begin{tabular}{SSSSSSSS} \toprule
-%    {model} & {best adjusted random score} & {best adjusted random score)}  \\ \midrule
-%       Affinity Propagation  & 0.001 & 0.38 / $\pm$ 0.03 \\ \midrule
-%       DBScan                     & 0.000 & 0.38 / $\pm$ 0.04 \\ \midrule
-%      HDBScan                    & 0.328 & 0.65 / $\pm$ 0.03  \\ \midrule
-%     MeanShift                   & 0.004 & 0.76 / $\pm$ 0.04  \\ \midrule
-%     Optics                        & 0.000 & 0.83 / $\pm$ 0.03  \\ \midrule
-%\end{tabular}
-%\end{center}
+To keep the presentation of the results concise, I will be going over the most meaningful results.
+This is the case for when we set $k=20$.
 
-\newcolumntype{b}{X}
-\newcolumntype{s}{>{\hsize=.5\hsize}X}
+Although initially it was apparent that adding additional dimensions to the dimensionality reduction technique would improve the clustering performance we soon realized that introducing the chinese whispers algorithm would show that trimming down the dimensionality to $k=20$ achieved the best results.
+We assume that this is the case as the 20 principal components with biggest eigenvalues capture enough about semantics such that the rest of the vectors can be left out.
+To keep the discussion focused, please refer to section \eqref{section:more_clustering_results} to see the results for $k=[50, 100]$ for different clustering methods, exluding the adapted chinese whispers algorithm.
 
+The next two tables show results where we keep the dimensionality at $k=100$ and keep the sample size at $n=500$ and $n=10000$. 
+
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=500$. }
 \begin{table}[htbp]
     \centering
     %\begin{tabularx}{\textwidth}{| X | X |}
     \begin{tabularx}{\textwidth}{b|ss}
     \toprule
-      {model} & {ARI)}  \\ \hline
-        Affinity Propagation     & 0.001     \\ \hline
-        DBScan                        & 0.000      \\ \hline
-        HDBScan                      & 0.328     \\ \hline
-        MeanShift                    & 0.004      \\ \hline
-        Optics                         & 0.000      \\ \hline
-    \end{tabularx}
-\end{table}
-
-Repeating the experiment with 1000 datapoint does not change the results by much.
-
-\begin{table}[htbp]
-    \centering
-    %\begin{tabularx}{\textwidth}{| X | X |}
-    \begin{tabularx}{\textwidth}{b|ss}
-    \toprule
-      {model} & {ARI)}  \\ \hline
-        Affinity Propagation     & 0.000     \\ \hline
-        DBScan                        & 0.139      \\ \hline
-        HDBScan                      & 0.271     \\ \hline
-        MeanShift                    & 0.005      \\ \hline
-        Optics                         & 0.070      \\ \hline
-    \end{tabularx}
-\end{table}
-
-Repeating the experiment with 1000 items and projecting PCA to 100 results in 
-
-\begin{table}[htbp]
-    \centering
-    %\begin{tabularx}{\textwidth}{| X | X |}
-    \begin{tabularx}{\textwidth}{b|ss}
-    \toprule
-      {model} & {ARI)}  \\ \hline
-        Affinity Propagation     & 0.000     \\ \hline
-        DBScan                        & 0.215      \\ \hline
-        HDBScan                      & 0.359     \\ \hline
-        MeanShift                    & 0.003      \\ \hline
-        Optics                         & 0.000      \\ \hline
-    \end{tabularx}
-\end{table}
-
-We see that including more dimensions make the clustering better w.r.t. the adjusted random score.
-
-%TODO Move to 
-Here, we also introduce the chinese whispers algorithm.
-The chinese whispers algorithm was used to cluster for word-senses in the context of static word embeddings, such as in
-\cite{pelevina16}.
-
-We now apply forceful clustering using Bayesian Optimization.
-
-%TODO: Move some to Appendix (especially when it is not very successful...
-100 latent dimensions, 500 samples
-\begin{table}[htbp]
-    \centering
-    %\begin{tabularx}{\textwidth}{| X | X |}
-    \begin{tabularx}{\textwidth}{b|ss}
-    \toprule
-      {model} & {ARI)}  \\ \hline
+      {\textbf{Clustering Model}} & {\textbf{ARI Score}}  \\ \midrule
         Affinity Propagation     & 0.168     \\ \hline
-        Chinese Whispers        & 0.298     \\ \hline
+        Chinese Whispers        & \textbf{0.298}     \\ \hline
         DBScan                        & 0.201      \\ \hline
         HDBScan                      & 0.242     \\ \hline
         MeanShift                    & 0.167      \\ \hline
@@ -1953,34 +1919,35 @@ We now apply forceful clustering using Bayesian Optimization.
     \end{tabularx}
 \end{table}
 
-
-100 components, 1000 samples
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. }
 \begin{table}[htbp]
     \centering
     %\begin{tabularx}{\textwidth}{| X | X |}
     \begin{tabularx}{\textwidth}{b|ss}
     \toprule
-      {model} & {ARI)}  \\ \hline
+      {Clustering Model} & {ARI Score}  \\ \midrule
         Affinity Propagation     & 0.170     \\ \hline
         Chinese Whispers        & 0.249     \\ \hline
-        DBScan                        & 0.260      \\ \hline
+        DBScan                        & \textbf{0.260}      \\ \hline
         HDBScan                      & 0.234     \\ \hline
         MeanShift                    & 0.167      \\ \hline
         Optics                         & 0.197      \\ \hline
     \end{tabularx}
 \end{table}
 
+We quickly realize (together with the results in the appendix) that the sample does not have much effect on the clustering performance.
+This is also the case because the corpora are exhaustive, and especially SemCor does not provide enough additional labels to make adding additional samples meaningful.
+Because of this, we change the sample size at either $n=500$ and $n=1000$ for subsequent trials.
 
-Projecting to lower dimensions increases accuracy strongly.
-20 components, 1000 samples
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. }
 \begin{table}[htbp]
     \centering
     %\begin{tabularx}{\textwidth}{| X | X |}
     \begin{tabularx}{\textwidth}{b|ss}
     \toprule
-      {model} & {ARI)}  \\ \hline
+      {\textbf{Clustering Model}} & {\textbf{ARI Score}}  \\ \midrule
         Affinity Propagation     & 0.165     \\ \hline
-        Chinese Whispers        & 0.349     \\ \hline
+        Chinese Whispers        & \textbf{0.349}     \\ \hline
         DBScan                        & 0.167      \\ \hline
         HDBScan                      & 0.273     \\ \hline
         MeanShift                    & 0.226      \\ \hline
@@ -1988,19 +1955,18 @@ Projecting to lower dimensions increases accuracy strongly.
     \end{tabularx}
 \end{table}
 
+So far, we had not added the \Verb#[SEP]# token to the sentence that BERT would input. 
+The following table includes the \Verb#[SEP]# at the end of the sentence.
 
-
-Projecting to lower dimensions increases accuracy strongly.
-and now we add a SEP token
-20 components, 1000 samples
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. }
 \begin{table}[htbp]
     \centering
     %\begin{tabularx}{\textwidth}{| X | X |}
     \begin{tabularx}{\textwidth}{b|ss}
     \toprule
-      {model} & {ARI}  \\ \hline
+      {\textbf{Clustering Model}} & {\textbf{ARI Score}}  \\ \midrule
         Affinity Propagation     & 0.316     \\ \hline
-        Chinese Whispers        & 0.457     \\ \hline
+        Chinese Whispers        & \textbf{0.457}     \\ \hline
         DBScan                        & 0.170      \\ \hline
         HDBScan                      & 0.298     \\ \hline
         MeanShift                    & 0.251      \\ \hline
@@ -2008,26 +1974,28 @@ and now we add a SEP token
     \end{tabularx}
 \end{table}
 
-We now analyse the embeddings manually
+It is interesting to see that adding the \Verb#[SEP]# significantly increases the performance of the clustering algorithms.
+However, this is also expected, as BERT is trained using the \Verb#[SEP]# token.
+Adding 1 or more \Verb#[PAD]# at the end of the sentence does not improve the score any further. \\
 
 \subsubsection{Qualitative evaluation}
 
-Given that the above numbers likely don't mean anything, here are some clusters found for the best model configuration (chinese whispers), applied on a set of words.
-
-
-
-Can see that this can be used for biased and insecure AI applications!
+So far, we have looked at the Adjusted Random Index Score as a way to measure how well the datasamples were clustered by meaning.
+However, because this is an arbitrary score, it is also important to do a qualitative analysis, and go over examples to see what this clustering scheme results in.
+The below clusterings form partitions of the sentences to be clustered.
 
 \begin{figure}[H]
+\scalebox{0.9}{
 \begin{align}
-\text{                                                                  } & \text{- - - -} \nonumber \\
-\text{Ms. Gotbaum tried to slide her handcuffed } & \text{arms from her back to her front} \nonumber \\
-\text{                                                                  } & \text{- - - -} \nonumber \\
-               \text{That magisterial use of the upper body and } & \text{arms is her physical signature} \nonumber \\
-\text{entered the stage in pairs and forcefully stretched their } & \text{arms and legs} \nonumber \\ 
-                                    \text{ripped from patients’ } & \text{arms as they were carried away} \nonumber \\
-                                    \text{                                                                  } & \text{- - - -} \nonumber \\
+\texttt{                                                                  } & \texttt{- - - -} \nonumber \\
+\texttt{Ms. Gotbaum tried to slide her handcuffed } & \texttt{arms from her back to her front} \nonumber \\
+\text{                                                                  } & \texttt{- - - -} \nonumber \\
+               \texttt{That magisterial use of the upper body and } & \texttt{arms is her physical signature} \nonumber \\
+\texttt{entered the stage in pairs and forcefully stretched their } & \texttt{arms and legs} \nonumber \\ 
+                                    \texttt{ripped from patients’ } & \texttt{arms as they were carried away} \nonumber \\
+                                    \text{                                                                  } & \texttt{- - - -} \nonumber \\
 \end{align}
+}
 \caption{A famous equation}
 \end{figure}
 
@@ -2657,9 +2625,6 @@ BERnie full Pre-training trains the entire embeddings, whereas BERnie partial Pr
 && \textbf{BERnie} & \textbf{BERnie full\- Pre}  & \textbf{BERnie partial\- Pre}\\
 \midrule
 CoLA  & Accuracy  &  0.5457 & 0.5418 & 0.5731 \\
-MRPC & Accuracy &  0.8064 & 0.3824 & 0.3162\\
-          & F1           &  0.8684 & 0.1720 & 0.0000 \\
-          & Mixed     &  0.8374 & 0.2775 & 0.1581 \\          
 SST-2 & Accuracy  &  0.9266 & 0.9169 & 0.9266 \\
 QNLI & Accuracy & 0.9020 & 0.5374 & 0.6700 \\
 RTE & Accuracy &  0.5722 & 0.4784 & 0.4729 \\
@@ -2667,6 +2632,8 @@ WNLI & Accuracy & 0.4649 & 0.4225 & 0.4507 \\
 \bottomrule
 \end{tabular}
 }
+
+We suspect a bug in loading the model appropriately for the MRPC task, and thus ommited the results for this task.
 
 \section{Compressing the non-lexical out}
 %TODO Need to run some more experiments ...
@@ -2698,6 +2665,54 @@ Finally, we use a simple algorithm to what extent we can disentangle the semanti
 % \bibliographystyle{unsrt} 
 \bibliographystyle{plain}
 \bibliography{dissertation} 
+
+\chapter{More Results}
+
+\section{Finding the best clustering model}\label{section:more_clustering_results}
+
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=500$. }
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {Clustering Model} & {ARI Score}  \\ \midrule
+        Affinity Propagation     & 0.001     \\ \hline
+        DBScan                        & 0.000      \\ \hline
+        HDBScan                      & \textbf{0.328}     \\ \hline
+        MeanShift                    & 0.004      \\ \hline
+        Optics                         & 0.000      \\ \hline
+    \end{tabularx}
+\end{table}
+
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=1000$. }
+\begin{table}[htbp]
+    \centering
+    \begin{tabularx}{\textwidth}{b | ss}
+    \toprule
+      {Clustering Model} & {ARI Score}  \\ \midrule
+        Affinity Propagation     & 0.000     \\ \hline
+        DBScan                        & 0.139      \\ \hline
+        HDBScan                      & \textbf{0.271}     \\ \hline
+        MeanShift                    & 0.005      \\ \hline
+        Optics                         & 0.070      \\ \hline
+    \end{tabularx}
+\end{table}
+
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. }
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{b|ss}
+    \toprule
+      {Clustering Model} & {ARI Score}  \\ \midrule
+        Affinity Propagation     & 0.000     \\ \hline
+        DBScan                        & \textbf{0.215}      \\ \hline
+        HDBScan                      & 0.359     \\ \hline
+        MeanShift                    & 0.003      \\ \hline
+        Optics                         & 0.000      \\ \hline
+    \end{tabularx}
+\end{table}
 
 \chapter{Using word vectors in translation}\label{AppendixApplication}
 

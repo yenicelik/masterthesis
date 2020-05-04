@@ -1,51 +1,51 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Figure taken from \cite {mikolov13}. The CBOW architecture predicts the current word based on the context. The Skip-gram predicts surrounding words given the current word.\relax }}{13}% 
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Figure taken from \cite {mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.\relax }}{17}% 
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Figure taken from \cite {colahLSTM}. The internals of the LSTM cell, and the recurrent flow which is repeated for three consecutive timesteps $t-1, t, t+1$. The LSTM produces an hidden representation at every steep $h_{t-1}, h_{t}, h_{t+1}$ given some inputs $x_{t-1}, x_t, x_{t+1}$. \relax }}{23}% 
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Figure taken from \cite {vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.\relax }}{26}% 
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Figure taken from \cite {devlin18}. BERT uses a bidirectional transformer, which is not limited to reading in all the input from only left to right or right to left. OpenAI GPT (next section) uses a left-to-right Transformer, while ELMo is using a bidirectional LSTM which naturally captures a direction. \relax }}{28}% 
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Example from \cite {devlin18}. An input sentence which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. The word to be predicted is \textit {the} \relax }}{28}% 
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Example from \cite {devlin18}. Two input sequences which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the second sentence is a continuation of the first one, and thus the label would be \textit {isNext}. \relax }}{29}% 
-\contentsline {figure}{\numberline {2.8}{\ignorespaces Figure taken from \cite {devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.\relax }}{29}% 
-\contentsline {figure}{\numberline {2.9}{\ignorespaces Hello\relax }}{32}% 
-\contentsline {figure}{\numberline {2.10}{\ignorespaces Taken from \cite {suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distancee, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducable with this dimension while still matching the classification accuracy (right).\relax }}{39}% 
-\contentsline {figure}{\numberline {2.11}{\ignorespaces Taken from \cite {kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.\relax }}{40}% 
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Figure taken from \cite {mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.\relax }}{16}% 
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Figure taken from \cite {colahLSTM}. The internals of the LSTM cell, and the recurrent flow which is repeated for three consecutive timesteps $t-1, t, t+1$. The LSTM produces an hidden representation at every steep $h_{t-1}, h_{t}, h_{t+1}$ given some inputs $x_{t-1}, x_t, x_{t+1}$. \relax }}{22}% 
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Figure taken from \cite {vaswani17}. The transformer module architecture. The transformer encapsulates multiple attention layers.\relax }}{25}% 
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Figure taken from \cite {devlin18}. BERT uses a bidirectional transformer, which is not limited to reading in all the input from only left to right or right to left. OpenAI GPT (next section) uses a left-to-right Transformer, while ELMo is using a bidirectional LSTM which naturally captures a direction. \relax }}{27}% 
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Example from \cite {devlin18}. An input sentence which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. The word to be predicted is \textit {the} \relax }}{27}% 
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Example from \cite {devlin18}. Two input sequences which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the second sentence is a continuation of the first one, and thus the label would be \textit {isNext}. \relax }}{28}% 
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Figure taken from \cite {devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.\relax }}{28}% 
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Hello\relax }}{31}% 
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Figure taken from \cite {miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.\relax }}{36}% 
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.\relax }}{37}% 
+\contentsline {figure}{\numberline {2.12}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word "was". In total, 18 different concepts are recorded.\relax }}{38}% 
+\contentsline {figure}{\numberline {2.13}{\ignorespaces Shows that the SemCor data is biased. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5). The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. This is a cumulative plot over all words with WordNet senses within SemCor 3.0. The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words. \relax }}{39}% 
+\contentsline {figure}{\numberline {2.14}{\ignorespaces Taken from \cite {suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distancee, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducable with this dimension while still matching the classification accuracy (right).\relax }}{42}% 
+\contentsline {figure}{\numberline {2.15}{\ignorespaces Taken from \cite {kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.\relax }}{44}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite {miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.\relax }}{48}% 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word "bank". In total, 18 different concepts are recorded.\relax }}{49}% 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word "was". In total, 18 different concepts are recorded.\relax }}{50}% 
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Shows that the SemCor data is biased. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5). The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. This is a cumulative plot over all words with WordNet senses within SemCor 3.0. The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words. \relax }}{51}% 
-\contentsline {figure}{\numberline {3.5}{\ignorespaces From \cite {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{56}% 
+\contentsline {figure}{\numberline {3.1}{\ignorespaces From \cite {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{55}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces A famous equation\relax }}{66}% 
-\contentsline {figure}{\numberline {4.2}{\ignorespaces A famous equation\relax }}{67}% 
-\contentsline {figure}{\numberline {4.3}{\ignorespaces A famous equation\relax }}{67}% 
-\contentsline {figure}{\numberline {4.4}{\ignorespaces A famous equation\relax }}{68}% 
-\contentsline {figure}{\numberline {4.5}{\ignorespaces A famous equation\relax }}{68}% 
-\contentsline {figure}{\numberline {4.6}{\ignorespaces A famous equation\relax }}{69}% 
-\contentsline {figure}{\numberline {4.7}{\ignorespaces A famous equation\relax }}{69}% 
-\contentsline {figure}{\numberline {4.8}{\ignorespaces A famous equation\relax }}{70}% 
-\contentsline {figure}{\numberline {4.9}{\ignorespaces A famous equation\relax }}{70}% 
-\contentsline {figure}{\numberline {4.10}{\ignorespaces A famous equation\relax }}{71}% 
-\contentsline {figure}{\numberline {4.11}{\ignorespaces A famous equation\relax }}{71}% 
-\contentsline {figure}{\numberline {4.12}{\ignorespaces A famous equation\relax }}{72}% 
-\contentsline {figure}{\numberline {4.13}{\ignorespaces A famous equation\relax }}{72}% 
-\contentsline {figure}{\numberline {4.14}{\ignorespaces A famous equation\relax }}{73}% 
-\contentsline {figure}{\numberline {4.15}{\ignorespaces A famous equation\relax }}{73}% 
-\contentsline {figure}{\numberline {4.16}{\ignorespaces A famous equation\relax }}{74}% 
-\contentsline {figure}{\numberline {4.17}{\ignorespaces A famous equation\relax }}{74}% 
-\contentsline {figure}{\numberline {4.18}{\ignorespaces plots of....\relax }}{76}% 
-\contentsline {figure}{\numberline {4.19}{\ignorespaces plots of....\relax }}{76}% 
-\contentsline {figure}{\numberline {4.20}{\ignorespaces plots of....\relax }}{76}% 
+\contentsline {figure}{\numberline {4.1}{\ignorespaces A famous equation\relax }}{70}% 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces A famous equation\relax }}{71}% 
+\contentsline {figure}{\numberline {4.3}{\ignorespaces A famous equation\relax }}{71}% 
+\contentsline {figure}{\numberline {4.4}{\ignorespaces A famous equation\relax }}{72}% 
+\contentsline {figure}{\numberline {4.5}{\ignorespaces A famous equation\relax }}{72}% 
+\contentsline {figure}{\numberline {4.6}{\ignorespaces A famous equation\relax }}{73}% 
+\contentsline {figure}{\numberline {4.7}{\ignorespaces A famous equation\relax }}{73}% 
+\contentsline {figure}{\numberline {4.8}{\ignorespaces A famous equation\relax }}{74}% 
+\contentsline {figure}{\numberline {4.9}{\ignorespaces A famous equation\relax }}{74}% 
+\contentsline {figure}{\numberline {4.10}{\ignorespaces A famous equation\relax }}{75}% 
+\contentsline {figure}{\numberline {4.11}{\ignorespaces A famous equation\relax }}{75}% 
+\contentsline {figure}{\numberline {4.12}{\ignorespaces A famous equation\relax }}{76}% 
+\contentsline {figure}{\numberline {4.13}{\ignorespaces A famous equation\relax }}{76}% 
+\contentsline {figure}{\numberline {4.14}{\ignorespaces A famous equation\relax }}{77}% 
+\contentsline {figure}{\numberline {4.15}{\ignorespaces A famous equation\relax }}{77}% 
+\contentsline {figure}{\numberline {4.16}{\ignorespaces A famous equation\relax }}{78}% 
+\contentsline {figure}{\numberline {4.17}{\ignorespaces plots of....\relax }}{79}% 
+\contentsline {figure}{\numberline {4.18}{\ignorespaces plots of....\relax }}{80}% 
+\contentsline {figure}{\numberline {4.19}{\ignorespaces plots of....\relax }}{80}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{78}% 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces The modified pipeline. The BERnie model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. For each target token $t_{\text {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{79}% 
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Inside the embedding layer of BERT, we introduce more specific embeddings \textit {run\_ VERB} and \textit {run\_ NOUN}. The BERT model should intuitively now capture more expressiveness, as the model size increased. The original \textit {run} embedding is removed.\relax }}{80}% 
-\contentsline {figure}{\numberline {5.4}{\ignorespaces plots of....\relax }}{81}% 
-\contentsline {figure}{\numberline {5.5}{\ignorespaces \relax }}{81}% 
-\contentsline {figure}{\numberline {5.6}{\ignorespaces plots of....\relax }}{82}% 
-\contentsline {figure}{\numberline {5.7}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.\relax }}{82}% 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{82}% 
+\contentsline {figure}{\numberline {5.2}{\ignorespaces The modified pipeline. The BERnie model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. For each target token $t_{\text {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{83}% 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Inside the embedding layer of BERT, we introduce more specific embeddings \textit {run\_ VERB} and \textit {run\_ NOUN}. The BERT model should intuitively now capture more expressiveness, as the model size increased. The original \textit {run} embedding is removed.\relax }}{84}% 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces \relax }}{84}% 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces plots of....\relax }}{85}% 
+\contentsline {figure}{\numberline {5.6}{\ignorespaces plots of....\relax }}{85}% 
+\contentsline {figure}{\numberline {5.7}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.\relax }}{86}% 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Taken from \cite {conneau17}. Each \relax }}{95}% 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Taken from \cite {conneau17}. Each \relax }}{101}% 

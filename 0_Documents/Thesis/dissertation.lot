@@ -3,13 +3,22 @@
 \contentsline {table}{\numberline {2.1}{\ignorespaces Taken from \cite {wang19} Table to test captions and labels\relax }}{7}% 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {was}.\relax }}{59}% 
-\contentsline {table}{\numberline {4.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {is}.\relax }}{60}% 
-\contentsline {table}{\numberline {4.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {one}.\relax }}{60}% 
-\contentsline {table}{\numberline {4.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{60}% 
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {was}.\relax }}{61}% 
+\contentsline {table}{\numberline {4.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {is}.\relax }}{61}% 
+\contentsline {table}{\numberline {4.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {one}.\relax }}{61}% 
+\contentsline {table}{\numberline {4.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{62}% 
+\contentsline {table}{\numberline {4.5}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=500$. \relax }}{68}% 
+\contentsline {table}{\numberline {4.6}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. \relax }}{68}% 
+\contentsline {table}{\numberline {4.7}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{69}% 
+\contentsline {table}{\numberline {4.8}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{69}% 
+\contentsline {table}{\numberline {4.9}{\ignorespaces A famous equation\relax }}{70}% 
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces asj\relax }}{83}% 
-\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{84}% 
-\contentsline {table}{\numberline {5.3}{\ignorespaces Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.\relax }}{85}% 
+\contentsline {table}{\numberline {5.1}{\ignorespaces asj\relax }}{87}% 
+\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{87}% 
+\contentsline {table}{\numberline {5.3}{\ignorespaces Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.\relax }}{88}% 
 \addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {A.1}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=500$. \relax }}{99}% 
+\contentsline {table}{\numberline {A.2}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=1000$. \relax }}{99}% 
+\contentsline {table}{\numberline {A.3}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. \relax }}{99}% 
 \addvspace {10\p@ }

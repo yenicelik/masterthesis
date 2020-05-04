@@ -14,6 +14,7 @@ Warning--empty journal in chen19
 Warning--empty journal in chopra05
 Warning--empty journal in conneau17
 Warning--empty journal in francis64
+Warning--empty journal in frey07
 Warning--empty journal in ganea18
 Warning--empty booktitle in ge18
 Warning--empty journal in hadsell06
@@ -44,45 +45,45 @@ Warning--empty booktitle in wang19c
 Warning--empty journal in wittgenstein53
 Warning--empty journal in wu16
 Warning--empty journal in zhu18
-You've used 83 entries,
+You've used 90 entries,
             2118 wiz_defined-function locations,
-            836 strings with 16343 characters,
-and the built_in function-call counts, 26680 in all, are:
-= -- 2422
-> -- 1722
-< -- 13
-+ -- 689
-- -- 594
-* -- 1729
-:= -- 4662
-add.period$ -- 252
-call.type$ -- 83
-change.case$ -- 546
+            872 strings with 17462 characters,
+and the built_in function-call counts, 29270 in all, are:
+= -- 2686
+> -- 1826
+< -- 17
++ -- 731
+- -- 628
+* -- 1878
+:= -- 5066
+add.period$ -- 273
+call.type$ -- 90
+change.case$ -- 584
 chr.to.int$ -- 0
-cite$ -- 122
-duplicate$ -- 1005
-empty$ -- 1779
-format.name$ -- 594
-if$ -- 5396
+cite$ -- 130
+duplicate$ -- 1119
+empty$ -- 1970
+format.name$ -- 628
+if$ -- 5970
 int.to.chr$ -- 0
-int.to.str$ -- 83
-missing$ -- 79
-newline$ -- 417
-num.names$ -- 162
-pop$ -- 683
+int.to.str$ -- 90
+missing$ -- 86
+newline$ -- 452
+num.names$ -- 176
+pop$ -- 724
 preamble$ -- 1
-purify$ -- 463
+purify$ -- 494
 quote$ -- 0
-skip$ -- 743
+skip$ -- 847
 stack$ -- 0
-substring$ -- 784
-swap$ -- 183
-text.length$ -- 13
+substring$ -- 966
+swap$ -- 229
+text.length$ -- 17
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 332
-warning$ -- 39
-while$ -- 192
-width$ -- 85
-write$ -- 813
-(There were 40 warnings)
+type$ -- 360
+warning$ -- 40
+while$ -- 214
+width$ -- 92
+write$ -- 886
+(There were 41 warnings)

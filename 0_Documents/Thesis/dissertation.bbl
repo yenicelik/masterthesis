@@ -51,6 +51,12 @@ Jane Bromley, Isabelle Guyon, and Yann LeCun.
 \newblock Signature verification using a "siamese" time delay neural network.
 \newblock 1994.
 
+\bibitem{campello13}
+Ricardo J. G.~B. Campello, Davoud Moulavi, and Joerg Sander.
+\newblock Density-based clusteering based on hierarchical density estimates.
+\newblock {\em PAKDD 2013: Advances in Knowledge Discovery and Data Mining},
+  pages 160--172, 2013.
+
 \bibitem{cer2017}
 Daniel Cer, Mona Diab, Eneko Agirre, Inigo Lopez-Gazpio, and Lucia Specia.
 \newblock Semeval-2017 task 1: Semantic textual similarity-multilingual and
@@ -72,6 +78,12 @@ Sumit Chopra, Raia Hadsell, and Yann LeCun.
 \newblock Learning a similarity metric discriminatively, with application to
   face verification.
 \newblock 2005.
+
+\bibitem{comaniciu02}
+Dorin Comaniciu and Peter Meer.
+\newblock Mean shift: A robust approach toward feature space analysis.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  pages 603--619, 2002.
 
 \bibitem{conneau17}
 Alexis Conneau, Guillaume Lample, Aurelio Ranzato, Ludovic Denoyer, and Hervé
@@ -97,11 +109,21 @@ William~B Dolan and Chris Brockett.
 \newblock In {\em Proceedings of the Third International Workshop on
   Paraphrasing (IWP2005)}, 2005.
 
+\bibitem{ester96}
+Matrin Ester, Hans-Peter Kriegel, Joerg Sander, and Xiaowei Xu.
+\newblock A density-based algorithm for discovering clusters.
+\newblock {\em KDD-96 Proceedings}, 1996.
+
 \bibitem{francis64}
 W.~N. Francis and H.~Kucera.
 \newblock A standard corpus of present-day edited american english, for use
   with digital computers.
 \newblock 1964.
+
+\bibitem{frey07}
+Brendan~J. Frey and Delbert Dueck.
+\newblock Clustering by passing messages between data points.
+\newblock 2007.
 
 \bibitem{gage94}
 Philip Gage.
@@ -219,11 +241,24 @@ Peter~J. Liu, Mohammad Saleh, Etienne Pot†, Ben Goodrich, Ryan Sepassi,
 \newblock Generating wikipedia by summarizing long sequences.
 \newblock 2018.
 
+\bibitem{lloyd57}
+S.~P. Lloyd.
+\newblock Least squares quantization in pcm.
+\newblock {\em Technical Report RR-5497 Bell Lab}, 1957.
+
 \bibitem{ma19}
 Shuang Ma, Daniel Mcduff, and Yale Song.
 \newblock M3 d-gan: Multi-modal multi-domain translation with universal
   attention.
 \newblock 2019.
+
+\bibitem{macqueen67}
+J.~B. MacQueen.
+\newblock Some methods for classification and analysis of multivariate
+  observations.
+\newblock {\em L. M. Le Cam and J. Neyman (Eds.), Proceedings of the fifth
+  Berkeley symposium on mathematical statistics and probability}, pages Vol. 1,
+  pp. 281--297, 1967.
 
 \bibitem{mahalanobis36}
 P.~C. Mahalanobis.
@@ -234,6 +269,11 @@ P.~C. Mahalanobis.
 Chandler May, Alex Wang, Shikha Bordia, Samuel~R. Bowman, and Rachel Rudinger.
 \newblock On measuring social biases in sentence encoders.
 \newblock 2019.
+
+\bibitem{mihael99}
+Ankerst Mihael, Markus~M. Breunig, Hans-Peter Kriegel, and Jörg Sander.
+\newblock Optics: ordering points to identify the clustering structure.
+\newblock {\em ACM SIGMOD Record 28, no. 2}, pages 49--60, 1999.
 
 \bibitem{mikolov13}
 Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean.
