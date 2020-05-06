@@ -4,9 +4,12 @@ The top-level auxiliary file: dissertation.aux
 The style file: plain.bst
 Database file #1: dissertation.bib
 Warning--entry type for "shankar17" isn't style-file defined
---line 832 of file dissertation.bib
+--line 821 of file dissertation.bib
 Warning--to sort, need author or key in colahLSTM
 Warning--to sort, need author or key in spacyb
+Warning--to sort, need author or key in news_corpus
+Warning--to sort, need author or key in pyax
+Warning--empty journal in ackerman09
 Warning--empty journal in alvarez18
 Warning--empty journal in bojanowski17
 Warning--empty journal in bromley94
@@ -27,13 +30,13 @@ Warning--empty journal in lee17
 Warning--empty booktitle in Liu18
 Warning--empty journal in ma19
 Warning--empty journal in may19
+Warning--empty journal in mccarthy16
 Warning--empty booktitle in miller94
 Warning--empty booktitle in ni17
 Warning--empty journal in peters18
 Warning--empty booktitle in Rei17
 Warning--empty booktitle in rippel16
 Warning--empty journal in rumelhart85
-Warning--empty journal in sanh19
 Warning--empty journal in sennrich16
 Warning--empty journal in shen19
 Warning--empty booktitle in sohn16
@@ -45,45 +48,45 @@ Warning--empty booktitle in wang19c
 Warning--empty journal in wittgenstein53
 Warning--empty journal in wu16
 Warning--empty journal in zhu18
-You've used 90 entries,
+You've used 99 entries,
             2118 wiz_defined-function locations,
-            872 strings with 17462 characters,
-and the built_in function-call counts, 29270 in all, are:
-= -- 2686
-> -- 1826
-< -- 17
-+ -- 731
-- -- 628
-* -- 1878
-:= -- 5066
-add.period$ -- 273
-call.type$ -- 90
-change.case$ -- 584
+            911 strings with 19145 characters,
+and the built_in function-call counts, 32530 in all, are:
+= -- 2978
+> -- 2074
+< -- 18
++ -- 830
+- -- 718
+* -- 2125
+:= -- 5632
+add.period$ -- 300
+call.type$ -- 99
+change.case$ -- 656
 chr.to.int$ -- 0
-cite$ -- 130
-duplicate$ -- 1119
-empty$ -- 1970
-format.name$ -- 628
-if$ -- 5970
+cite$ -- 142
+duplicate$ -- 1214
+empty$ -- 2161
+format.name$ -- 718
+if$ -- 6617
 int.to.chr$ -- 0
-int.to.str$ -- 90
-missing$ -- 86
-newline$ -- 452
-num.names$ -- 176
-pop$ -- 724
+int.to.str$ -- 99
+missing$ -- 93
+newline$ -- 497
+num.names$ -- 190
+pop$ -- 808
 preamble$ -- 1
-purify$ -- 494
+purify$ -- 557
 quote$ -- 0
-skip$ -- 847
+skip$ -- 921
 stack$ -- 0
-substring$ -- 966
-swap$ -- 229
-text.length$ -- 17
+substring$ -- 1070
+swap$ -- 246
+text.length$ -- 18
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 360
-warning$ -- 40
-while$ -- 214
-width$ -- 92
-write$ -- 886
-(There were 41 warnings)
+type$ -- 396
+warning$ -- 43
+while$ -- 232
+width$ -- 101
+write$ -- 976
+(There were 44 warnings)

@@ -707,7 +707,7 @@ We will not go into further detail of how and why the transformer architecture w
 All of the below presented models use the transformer architecture as a building block instead of the LSTM used in ELMo.
 The following architectures are all based on the transformer module.
 
-\subsubsection{BERT}
+\subsubsection{BERT}\label{section:BERT}
  
 As introduced in \cite{devlin18}, the Bidirectional Encoder Representations from Transformers model (BERT) combines the above concepts of forward and backwards sequential models with attention, as marked in the transformer architecture above.
 
@@ -793,6 +793,30 @@ Numerous works have been published on making BERT representations more compact, 
 %TODO talk about bert tokenizers..
 
 %TODO Hint at the hubness problem \cite{conneau17}
+
+We will further provide a more detailed explanation of the inner workings of BERT embeddings, specifically  how sentences are split up into tokens, and how word-tokens are translated into the latent space.
+
+The general pipeline of how BERT processes sentences is as follows.
+We have a sentence $s$ which includes a set of words $w_1$, \ldots, $w_n$.
+This sequence of words is now given as input to the BERT model.
+First, this sequence of words is split into a set of tokens $t_1$, \ldots, $t_m$, where $m \geq n$.
+Now these tokens, which are in the vocabulary of the BERT tokenizer, are converted to indicies, which correspond to index of each individual embedding inside BERT.
+
+%TODO properly define which symbols etc. you want to use ... this should be formally rigorous enough
+
+%TODO Talk about the tokenizer here again
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_vanilla_BERT.png}
+  \caption{The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots, $t_m$ as defined in a given vocabulary $V$.
+Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
+This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.
+}
+  \label{fig:BERT_vanilla_pipeline}
+\end{figure}
+
+
 
 \subsubsection{GPT and GPT-2}
 
@@ -1602,9 +1626,11 @@ A translation model is learned which can not only translate between different do
 
 %TODO Go a bit into detail with chinese whispers, and the paper where they form EGO networks to find synsets (and thus, meanings...)
 
-\chapter{Understanding the semantic subspace organization in BERT}
+\chapter{Understanding the semantic subspace organization in BERT}\label{section:Understand_BERT}
 
-We begin our analysis by trying to understanding how BERT organized its semantic subspace.
+%TODO because there is a mismatch between what humans understand between the features in language, and what a neural network records, we analyse ..
+
+We begin our analysis by trying to understanding how BERT organizes its semantic subspace.
 
 For this, we conduct three experiments.
 The experiments have varying difficulty for the algorithm to understand the subspace organization for a given word $w$.
@@ -1983,467 +2009,418 @@ Adding 1 or more \Verb#[PAD]# at the end of the sentence does not improve the sc
 So far, we have looked at the Adjusted Random Index Score as a way to measure how well the datasamples were clustered by meaning.
 However, because this is an arbitrary score, it is also important to do a qualitative analysis, and go over examples to see what this clustering scheme results in.
 The below clusterings form partitions of the sentences to be clustered.
+Figures \eqref{fig:example_arms_negative_handcuffed} - \eqref{example_arms_negative_crossed} show a a partition that is created when we run the above received best clustering algorithm on the word \Verb#arms#, which is polysemous. 
+WordNet records 10 different semantic classes for this word.
+To keep this work concise, we will only show this as an explicit example. 
+We refer to appendix \eqref{more_clustering_results_qualitative} for some more examples.
+Because it is difficult to describe each partition through a concise and general statement, we show a few sampled words which represent the given semantic cluster.
 
-\begin{figure}[H]
-\scalebox{0.9}{
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
 \begin{align}
-\texttt{                                                                  } & \texttt{- - - -} \nonumber \\
+\texttt{                                                                  } & \texttt{- -} \nonumber \\
 \texttt{Ms. Gotbaum tried to slide her handcuffed } & \texttt{arms from her back to her front} \nonumber \\
-\text{                                                                  } & \texttt{- - - -} \nonumber \\
+\text{                                                                  } & \texttt{- -} \nonumber \\
                \texttt{That magisterial use of the upper body and } & \texttt{arms is her physical signature} \nonumber \\
 \texttt{entered the stage in pairs and forcefully stretched their } & \texttt{arms and legs} \nonumber \\ 
                                     \texttt{ripped from patients’ } & \texttt{arms as they were carried away} \nonumber \\
-                                    \text{                                                                  } & \texttt{- - - -} \nonumber \\
+                                    \text{                                                                  } & \texttt{- -} \nonumber
 \end{align}
+\end{minipage}
+}\label{fig:example_arms_negative_handcuffed}
+\captionof{figure}{Partition 1 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of hancuffed arms. Notice that the sentiment is usually one of surprise, and rather negative.}
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\text{                                              } & \texttt{- -} \nonumber \\
+\texttt{She swooped him up into her } & \texttt{arms and kissed him madly} \nonumber \\
+\text{                                              } & \texttt{- -} \nonumber \\
+\texttt{I place my son in her } & \texttt{arms and I pray that it somehow comforts her} \nonumber \\
+\texttt{perfect babies \ldots into the loving } & \texttt{arms of middle class+ Americans} \nonumber \\
+\texttt{which he falls back into her } & \texttt{arms like a baby} \nonumber \\
+\texttt{Sometimes I took it into my } & \texttt{arms and felt its surprising heft} \nonumber \\
+\text{                                              } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
 }
-\caption{A famous equation}
-\end{figure}
+\captionof{figure}{Partition 2 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of arms where one person hugs or loves another. Notice that this usually includes a positive sentiment.}
 
 
-\begin{figure}[H]
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
 \begin{align}
-\text{                                              } & \text{- - - -} \nonumber \\
-\text{She swooped him up into her } & \text{arms and kissed him madly} \nonumber \\
-\text{                                              } & \text{- - - -} \nonumber \\
-\text{I place my son in her } & \text{arms and I pray that it somehow comforts her} \nonumber \\
-\text{perfect babies \ldots into the loving } & \text{arms of middle class+ Americans} \nonumber \\
-\text{which he falls back into her } & \text{arms like a baby} \nonumber \\
-\text{Sometimes I took it into my } & \text{arms and felt its surprising heft} \nonumber \\
-\text{                                              } & \text{- - - -} \nonumber
+\texttt{                              } & \texttt{- -} \nonumber \\
+\texttt{and shuttle robotic } & \texttt{arms of a solar array and truss}  \nonumber\\
+\texttt{                              } & \texttt{- -} \nonumber \\
+\texttt{a contingent of young } & \texttt{arms that will allow us to win now}  \nonumber\\
+\texttt{By and large, those } & \texttt{arms remained as fictional as those in "The War \ldots"}  \nonumber\\
+\texttt{and extensive use of robotic } & \texttt{arms operating at their limits}  \nonumber\\
+\texttt{staff of strong young } & \texttt{arms that might have tamed the National League East} \nonumber \\
+\text{                              } & \texttt{- -} \nonumber
 \end{align}
-\caption{A famous equation}
-\end{figure}
+\end{minipage}
+}
+\captionof{figure}{Partition 3 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of strong arms, usually in a competitive context.}
 
-
-\begin{figure}[H]
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
 \begin{align}
-\text{                              } & \text{- - - -} \nonumber \\
-\text{and shuttle robotic } & \text{arms of a solar array and truss}  \nonumber\\
-\text{                              } & \text{- - - -} \nonumber \\
-\text{a contingent of young } & \text{arms that will allow us to win now}  \nonumber\\
-\text{By and large, those } & \text{arms remained as fictional as those in "The War \ldots"}  \nonumber\\
-\text{and extensive use of robotic } & \text{arms operating at their limits}  \nonumber\\
-\text{staff of strong young } & \text{arms that might have tamed the National League East} \nonumber \\
-\text{                              } & \text{- - - -} \nonumber \\
+\texttt{                                                   } & \texttt{- -} \nonumber \\
+\texttt{this country is so polarized that people spring to } & \texttt{arms against any proposal} \nonumber \\
+\text{                                                   } & \texttt{- -} \nonumber \\
+                        \texttt{At least they are carrying } & \texttt{arms to protect themselves} \nonumber \\
+                 \texttt{His organization issued a call to } & \texttt{arms} \nonumber \\
+      \texttt{he shoves it in the faces of his comrades in } & \texttt{arms} \nonumber \\
+                           \texttt{people who had taken up } & \texttt{arms against the United States} \nonumber \\
+                    \texttt{Mostly non-Arab rebels took up } & \texttt{arms in early 2003} \nonumber \\
+\texttt{                                                   } & \texttt{- -} \nonumber
 \end{align}
-\caption{A famous equation}
-\end{figure}
+\end{minipage}
+}
+\captionof{figure}{Partition 4 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of individuals and countries. This uses the semantic definition of arms which is analogous to \texttt{weaponry}.}
 
 
-
-\begin{figure}[H]
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
 \begin{align}
-\text{                                                   } & \text{- - - -} \nonumber \\
-\text{this country is so polarized that people spring to } & \text{arms against any proposal} \nonumber \\
-\text{                                                   } & \text{- - - -} \nonumber \\
-                        \text{At least they are carrying } & \text{arms to protect themselves} \nonumber \\
-                 \text{His organization issued a call to } & \text{arms} \nonumber \\
-      \text{he shoves it in the faces of his comrades in } & \text{arms} \nonumber \\
-                           \text{people who had taken up } & \text{arms against the United States} \nonumber \\
-                    \text{Mostly non-Arab rebels took up } & \text{arms in early 2003} \nonumber \\
-\text{                                                   } & \text{- - - -} \nonumber \\
+\texttt{                                                   } & \texttt{- -} \nonumber \\
+                      \texttt{The classic years of the } & \texttt{arms race, the 1950s and ’60s before} \nonumber \\
+                      \texttt{                                                   } & \texttt{- -} \nonumber \\
+                    \texttt{that concerns over nuclear } & \texttt{arms proliferation in the Middle East} \nonumber \\
+                  \texttt{Russian adherence to another } & \texttt{arms control treaty} \nonumber \\
+       \texttt{he will press for peace and an eventual } & \texttt{arms cut for the states} \nonumber \\
+       \texttt{payments to the companies that supplied } & \texttt{arms to Iraq were often delayed} \nonumber \\
+\texttt{Mr. Safar denies any wrongdoing, including any } & \texttt{arms dealings} \nonumber \\
+\texttt{                                                   } & \texttt{- -} \nonumber \\
 \end{align}
-\caption{A famous equation}
-\end{figure}
+\end{minipage}
+}
+\captionof{figure}{Partition 5 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of countries (no individuals). This uses the semantic definition of arms which is analogous to \texttt{weaponry}. One can notice that these sentences usually refer to nuclear arms.}
 
 
-\begin{figure}[H]
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
 \begin{align}
-\text{                                                   } & \text{- - - -} \nonumber \\
-                      \text{The classic years of the} & \text{arms race, the 1950s and ’60s before} \nonumber \\
-                      \text{                                                   } & \text{- - - -} \nonumber \\
-                    \text{that concerns over nuclear} & \text{arms proliferation in the Middle East} \nonumber \\
-                  \text{Russian adherence to another} & \text{arms control treaty} \nonumber \\
-       \text{he will press for peace and an eventual} & \text{arms cut for the states} \nonumber \\
-       \text{payments to the companies that supplied} & \text{arms to Iraq were often delayed} \nonumber \\
-\text{Mr. Safar denies any wrongdoing, including any} & \text{arms dealings} \nonumber \\
-\text{                                                   } & \text{- - - -} \nonumber \\
+\texttt{                                              } & \texttt{ - -} \nonumber \\
+           \texttt{leaned back in his chair and, with} & \texttt{ arms crossed,} \nonumber \\
+\texttt{                                              } & \texttt{ - -} \nonumber \\
+\texttt{God, fully in name, is at the bottom with his} & \texttt{ arms out wide.} \nonumber \\
+    \texttt{If you feel yourself falling, spread your} & \texttt{ arms} \nonumber \\
+                                   \texttt{Agamemnon,} & \texttt{ arms raised ... barely contained violence} \nonumber \\
+                       \texttt{Mr. James sat with his} & \texttt{ arms folded, his head lowered} \nonumber \\
+      \texttt{she felt tears in her eyes and held her} & \texttt{ arms out in simple joy} \nonumber \\
+\texttt{                                             } & \texttt{ - -} \nonumber
 \end{align}
-\caption{A famous equation}
-\end{figure}
+\end{minipage}
+}\label{fig:example_arms_negative_crossed}
+\captionof{figure}{Partition 6 for the word \texttt{arms}. This cluster again refers to the arms of a person, however usually with a positive / optimistic sentiment.}
 
 
-
-\begin{figure}[H]
-\begin{align}
-\text{                                              } & \text{- - - -} \nonumber \\
-           \text{leaned back in his chair and, with} & \text{ arms crossed,} \nonumber \\
-\text{                                              } & \text{- - - -} \nonumber \\
-\text{God, fully in name, is at the bottom with his} & \text{ arms out wide.} \nonumber \\
-    \text{If you feel yourself falling, spread your} & \text{ arms} \nonumber \\
-                                   \text{Agamemnon,} & \text{ arms raised ... barely contained violence} \nonumber \\
-                       \text{Mr. James sat with his} & \text{ arms folded, his head lowered} \nonumber \\
-      \text{she felt tears in her eyes and held her} & \text{ arms out in simple joy} \nonumber \\
-\text{                                             } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-NOW MOVING OVER TO THE BANK EXAMPLE
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{heavy withdrawals from the British} & \text{ bank Northern Rock reignited concern} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{credit card and other consumer loans, forcing the} & \text{ bank to set aside \$3.4 billion} \nonumber \\
-\text{by a mainland Chinese commercial bank in a U.S.} & \text{ bank} \nonumber \\
-\text{Investors fear the} & \text{ bank will be forced to write down} \nonumber \\
-\text{investors hoped that the} & \text{ bank had disclosed the} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                              } & \text{- - - -} \nonumber \\
-\text{I would expect the} & \text{ bank by the trail to the left of the road to have been broken down} \nonumber \\
-\text{                                              } & \text{- - - -} \nonumber \\
-\text{The current slowed and swirled alongside a mud} & \text{ bank where cows had trodden to the water} \nonumber \\
-\text{But the} & \text{ bank had positioned itself well} \nonumber \\
-\text{provide plant scientists and farmers with a} & \text{ bank of genes} \nonumber \\
-\text{Upstairs at the large} & \text{ bank of cashiers} \nonumber \\
-\text{                                              } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{of their family’s naturalization —} & \text{ bank deposit by bank deposit} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{12 that the company might suffer a run on the} & \text{ bank because of mortgage concerns} \nonumber \\
-\text{Third, per several} & \text{ bank managers of major national banks} \nonumber \\
-\text{Local party bosses gained broad powers over state} & \text{ bank lending, taxes} \nonumber \\
-\text{government contracts, and a web of} & \text{ bank accounts} \nonumber \\
-\text{Prince Bandar’s Washington} & \text{ bank accounts} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                    } & \text{- - - -} \nonumber \\
- \text{to lift some of the mystery surrounding the central} & \text{ bank and improve communications with Wall Street} \nonumber \\
-\text{                                                    } & \text{- - - -} \nonumber \\
-\text{many economists had predicted that the} & \text{ bank would not cut its rate} \nonumber \\
-\text{expectations that the central} & \text{ bank will raise interest} \nonumber \\
-\text{a hint that the central} & \text{ bank plans to hold rates} \nonumber \\
-\text{China’s central} & \text{ bank has stepped up its already huge purchases of dollar-denominated securities} \nonumber \\
-\text{fertilizer prices in African countries, but that the} & \text{ bank itself had often failed to recognize} \nonumber \\
-\text{                                                    } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                              } & \text{- - - -} \nonumber \\
-\text{citing challenges for the investment} & \text{ bank and the potential for an above-average credit burden} \nonumber \\
-\text{                                              } & \text{- - - -} \nonumber \\
-\text{93 percent drop in profits at its investment} & \text{ bank last week} \nonumber \\
-\text{UBS said it did not expect its investment} & \text{ bank to return to profitability} \nonumber \\
-\text{defrauded by the investment} & \text{ bank in 1998 when} \nonumber \\
-\text{said in an interview that the investment} & \text{ bank approached him last month \nonumber} \\
-\text{said the leaders of Citigroup’s investment} & \text{ bank and alternative} \nonumber \\
-\text{                                            } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-EXAMPLES FOR KEY CLUSTERING
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{Many of the} & \text{ key Arab states } \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{in two months and Australia's} & \text{ key S\&P ASX 200 shed 1.9 percent } \nonumber \\
-\text{Wall Street rebounded Wednesday after} & \text{ key earnings reports from JPMorgan Chase \& Co.} \nonumber \\
-\text{The Democratic candidate hires a} & \text{ key strategist} \nonumber \\
-\text{[CLS] Mr. Jones “quickly established a good rapport with} & \text{ key donors” } \nonumber \\
-\text{able to meet the two} & \text{ key officials in the government} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{former president of Trinity College, who played a} & \text{ key role in designing the test} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{seen in the West as a} & \text{ key yardstick of the fairness of an election} \nonumber \\
-\text{treat ... as a} & \text{ key factor in its decisions about regulatory issues} \nonumber \\
-\text{which policy makers have called the} & \text{ key test for deciding whether to lower interest rates} \nonumber \\
-\text{9. 11. as a} & \text{ key element in pitch meetings} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{Interstate 5 is a} & \text{ key route connecting Southern and Northern California} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{ A} & \text{ key piece of new functionality for Ops Center } \nonumber \\
-\text{Youssef Squali at Jefferies \& Co. says two} & \text{ key factors are driving the stock up} \nonumber \\
-\text{transforming connection with believers is a} & \text{ key element of evangelical Christianity} \nonumber \\
-\text{What would you say was the} & \text{ key element of your management style that allowed you to stabilize H.P.} \nonumber \\
-\text{is a} & \text{ key indicator of retailer performance} \nonumber \\
-\text{in the West the} & \text{ key players were not a small group of intellectuals reading Greek sources } \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-\begin{figure}[H]
-\begin{align}
- \text{                                                 } & \text{- - - -} \nonumber \\
-\text{times change and technology advances, the} & \text{ key to the city symbolizes } \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{And an official, five-and-three-quarters-inch-long gold-plated pewter} & \text{ key to prove it} \nonumber \\
-\text{but it is small enough to fit onto a} & \text{ key chain} \nonumber \\
-\text{In it lay three keys on a} & \text{ key chain in the shape of a red speedboat} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{The Red Sox will now have all their} & \text{ key players from their 2007 championship team} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{Mike Green scored 12 points and had a} & \text{ key assist in overtime as No. 22 Butler beat Virginia Tech} \nonumber \\
-\text{or taking the chance of losing a} & \text{ key player to injury} \nonumber \\
-\text{But they never led, could not get a} & \text{ key basket at crucial times and played like a team } \nonumber \\
-  \text{but Cam Long stole the ball near the top of the} & \text{ key and ran out the clock} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{align}
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{Three of their} & \text{ key players played more than 40 minutes in Sacramento} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\text{A} & \text{ key for the Giants on Sunday} \nonumber \\
-\text{chemical reactions on solid surfaces, which are} & \text{ key to understanding questions like why the ozone layer is thinning} \nonumber \\
-\text{but is she part of the conspiracy or the} & \text{ key to Sim’s salvation?} \nonumber \\
-\text{whose ability to play on a sprained ankle against the Eagles} & \text{ key to that matchup} \nonumber \\
-\text{Horses have been the lifelong} & \text{ key to satisfying the real feminine needs for me and my daughter} \nonumber \\
-\text{Connecticut cornerback said the} & \text{ key to defeating Louisville would be pressuring Brohm} \nonumber \\
-\text{                                                 } & \text{- - - -} \nonumber \\
-\end{align}
-\caption{A famous equation}
-\end{figure}
-
-
-
-
+As one can see, the different partitions do not quite capture semantics.
+Primarily, the different partitions capture context - which should be no surprise when we are sampling context embeddings.
+On a second look, however, the second strongest linguistic feature seems to be sentiment. 
+This is also confirmed by other samples, which more often than not include strong notions of sentiment features.
+Although we cannot manually capture all possible words, as there is no formal definition for linguistic features within BERT vectors to our knowledge, where these concepts are purely man-made, 
+we can thus conclude that BERT puts more weight on sentiment than on semantics, and that the semantics are a by-product of the context.
+This shows that more fundamental work needs to be done before we can formalize semantics.
 
 
 \section{Correlation between Part of Speech and Context within BERT} \label{correlation_pos_context}
 
-\subsection{Motivation}
-
-%TODO think about why you did this lol
-Because there are more resources in NLP with Part of Speech (PoS) tags, as compared to semantics, we want to analyse to what extent BERT sees similarities between PoS and, and because we assume a strong correlation between PoS and semantics, we analyse to what extent this is visible within BERT vectors.
+In the previous section, we have when we partition the sampled context vectors into clusters, sentiment becomes a prevalent factors next to semantics.
+Although the reason for this cannot be trivially concluded, this could also be a consequence of the nature of language.
+In this section, we are interested to what extent part-of-speech information entails semantic information.
+We pick part-of-speech because there are robust classifiers built on simple models with high accuracy rates (~92\%).
+Our hypothesis is that part-of-speech has a strong entailment towards semantics.
+One example of this manifestation is by \textit{frozen verbs}.
+A frozen verb is a noun which achieved it meaning through its verb form.
+The word \Verb#the run#, for example became a noun through its verb form \Verb#to run#, and thus is considered a frozen verb.
+Although this section is more a qualitative analysis of whether this hypothesis is true, due to the selective nature of samples that we can look at qualitatively.
+We finish this experiment by conducting a more  quantitative approach.
 
 \subsection{Experiment setup}
 
-We test the hypothesis "semantics implies PoS" by conductin the following experiment.
-For a chosen target word $w_t$, we fixate one of the wordnet meanings.
-We then sample $n$ sentences for the target word $w_t$ where $w_t$ has semantic meaning $m$ in the occurring sentence.
-After we have sampled all the sentences, we determine the PoS for the target word $w_t$.
-We then calculate the percentage occurrence of the majority PoS class and record this as a percentage.
+We test the hypothesis "semantics implies PoS" by conducting the following experiment.
+We define a set of words, including frozen verbs, which can appear as at least two different part-of-speech tags.
+These words are listed in the Appendix under section \eqref{section:frozen_verbs}.
+For this experiment, we choose a word $w_t$ from the above list and iterate over all WordNet meaning classes that this word presents.
+For each of the WordNet classes, we then measure the percentage of the most dominant part-of-speech tag.
+We refer to this percentage measure as the \textit{dominance} of the majority class.
+If this percentage is close to 100\%, (and generally above 50\%) we can confidently say that meaning strongly implies part-of-speech, at least as measured in the SemCor dataset.
+More specifically, the algorithm looks as follows:
+
+%TODO include optimization loop over all models
+\begin{algorithm}[H]
+\SetAlgoLined
+\SetKwInOut{Input}{Input}
+\Input{
+$\mathbf{w_{\text{analyse}}} = [w_1, \ldots, w_N]$: The list of target words for which we want to calculate the dominance percentages for; \\
+}
+\KwResult{A list of dominance percentages. Specifically, for each WordNet class for all the words, the distribution of fractions of how often the prevalent part-of-speech was occurrent.}
+
+out = [] \\
+
+\textbf{for}  $w$ in $\mathbf{w_{\text{analyse}}}$:  \\
+\quad \quad \textbf{for} wordNetClass \textbf{in} $w$.wordNetClasses() :  \\
+\quad \quad \quad \textbf{for} posLabels \\
+\quad \quad \quad \textbf{in} wordNetClass:  \\
+
+\quad \quad \quad \quad \textbf{if} length(posLabels) $<= 1$: \\
+\quad \quad \quad \quad \quad \quad  continue \\
+
+\quad \quad \quad \quad dominantLabel = Counter(posLabels).mostCommon(1) \\
+
+\quad \quad \quad \quad domFraction = dominantLabel.count() / length(posLabels) \\
+
+\quad \quad \quad \quad out.append(domFraction) \\
+
+
+\textbf{return} out
+ 
+ \caption{Analyzing dominance of part-of-speech within WordNet meaning clusters.}
+\end{algorithm}
+
 If all of the sampled target words $w_t$ for all the sentences have the same assigned PoS tag, then the score results in a value of $1.0$.
 If the dominant PoS tag occurs only half the time, this number decreases to $0.5$.
-Please notice that in this experiment, we only view simple PoS tags (i.e. "noun", "verb", "adjective", "pronoun"), and not the more complex ones listed above.
+If there are three PoS tags, and all occur equally often, this percentage would drop down to $0.33$
+Please notice that in this experiment again, we only view simple PoS tags (i.e. "noun", "verb", "adjective", "pronoun"), and not the more complex ones listed above.
+
+For a qualitative investigation, we visualize some of these words using the tensorboard projector, using both UMAP and PCA as the dimensionality reduction method.
+We color the samples by their respective part of speech tags.
 
 \subsection{Results}
 
-It is apparent that there is a strong relation between PoS and meaning. 
-Especially "erstarrte" Verben are a strong part of this
+\subsubsection{Quantitative Evaluation}
 
-\begin{figure}
-\begin{subfigure}{.5\textwidth}
+The results for this experiment reveal that there is a strong correlation between part of speech and semantics.
+The following graph shows the cumulative plot of dominance amongst all sampled words that have been investigated.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.5\linewidth]{./assets/experiments/pos_dominance_calculation.png}
+  \caption{Cumulative dominance of the most occurring cluster. Dominance of a part of speech tag is measured by the percentage cover that the majority class intakes.}
+  \label{fig:BERT_vanilla_pipeline}
+\end{figure}
+
+It is important to notice that some words did not have enough samples in the SemCor dataset for a significant valuation. 
+We intentionally left out classes which had less than $5$ samples.
+Also, SemCor is biased, as was previously stated.
+However, the results show that quite a majority of the sampled word-classes only contain a single part-of-speech tag, implying that part-of-speech is strongly correlated to meaning.
+
+%TODO be careful in what direction the correlation is valid for
+Because a numerical value is not intuitively interpretable, we continue with a qualitative evaluation of this phenomenon.
+
+\subsubsection{Qualitative Evaluation}
+
+
+To do a qualitative evaluation of the this hypothesis we visualize the BERT vectors using dimensionality reduction techniques.
+Due to the disadvantages that each dimensionality reduction techniques carry, we choose to look at $X$ using both PCA and UMAP.
+We only look at the polysemous words \Verb#block#, \Verb#run#, \Verb#cold# limited number of figures to keep the analysis concise 
+
+Figures \eqref{run_tensorboard} - \eqref{cold_tensorboard} show  the tensorboard visualizations.
+Please keep in mind that different colors imply different part of speech tags. 
+Because the specific value does not play an inportant role, we leave out this legend.
+
+\begin{figure}[H]
+\begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./assets/analysis/run_pca.png}
-  \caption{1a}
+  \caption{Dimensionality reduction using PCA}
   \label{fig:sfig1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\hfill
+\begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./assets/analysis/run_umap.png}
-  \caption{1b}
+  \caption{Dimensionality reduction using UMAP}
   \label{fig:sfig2}
 \end{subfigure}
-\caption{plots of....}
-\label{fig:fig}
+\caption{PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt{run}. }
+\label{fig:run_tensorboard}
 \end{figure}
 
-
-
-\begin{figure}
-\begin{subfigure}{.5\textwidth}
+\begin{figure}[H]
+\begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./assets/analysis/block_pca.png}
-  \caption{1a}
+  \caption{Dimensionality reduction using PCA}
   \label{fig:sfig1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\hfill
+\begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./assets/analysis/block_umap.png}
-  \caption{1b}
+  \caption{Dimensionality reduction using UMAP}
   \label{fig:sfig2}
 \end{subfigure}
-\caption{plots of....}
-\label{fig:fig}
+\caption{PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt{block}. }
+\label{fig:was_tensorboard}
 \end{figure}
 
-
-
-\begin{figure}
-\begin{subfigure}{.5\textwidth}
+\begin{figure}[H]
+\begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./assets/analysis/cold_pca.png}
-  \caption{1a}
+  \caption{Dimensionality reduction using PCA}
   \label{fig:sfig1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\hfill
+\begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./assets/analysis/cold_umap.png}
-  \caption{1b}
+  \caption{Dimensionality reduction using UMAP}
   \label{fig:sfig2}
 \end{subfigure}
-\caption{plots of....}
-\label{fig:fig}
+\caption{PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt{cold}. }
+\label{fig:cold_tensorboard}
 \end{figure}
+
+
+Following trends are apparent: 
+PCA shows a very smooth transition from different semantic classes, whereash UMAP stronlgy shows that clusters are forming between different semantic classes.
+This is also true for part-of-speech tags, however, we cannot generalize this as well, because part-of-speech tags strongly correlate with semantics.
+
+Furthermore, one can see that globally, BERT does seem to organize the context embeddings by semantics. 
+This is apparent in figures \eqref{run_tensorboard} and \eqref{cold_tensorboard}, where we can see that different blobs (UMAP) and extremes (PCA) in the figures respond to different semantic classes.
+Especially in Figure \eqref{run_tensorboard} (a), we can see that in the case of UMAP, the central clsuter strongly mixes nouns with adjectives (red and blue cluster), and that in the case of PCA, the context embeddings are constrained in such a way that embeddings which mix different semantic classes meet in the middle.
+Looking at the different blobs in UMAP we can again confirm the hypothesis that semantics strongly correlates to part-of-speech, as most clusters have a strong predominant color.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %TODO make another plot which is more coarse
 
 %\chapter{Evaluation} 
 \chapter{Exploiting subspace organization of semantics of BERT embeddings}
 
-The general pipeline of how BERT processes sentences is as follows.
-We have a sentence $s$ which includes a set of words $w_1$, \ldots, $w_n$.
-This sequence of words is now given as input to the BERT model.
-First, this sequence of words is split into a set of tokens $t_1$, \ldots, $t_m$, where $m \geq n$.
-Now these tokens, which are in the vocabulary of the BERT tokenizer, are converted to indicies, which correspond to index of each individual embedding inside BERT.
 
-%TODO properly define which symbols etc. you want to use ... this should be formally rigorous enough
+So far we have tried to understand how language features are better represented within the BERT language model.
+Now we want to understand how different modifications to the BERT model affect the performance on language modelling task.
+Because GLUE is a very general language modelling benchmark, we will start with GLUE.
+Our analysis will be limited to BERT only, although similar changed can also be made to modifications of BERT incl. ALBERT \cite{lan20}, DistillBERT \cite{sanh19}, we will keep the contents of this analysis focused on BERT only, as all transformer models share a similar architecture, and we expect the changes to similarly affect the different models.
+As such, the focus lies on the ablation study with BERT as the model baseline.
+To have a model we can talk about, we will call any of our proposed modifications \textbf{BERnie}. 
+Please refer to \eqref{section:BERT_explanation} for a refresher of how sentences are tokenized inside BERT, and how tokens are converted to the latent representation and finally into context embeddings through the BERT model.
+\\
 
-%TODO Talk about the tokenizer here again
+Before we continue, we want to introduce the concept of a \textit{split-word}. A split-word is a word for which we will introduce additional embedding vectors in the BERT model.
+A split-word will in most cases have high-variance amongst word-vectors inside BERT.
+The idea behind this is that introducing more specialized embeddings for tokens which result in context embeddings that have high variance will allow to model more complex distributions, which could approximate the underlying true distribution better.
 
-\begin{figure}[h]
+
+
+%TODO Input the figure and table with split-words
+
+\begin{figure}[H]
 	\center
-  \includegraphics[width=\linewidth]{./assets/experiments/pipeline_vanilla_BERT.png}
-  \caption{The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots, $t_m$ as defined in a given vocabulary $V$.
-Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
-This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.
-}
-  \label{fig:BERT_vanilla_pipeline}
+  \includegraphics[width=0.5\linewidth]{./assets/experiments/variance_in_BERT_embeddings.png}
+  \caption{
+  	For each word $w$, we sample both the number of WordNet semantic classes that are recorded in the WordNet dataset. We also calculate the dimension-wise mean variance between $n=500$ sampled vectors for the word $w$. 
+  	This constitutes a point on this plot.
+  	We repeat this procedure for the most 20'000 most frequent words which consist of a single token (i.e. are not split up into further subtokens when the tokenizer is applied).
+	We show that although the variance is relatively high, especially if only few WordNet classes are present, there is a correlation between the number of WordNet classes and the variance of sampled BERT context embeddings.
+	The right and top distributions show histograms of how occurrent the variance and WordNet classes are respectively.
+	Our assumption is that if we introduce additional embedding-vectors inside BERT for certain words, that more complex distributions can be captures for words that have a higher number of WordNet classes.
+  }
+  \label{fig:BERT_variance}
 \end{figure}
 
+\section{BERnie: Making the variances across BERT embeddings more uniform}
 
-We introduce \textit{split-words}, for which we will be generating more specific embeddings.
-In particular, 
-The idea behind this is that introducing more specialized embeddings for certain tokens will allow to model more complex distributions.
-
-Because the non-modified (vanilla) BERT model uses a certain workflow, we will shortly introduce BERTs pipeline.
+We will introduce two adaptions to the BERT model, BERnie PoS and BERnie semantics.
+We will present the results after having introduced both adaptations.
 
 \subsection{BERnie PoS} \label{bernie_pos}
 
-\subsubsection{Motivation}
-
 We want to start with a simple model first.
 Because we have seen in the above section, that there is a strong correlation between semantics and part-of-speech, the initial idea is to introduce additional embedding vectors which are able to capture semantics (rather than just purely word tokens) better.
-In this case, part-of-speech is used as a proxy for semantics.
+Because of the strong correlation, part-of-speech is used as a proxy for semantics.
+One of the advantages that this carries is that we can use the spaCy PoS tagger \cite{spacyb} to classify the PoS tags with high accuracy.
+
+Our first model adaption is called \textbf{BERnie PoS}.
+In this case, we introduce new tokens, and new embedding vectors into the embedding layers of the transformers inside of BERT.
+These newly introduced embedding vectors are supposed to  be able to capture more complex target distributions, as we introduce more weights for regions of semantic ambiguity, which have higher variance as can be seen in Figure \eqref{fig:BERT_variance}.
 
 \subsubsection{Experiment setup}
 
 BERnie PoS introduces one new embedding vector for each possible PoS configuration of the split-words.
 
-As an example, instead of having a single embedding vector for the word \textit{run}, we introduce two new embeddings \textit{run\_  VERB} and \textit{run\_ NOUN}, which both replace the intial \textit{run}-embedding. 
-We will refer to \textit{run\_ VERB} and \textit{run\_ NOUN} as \textit{sub-embeddings}, as these exploit the subspace structure of the context embeddings sampled for the word \textit{run}.
-As for the tokenizer, we also introduce a mechanism which turns any occurrence of \textit{run} into one of the sub-embeddings.
+As an example, instead of having a single embedding vector for the word \Verb#run#, we introduce two new embeddings \Verb#run_ VERB# and \Verb#run\_NOUN#, which both replace the intial \textit{run}-embedding. 
+We will refer to \Verb#run\_VERB# and \Verb#run\_NOUN# as so called \textit{sub-embeddings}, as these exploit the subspace structure of the context embeddings sampled for the word \Verb#run#.
+As for the tokenizer, we also introduce a mechanism which turns any occurrence of \Verb#run# into one of the sub-embeddings.
 
-Specifically, our desired pipeline would not look as follows.
+Specifically, our PoS modified pipeline would now look as follows.
 
 \begin{figure}[H]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png}
-  \caption{The modified pipeline. 
-  The BERnie model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots, $t_m$ as defined in a given vocabulary $V$.
+  \caption{The PoS modified pipeline. 
+  The BERnie PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots, $t_m]$ as defined in a given vocabulary $V$.
+  This vocabulary $V$ is extended with the additionally introduced split-words.
 For each target token $t_{\text{target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token.
-In this case, $run$ becomes $run\_ VERB$.
+In this case, $run$ becomes the more specialized $run\_ VERB$.
 Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
-This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.
+This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer.
 }
   \label{fig:BERnie_POS_pipeline}
 \end{figure}
 
 
-To identify whether the occurring \textit{run} in an example sentence is a verb or a noun, we use the spaCy part-of-speech tagger \cite{spacyb}, which claims 92.6 \% accuracy for this task.
+To identify whether the occurring \Verb#run# in an example sentence is a verb or a noun, we use the spaCy part-of-speech tagger \cite{spacyb}, which claims 92.6 \% accuracy for this task.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS_initialization.png}
-  \caption{Inside the embedding layer of BERT, we introduce more specific embeddings \textit{run\_ VERB} and \textit{run\_ NOUN}. The BERT model should intuitively now capture more expressiveness, as the model size increased. The original \textit{run} embedding is removed.}.
-  \label{fig:BERnie_POS_pipeline}
+  \caption{Inside the embedding layer of the transformer which occurs at each layer of BERT, we introduce more specific embeddings \texttt{run\_VERB} and \texttt{run\_NOUN}. The BERT model should now capture more expressiveness, as more weight got introduced for a part of the model which results in a probability distribution with high variance. The original \texttt{run} embedding is removed.}.
+  \label{fig:BERnie_POS_initialization}
 \end{figure}
 
 
 
 
-\begin{figure}
+\begin{figure}[H]
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png}
-  \caption{1a: The part-of-speech modified tokenizer pipeline}
+  \caption{The part-of-speech modified tokenizer pipeline.}
   \label{fig:sfig1}
 \end{subfigure}%
-\quad
+\hfill
 \begin{subfigure}{.65\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS.png}
-  \caption{1b: The part-of-speech modified BERT embedding}
+  \caption{The part-of-speech modified BERT embedding inside the transformer that BERT uses.}
   \label{fig:sfig2}
 \end{subfigure}
-\caption{plots of....}
+\caption{The resulting, fully modified BERnie PoS pipeline.}
 \label{fig:fig}
 \end{figure}
 
+During training, all weights of BERT are fine-tuned to the downstream GLUE task as described in section 
+%TODO Cite the GLUE section.
+
 \subsection{BERnie Meaning}\label{experiment_bernie_meaning}
 
-\subsubsection{Motivation}
-
-Similar to the above model, we are introducing new BERT embeddings.
-This time however, we do not introduce new tokens by part-of-speech, as we did in the previous section, but rather by semantics.
-For this, we use the a similar methodology as the model from the section \ref{bernie_pos}.
-However, instead of replacing word by their part-of-speech specizalization, we replace words by some semantic specialization.
-%TODO how to cite sections
-The idea here is to adhere more strongly to the subspace structure as seen in section \ref{correlation_pos_context}.
-
-Thus, we introduce the clustering methodology introduced in \ref{experiment_BERT_clusterability}.
+Similar to the above model, we are introducing new BERT tokens and their respective embeddings in the transformer embedding layer, similar to the above section \ref{bernie_pos}.
+This time however, we do not introduce new tokens by part-of-speech, as we did in the previous section, but rather by the clustering algorithms above, which were supposed to cluster by WordNet classes \ref{experiment_BERT_clusterability}.
+Thus, implicitly, we are hoping to cluster by semantics.
+The idea here is to adhere more strongly to the subspace structure as seen in section \ref{correlation_pos_context}, following the investigation from section \ref{section:Understand_BERT}.
+Please notice that although we did optimized the development set to mimick the clustering as is the case analogously to the WordNet classes, that the resulting clusters are implicit latent variables that are not hard-coded, and thus cannot be intuitively understood without further analysis; and also because in most cases we cannot formally describe the concept of semantics and other linguistic properties inside of BERT.
 
 \subsubsection{Experiment setup}
 
@@ -2670,6 +2647,8 @@ Finally, we use a simple algorithm to what extent we can disentangle the semanti
 
 \section{Finding the best clustering model}\label{section:more_clustering_results}
 
+\subsubsection{Quantiative Evaluation}
+
 \captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=500$. }
 \begin{table}[htbp]
     \centering
@@ -2713,6 +2692,239 @@ Finally, we use a simple algorithm to what extent we can disentangle the semanti
         Optics                         & 0.000      \\ \hline
     \end{tabularx}
 \end{table}
+
+
+\subsubsection{Qualitative Evaluation}\label{section:more_clustering_results_qualitative}
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                 } & \texttt{ - -} \nonumber \\
+\texttt{heavy withdrawals from the British} & \texttt{ bank Northern Rock reignited concern} \nonumber \\
+\texttt{                                                 } & \texttt{ - -} \nonumber \\
+\texttt{credit card and other consumer loans, forcing the} & \texttt{ bank to set aside \$3.4 billion} \nonumber \\
+\texttt{by a mainland Chinese commercial bank in a U.S.} & \texttt{ bank} \nonumber \\
+\texttt{Investors fear the} & \texttt{ bank will be forced to write down} \nonumber \\
+\texttt{investors hoped that the} & \texttt{ bank had disclosed the} \nonumber \\
+\texttt{                                                 } & \texttt{ - -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                              } & \texttt{ - -} \nonumber \\
+\texttt{I would expect the} & \texttt{ bank by the trail to the left of the road to have been broken down} \nonumber \\
+\texttt{                                              } & \texttt{-  -} \nonumber \\
+\texttt{The current slowed and swirled alongside a mud} & \texttt{ bank where cows had trodden to the water} \nonumber \\
+\texttt{But the} & \texttt{ bank had positioned itself well} \nonumber \\
+\texttt{provide plant scientists and farmers with a} & \texttt{ bank of genes} \nonumber \\
+\texttt{Upstairs at the large} & \texttt{ bank of cashiers} \nonumber \\
+\texttt{                                              } & \texttt{ - -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                 } & \texttt{ - -} \nonumber \\
+\texttt{of their family’s naturalization - } & \texttt{ bank deposit by bank deposit} \nonumber \\
+\texttt{                                                 } & \texttt{ - -} \nonumber \\
+\texttt{12 that the company might suffer a run on the} & \texttt{ bank because of mortgage concerns} \nonumber \\
+\texttt{Third, per several} & \texttt{ bank managers of major national banks} \nonumber \\
+\texttt{Local party bosses gained broad powers over state} & \texttt{ bank lending, taxes} \nonumber \\
+\texttt{government contracts, and a web of} & \texttt{ bank accounts} \nonumber \\
+\texttt{Prince Bandar’s Washington} & \texttt{ bank accounts} \nonumber \\
+\texttt{                                                 } & \texttt{ - -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                    } & \texttt{- -} \nonumber \\
+ \texttt{to lift some of the mystery surrounding the central} & \texttt{ bank and improve communications with Wall Street} \nonumber \\
+\texttt{                                                    } & \texttt{- -} \nonumber \\
+\texttt{many economists had predicted that the} & \texttt{ bank would not cut its rate} \nonumber \\
+\texttt{expectations that the central} & \texttt{ bank will raise interest} \nonumber \\
+\texttt{a hint that the central} & \texttt{ bank plans to hold rates} \nonumber \\
+\texttt{China’s central} & \texttt{ bank has stepped up its already huge purchases of dollar-denominated securities} \nonumber \\
+\texttt{fertilizer prices in African countries, but that the} & \texttt{ bank itself had often failed to recognize} \nonumber \\
+\texttt{                                                    } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                              } & \texttt{- -} \nonumber \\
+\texttt{citing challenges for the investment} & \texttt{ bank and the potential for an above-average credit burden} \nonumber \\
+\texttt{                                              } & \texttt{- -} \nonumber \\
+\texttt{93 percent drop in profits at its investment} & \texttt{ bank last week} \nonumber \\
+\texttt{UBS said it did not expect its investment} & \texttt{ bank to return to profitability} \nonumber \\
+\texttt{defrauded by the investment} & \texttt{ bank in 1998 when} \nonumber \\
+\texttt{said in an interview that the investment} & \texttt{ bank approached him last month \nonumber} \\
+\texttt{said the leaders of Citigroup’s investment} & \texttt{ bank and alternative} \nonumber \\
+\texttt{                                            } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+EXAMPLES FOR KEY CLUSTERING
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{Many of the} & \texttt{ key Arab states } \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{in two months and Australia's} & \texttt{ key S\&P ASX 200 shed 1.9 percent } \nonumber \\
+\texttt{Wall Street rebounded Wednesday after} & \texttt{ key earnings reports from JPMorgan Chase \& Co.} \nonumber \\
+\texttt{The Democratic candidate hires a} & \texttt{ key strategist} \nonumber \\
+\texttt{[CLS] Mr. Jones “quickly established a good rapport with} & \texttt{ key donors” } \nonumber \\
+\texttt{able to meet the two} & \texttt{ key officials in the government} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{former president of Trinity College, who played a} & \texttt{ key role in designing the test} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{seen in the West as a} & \texttt{ key yardstick of the fairness of an election} \nonumber \\
+\texttt{treat ... as a} & \texttt{ key factor in its decisions about regulatory issues} \nonumber \\
+\texttt{which policy makers have called the} & \texttt{ key test for deciding whether to lower interest rates} \nonumber \\
+\texttt{9. 11. as a} & \texttt{ key element in pitch meetings} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{Interstate 5 is a} & \texttt{ key route connecting Southern and Northern California} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{ A} & \texttt{ key piece of new functionality for Ops Center } \nonumber \\
+\texttt{Youssef Squali at Jefferies \& Co. says two} & \texttt{ key factors are driving the stock up} \nonumber \\
+\texttt{transforming connection with believers is a} & \texttt{ key element of evangelical Christianity} \nonumber \\
+\texttt{What would you say was the} & \texttt{ key element of your management style that allowed you to stabilize H.P.} \nonumber \\
+\texttt{is a} & \texttt{ key indicator of retailer performance} \nonumber \\
+\texttt{in the West the} & \texttt{ key players were not a small group of intellectuals reading Greek sources } \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+ \texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{times change and technology advances, the} & \texttt{ key to the city symbolizes } \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{And an official, five-and-three-quarters-inch-long gold-plated pewter} & \texttt{ key to prove it} \nonumber \\
+\texttt{but it is small enough to fit onto a} & \texttt{ key chain} \nonumber \\
+\texttt{In it lay three keys on a} & \texttt{ key chain in the shape of a red speedboat} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{The Red Sox will now have all their} & \texttt{ key players from their 2007 championship team} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{Mike Green scored 12 points and had a} & \texttt{ key assist in overtime as No. 22 Butler beat Virginia Tech} \nonumber \\
+\texttt{or taking the chance of losing a} & \texttt{ key player to injury} \nonumber \\
+\texttt{But they never led, could not get a} & \texttt{ key basket at crucial times and played like a team } \nonumber \\
+  \texttt{but Cam Long stole the ball near the top of the} & \texttt{ key and ran out the clock} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+
+\scalebox{0.7}{
+\begin{minipage}{\linewidth}
+\begin{align}
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{Three of their} & \texttt{ key players played more than 40 minutes in Sacramento} \nonumber \\
+\texttt{                                                 } & \texttt{- -} \nonumber \\
+\texttt{A} & \texttt{ key for the Giants on Sunday} \nonumber \\
+\texttt{chemical reactions on solid surfaces, which are} & \texttt{ key to understanding questions like why the ozone layer is thinning} \nonumber \\
+\texttt{but is she part of the conspiracy or the} & \texttt{ key to Sim’s salvation?} \nonumber \\
+\texttt{whose ability to play on a sprained ankle against the Eagles} & \texttt{ key to that matchup} \nonumber \\
+\texttt{Horses have been the lifelong} & \texttt{ key to satisfying the real feminine needs for me and my daughter} \nonumber \\
+\texttt{Connecticut cornerback said the} & \texttt{ key to defeating Louisville would be pressuring Brohm} \nonumber \\
+\text{                                                 } & \texttt{- -} \nonumber
+\end{align}
+\end{minipage}
+}
+\captionof{figure}{Some figure}
+
+\section{Frozen Verbs}\label{section:frozen_verbs}
+The words under investigation include
+\Verb#attack#, \Verb#act#, \Verb#die#, \Verb#kick#, \Verb#sand#, \Verb#address#, \Verb#aim#, \Verb#act#, \Verb#address#, \Verb#back#, \Verb#bear#, \Verb#block#, \Verb#catch#, \Verb#charge#, \Verb#crack#, \Verb#double#, \Verb#face#, \Verb#head#, \Verb#march#, \Verb#order#, \Verb#play#, \Verb#roll#, \Verb#saw#, \Verb#tie#, \Verb#train#, \Verb#treat#, \Verb#value#, \Verb#visit#, \Verb#wake#, \Verb#work#, \Verb#zone#, \Verb#act#, \Verb#address#, \Verb#aim#, \Verb#answer#, \Verb#back#, \Verb#balloon#, \Verb#bank#, \Verb#battle#, \Verb#bear#, \Verb#bend#, \Verb#blast#, \Verb#block#, \Verb#break#, \Verb#brush#, \Verb#catch#, \Verb#challenge#, \Verb#charge#, \Verb#cheer#, \Verb#color#, \Verb#cook#, \Verb#crack#, \Verb#curl#, \Verb#cycle#, \Verb#dance#, \Verb#design#, \Verb#die#, \Verb#double#, \Verb#doubt#, \Verb#dust#, \Verb#echo#, \Verb#end#, \Verb#estimate#, \Verb#face#, \Verb#finish#, \Verb#fish#, \Verb#flood#, \Verb#fool#, \Verb#frown#, \Verb#garden#, \Verb#glue#, \Verb#guard#, \Verb#guess#, \Verb#hammer#, \Verb#hand#, \Verb#head#, \Verb#hug#, \Verb#insult#, \Verb#iron#, \Verb#kiss#, \Verb#laugh#, \Verb#loan#, \Verb#love#, \Verb#man#, \Verb#march#, \Verb#milk#, \Verb#object#, \Verb#order#, \Verb#paddle#, \Verb#peel#, \Verb#permit#, \Verb#play#, \Verb#pop#, \Verb#practice#, \Verb#produce#, \Verb#punch#, \Verb#question#, \Verb#quiz#, \Verb#rhyme#, \Verb#rock#, \Verb#roll#, \Verb#run#, \Verb#sand#, \Verb#saw#, \Verb#skate#, \Verb#smell#, \Verb#surprise#, \Verb#thunder#, \Verb#tie#, \Verb#time#, \Verb#toast#, \Verb#trace#, \Verb#train#, \Verb#treat#, \Verb#trick#, \Verb#use#, \Verb#vacuum#, \Verb#value#, \Verb#visit#, \Verb#wake#, \Verb#walk#, \Verb#water#, \Verb#wish#, \Verb#work#, \Verb#x - ray#, \Verb#yawn#, \Verb#zone#, \Verb#cut#, \Verb#break#, \Verb#well#, \Verb#down#, \Verb#run#, \Verb#round#, \Verb#table#, \Verb#bank#, \Verb#cold#, \Verb#good#, \Verb#mouse#, \Verb#was#, \Verb#key#, \Verb#arms#, \Verb#thought#, \Verb#pizza#, \Verb#made#, \Verb#book#, \Verb#damn#.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \chapter{Using word vectors in translation}\label{AppendixApplication}
 

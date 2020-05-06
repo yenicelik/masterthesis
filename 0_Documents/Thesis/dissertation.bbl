@@ -1,14 +1,29 @@
 \begin{thebibliography}{10}
 
+\bibitem{pyax}
+facebook/ax: Adaptive experimentation platform.
+\newblock \url{https://github.com/facebook/Ax}.
+\newblock Accessed: 2020-05-04.
+
 \bibitem{spacyb}
 spacy: Part-of-speech tagging.
 \newblock \url{https://spacy.io/api/annotation#pos-tagging}.
 \newblock Accessed: 2020-04-13.
 
+\bibitem{news_corpus}
+Translation task 2017 - acl 2017 - news corpus.
+\newblock \url{http://www.statmt.org/wmt17/translation-task.html}.
+\newblock Accessed: 2020-05-03.
+
 \bibitem{colahLSTM}
 Understanding lstms.
 \newblock \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}.
 \newblock Accessed: 2020-05-02.
+
+\bibitem{ackerman09}
+Margareta Ackerman and Shai Ben-David.
+\newblock Clusterability: A theoretical study.
+\newblock 2009.
 
 \bibitem{alvarez18}
 David Alvarez-Melis and Tommi~S. Jaakkola.
@@ -35,6 +50,11 @@ Yoshua Bengio, Holger Schwenk, Jean-Sebastien Senecal, Morin Frederic, and
 Luisa Bentivogli, Peter Clark, Ido Dagan, and Danilo Giampiccolo.
 \newblock The fifth pascal recognizing textual entailment challenge.
 \newblock In {\em TAC}, 2009.
+
+\bibitem{bergstra12}
+James Bergstra and Yoshua Bengio.
+\newblock Random search for hyper-parameter optimization.
+\newblock {\em Journal of Machine Learning Research 13}, pages 281--305, 2012.
 
 \bibitem{bojanowski17}
 Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov.
@@ -223,6 +243,13 @@ Guillaume Lample, Alexis Conneau, Ludovic Denoyer, and Marc'Aurelio Ranzato.
 \newblock Unsupervised machine translation using monolingual corpora only.
 \newblock {\em ICLR}, 2018.
 
+\bibitem{lan20}
+Zhenzhong Lan, Mingda Chen, Sebastian Goodman, Kevin Gimpel, Piyush Sharma, and
+  Radu Soricut.
+\newblock Albert: A lite bert for self-supervised learning of language
+  representations.
+\newblock {\em ICLR}, 2020.
+
 \bibitem{lee17}
 Jason Lee, Kyunghyun Cho, and Thomas Hofmann.
 \newblock Fully character-level neural machine translation without explicit
@@ -270,6 +297,11 @@ Chandler May, Alex Wang, Shikha Bordia, Samuel~R. Bowman, and Rachel Rudinger.
 \newblock On measuring social biases in sentence encoders.
 \newblock 2019.
 
+\bibitem{mccarthy16}
+Diana Mccarthy, Marianna Apidianaki, and Katrin Erk.
+\newblock Word sense clustering and clusterability.
+\newblock 2016.
+
 \bibitem{mihael99}
 Ankerst Mihael, Markus~M. Breunig, Hans-Peter Kriegel, and Jörg Sander.
 \newblock Optics: ordering points to identify the clustering structure.
@@ -308,6 +340,13 @@ Panagiotis Moutafis, Mengjun Leng, and Ioannis~A. Kakadiaris.
 Jiazhi Ni, Jie Liu, Chenxin Zhang, Dan Ye, and Zhirou Ma.
 \newblock Fine-grained patient similarity measuring using deep metric learning.
 \newblock 2017.
+
+\bibitem{scikit-learn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock {\em Journal of Machine Learning Research}, 12:2825--2830, 2011.
 
 \bibitem{pelevina16}
 Maria Pelevina, Nikolay Arefyev, Chris Biemann, and Alexander Panchenko.
@@ -378,7 +417,8 @@ David Rumelhart, Geoffrey Hinton, and Ronald Williams.
 Victor Sanh, Lysandre Debut, Julien Chaumond, and Thomas Wolf.
 \newblock Distilbert, a distilled version of bert: smaller, faster, cheaper and
   lighter.
-\newblock 2019.
+\newblock {\em 33rd Conference on Neural Information Processing Systems
+  (NeurIPS 2019)}, 2019.
 
 \bibitem{sennrich15}
 Rico Sennrich, Barry Haddow, and Alexandra Birch.
@@ -472,6 +512,13 @@ Xun Wang, Xintong Han, Weilin Huang, Dengke Dong, and Matthew~R. Scott.
   learning.
 \newblock 2019.
 
+\bibitem{wang13}
+Ziyu Wang, Masrour Zoghi†, Frank Hutter, David Matheson, and Nando
+  de~Freitas.
+\newblock Bayesian optimization in high dimensions via random embeddings.
+\newblock {\em AAAI Publications, Twenty-Third International Joint Conference
+  on Artificial Intelligence}, 2013.
+
 \bibitem{warstadt2018}
 Alex Warstadt, Amanpreet Singh, and Samuel~R Bowman.
 \newblock Neural network acceptability judgments.
@@ -490,6 +537,14 @@ Adina Williams, Nikita Nangia, and Samuel Bowman.
 Ludwig Wittgenstein.
 \newblock Philosophical investigations.
 \newblock 1953.
+
+\bibitem{Wolf2019}
+Thomas Wolf, Lysandre Debut, Victor Sanh, Julien Chaumond, Clement Delangue,
+  Anthony Moi, Pierric Cistac, Tim Rault, R'emi Louf, Morgan Funtowicz, and
+  Jamie Brew.
+\newblock Huggingface's transformers: State-of-the-art natural language
+  processing.
+\newblock {\em ArXiv}, abs/1910.03771, 2019.
 
 \bibitem{wu16}
 Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc~V. Le, and Mohammad~Norouzi et.
