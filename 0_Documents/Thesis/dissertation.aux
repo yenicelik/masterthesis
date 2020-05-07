@@ -137,9 +137,11 @@
 \citation{ba16}
 \citation{wang19}
 \citation{wang19b}
+\citation{wang19}
+\citation{wang19}
 \citation{warstadt2018}
 \@writefile{toc}{\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{32}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.10}{\ignorespaces Hello\relax }}{32}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.10}{\ignorespaces From \cite  {wang19}. All GLUE tasks, what linguistic phenomenon is being benchmarked, the domain that the benchmark data contains sentences in, and the sizes of the training and test sets (in number of samples)\relax }}{32}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Single Sentence Tasks}{32}\protected@file@percent }
 \citation{socher2013}
 \citation{dolan2005}
@@ -323,12 +325,12 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces  For each word $w$, we sample both the number of WordNet semantic classes that are recorded in the WordNet dataset. We also calculate the dimension-wise mean variance between $n=500$ sampled vectors for the word $w$. This constitutes a point on this plot. We repeat this procedure for the most 20'000 most frequent words which consist of a single token (i.e. are not split up into further subtokens when the tokenizer is applied). We show that although the variance is relatively high, especially if only few WordNet classes are present, there is a correlation between the number of WordNet classes and the variance of sampled BERT context embeddings. The right and top distributions show histograms of how occurrent the variance and WordNet classes are respectively. Our assumption is that if we introduce additional embedding-vectors inside BERT for certain words, that more complex distributions can be captures for words that have a higher number of WordNet classes. \relax }}{82}\protected@file@percent }
 \newlabel{fig:BERT_variance}{{5.1}{82}}
 \citation{spacyb}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}BERnie: Making the variances across BERT embeddings more uniform}{83}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}BERnie: Making the variances across BERT embeddings more equal}{83}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}BERnie PoS}{83}\protected@file@percent }
 \newlabel{bernie_pos}{{5.1.1}{83}}
 \@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{83}\protected@file@percent }
 \citation{spacyb}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces The PoS modified pipeline. The BERnie PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additionally introduced split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes the more specialized $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{84}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces The PoS modified pipeline. The BERnie PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes the more specialized $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{84}\protected@file@percent }
 \newlabel{fig:BERnie_POS_pipeline}{{5.2}{84}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Inside the embedding layer of the transformer which occurs at each layer of BERT, we introduce more specific embeddings \texttt  {run\_VERB} and \texttt  {run\_NOUN}. The BERT model should now capture more expressiveness, as more weight got introduced for a part of the model which results in a probability distribution with high variance. The original \texttt  {run} embedding is removed.\relax }}{85}\protected@file@percent }
 \newlabel{fig:BERnie_POS_initialization}{{5.3}{85}}
@@ -341,28 +343,27 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}BERnie Meaning}{86}\protected@file@percent }
 \newlabel{experiment_bernie_meaning}{{5.1.2}{86}}
 \@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{86}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces \relax }}{86}\protected@file@percent }
-\newlabel{fig:cbow_skipgram}{{5.5}{86}}
-\newlabel{fig:sfig1}{{5.6a}{87}}
-\newlabel{sub@fig:sfig1}{{a}{87}}
-\newlabel{fig:sfig2}{{5.6b}{87}}
-\newlabel{sub@fig:sfig2}{{b}{87}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces plots of....\relax }}{87}\protected@file@percent }
-\newlabel{fig:fig}{{5.6}{87}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.\relax }}{88}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces  The semantic modified pipeline. The BERnie Cluster model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the clustereing information as part of the token. In this case, $bank$ becomes the more specialized $bank\_FINANCE$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{87}\protected@file@percent }
+\newlabel{fig:BERT_semantic_modified_pipeline}{{5.5}{87}}
+\newlabel{fig:sfig1}{{5.6a}{88}}
+\newlabel{sub@fig:sfig1}{{a}{88}}
+\newlabel{fig:sfig2}{{5.6b}{88}}
+\newlabel{sub@fig:sfig2}{{b}{88}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces plots of....\relax }}{88}\protected@file@percent }
+\newlabel{fig:fig}{{5.6}{88}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces The BERT model takes as input a sentence $s$. The The resulting, fully modifid BERnie Cluster pipeline.\relax }}{88}\protected@file@percent }
 \newlabel{fig:cbow_skipgram}{{5.7}{88}}
 \@writefile{toc}{\contentsline {subsubsection}{Results}{88}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces GLUE Benchmark performance measures for the BERT model, BERnie PoS and BERnie Cluster. Higher scores are better. The task-wide best-performers are marked in bold. All values are the average scores of two runs. \relax }}{89}\protected@file@percent }
 \citation{devlin18}
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces asj\relax }}{89}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}BERnie Meaning with additional pre-training}{89}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Motivation}{89}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{89}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{89}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.\relax }}{90}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}BERnie Meaning with additional pre-training}{90}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{90}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.5}Results}{90}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces GLUE Benchmark performance measures for the BERT model, BERnie PoS and BERnie Cluster. Higher scores are better. The task-wide best-performers are marked in bold. All values are the average scores of two runs.\relax }}{91}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5.2}Compressing the non-lexical out}{91}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Motivation}{91}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{91}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Results}{91}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Results}{92}\protected@file@percent }
 \bibstyle{plain}
 \bibdata{dissertation}
 \@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusion}{93}\protected@file@percent }

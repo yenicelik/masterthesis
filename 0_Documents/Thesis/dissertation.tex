@@ -923,7 +923,7 @@ WNLI & 634 &  146   & coreference/NLI & fiction books \\
       
 \bottomrule
 \end{tabular}
-\caption{Hello}
+\caption{From \cite{wang19}. All GLUE tasks, what linguistic phenomenon is being benchmarked, the domain that the benchmark data contains sentences in, and the sizes of the training and test sets (in number of samples)}
 \end{figure}
 
 We use an accuracy score for all benchmarking datasets. Because MRPC and QQP have a dominant class, the F1-score is used here. Finally, STS-B is judged using a pearson and spearman correlation due to a ranking being produced, and CoLa is assessed using the Matthews correlation.
@@ -1423,6 +1423,8 @@ A final post-processing step removes near-duplicate clusters.
 Here, we also introduce the chinese whispers algorithm.
 The chinese whispers algorithm was used to cluster for word-senses in the context of static word embeddings, such as in
 \cite{pelevina16}.
+
+%TODO Write down the algorithm that you have implemented
 
 
 \section{Structure inside BERT}
@@ -2340,7 +2342,7 @@ The idea behind this is that introducing more specialized embeddings for tokens 
   \label{fig:BERT_variance}
 \end{figure}
 
-\section{BERnie: Making the variances across BERT embeddings more uniform}
+\section{BERnie: Making the variances across BERT embeddings more equal}
 
 We will introduce two adaptions to the BERT model, BERnie PoS and BERnie semantics.
 We will present the results after having introduced both adaptations.
@@ -2371,7 +2373,7 @@ Specifically, our PoS modified pipeline would now look as follows.
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png}
   \caption{The PoS modified pipeline. 
   The BERnie PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots, $t_m]$ as defined in a given vocabulary $V$.
-  This vocabulary $V$ is extended with the additionally introduced split-words.
+    This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words.
 For each target token $t_{\text{target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token.
 In this case, $run$ becomes the more specialized $run\_ VERB$.
 Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
@@ -2425,15 +2427,26 @@ Please notice that although we did optimized the development set to mimick the c
 \subsubsection{Experiment setup}
 
 Again, we start with the standard BERT model, whose pipeline looks as follows.
+
 \begin{figure}[H]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png}
-  \caption{}
-  \label{fig:cbow_skipgram}
+  \caption{
+  The semantic modified pipeline. 
+  The BERnie Cluster model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots, $t_m]$ as defined in a given vocabulary $V$.
+  This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words.
+For each target token $t_{\text{target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the clustereing information as part of the token.
+In this case, $bank$ becomes the more specialized $bank\_FINANCE$.
+Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
+This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer.
+  }
+  \label{fig:BERT_semantic_modified_pipeline}
 \end{figure}
 
-We now modify the tokenizer in such a way, that ambigious and polysemous words are replaced with a more specific token.
+We now also modify the tokenizer in such a way, that ambigious and polysemous words are replaced with a more specific token.
 As an example, we want to replace the word $bank$ with a token, which captures whether or not the $bank$ that we refer to implies a 1) financial institution, or 2) a river bank.
+Of course, the individual clusters contain context information, and not purely semantic information.
+For easier explainability, we assume that the different clusters referr to semantic clusters, but this is not always the case as we have seen before.
 
 We use the our clustering approach from \ref{experiment_BERT_clusterability} as the intermediate model to distinguish on which bank the sentence refers to.
 We also introduce new embedding vectors that the new tokens correspond to.
@@ -2443,13 +2456,13 @@ We also introduce new embedding vectors that the new tokens correspond to.
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning.png}
-  \caption{1a: The part-of-speech modified tokenizer pipeline}
+  \caption{The clustering-modified tokenizer pipeline}
   \label{fig:sfig1}
 \end{subfigure}%
 \begin{subfigure}{.55\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning_embedding.png}
-  \caption{1b: The part-of-speech modified BERT embedding}
+  \caption{The clustering-modified BERT embedding}
   \label{fig:sfig2}
 \end{subfigure}
 \caption{plots of....}
@@ -2457,14 +2470,12 @@ We also introduce new embedding vectors that the new tokens correspond to.
 \end{figure}
 
 After we have concluded these changed, we arrive at the following model, which has a modified tokenizer, and a modified BERT model.
-We call the corresponding model \textbf{BERnie}.
+We call the corresponding model \textbf{BERnie Cluster}.
 
 \begin{figure}[H]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning.png}
-  \caption{The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots, $t_m$ as defined in a given vocabulary $V$.
-Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
-This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer.}
+  \caption{The BERT model takes as input a sentence $s$. The The resulting, fully modifid BERnie Cluster pipeline.}
   \label{fig:cbow_skipgram}
 \end{figure}
 
@@ -2472,10 +2483,12 @@ This embedding vector is used by the intermediate layers of the transformer, and
 
 \subsubsection{Results}
 
-We now do a short evaluation of the introduced BERnie PoS and BERnie model.
-To understand on a wide scale, we use the GLUE benchmarks to understand what effect the extension of the embedding layer on points of high variance has.
+We now do an evaluation of the introduced BERnie PoS and BERnie Cluster model.
+To understand the resulting performance as a language model, we refer to the GLUE benchmark dataset.
+Because we want to understand what these modifications have as an affect, we focus on an ablation study rather than absolute performance improvement to state-of-the-art methods like ALBERT.
+Weights which are instantiated specifically for the GLUE tasks (final layer) are once instantiated with a random seed of 42, and once with a random seed of 101.
+The scores are the mean of the two runs.
 
-%TODO Write section for GLUE tasks
 \begin{table}
 \center
 \scalebox{0.9}{
@@ -2490,8 +2503,7 @@ To understand on a wide scale, we use the GLUE benchmarks to understand what eff
  % *{5}{S[table-format=4.0]} % three columns with numeric data       
 }
 \toprule
-%TODO MRPC has one aligned, and one unaligned test
-&&\textbf{BERT} & \textbf{BERnie PoS} & \textbf{BERnie} \\
+\textbf{Task} & \textbf{Score Measure} &\textbf{BERT} & \textbf{BERnie PoS} & \textbf{BERnie Cluster} \\
 \midrule
 CoLA  & Accuracy  &  \textbf{0.5739} & 0.5263 &  0.5457 \\
 
@@ -2523,71 +2535,61 @@ QQP & Accuracy &  \textbf{0.9113} &              &  0.9042 \\
 
 \end{tabular}
 }
-\caption{asj}
+\caption{GLUE Benchmark performance measures for the BERT model, BERnie PoS and BERnie Cluster.
+Higher scores are better.
+The task-wide best-performers are marked in bold.
+All values are the average scores of two runs.
+}
 \end{table}
 
 
-One can see that in general, the BERnie models performs slightly worse.
-
-
-All values are the average of two runs. 
-Weights which are instantiated specifically for the GLUE tasks are once instantiated with a random seed of 42, and once with a random seed of 101.
-
-Although most experimental results are similar between standard BERT and the modified BERnie PoS and BERnie models, the WNLI and RTE experiments are considerably deviating in performance through the addition of the additional embedding vectors.
-For the BERnie model, WNLI performs \textbf{10.56\%} better than standard BERT, and RTE performs  \textbf{-7.40\%} worse than the standard BERT implementation.
+One can see that for most tasks, the BERnie model modifications performs slightly worse than the standard BERT model by a couple percentage points.
+However, he WNLI and RTE experiments are considerably deviating in performance through the addition of the additional embedding vectors.
+For the BERnie Cluster model, WNLI performs \textbf{10.56\%} better than standard BERT, and RTE performs  \textbf{-7.40\%} worse than the standard BERT implementation.
 Similar results are observable for the difference between the unmodified BERT and the BERnie PoS model with \textbf{3.52\%} improvement for WLNI and \textbf{-3.79\%} decline in performance for the RTE task.
 
-Also, compared to BERnie PoS, the standard BERnie model amplifies the performence-difference to BERT in both the negative and positive direction.
+Also, compared to BERnie PoS, the BERnie Cluster model amplifies the performance-difference to BERT in both the negative and positive direction.
 
+%TODO What could this mean?
+
+%TODO Look for papers that look for which WNLI and RTE also show changes ...
+
+%TODO Go experiment to experiment, and talk about what implications this has, does this make sense, etc.
 
 \subsection{BERnie Meaning with additional pre-training}
 
-\subsubsection{Motivation}
-In section \ref{experiment_bernie_meaning}, we can see that extending the BERT model generally leads to worse performance.
+Our first idea is that the overall negative trend in performance might be due to the newly initialized vectors not being calibrated enough.
 
 We assume that the BERnie require additional pre-training, as we are adding more specific embedding vectors, without fine-tuning them.
 We assume that this is necessary, as this is how the weights of BERT are also trained in the original paper \cite{devlin18} through the masked language model approach.
 
-\subsubsection{Experiment setup}
+\subsection{Experiment setup}
 
-We evaluate the models of the previous experiments.
+We want to test to what extent pre-training the newly initialized embeddings helps improve the performance on the embeddings.
+We apply 1 epoch of pre-training on the news corpus described in Section 2.
 
-\begin{center}
-\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit{was}.}
-\begin{tabular}{SSSSSSSS} \toprule
-    {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
-       2  & 0.08 & 0.38 / $\pm$ 0.03 \\ \midrule
-       3  & 0.11 & 0.38 / $\pm$ 0.04 \\ \midrule
-     10  & 0.28 & 0.65 / $\pm$ 0.03  \\ \midrule
-     20  & 0.43 & 0.76 / $\pm$ 0.04  \\ \midrule
-     30  & 0.53 & 0.83 / $\pm$ 0.03  \\ \midrule
-     50  & 0.67 & 0.93 / $\pm$ 0.01 \\ \midrule
-     75  & 0.77 & 0.95 / $\pm$ 0.01 \\ \midrule
-    100 & 0.83 & 0.95 / $\pm$ 0.01  \\ \midrule
-\end{tabular}
-\end{center}
+We evaluate the models of the same GLUE benchmark tasks as in the previous section.
 
-%TODO Perhaps leave out the very bad results, or focus on debugging?
+%TODO we use the GLUE tasks to understanding how introducing more embedding vectors affects the performance of language models / our method.
 
-%TODO Link above section to this ...
-WNLI is a comprehension task where a model must read a sentence with a pronoun, and select the referent of that pronoun form a list of choices.
-
-Each one is contingent on contextual information provided by a single word or phrase in the sentence. To convert the problem into sentence pair classification, we construct sentence pairs by replacing the ambiguous pronoun with each possible referent.
-%TODO : Describe what kind of task WNLI is
-%TODO : Describe what kind of task RTE is
-
-%TODO we use the GLUE tasks to understanding how introducing more embedding vectors affects the performance of our search models.
-
-
-To train an ablation study, whether or not additional pre-training improves the instantiated word-vectors, we conduct the following experiment.
 We instantiate the additional embeddings as described in the previous section.
 We then run one full epoch of training with the same training parameters as used for GLUE on the news.corpus.2007 dataset using a masked languag emodel methodology .
 %TODO cite BERT training methodology
 We save this model and load it for the GLUE tasks.
 BERnie full Pre-training trains the entire embeddings, whereas BERnie partial Pre-Training fixates all embedding vectors except the ones for the ones that were newly added.
 
+We refer to \textit{full pre-training}, resulting in the \textbf{BERnie full Pre} model, when we allow the gradient to be update on all the embedding weights during pre-training.
+We refer to \textit{partial pre-training}, resulting in the \textbf{BERnie partial Pre} model, when we only allow gradient updates for the (sub-)embeddings of the split-words.
+In this case, only the newly added embeddings vectors are calibrated, while all other embedding vectors are kept constant.
+
+
+\subsection{Results}
+
+Again, we ran the experiments and show the results as the average of two runs.
+Due to time-constraints and certainty of bugs for some experiments, we only show the results for a subset of the GLUE tasks.
+
 %TODO Write section for GLUE tasks
-\captionof{table}{Mean of mulitple experiments for BERnie with addiitonally trained embeddings and weights.}
+
 \scalebox{0.9}{
 \begin{tabular}{
  l % left aligned column
@@ -2599,18 +2601,27 @@ BERnie full Pre-training trains the entire embeddings, whereas BERnie partial Pr
 }
 \toprule
 %TODO MRPC has one aligned, and one unaligned test
-&& \textbf{BERnie} & \textbf{BERnie full\- Pre}  & \textbf{BERnie partial\- Pre}\\
+\textbf{Task} & \textbf{Score Measure} & \textbf{BERnie} & \textbf{BERnie full\- Pre}  & \textbf{BERnie partial\- Pre}\\
 \midrule
-CoLA  & Accuracy  &  0.5457 & 0.5418 & 0.5731 \\
-SST-2 & Accuracy  &  0.9266 & 0.9169 & 0.9266 \\
-QNLI & Accuracy & 0.9020 & 0.5374 & 0.6700 \\
-RTE & Accuracy &  0.5722 & 0.4784 & 0.4729 \\
-WNLI & Accuracy & 0.4649 & 0.4225 & 0.4507 \\
+CoLA  & Accuracy  &  0.5457 & 0.5418 & \textbf{0.5731} \\
+SST-2 & Accuracy  &  \textbf{0.9266} & 0.9169 & \textbf{0.9266} \\
+QNLI & Accuracy & \textbf{0.9020} & 0.5374 & 0.6700 \\
+RTE & Accuracy &  \textbf{0.5722} & 0.4784 & 0.4729 \\
+WNLI & Accuracy & \textbf{0.4649} & 0.4225 & 0.4507 \\
 \bottomrule
 \end{tabular}
 }
+\captionof{table}{GLUE Benchmark performance measures for the BERT model, BERnie PoS and BERnie Cluster.
+Higher scores are better.
+The task-wide best-performers are marked in bold.
+All values are the average scores of two runs.}
 
-We suspect a bug in loading the model appropriately for the MRPC task, and thus ommited the results for this task.
+As one can see, the additional pre-training does not improve the performance.
+However, we assume that this is due to the pre-training corpus not being similar to the pre-training corpus that was initially used for BERT (which is too big to be run for this test), or the hyperparamters not being optimal for this run.
+Finally, it could also be that the initialization for the newly addeed vectors was suboptimal, as we have seen strong deviations (of up to 5\% in performance) over different random seeds for the GLUE tasks.
+Due to time-constraints, we decided to not move ahead with this experiment.
+
+
 
 \section{Compressing the non-lexical out}
 %TODO Need to run some more experiments ...

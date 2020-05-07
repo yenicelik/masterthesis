@@ -68,19 +68,19 @@
 \contentsline {subsubsection}{Quantitative Evaluation}{77}% 
 \contentsline {subsubsection}{Qualitative Evaluation}{77}% 
 \contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{81}% 
-\contentsline {section}{\numberline {5.1}BERnie: Making the variances across BERT embeddings more uniform}{83}% 
+\contentsline {section}{\numberline {5.1}BERnie: Making the variances across BERT embeddings more equal}{83}% 
 \contentsline {subsection}{\numberline {5.1.1}BERnie PoS}{83}% 
 \contentsline {subsubsection}{Experiment setup}{83}% 
 \contentsline {subsection}{\numberline {5.1.2}BERnie Meaning}{86}% 
 \contentsline {subsubsection}{Experiment setup}{86}% 
 \contentsline {subsubsection}{Results}{88}% 
-\contentsline {subsection}{\numberline {5.1.3}BERnie Meaning with additional pre-training}{89}% 
-\contentsline {subsubsection}{Motivation}{89}% 
-\contentsline {subsubsection}{Experiment setup}{89}% 
+\contentsline {subsection}{\numberline {5.1.3}BERnie Meaning with additional pre-training}{90}% 
+\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{90}% 
+\contentsline {subsection}{\numberline {5.1.5}Results}{90}% 
 \contentsline {section}{\numberline {5.2}Compressing the non-lexical out}{91}% 
 \contentsline {subsubsection}{Motivation}{91}% 
 \contentsline {subsubsection}{Experiment setup}{91}% 
-\contentsline {subsubsection}{Results}{91}% 
+\contentsline {subsubsection}{Results}{92}% 
 \contentsline {chapter}{\numberline {6}Conclusion}{93}% 
 \contentsline {chapter}{\numberline {A}More Results}{103}% 
 \contentsline {section}{\numberline {A.1}Finding the best clustering model}{103}% 
