@@ -562,6 +562,10 @@ We can learn the parameters $\Sigma$ and $\mu$ for each of these embeddings usin
 These constraints can be used by using a laplacian regularizer in the loss function which is then optimized using a gradient based approach. 
 The method shows competitive scores to the Skip-Gram model, although usually only with minor improvements depending on the benchmark-dataset.
 
+Furtheer extensions have been recorded to model word embeddings as probability densities using a bayesian skip-gram approach \cite{brazinskas19}, where the resulting model architecture is similar to the word2vec neural network, with a probabilistic latent module instead of a deterministic matrix.
+Yet another line of work \cite{yan19} aims to exploit the formal properties of Wasserstein distances to learn word embedding.
+Many concepts from the above ideas have been translated into analogous probabilistic concepts.
+
 \newpage
 \subsection{Context Embeddings}
 
@@ -816,68 +820,13 @@ This embedding vector is used by the intermediate layers of the transformer, and
   \label{fig:BERT_vanilla_pipeline}
 \end{figure}
 
+\subsubsection{Other language models}
 
+Although the subsequent work completely works with the BERT language model, there is a wide variets of other language models which are popular.
+These include GPT \cite{radford18} and GPT-2 \cite{radford19} which are both also based on transformers, however only allows the sequence modeling to be forward looking (in contrast to BERT, which also allows the future context to take into the calculation when creating the context embedding).
+These also include more fundamental modifications to the transformer, including the introduction of layer normalization \cite{ba16} layer to the input of each sub-block and an additional layer normalization after the final self-attention block. 
+Other language models which extent BERT and transformer models include ALBERT \cite{lan20} - which is widely considered one of the state-of-the-art transformer models, DisilBERT \cite{sanh19}, HUBERT \cite{moradshahi19}, ERNIE \cite{sun19}, RoBERTa \cite{liu19}, SpanBERT \cite{joshi19}, StructBERT \cite{wang19d}.
 
-\subsubsection{GPT and GPT-2}
-
-First proposed in \cite{radford18} and further extended in \cite{radford19}.
-
-\cite{radford18} introduces the concept of \textit{generative pre-training} and discriminative fine-tuning \textit{generative pre-training}.
-
-\paragraph{Unsupervised pre-training} consists of an unsupervised corpus of tokens $\mathcal{U} = \{ u_1, \ldots, u_n \}$ and use the common objective of 
-
-\begin{equation}
-L(\mathcal{U}) = \sum_i \log P(u_i | u_{i-k}, \ldots, u_{u-1}; \theta )
-\end{equation}
-
-where $k$ describes a context window, and the conditional probability $P$ is modeled using a neural network wth parameters $\theta$. 
-The transformer decoder \cite{Liu18} is used which is a variant of the transformer \cite{vaswani17}, which introduces a multi-headed self-attention operation over the input context tokens followed by position-wise feedforward layers to produce an output distribution over target tokens as such:
-
-\begin{align}
-h_0 & = UW_e + W_p \\
-h_l & = \text{transformer\_block}(h_{l-1}) \forall i \in [1, n] \\
-P(u) & = \text{softmax}(h_n {W_e}^T)
-\end{align}
-
-where $U=\left(u_{-k}, \ldots, u_{-1}\right)$ is the context vector of tokens, $n$ is the number of layers, $W_e$ is the token embedding matrix, and $W_p$ is the position embedding matrix.
-
-\paragraph{Supervised fine-tuning} consists of leveraging a labeled dataset $\mathcal{C}$, where each instance consists of a sequence of input tokens, $x^1, \ldots, x^m$ along with a label $y$.
-The inputs are passed through the pre-trained model to obtain the final transformer block's activation ${h_l}^m$ which is then fed into an added linear output layer with parameters $W_y$ to predict $y$.
-
-\begin{equation}
-P\left(y | x^{1}, \ldots, x^{m}\right)=\operatorname{softmax}\left(h_{l}^{m} W_{y}\right)
-\end{equation}
-
-which then gives the following objective to maximize:
-
-\begin{equation}
-L_{2}(\mathcal{C})=\sum_{(x, y)} \log P\left(y | x^{1}, \ldots, x^{m}\right)
-\end{equation}
-
-As suggested in \cite{Rei17} and \cite{peters17a}, an auxiliary language modeling loss (unsupervised training) is added which accelerates convergence and improves generalization
-
-\begin{equation}
-L_{3}(\mathcal{C})=L_{2}(\mathcal{C})+\lambda * L_{1}(\mathcal{C})
-\end{equation}
-
-with a regularization parameter $\lambda$.
-
-
-%TODO read the two papers and take out anything significantly different to BERT.
-
-GPT-2 improves on the first version of GPT.
-Firs, the training dataset uses a crawled text of all outbound texts from Reddit resulting in the WebText corpus. 
-The crawling als prioritizes documents by quality.
-
-The second major modification is in input representations.
-GPT-2 uses a Byte Pair Encoding (BPE) scheme,
-\cite{sennrich15}, which operates on unicode code points as the most fundamentla unit of language.
-The BPE tokenization is modified by avoiding merging across character categories for any byte sequence (i.e. for words that occur in many variations, such as \Verb#dog.#, \Verb#dog!#, and \Verb#dog?#)
-This is similar to the character level rnns (cite jason).
-
-The base model of GPT is modified by moving the layer normalization \cite{ba16} layer to the input of each sub-block and an additional layer normalization after the final self-attention block. 
-Also, initialization was modified to account for the accumulation of the residual path with model depth.
-Also, vocabulary is expanded to 50257 tokens.
 
 \section{GLUE benchmark dataset}
 
@@ -1210,180 +1159,6 @@ None, 3, 1, 1, 1, None, 1, 1, 1, 1
 \end{figure}
 %TODO Should make this graph again, a bit better titles..
 
-\section{Metric Learning and Disentanglement}
-
-Althogh difference metric spaces can be considered, we will be refering to Euclidean spaces for simplicity and unless otherwise stated.
-
-%TODO cite the proper definition of Metric learning
-Metric learning is the concept of learning a new space in which distances between data samples 
-
-%TODO mention the survey paper
-Distance metric learning approaches the problem of learning a similarity metric.
-
-We introduce two sets of data-sample pairs, $S$ and $D$:
-
-\begin{align}
-S &= \{ (x_i, x_j) : x_i and x_j should be similar\} \\
-D &= \{ (x_i, x_j) : x_i and x_j should be dissimilar\}
-\end{align}
-
-As is also mentioned in \cite{moutafis17}, the proximity relation can also be captured through \textit{relation triplets}
-
-\begin{align}
-R &= \{ (x_i, x_j, j_l) : x_i is more similar to x_j than x_l \} \\
-\end{align}
-
-The general notion of a distance in the euclidean space can be defined as 
-\begin{equation}
-d_{E}\left(\boldsymbol{x}_{\boldsymbol{i}}, \boldsymbol{x}_{\boldsymbol{j}}\right)=\sqrt{\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)^{\top}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)}
-\end{equation}
-or equivalents as the $l_2$-norm
-
-\begin{equation}
-d_{E}\left(\boldsymbol{x}_{i}, \boldsymbol{x}_{j}\right)=\left\|\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right\|_{2}
-\end{equation}
-
-Most distance learning techniques propose different ways of learning a Mahalanobis distance \cite{mahalanobis36}
-
-\begin{equation}
-d_{M}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)=\sqrt{\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)^{\top} \boldsymbol{A}^{-1}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)}
-\end{equation}
-
-Because calculating $d^2$ is computationally simpler, and $d^2$ maintains most mathematical properties as calculating $d$, often $d^2$ is used for downstream calculations (i.e. optimization, distance measure), rather than $d$.
-
-In the case of the Mahalanobis distance, $A$ is a linear operator such as a matrix.
-However, $A$ can also be generalized to a nonlinear operator by using the following formulation of the distance metric
-
-\begin{align}
-d_{M}^{2}\left(x_{i}-x_{j}\right) &=\left(x_{i}-x_{j}\right)^{\top} A^{-1}\left(x_{i}-x_{j}\right) \\
-d_{M}^{2}\left(x_{i}-x_{j}\right) &= (L\left(x_{i}-x_{j}\right))^{\top} (L\left(x_{i}-x_{j}\right)) \\
-d_{M}\left(x_{i}-x_{j}\right) &=\left\|L\left(x_{i}-x_{j}\right)\right\|_{2} \\
-d_{M}\left(x_{i}-x_{j}\right) &=\left\|Lx_{i}-Lx_{j}\right\|_{2}
-\end{align}
-
-where $A = L^T L$ and $L$ can now be any function $L \in \mathbf{R}^n -> \mathbf{R}^d$. 
-Whenever, $d < n$, the data is projected to a lower dimensional space $d$, which results in dimensionality reduction, which however breaks the convexity property if $L$ is not invertible.
-In comparison to a dimensionality reduction such as PCA, it has been obsereved that learning a similarity measure can sometimes be more effective \cite{chechik10}.
-
-Specifically, the data is projected into another  \
-%TODO specify this further
-The authors in \cite{moutafis17} argue that due to this property of measuring similarity between pairs, the metric learning models are able to generalize better across classes.
-
-\subsubsection{Non-Deep Metric Learning}
-
-Although we focus on deep metric learning during our experiments, due to the additional flexibility that deep neural networks provide, a good understanding of the underlying mechanisms is useful.
-
-\cite{suarez19} provides a good introduction into the literature of metric learning algorithms.
-
-We first define by a proper definition of a distance
-
-\newtheorem{mydef}{Definition}
-\begin{mydef}
-Let $X$ be a non empty set. A \textit{distance} or \textit{metric} over $X$ is a map $d: X \times X -> \mathbb{R}$ that satisfies the following properties:
-
-\begin{enumerate}
-\item Coincidence: $d(x, y) = 0 \iff x = y,$ for all $x, y \in X$
-\item Symmetry: $d(x, y) = d(y, x)$ for all $x, y \in X$
-\item Triangle inequality: $d(x, z) \leq d(x, y) + d(y, z) $ for all $x, y \in X$
-\end{enumerate}
-The ordered pair $(X, d)$ is called a metric space. 
-We will be assuming a euclidean metric space unless otherwise specified.
-\end{mydef}
-
-Because the coincidence property is not always important to us, but because word-embeddings are more interested in measuring relative distances, we will also consider mappings konwn as \textit{pseudoinstances} which relax the coincidence property to merely fulfill $d(x, x) = 0$.
-In the $d$ dimensional euclidean space, the set of \textit{Mahalanobis distances}, which is parametrized by positive semidefinite matrices are useful.
-
-Using above similarity, dissimilarity and relation triplets, an optimal distance $d$ from a set of distances $\mathcal{D}$ can be found
-
-\begin{equation}
-\min_{d \in \mathcal{D}} l (d, S, D, R)
-\end{equation}
-
-where $l$ is one of the loss metrics shown below.
-
-
-
-\begin{figure}[H]
-	\center
-  \includegraphics[width=\linewidth]{./assets/relatedwork/metric_learning_example.png}
-  \caption{Taken from \cite{suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distancee, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducable with this dimension while still matching the classification accuracy (right).}
-  \label{fig:BERT_vanilla_pipeline}
-\end{figure}
-
-Although we will not go into too much detail, we will outline some algorithms that \cite{suarez19} mentions in their work.
-
-We will first start with dimensionality reduction techniques, then move to nearest neighbors classifiers, follow with nearest centroids classifiers and finally go over some information theory based algorithms.
-Notice that for almost each one of these methods, kernelized versions are available.
-
-
-
-%TODO Insert some texts from table I
-
-\paragraph{Dimensionality Reduction} techniques include principal component analysis \textit{PCA}, LDA ANMM
-
-
-
-\subsubsection{Deep Metric Learning}
-
-Besides the non-deep proposed in the work above models , in\cite{kaya19} also introduces the deep generalization to these frameworks.
-
-\begin{figure}[H]
-	\center
-  \includegraphics[width=\linewidth]{./assets/relatedwork/metric_learning.png}
-  \caption{Taken from \cite{kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.}
-  \label{fig:muse_translation}
-\end{figure}
-
-The most prominent model is the siamese network \cite{bromley94}, \cite{chopra05}, \cite{hadsell06}, where the network consists of two identical sub-networks joined at their outputs. 
-We provide an example the architecture looks that looks as follows:
-
-\begin{verbatim}
-class Siamese:
-
-    def __init__(input_dim, latent_dim):
-        self.fully_connected = nn.Linear(input_dim, latent_dim)
-        
-    def forward(input1, input2):
-        latent_1 = self.fully_connected(input1)
-        latent_2 = self.fully_connected(input2)
-        
-        distance = torch.sqrt(
-            torch.sum((latent_1 - latent_2) * (latent_1 - latent_2))
-        )
-        
-        return distance, latent_1, latent_2
-\end{verbatim}
-
-Two samples are ingested by the neural network simultaneously.
-Both samples are passed through identical weights.
-Training occurs by minimizing the contrastive loss.
-
-\begin{equation}
-L_{\text {Contrastive }}=(Y) \frac{1}{2}\left(D_{W}\right)^{2}+(1-Y) \frac{1}{2}\left\{\max \left(0, m-D_{W}\right)\right\}^{2}
-\end{equation}
-
-where we follow the convention that $Y=1$ whenever the given sample-pairs are of the same class, and $Y=0$ whenever the given sample-pairs are from different classes, and $D_W$ is the output of the above neural network.
-Training can be highly unstable, and as such, the learning rate must be properly set, batches must have a balanced amount of both similar, and dissimilar pairs. 
-Finally, training can fail if a single batch includes multiple domains of data. \\
-
-For the triplet networks \cite{hoffer14} which makes use of relation triplets, including an input $X$, a point similar to the input $X^p$ and a point dissimilar to the input $X^n$, the following loss can be used for minimization.
-
-\begin{equation}
-L_{\text {Triplet}}=\max \left(0,\left\|G_{W}(X)-G_{W}\left(X^{p}\right)\right\|_{2}-\left\|G_{W}(X)-G_{W}\left(X^{n}\right)\right\|_{2}+\alpha\right)
-\end{equation} 
-
-where $\alpha$ forms a distance margin, similar to the length of the support vector in SVMs.
-
-As the authors suggest, using a triplet logic results in more stable training and bigger margins between similarity classes.
-Analogous logic goes for quadrupel loss etc., but it is unsure to what extend these extensions increase performance.
-This general idea can also be extended to angular distance (using cosine distances), and non-euclidean spaces, however, we will not go into further detail on this as this is not the focus of this work.
-
-Although we will not go into further detail, other loss functions include histogram loss \cite{ustinova16}, the structured loss \cite{song16} n-pair loss \cite{sohn16}, magnet loss \cite{rippel16}, angular loss \cite{wang17}, quadruple loss \cite{ni17}, clustering loss \cite{song17}, hierarchical triplet loss \cite{ge18} and the multi-similarity loss \cite{wang19c}.
-
-%TODO do back-projection to higher dimenisonal space.
-%TODO check performance on some bias prediction task (to see if sentiment is truly gone ..)
-
-
 \chapter{Related Work}
 
 Talke about \cite{mccarthy16}
@@ -1418,16 +1193,358 @@ Due to the density criteria, the resulting clusterings don't have to be convex a
 After cluster-centers are randomly initialized, the centroids are updated by the mean of the cluster until convergence in the cluster-assignments is reached.
 A final post-processing step removes near-duplicate clusters.
 
-\paragraph{The Chinese Whispers} algorithm is one of the more relevant clustering algorithms used in this survey. 
+\paragraph{Chinese Whispers} algorithm is one of the more relevant clustering algorithms used in this survey. 
+
 
 Here, we also introduce the chinese whispers algorithm.
 The chinese whispers algorithm was used to cluster for word-senses in the context of static word embeddings, such as in
 \cite{pelevina16}.
 
 %TODO Write down the algorithm that you have implemented
+The Chinese whispers clustering algorithm operates on graphs.
+Because we are only given a set of context vectors organized in a matrix $X$, we must first generate a graph from the given set of vectors.
+
+Our modified version looks as follows:
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\SetKwInOut{Input}{Input}
+\Input{
+$X$: The set of context embeddings for a word $w$ includeed in a set of $n$ sentences. 
+These are the BERT vectors we want to cluster; \\ 
+}
+\KwResult{Cluster assignments for each of the samples within $X$.}
+
+corMatrix = cosineSimilarity(X, X) \\
+closestNeighbors = argsort(corMatrix, axis=1)[:, :n] \\
+corMatrix[not in closestNeighbors] = 0. \\
+
+corMatrix[identifyHubs(corMatrix)] = 0. \\
+
+clusters = runChineseWhispersOnGraph(corMatrix) \\
+
+clusters = extrapolateHubsByNearestNeighbors(clusters) \\
+
+return clusters
+
+ \caption{Checks sampled BERT vectors for clusters by  meaning}
+\end{algorithm}
+
+First of all, we create a graph $G$ from the set of vectors $X$ using the following algorithm.
+Although we don't explicitly create $G$, we denote the adjacency matrix of $G$ through the variable corMatrix.
+$G$ (in the form of the adjacency matrix) is passed on to the Chinese whispers algorithm.
+
+%TODO Cite CLSL paper which says that there are many hubs
+
+We identify hubs by the following cutoff formula which is used to filter nodes whose connectivity value is too high
+
+\begin{equation}
+cutoff(x) = \mu ( X ) + c \sigma (X)
+\end{equation}
+
+where $c$ is an adjustable hyperparameter.
+The RunChineseWhispersOnGraph function uses the standard NetworkX implementation \cite{hagberg04} to calculate such a clustering.
+
+
 
 
 \section{Structure inside BERT}
+
+
+\cite{mickus19} analyses the structure inside BERT, and show that there is no correlation between the semantic feature of a word, and the location of the context embedding produced by BERT.
+They go so far as to say that the position $i$ of the word $w_i$ inside the sequence $s = [w_1, \ldots, w_i, \ldots, w_T]$ has a stronger implication on the produced context embedding than the word token does.
+This is strongly manifested if one looks at context embeddings for words $w_i$ where $i$ is odd vs. even.
+It is also mentioned that most papers that do an active analysis on this topic do not go enough into depth on the topic of the theory of meaning, but rather are trying to identify common patterns in modern language models.
+The paper analysis these properties by conducting three experiments.
+The first one is about \textit{word type cohesion}, which tests if similar words are projected into similar points in the context embedding space.
+%TODO explain silhouette score?
+They go so extreme to analyse if identical words (implicitly, with the same WordNet classes) are projected to the same space inside BERT when sampled through different sentences.
+The authors make use of the silhouette score, and a clustering  scheme of words - where a cluster is defined by similar words - and use the silhouette score as an argument to show that similar words are not projected to similar points in the context space.
+The authors use Wiktionary
+%TODO cite wiktionary
+instead of WordNet as a resource to arrive at a set of semantic classes.
+They argue that polysemous words - where meaning varies more - result in degraded cohesion scores and decreased silhouette scores.
+Of course this does not imply that this global organization of word-vectors has a negative effect on downstream tasks, which is also visible in the strong success of transformer-based language models.
+Finally, the authors argue that the cosine similarity is a good distance measure for semantic similarity between embedding vectors.
+The authors continue with a sentence-pair similarity analysis, as well an analysis of the sentence-level structure, which is not of strong interest for our investigation. \\
+
+\cite{arefyev19} aim to improve the semantic frame induction problem which is the task of finding semantic clusters inside a set of data samples, in this case words.
+The authors report that they use a two-clustering approach, where the first phase includes a global clustering approach, which merges synonyms together, and in a second phase creates clusters inside the clusters which result from the first phase.
+The authors report to use an agglorometive clustering algorithm, where .
+However, the authors also report that development and test sets were merged together for hyperpamater selection, which naturally biases the model.
+The authors define a cutoff criterion based on the silhouette score and the number of samples within a cluster. \\
+
+\cite{pilehvar19} address the problem of a missing benchmark dataset to test word emebddings that are supposed to model polysemous words.
+Existing methods include Stanford Contextual Word Similarity dataset, however these benchmarks are only well-defined for static word embeddings which usually only encode one token through a single word vector.
+The authors introduce a dataset of labelled sentence pairs, where the language model is supposed to learn if the different semantic classes of a target word $w$. \\
+
+An example from the datset includes (the first one with the target word \Verb#bed#, the second one with a target word \Verb#window#:
+
+%TODO do code styling
+\begin{verbatim}
+There's a lot of trash on the bed of the river.
+I keep a glass of water next to my bed when I sleep.
+label:False
+\end{verbatim}
+
+\begin{verbatim}
+The expanded window will give us time to catch the thieves.
+You have a two-hour window of clear weather to finish working on the lawn.
+label:True
+\end{verbatim}
+
+%TODO Run this (this is the superGlue task)
+
+
+\cite{tan19} introduces the Positional Attention-based Frame Identification with BERT \textit{PAFIBERT}, which aims to transform sentences from natural language into formal representations of predicate-argument structures.
+This contains the tasks of frame identification (i.e. predicting the most likely semantic rame for a marked lexical predicate), as well as semantic role assignment, which associates the given word with semantic roles (from FrameNet).
+%TODO Cite FrameNet?
+The authors propose an extension to the BERT layer, making use of another attention layer operating on the final layer outputs of BERT.
+
+\cite{pelevina16} introduces a methodology to learn word sense embeddings, by solving a word-sense-disambiguation (WSD) task.
+The authors create an EGO-network for each concept in the vector space whose correlation matrix $G(X)$ results in an adjacency matrix for a resulting subgraph $\tilde{G}$
+
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/relatedwork/ego_network.png}
+  \caption{From \cite{pelevina16}. An EGO-network of the word \texttt{table} is created. Then, clustering is applied on the EGO network, to identify different semantic classes}
+  \label{fig:ego_network}
+\end{figure}
+
+The authors propose a multi-step approach, where they (1) learn word embeddings, (2) build a graph of nearest neighbours based on vector simliarities, (3) apply induction of word senses using ego-neetwork clustering and (4) aggregate the word-vectors with respect to the induced senses.
+The authors use the static word2vec word embeddings as the starting step.
+A graph is created by only keeping the $N$ nodes with highest weight (deenoted by a similarity value).
+Clustering is done using the Chinese whispers algorithm.
+%TODO refer to section with chinese whispers algorihm.
+A comparison with other word embeddings such as JoBimText (JBT), and TWSI is conducted.
+%TODO cite jobimtext and wikipedia corpus via corwdsourcing
+
+
+The authors show different results, for example for the word table. 
+The result would conceptually corresponds to what is recorded by WordNet classes.
+However, the underlying limitation lies in the choice of the word-vectors, as well as the informal way of constructing the graph for which clustering is applied on.
+
+\captionof{table}{The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. }
+\begin{table}[htbp]
+    \centering
+    %\begin{tabularx}{\textwidth}{| X | X |}
+    \begin{tabularx}{\textwidth}{p{50pt}|b}
+    \toprule
+      {\textbf{Vector}} & {\textbf{Nearest Neighbours}}  \\ \midrule
+        table & tray, bottom, diagram, bucket, brackets, stack, basket, list, parenthesis, cup, trays, pile, playfield, bracket, pot, drop-down, cue, plate \\ \hline
+        table\# 0 & leftmost\# 0 , column\# 1 , randomly\# 0 , tableau \#1 , top-left\# 0, indent\# 1, bracket\# 3, pointer\# 0 , footer\# 1 , cursor\# 1 , diagram\# 0 , grid\# 0      \\ \hline
+        table\# 1 & pile\# 1, stool\# 1, tray\# 0, basket\# 0, bowl\# 1, bucket\# 0, box\# 0, cage\# 0, saucer\# 3, mirror\# 1, birdcage\# 0, hole\# 0, pan\# 1, lid\# 0    \\ \hline
+    \end{tabularx}
+\end{table}
+
+\cite{qasemizadeh19} introduce a model for unsupervised lexical frame induction, which can also be used to identify polysemous words.
+
+\cite{camachocollados18} concludes a survey on vector representations of meanings.
+They talk about different sense representation exploiting monolingual corpora, which apply clustering-based models to extract senses from text, or joint training methodologies, which perform induction and representation learning together.
+The paper also talks about learned topic embeddings and word-embeddings that are separately learned, jointly or subsequently.
+The authors re-iterate that about 80\% of all words in WordNet  3.0 are monosemous, with less than 5\% having more than 3 senses.
+The authors describe multiple types of models that capture polysemy: 
+(1) Dynamic polysemy, which is a dirct solution to the varying polysemy problem of sense representation models, which would be to set the number of senses of a word as defined by an external sense inventory such as WordNet. 
+Often, heuristics are used, such as that the frequency of a model is correlated with polysemy, as more frequent words are probably more polysemous.
+(2) Pure sense-based models include which implicitly learn ambiguity of in context words.
+
+%TODO this is one of the early works \cite{melamud16}
+
+\cite{wiedmann19} analyses to what extent context emebddings are better at word sense disambiguation tasks.
+The authors use a nearest neighbour classifier to measure the performacen on  for two standard WSD benchmark datasets.
+The authors show that BERT is able to put polysemic words into distinct 'sense' regions of the embeddings space, while ELMo and other models do not seem to possess this ability.
+The authors argue that for static word vectors, different word senses are collapsed into the same string representation.
+The number of senses can be defined by a given parameter, or derived automatically through a non-parametric estimation.
+Prior work on using recurrent neural networks to classify sense labels is existent
+%Cite Kageback and Salomonsson
+The authors argue that because for most NLP tasks, the fact that context emebddings perform better implies that they also capture polysemy much differently.
+The authors look at different contextual language models, including BERT and ELMo.
+The distributional hypothesis includes that if the same word regularly occurs in different, distinct contextes, we may assume polysemy of its meaning \cite{miller91}.
+In their experiment, the authors use as the word embedding the concatenation ofhte averaged wordpiece vectors of the last four layers. \\
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/relatedwork/wsd_bert.png}
+  \caption{From \cite{wiedmann19}. T-SNE plots of different senses of \texttt{bank} and their context embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data.
+  }
+  \label{fig:bert_wsd}
+\end{figure}
+
+The authors conclude that WSD can be surprisingly effective using solely context embeddings.
+Different SensEval datasets are used for benchmarking, which also including SemCor.
+
+%TODO Do I have to cite these datasets?
+\cite{navigli19} also provide a summary of different ways similarity between word embeddings can be measured.
+The authors consider both knowledge-based approaches, where third party resources (like WordNet) are used, and the distributional approach, which targets at learning these concepts in an unsupervised fashion.
+The authors also go over a set of representations and measures to compute similarity.
+
+\cite{ribeiro19} also aim to devise a verb-clustering, and an argument-clustering approach which is supposed to devise a clustering that evoke frame-specific slots and thus semantic roles.
+The authors again make use of the Chinese whispers algorithm
+\cite{biemann06} to arrive at the semantic frame cluster.
+The authors make use of ELMo and BERT word embeddings.
+For the chinese whispers algorithm again, it is needed to devise a graph from the set of word embeddings $X$.
+The cutoff rule by which it is decided is defined by the function
+
+\begin{equation}
+t_f = \frac{\mu + \sigma}{2}
+\end{equation}
+
+where $\mu$ and $\sigma$ are the mean and standard deviation of the pairwise distance distribution, respectively. 
+This rule is used for verb-clustering.
+For Argument clustering, the following cutoff function is defined 
+
+\begin{equation}
+t_a = \mu - 1.5 \sigma
+\end{equation}
+
+as a higher neighboring threshold is needed.
+Performance on the cluster is calculated using the number of clusters, and a purity metric which describes how homogenous the created clusters are. 
+Labels from FrameNet \cite{baker98} are used.
+
+\cite{liebeskind19} propose a first-order co-occurrence-based approach and a second-order distributional-based approach to automatically create a thesaurus.
+
+\cite{shi19} create a relation extraction and semantic role labelling model using BERT as the underlying model.
+The authors extend the BERT Model with a simple MLP on top of the last hidden layer. 
+The authors use the CoNLL 2005 \cite{carreras04} and the 2012  dataset \cite{pradhan13} for labelled training.
+The authors are able to superseed prior non-BERT models with this simple BERT extension for the tasks of semantic role labelling. \\
+
+\cite{remus13} average the word vectors of synsets to arrive at vectors which described semantics.
+Synsets are calculating using the same clustering approach which is applied on ego-graphs of the network as is done in \cite{biemann06}.
+
+\subsection{Static word embeddings from context embeddings}
+
+\cite{may19} Measure social biases in BERT context embeddings.
+For this, they use static word embeddings by averaging over token-embeddings produced by BERT.
+Although the authors cannot prove general trends, they show that certain suspicious patterns of sensitivity suggest that bias is occurring in different contexts.
+
+\cite{peters18} analysis the choice of different neural networks (i.e. LSTM, CNN or self-attention) as the underlying neural network within modern language models.
+The authors show that there isa  tradeoff between speed an accuracy, but that all architectures learn representations that outperform word embeddings for challenging NLP tasks.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.6\linewidth]{./assets/relatedwork/self_attention_analysis.png}
+  \caption{From \cite{peters18}. The authors show different similarity intensities (cosine similarity) between token-pairs using the output of a 4-layer LSTM (left), and the output after the first layer (right).}
+  \label{fig:embeddings_by_language}
+\end{figure}
+
+The authors argue that in general, lower layers mostly capture local information, while top layers represent longer range relationships.
+For biLMs, lower layers tend to place words from the same syntactic constituents in similar parts of the vector space.
+The authors hint that the model implicitly is trying to learn coreference resolution.
+The authors show that in biLMs, semantics is captured only to a small extent, whereas morphology alone is most often used to answer questions on word analogy tasks.
+The authors also argue that the biLM architectures learn syntax, as PoS tags are captured at lower levels of the biLM layers.
+The authors further build a contstituency parser with almost 80\% accuracy, by only adding a linear classifier and the span representation onto the lower layers of the biLMs.
+A tree is built using a greedy decoding step similar to \cite{joshi19b}.
+
+Work has been conducted in distilling knowledge or minimfying  BERT models to smaller neural network models \cite{tang19}, \cite{tsai19}, and most famously \cite{sanh19}.
+Compressed sentence representations can also be learned i.e. through random projections or architectures similar to autoencoders \cite{shen19}, amongst others, making use of a max-pool operator over sentence-tokens to arrive at a sentence embedding.
+
+\cite{caliskan19} analyse the social bias contained in semantics derived from language corpora, which is the case also for modern language models like BERT, which are trained on such corpora.
+The authors hint that word-embeddings like word2vec contain biases, where male names are more biased with career settings than female names, and european-american names are considered more pleasant than african-american names.
+
+\cite{denkowski09} presents a survey on different techniques for unsupervised word sense induction.
+The author goes over clustering approaches over words, according to some feature vectors and discounted pointwise mutual information, or based on word context pairs (i.e. 3-grams of words), as well as clustering based on a global co-occurrence matrix.
+Graph-based approaches are also mentioned, where a graph is created in such a way that nouns are nodes, and edges between nodes exist whenever two words occur in the same paragraph.
+Hyperedges are removed, and some some edges are pruned.
+Clustering is applied on the nodes of the resulting graph.
+
+\cite{shin18} analyse properties of static word vectors by applying eigenvector analysis from Random Matrix Theory.
+The authors show that semantically coherent groups not only form in the row space, but also in the column space, implying that individual word vector dimensions can be interpreted as human-interpretable semantic features.
+The authors make use of positive pointwise mutual information matrix, which is based on a log-ratio between the joint probability of a word $w$ and its context words $c$.
+The authors apply a qulitative analysis by examining the top elements of the eigenvectors by sorting their absolute values in decreasing order.
+The authors analyse salient columns for words like airport.
+High absolute values imply that the word is relevant to the semantic group formed in the rowspace.
+
+\cite{levine19} revise a neural network which is based on BERT which predicts not only the word-form of masked words, but also the WordNet supersenses.
+The authors use the Word in Context benchmark as the benchmark.
+A linear layer is appended above the final layer of BERT, making use of the final hidden representation.
+Training is done in a supervised fashion using the SemCor dataseet and the WiC tasks.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/sensebert.png}
+  \caption{From \cite{levine19}. Standard BERT (left) and the SenseBERT adaptations (right), which include an embedding-encoder and an embedding-decoder specifically for WordNet senses.}
+  \label{fig:embeddings_by_language}
+\end{figure}
+
+The authors mark up to 12\% gain in accuracy for in the SemEval-SS task (predicting SemCor WordNet labels), and up to 12\% improvement for the Word in Context task.
+Even withouth fine-tuning, SenseBERT achieves competitive results with fine-tuned BERT.
+The authors show that globally, these vectors seem to be properly aligned by their senses, even though they do not quantify this.
+
+\cite{martinc20} looks at how semantics of language change over time, by training language models on a balanced set of genres, from the 1960s and the 1990s.
+The authors measure the variation coefficient of words.
+The authors cluster the word embedding spaces, and then calculate the drift measures through pearson and spearman correlations to arrive at a quantitative expression of how much language changes.
+
+\cite{reimers19} set up a clustering and classification method of context embeddings for topic-dependent arguments.
+This allows for better data mining in large documents.
+
+\cite{coenen19} analyse how BERT and similar transformer models represent linguistic information.
+They argue that on a high level, semantic and syntactic features seem to be present in different subspaces.
+They also argue that there is fine-grained geometric representations of word senses.
+They also argue that the semantic information seems to be encoded in a relatively low-dimensional subspace.
+The authors use the Penn Treebank 
+%TODO cite penn treebankd
+to infer a dependency parsing scheme using a linear classifier with the attention layers as input.
+The authors achieve above 85.8\% accuracy for two-class classification, and 71.5\% accuracy for multi-class classification.
+In a prior work by \cite{hewitt19} find that BERT encodes a parse tree where the tree distance seems to correspond to specifically to the square of the Euclidean distance.
+The authors argue why this is the takes, and present a theorem that shows that a tree with $n$ nodes has a Pythagorean embedding in $\mathbb{R}^{n-1}$.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/BERT_tree.png}
+  \caption{From \cite{coenen19}. Visualizing the embeddings of two sentences after applying the Hewitt Manning probe. Parse tree (left) in comparison to the PCA projection of the context embeddings (right). Small deviations are apparently, but a positive trend exists. The color of an edge determines the squared Euclidean distance.}
+  \label{fig:BERT_tree}
+\end{figure}
+
+The authors also analyse semantic features qualitatively.
+However, it is important to realize that the qualitative evaluation is very sparse, and only considers the linguistic feature of \textit{plurality}.
+Also, it is important that the semantic division between does not rule out a division between part-of-speech tags, as \texttt{die} have different meanings when interpreted as a verb and as a noun.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.7\linewidth]{./assets/relatedwork/BERT_plurality.png}
+  \caption{From \cite{coenen19}. Embeddings for the word \texttt{die} in different contexts, visualized through UMAP. The blue text describes general annotations.}
+  \label{fig:BERT_plurality}
+\end{figure}
+
+A nearest neighbour classifier is built using the BERT embeddings resulting from the labelled SemCor corpus, achieving state-of-the-art results on word-sense-disambiguation tasks.
+The authors try to find a linear transformation matrix under which the word-sense-disambiguation task performs even better, however this results in only marginal benefit.
+The underlying assumption is that the semantic features are encoded in an underlying subspace of the BERT context vectors.
+The authors also note that more semantic information this suggests that more semantic information may be available in lower layers.
+
+(... isn't this actually in the loss function...?)
+
+\cite{si19} use context embeddings to better extract clinic concepts. 
+This is a task similar to extract semantic meanings, but rather the meanings are medical concepts rather than WordNet classes.
+Besides using SemCor, the authors also focus on medical datasets.
+The authors explore word2vec, GloVe, fastText, ELMo and BERT embeddings.
+The authors demonstrate state-of-the-art results for clinical concept extraction.
+
+%\begin{figure}[H]
+%	\center
+%  \includegraphics[width=0.7\linewidth]{./assets/relatedwork/cold_fictional_desired.png}
+%  \caption{From \cite{coenen19}. \textbf{Fictional} embedding vector points and clusters of \texttt{cold}. This is one of the results that we want to arrive at. }
+%  \label{fig:cold_fictional_desired}
+%\end{figure}
+
+
+
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 (How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings)
 
@@ -1562,11 +1679,9 @@ the cosine similarity between these vectors seem pretty well-done!
 
 -> Can also analyze only words that exist.
 
-\subsection{Attention mechanism}
-
-Some analysis has been done with looking at the similarity between the produced context-vectors for biLM \cite{peters18}.
-
 \subsection{From token-vectors to word-vectors}
+
+\subsection{Bias in BERT vectors}
 
 \cite{may19} analyse the social biases that are part of the context embeddings and show that depending on the language model (ELMo, BERT), the amount of social bias deviates. 
 Because context embeddings capture more than just semantics, bias is a natural implication of context vectors.
@@ -1574,8 +1689,6 @@ A by-product of their research includes aggregating token-embeddings (i.e. aggre
 Although not very extensive on the topic of aggregation, the authors  use techniques of mean-pooling, max-pooling, and last-pooling to determine arrive at a single context-vector, if the given token is intrinsically split-up by the language-model tokenizer (incl. BERT, ELMo, GPT).
 
 Finally, evaluation on the corpora also yield inclusion of human-like biases \cite{jentzsch19} by names, races, male-vs-female.
-
-\subsection{Bias in BERT vectors}
 
 
 \subsection{Change of meanings over time}
@@ -2621,7 +2734,189 @@ However, we assume that this is due to the pre-training corpus not being similar
 Finally, it could also be that the initialization for the newly addeed vectors was suboptimal, as we have seen strong deviations (of up to 5\% in performance) over different random seeds for the GLUE tasks.
 Due to time-constraints, we decided to not move ahead with this experiment.
 
+\chapter{Conclusion}
 
+\appendix
+\singlespacing
+
+% \bibliographystyle{unsrt} 
+\bibliographystyle{plain}
+\bibliography{dissertation} 
+
+\chapter{Other lines of work}
+
+\section{Metric Learning and Disentanglement}
+
+Althogh difference metric spaces can be considered, we will be refering to Euclidean spaces for simplicity and unless otherwise stated.
+
+%TODO cite the proper definition of Metric learning
+Metric learning is the concept of learning a new space in which distances between data samples 
+
+%TODO mention the survey paper
+Distance metric learning approaches the problem of learning a similarity metric.
+
+We introduce two sets of data-sample pairs, $S$ and $D$:
+
+\begin{align}
+S &= \{ (x_i, x_j) : x_i and x_j should be similar\} \\
+D &= \{ (x_i, x_j) : x_i and x_j should be dissimilar\}
+\end{align}
+
+As is also mentioned in \cite{moutafis17}, the proximity relation can also be captured through \textit{relation triplets}
+
+\begin{align}
+R &= \{ (x_i, x_j, j_l) : x_i is more similar to x_j than x_l \} \\
+\end{align}
+
+The general notion of a distance in the euclidean space can be defined as 
+\begin{equation}
+d_{E}\left(\boldsymbol{x}_{\boldsymbol{i}}, \boldsymbol{x}_{\boldsymbol{j}}\right)=\sqrt{\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)^{\top}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)}
+\end{equation}
+or equivalents as the $l_2$-norm
+
+\begin{equation}
+d_{E}\left(\boldsymbol{x}_{i}, \boldsymbol{x}_{j}\right)=\left\|\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right\|_{2}
+\end{equation}
+
+Most distance learning techniques propose different ways of learning a Mahalanobis distance \cite{mahalanobis36}
+
+\begin{equation}
+d_{M}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)=\sqrt{\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)^{\top} \boldsymbol{A}^{-1}\left(\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right)}
+\end{equation}
+
+Because calculating $d^2$ is computationally simpler, and $d^2$ maintains most mathematical properties as calculating $d$, often $d^2$ is used for downstream calculations (i.e. optimization, distance measure), rather than $d$.
+
+In the case of the Mahalanobis distance, $A$ is a linear operator such as a matrix.
+However, $A$ can also be generalized to a nonlinear operator by using the following formulation of the distance metric
+
+\begin{align}
+d_{M}^{2}\left(x_{i}-x_{j}\right) &=\left(x_{i}-x_{j}\right)^{\top} A^{-1}\left(x_{i}-x_{j}\right) \\
+d_{M}^{2}\left(x_{i}-x_{j}\right) &= (L\left(x_{i}-x_{j}\right))^{\top} (L\left(x_{i}-x_{j}\right)) \\
+d_{M}\left(x_{i}-x_{j}\right) &=\left\|L\left(x_{i}-x_{j}\right)\right\|_{2} \\
+d_{M}\left(x_{i}-x_{j}\right) &=\left\|Lx_{i}-Lx_{j}\right\|_{2}
+\end{align}
+
+where $A = L^T L$ and $L$ can now be any function $L \in \mathbf{R}^n -> \mathbf{R}^d$. 
+Whenever, $d < n$, the data is projected to a lower dimensional space $d$, which results in dimensionality reduction, which however breaks the convexity property if $L$ is not invertible.
+In comparison to a dimensionality reduction such as PCA, it has been obsereved that learning a similarity measure can sometimes be more effective \cite{chechik10}.
+
+Specifically, the data is projected into another  \
+%TODO specify this further
+The authors in \cite{moutafis17} argue that due to this property of measuring similarity between pairs, the metric learning models are able to generalize better across classes.
+
+\subsubsection{Non-Deep Metric Learning}
+
+Although we focus on deep metric learning during our experiments, due to the additional flexibility that deep neural networks provide, a good understanding of the underlying mechanisms is useful.
+
+\cite{suarez19} provides a good introduction into the literature of metric learning algorithms.
+
+We first define by a proper definition of a distance
+
+\newtheorem{mydef}{Definition}
+\begin{mydef}
+Let $X$ be a non empty set. A \textit{distance} or \textit{metric} over $X$ is a map $d: X \times X -> \mathbb{R}$ that satisfies the following properties:
+
+\begin{enumerate}
+\item Coincidence: $d(x, y) = 0 \iff x = y,$ for all $x, y \in X$
+\item Symmetry: $d(x, y) = d(y, x)$ for all $x, y \in X$
+\item Triangle inequality: $d(x, z) \leq d(x, y) + d(y, z) $ for all $x, y \in X$
+\end{enumerate}
+The ordered pair $(X, d)$ is called a metric space. 
+We will be assuming a euclidean metric space unless otherwise specified.
+\end{mydef}
+
+Because the coincidence property is not always important to us, but because word-embeddings are more interested in measuring relative distances, we will also consider mappings konwn as \textit{pseudoinstances} which relax the coincidence property to merely fulfill $d(x, x) = 0$.
+In the $d$ dimensional euclidean space, the set of \textit{Mahalanobis distances}, which is parametrized by positive semidefinite matrices are useful.
+
+Using above similarity, dissimilarity and relation triplets, an optimal distance $d$ from a set of distances $\mathcal{D}$ can be found
+
+\begin{equation}
+\min_{d \in \mathcal{D}} l (d, S, D, R)
+\end{equation}
+
+where $l$ is one of the loss metrics shown below.
+
+
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/metric_learning_example.png}
+  \caption{Taken from \cite{suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distancee, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducable with this dimension while still matching the classification accuracy (right).}
+  \label{fig:BERT_vanilla_pipeline}
+\end{figure}
+
+Although we will not go into too much detail, we will outline some algorithms that \cite{suarez19} mentions in their work.
+
+We will first start with dimensionality reduction techniques, then move to nearest neighbors classifiers, follow with nearest centroids classifiers and finally go over some information theory based algorithms.
+Notice that for almost each one of these methods, kernelized versions are available.
+
+
+
+%TODO Insert some texts from table I
+
+\paragraph{Dimensionality Reduction} techniques include principal component analysis \textit{PCA}, LDA ANMM
+
+
+
+\subsubsection{Deep Metric Learning}
+
+Besides the non-deep proposed in the work above models , in\cite{kaya19} also introduces the deep generalization to these frameworks.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/metric_learning.png}
+  \caption{Taken from \cite{kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.}
+  \label{fig:muse_translation}
+\end{figure}
+
+The most prominent model is the siamese network \cite{bromley94}, \cite{chopra05}, \cite{hadsell06}, where the network consists of two identical sub-networks joined at their outputs. 
+We provide an example the architecture looks that looks as follows:
+
+\begin{verbatim}
+class Siamese:
+
+    def __init__(input_dim, latent_dim):
+        self.fully_connected = nn.Linear(input_dim, latent_dim)
+        
+    def forward(input1, input2):
+        latent_1 = self.fully_connected(input1)
+        latent_2 = self.fully_connected(input2)
+        
+        distance = torch.sqrt(
+            torch.sum((latent_1 - latent_2) * (latent_1 - latent_2))
+        )
+        
+        return distance, latent_1, latent_2
+\end{verbatim}
+
+Two samples are ingested by the neural network simultaneously.
+Both samples are passed through identical weights.
+Training occurs by minimizing the contrastive loss.
+
+\begin{equation}
+L_{\text {Contrastive }}=(Y) \frac{1}{2}\left(D_{W}\right)^{2}+(1-Y) \frac{1}{2}\left\{\max \left(0, m-D_{W}\right)\right\}^{2}
+\end{equation}
+
+where we follow the convention that $Y=1$ whenever the given sample-pairs are of the same class, and $Y=0$ whenever the given sample-pairs are from different classes, and $D_W$ is the output of the above neural network.
+Training can be highly unstable, and as such, the learning rate must be properly set, batches must have a balanced amount of both similar, and dissimilar pairs. 
+Finally, training can fail if a single batch includes multiple domains of data. \\
+
+For the triplet networks \cite{hoffer14} which makes use of relation triplets, including an input $X$, a point similar to the input $X^p$ and a point dissimilar to the input $X^n$, the following loss can be used for minimization.
+
+\begin{equation}
+L_{\text {Triplet}}=\max \left(0,\left\|G_{W}(X)-G_{W}\left(X^{p}\right)\right\|_{2}-\left\|G_{W}(X)-G_{W}\left(X^{n}\right)\right\|_{2}+\alpha\right)
+\end{equation} 
+
+where $\alpha$ forms a distance margin, similar to the length of the support vector in SVMs.
+
+As the authors suggest, using a triplet logic results in more stable training and bigger margins between similarity classes.
+Analogous logic goes for quadrupel loss etc., but it is unsure to what extend these extensions increase performance.
+This general idea can also be extended to angular distance (using cosine distances), and non-euclidean spaces, however, we will not go into further detail on this as this is not the focus of this work.
+
+Although we will not go into further detail, other loss functions include histogram loss \cite{ustinova16}, the structured loss \cite{song16} n-pair loss \cite{sohn16}, magnet loss \cite{rippel16}, angular loss \cite{wang17}, quadruple loss \cite{ni17}, clustering loss \cite{song17}, hierarchical triplet loss \cite{ge18} and the multi-similarity loss \cite{wang19c}.
+
+%TODO do back-projection to higher dimenisonal space.
+%TODO check performance on some bias prediction task (to see if sentiment is truly gone ..)
 
 \section{Compressing the non-lexical out}
 %TODO Need to run some more experiments ...
@@ -2645,14 +2940,6 @@ Finally, we use a simple algorithm to what extent we can disentangle the semanti
 
 %TODO Should I include the experimental data from the individual runs in a table in the Appendix?
 
-\chapter{Conclusion}
-
-\appendix
-\singlespacing
-
-% \bibliographystyle{unsrt} 
-\bibliographystyle{plain}
-\bibliography{dissertation} 
 
 \chapter{More Results}
 

@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{100}
 
 \bibitem{pyax}
 facebook/ax: Adaptive experimentation platform.
@@ -30,10 +30,23 @@ David Alvarez-Melis and Tommi~S. Jaakkola.
 \newblock Gromov-wasserstein alignment of word embedding spaces.
 \newblock 2018.
 
+\bibitem{arefyev19}
+Nikolay Arefyev, Boris Sheludko, Adis Davletov, Dmitry Kharchev, Alex
+  Nevidomsky, and Alexander Panchenko.
+\newblock Neural granny at semeval-2019 task 2: A combined approach for better
+  modeling of semantic relationships in semantic frame induction.
+\newblock {\em Proceedings ofthe 13th International Workshop on Semantic
+  Evaluation (SemEval-2019)}, page 31–38, 2019.
+
 \bibitem{ba16}
 Jimmy~Lei Ba, Jamie~Ryan Kiros, and Geoffrey~E. Hinton.
 \newblock Layer normalization.
 \newblock {\em arXiv}, 2016.
+
+\bibitem{baker98}
+Collin~F. Baker, Charles~J. Fillmore, and John~B. Lowe.
+\newblock The berkeley framenet project.
+\newblock {\em ACL/COLING, volume 1}, pages 86--90, 1998.
 
 \bibitem{bengio03}
 Yoshua Bengio, Réjean Ducharme, Pascal Vincent, and Christian Jauvin.
@@ -56,6 +69,13 @@ James Bergstra and Yoshua Bengio.
 \newblock Random search for hyper-parameter optimization.
 \newblock {\em Journal of Machine Learning Research 13}, pages 281--305, 2012.
 
+\bibitem{biemann06}
+Chris Biemann.
+\newblock Chinese whispers: An efficient graph clustering algorithm and its
+  application to natural language processing problems.
+\newblock {\em In Workshop on Graph-based Methods for Natural Language
+  Processing}, pages 73--80, 2006.
+
 \bibitem{bojanowski17}
 Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov.
 \newblock Enriching word vectors with subword information.
@@ -66,16 +86,39 @@ Samuel~R Bowman, Gabor Angeli, Christopher Potts, and Christopher~D Manning.
 \newblock A large annotated corpus for learning natural language inference.
 \newblock {\em arXiv preprint arXiv:1508.05326}, 2015.
 
+\bibitem{brazinskas19}
+Arthur Bražinskas, Serhii Havrylov, and Ivan Titov.
+\newblock Embedding words as distributions with a bayesian skip-gram model.
+\newblock 2018.
+
 \bibitem{bromley94}
 Jane Bromley, Isabelle Guyon, and Yann LeCun.
 \newblock Signature verification using a "siamese" time delay neural network.
 \newblock 1994.
+
+\bibitem{caliskan19}
+Aylin Caliskan, Joanna~J. Bryson, and Arvind Narayanan.
+\newblock Semantics derived automatically from language corpora contain
+  human-like moral choices.
+\newblock {\em Science 356 (6334)}, pages 183--186--44, 2019.
+
+\bibitem{camachocollados18}
+Jose Camacho-Collados and Mohammad~Taher Pilehvar.
+\newblock A survey on vector representations of meaning from word to sense
+  embeddings: A survey on vector representations of meaning.
+\newblock 2018.
 
 \bibitem{campello13}
 Ricardo J. G.~B. Campello, Davoud Moulavi, and Joerg Sander.
 \newblock Density-based clusteering based on hierarchical density estimates.
 \newblock {\em PAKDD 2013: Advances in Knowledge Discovery and Data Mining},
   pages 160--172, 2013.
+
+\bibitem{carreras04}
+Xavier Carreras and Lluis Marquez.
+\newblock Introduction to the conll-2004 shared task: Semantic role labeling.
+\newblock {\em In Proceedings of the Eighth Conference on Computational Natural
+  Language Learning (CoNLL-2004)}, 2004.
 
 \bibitem{cer2017}
 Daniel Cer, Mona Diab, Eneko Agirre, Inigo Lopez-Gazpio, and Lucia Specia.
@@ -172,6 +215,12 @@ Raia Hadsell, Sumit Chopra, and Yann LeCun.
 \newblock Dimensionality reduction by learning an invariant mapping.
 \newblock 2006.
 
+\bibitem{hagberg04}
+Aric Hagberg, Dan Schult, and Pieter Swart.
+\newblock Networkx.
+\newblock \url{https://github.com/networkx/networkx}, 2006.
+\newblock Accessed: 2020-05-07.
+
 \bibitem{bar2006}
 Bar-Roy Haim, Ido Dagan, Bill Dolan, Lisa Ferro, Danilo Giampiccolo, Bernardo
   Magnini, and Idan Szpektor.
@@ -209,7 +258,8 @@ Matthew Honnibal and Ines Montani.
 Renfen Hu, Shen Li, and Shichen Liang.
 \newblock Diachronic sense modeling with deep contextualized word embeddings:
   An ecological view.
-\newblock 2019.
+\newblock {\em Proceedings ofthe 57th Annual Meeting ofthe Association for
+  Computational Linguistics}, pages 3899--3908, 2019.
 
 \bibitem{hubert85}
 Lawrence Hubert and Phipps Arabie.
@@ -226,6 +276,19 @@ Sophie Jentzsch, Constantin Rothkopf, and Patrick Schramowski~Kristian
 \newblock On measuring social biases in sentence encoders.
 \newblock {\em AIES 2019 - Proceedings of the 2019 AAAI/ACM Conference on AI,
   Ethics, and Society}, pages 37--44, 2019.
+
+\bibitem{joshi19}
+Mandar Joshi, Danqi Chen, Yinhan Liu, Daniel~S. Weld, Luke Zettlemoyer, and
+  Omer Levy.
+\newblock Spanbert: Improving pre-training by representing and predicting
+  spans.
+\newblock 2019.
+
+\bibitem{joshi19b}
+Vidur Joshi, Matthew Peters, and Mark Hopkins.
+\newblock Extending a parser to distant domains using a few dozen partially
+  annotated examples.
+\newblock 2018.
 
 \bibitem{kaya19}
 Mahmut Kaya and Hasan~Sakir Bilge.
@@ -262,11 +325,17 @@ Hector Levesque, Ernest Davis, and Leora Morgenstern.
 \newblock In {\em Thirteenth International Conference on the Principles of
   Knowledge Representation and Reasoning}, 2012.
 
-\bibitem{Liu18}
-Peter~J. Liu, Mohammad Saleh, Etienne Pot†, Ben Goodrich, Ryan Sepassi,
-  Łukasz Kaiser, and Noam Shazeer.
-\newblock Generating wikipedia by summarizing long sequences.
-\newblock 2018.
+\bibitem{liebeskind19}
+Chaya Liebeskind, Ido Dagan, and Jonathan Schler.
+\newblock An algorithmic scheme for statistical thesaurus construction in a
+  morphologically rich language.
+\newblock {\em Applied Artificial Intelligence Vol. 33}, pages 483--496, 2019.
+
+\bibitem{liu19}
+Yinhan Liu, Myle Ott, Naman Goyal, Jingfei Du, Mandar Joshi, Danqi Chen, Omer
+  Levy, Mike Lewis, Luke Zettlemoyer, Veselin Stoyanov, and Paul~G. Allen.
+\newblock Roberta: A robustly optimized bert pretraining approach.
+\newblock 2019.
 
 \bibitem{lloyd57}
 S.~P. Lloyd.
@@ -302,6 +371,12 @@ Diana Mccarthy, Marianna Apidianaki, and Katrin Erk.
 \newblock Word sense clustering and clusterability.
 \newblock 2016.
 
+\bibitem{mickus19}
+Timothee Mickus, Denis Paperno, and Kees~Van Deemter.
+\newblock What do you mean, bert? assessing bert as a distributional semantics
+  model.
+\newblock 2019.
+
 \bibitem{mihael99}
 Ankerst Mihael, Markus~M. Breunig, Hans-Peter Kriegel, and Jörg Sander.
 \newblock Optics: ordering points to identify the clustering structure.
@@ -324,17 +399,33 @@ George~A. Miller, Richard Beckwith, Christiane Fellbaum, Derek Gross, and
 \newblock Introduction to wordnet: An on-line lexical database.
 \newblock {\em International Journal of Lexicography}, pages 235--244, 1990.
 
+\bibitem{miller91}
+George~A. Miller and Walter~G. Charles.
+\newblock Contextual correlates of semantic similarity.
+\newblock {\em Language and cognitive processes 6}, pages 1--28, 1991.
+
 \bibitem{miller94}
 George~A. Miller, Martin Chodorow, Shari Landes, Claudia Leacock, and Robert~G.
   Thomas.
 \newblock Using a semantic concordance for sense identification.
 \newblock pages 240--243, 1994.
 
+\bibitem{moradshahi19}
+Mehrad Moradshahi, Hamid Palangi, Monica~S Lam, Paul Smolensky, and Jianfeng
+  Gao.
+\newblock Hubert untangles bert to improve transfer across nlp tasks.
+\newblock 2019.
+
 \bibitem{moutafis17}
 Panagiotis Moutafis, Mengjun Leng, and Ioannis~A. Kakadiaris.
 \newblock An overview and empirical comparison of distance metric learning
   methods.
 \newblock {\em IEEE Transactions on Cybernetics}, 2017.
+
+\bibitem{navigli19}
+Roberto Navigli and Federico Martelli.
+\newblock An overview of word and sense similarity.
+\newblock {\em Natural Language Engineering}, pages 693--714, 2019.
 
 \bibitem{ni17}
 Jiazhi Ni, Jie Liu, Chenxin Zhang, Dan Ye, and Zhirou Ma.
@@ -351,18 +442,13 @@ F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
 \bibitem{pelevina16}
 Maria Pelevina, Nikolay Arefyev, Chris Biemann, and Alexander Panchenko.
 \newblock Making sense of word embeddings.
-\newblock {\em Journal of Classification}, 2016.
+\newblock {\em Proceedings ofthe 1st Workshop on Representation Learning for
+  NLP}, pages 174--183, 2016.
 
 \bibitem{pennington14}
 Jeffrey Pennington, Richard Socher, and Christopher Manning.
 \newblock Glove: Global vectors for word representation.
 \newblock {\em EMNLP}, page 1532–1543, 2014.
-
-\bibitem{peters17a}
-Matthew~E. Peters, Waleed Ammar, Chandra Bhagavatula, and Russell Po.
-\newblock Semi-supervised sequence tagging with bidirec- tional language
-  models.
-\newblock {\em ACL}, 2017.
 
 \bibitem{peters17b}
 Matthew~E Peters, Mark Neumann, Matt Gardner, Christopher Clark, Kenton Lee,
@@ -375,6 +461,25 @@ Matthew~E Peters, Mark Neumann, Luke Zettlemoyer, and Wen-Tau Yih.
 \newblock Dissecting contextual word embeddings: Architecture and
   representation.
 \newblock 2018.
+
+\bibitem{pilehvar19}
+Mohammad~Taher Pilehvar and Jose Camacho-Collados.
+\newblock Wic: the word-in-context dataset for evaluating context-sensitive
+  meaning representations.
+\newblock 2019.
+
+\bibitem{pradhan13}
+Sameer Pradhan, Alessandro Moschitti, Nianwen Xue, Hwee~Tou Ng, Anders
+  Bjorkelund, Olga Uryupina, Yuchen Zhang, and Zhi Zhong.
+\newblock Towards robust linguistic analysis using ontonotes.
+\newblock {\em In Proceedings of the Seventeenth Conference on Computational
+  Natural Language Learning}, pages 143--152, 2013.
+
+\bibitem{qasemizadeh19}
+Behrang Qasemizadeh, Miriam R~L Petruck, Laura Kallmeyer, and Marie Candito.
+\newblock Semeval-2019 task 2: Unsupervised lexical frame induction.
+\newblock {\em Proceedings ofthe 13th International Workshop on Semantic
+  Evaluation (SemEval-2019)}, page 16–30, 2019.
 
 \bibitem{radford18}
 Alec Radford, Karthk Narasimhan, Tim Salimans, and Ilya Sutskever.
@@ -398,10 +503,20 @@ William~M. Rand.
 \newblock {\em Journal of the American Statistical Association}, pages
   846--850, 1971.
 
-\bibitem{Rei17}
-Marek Rei.
-\newblock Semi-supervised multitask learning for sequence labeling.
-\newblock 2017.
+\bibitem{remus13}
+Steffen Remus and Chris Biemann.
+\newblock Retrofitting word representations for unsupervised sense aware word
+  similarities.
+\newblock {\em In Pro- ceedings of the Seventeenth Conference on Computational
+  Natural Language Learning}, pages 143--152, 2013.
+
+\bibitem{ribeiro19}
+Eugénio Ribeiro, Vânia Mendonça, Ricardo Ribeiro, David~Martins e~Matos,
+  Alberto Sardinha, Ana~Lucia Santos, and Luísa Coheur.
+\newblock L 2 f/inesc-id at semeval-2019 task 2: Unsupervised lexical semantic
+  frame induction using contextualized word representations.
+\newblock {\em Proceedings ofthe 13th International Workshop on Semantic
+  Evaluation (SemEval-2019)}, pages 130--136, 2019.
 
 \bibitem{rippel16}
 Oren Rippel, Manohar Paluri, Piotr Dollar, and Lubomir Bourdev.
@@ -420,11 +535,6 @@ Victor Sanh, Lysandre Debut, Julien Chaumond, and Thomas Wolf.
 \newblock {\em 33rd Conference on Neural Information Processing Systems
   (NeurIPS 2019)}, 2019.
 
-\bibitem{sennrich15}
-Rico Sennrich, Barry Haddow, and Alexandra Birch.
-\newblock Neural machine translation of rare words with subword units.
-\newblock {\em arXiv}, 2015.
-
 \bibitem{sennrich16}
 Rico Sennrich, Barry Haddow, and Alexandra Birch.
 \newblock Neural machine translation of rare words with subword units.
@@ -435,6 +545,12 @@ Dinghan Shen, Pengyu Cheng, Dhanasekar Sundararaman, Xinyuan Zhang, Qian Yang,
   Meng Tang, Asli Celikyilmaz, and Lawrence Carin.
 \newblock Learning compressed sentence representations for on-device text
   processing.
+\newblock 2019.
+
+\bibitem{shi19}
+Peng Shi, Jimmy Lin, and David~R Cheriton.
+\newblock Simple bert models for relation extraction and semantic role
+  labeling.
 \newblock 2019.
 
 \bibitem{socher2013}
@@ -466,10 +582,35 @@ Juan~Luis Suarez, Salvador Garcia, and Francisco Herrera.
   algorithms and experiments.
 \newblock 2019.
 
+\bibitem{sun19}
+Yu~Sun, Shuohuan Wang, Yukun Li, Shikun Feng, Hao Tian, Hua Wu, and Haifeng
+  Wang.
+\newblock Ernie 2.0: A continual pre-training framework for language
+  understanding.
+\newblock 2019.
+
 \bibitem{sutskever11}
 Ilya Sutskever, James Martens, and Geoffrey Hinton.
 \newblock Generating text with recurrent neural networks.
 \newblock 2011.
+
+\bibitem{tan19}
+Sang-Sang Tan and Jin-Cheon Na.
+\newblock Position atteention-based frame identification with bert: A deep
+  learning approach to target disambiguation and semantic frame selection.
+\newblock 2019.
+
+\bibitem{tang19}
+Raphael Tang, Yao Lu, Linqing Liu, Lili Mou, Olga Vechtomova, and Jimmy Lin.
+\newblock Distilling task-specific knowledge from bert into simple neural
+  networks.
+\newblock 2019.
+
+\bibitem{tsai19}
+Henry Tsai, Jason Riesa, Melvin Johnson, Naveen Arivazhagan, Xin Li, and Amelia
+  Archer.
+\newblock Small and practical bert models for sequence labeling.
+\newblock 2019.
 
 \bibitem{ustinova16}
 Evgeniya Ustinova and Victor Lempitsky.
@@ -506,6 +647,13 @@ Jian Wang, Feng Zhou, Shilei Wen, Xiao Liu, and Yuanqing Lin.
 \newblock Deep metric learning with angular loss.
 \newblock 2017.
 
+\bibitem{wang19d}
+Wei Wang, Bin Bi, Ming Yan, Chen Wu, Zuyi Bao, Jiangnan Xia, Liwei Peng, and
+  Luo Si.
+\newblock Structbert: Incorporating language structures into pre-training for
+  deep language understanding.
+\newblock 2019.
+
 \bibitem{wang19c}
 Xun Wang, Xintong Han, Weilin Huang, Dengke Dong, and Matthew~R. Scott.
 \newblock Multi-similarity loss with general pair weighting for deep metric
@@ -523,6 +671,12 @@ Ziyu Wang, Masrour Zoghi†, Frank Hutter, David Matheson, and Nando
 Alex Warstadt, Amanpreet Singh, and Samuel~R Bowman.
 \newblock Neural network acceptability judgments.
 \newblock {\em arXiv preprint arXiv:1805.12471}, 2018.
+
+\bibitem{wiedmann19}
+Gregor Wiedemann, Steffen Remus, Avi Chawla, and Chris Biemann.
+\newblock Does bert make any sense? interpretable word sense disambiguation
+  with contextualized embeddings.
+\newblock 2019.
 
 \bibitem{N18-1101}
 Adina Williams, Nikita Nangia, and Samuel Bowman.
@@ -552,6 +706,11 @@ Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc~V. Le, and Mohammad~Norouzi et.
 \newblock Google’s neural machine translation system: Bridging the gap
   between human and machine translation.
 \newblock 2016.
+
+\bibitem{yan19}
+An~Yan, Fanbo Xiang, and Yiming Zhang.
+\newblock Embedding learning by optimal transport.
+\newblock 2019.
 
 \bibitem{zhu18}
 Henghui Zhu, Ioannis~Ch Paschalidis, and Amir Tahmasebi.

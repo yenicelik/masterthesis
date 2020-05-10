@@ -3,8 +3,6 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: dissertation.aux
 The style file: plain.bst
 Database file #1: dissertation.bib
-Warning--entry type for "shankar17" isn't style-file defined
---line 821 of file dissertation.bib
 Warning--to sort, need author or key in colahLSTM
 Warning--to sort, need author or key in spacyb
 Warning--to sort, need author or key in news_corpus
@@ -12,7 +10,9 @@ Warning--to sort, need author or key in pyax
 Warning--empty journal in ackerman09
 Warning--empty journal in alvarez18
 Warning--empty journal in bojanowski17
+Warning--empty journal in brazinskas19
 Warning--empty journal in bromley94
+Warning--empty journal in camachocollados18
 Warning--empty journal in chen19
 Warning--empty journal in chopra05
 Warning--empty journal in conneau17
@@ -24,69 +24,80 @@ Warning--empty journal in hadsell06
 Warning--can't use both volume and number fields in bar2006
 Warning--empty journal in hegel17
 Warning--empty journal in hoffer14
-Warning--empty journal in hu19
+Warning--empty journal in joshi19
+Warning--empty journal in joshi19b
 Warning--empty journal in kudugunta18
 Warning--empty journal in lee17
-Warning--empty booktitle in Liu18
+Warning--empty journal in liu19
 Warning--empty journal in ma19
 Warning--empty journal in may19
 Warning--empty journal in mccarthy16
+Warning--empty journal in mickus19
 Warning--empty booktitle in miller94
+Warning--empty journal in moradshahi19
 Warning--empty booktitle in ni17
 Warning--empty journal in peters18
-Warning--empty booktitle in Rei17
+Warning--empty journal in pilehvar19
 Warning--empty booktitle in rippel16
 Warning--empty journal in rumelhart85
 Warning--empty journal in sennrich16
 Warning--empty journal in shen19
+Warning--empty journal in shi19
 Warning--empty booktitle in sohn16
 Warning--empty booktitle in song17
 Warning--empty booktitle in suarez19
+Warning--empty journal in sun19
 Warning--empty journal in sutskever11
+Warning--empty journal in tan19
+Warning--empty journal in tang19
+Warning--empty journal in tsai19
 Warning--empty booktitle in wang17
+Warning--empty journal in wang19d
 Warning--empty booktitle in wang19c
+Warning--empty journal in wiedmann19
 Warning--empty journal in wittgenstein53
 Warning--empty journal in wu16
+Warning--empty journal in yan19
 Warning--empty journal in zhu18
-You've used 99 entries,
+You've used 124 entries,
             2118 wiz_defined-function locations,
-            911 strings with 19145 characters,
-and the built_in function-call counts, 32530 in all, are:
-= -- 2978
-> -- 2074
-< -- 18
-+ -- 830
-- -- 718
-* -- 2125
-:= -- 5632
-add.period$ -- 300
-call.type$ -- 99
-change.case$ -- 656
+            1013 strings with 23963 characters,
+and the built_in function-call counts, 42364 in all, are:
+= -- 3917
+> -- 2674
+< -- 31
++ -- 1069
+- -- 928
+* -- 2775
+:= -- 7254
+add.period$ -- 376
+call.type$ -- 124
+change.case$ -- 836
 chr.to.int$ -- 0
-cite$ -- 142
-duplicate$ -- 1214
-empty$ -- 2161
-format.name$ -- 718
-if$ -- 6617
+cite$ -- 180
+duplicate$ -- 1591
+empty$ -- 2753
+format.name$ -- 928
+if$ -- 8687
 int.to.chr$ -- 0
-int.to.str$ -- 99
-missing$ -- 93
-newline$ -- 497
-num.names$ -- 190
-pop$ -- 808
+int.to.str$ -- 124
+missing$ -- 117
+newline$ -- 623
+num.names$ -- 240
+pop$ -- 1014
 preamble$ -- 1
-purify$ -- 557
+purify$ -- 712
 quote$ -- 0
-skip$ -- 921
+skip$ -- 1264
 stack$ -- 0
-substring$ -- 1070
-swap$ -- 246
-text.length$ -- 18
+substring$ -- 1523
+swap$ -- 379
+text.length$ -- 31
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 396
-warning$ -- 43
-while$ -- 232
-width$ -- 101
-write$ -- 976
-(There were 44 warnings)
+type$ -- 496
+warning$ -- 56
+while$ -- 306
+width$ -- 127
+write$ -- 1228
+(There were 56 warnings)
