@@ -342,12 +342,12 @@ We will not go into too much detail as to how these models are trained, as all o
 \subsection{Static Word Embeddings}
 
 Here we will talk about word-embeddings where each word-token only has a single embedding $x_w$, i.e. there is a bijection between word-tokens and word-embeddings. 
-Specifically, the mapping \eqref{map:embedding_mapping} is not a probabilistic function with a latent random factor, but rather a deterministic one.
-We will go over the basics of static word embeddings only, as the focus of this work lays in context embeddings which are presented in the subsequent section.
+Specifically, the mapping \eqref{map:embedding_mapping} is not a probabilistic function with a latent random factor.
+We will start with simple static word embeddings and proceed to more complex models in subsequent sections.
 
 \subsubsection{Basic Model}
 
-The first model we are going to look at is a most basic model which fulfills the properties of the distance metrics shown in \eqref{def:distance}.
+The first model we are going to look at is a most basic model which fulfills the properties of the distance metrics shown in \eqref{def:distance} and minimizes words within the same context.
 
 Here, we can introduce a \textit{log-bilinear} \cite{cil_slides} model where the log-probability is define as
 
@@ -355,7 +355,7 @@ Here, we can introduce a \textit{log-bilinear} \cite{cil_slides} model where the
 \text{log} p_{\theta}(w | w^{\prime}) = \left\langle\mathbf{x}_{w}, \mathbf{x}_{w^{\prime}}\right\rangle+b_{w} + \text { const. }
 \end{equation}
 
-To arrive at the actual probability, we can exponentiate the log-probability as such
+The actual probability density function can be calculated by exponentiating the log-probability
 
 $$
 p_{\theta}\left(w | w^{\prime}\right)=\frac{\exp \left[\left\langle\mathbf{x}_{w}, \mathbf{x}_{w^{\prime}}\right\rangle+b_{w}\right]}{Z_{\theta}\left(w^{\prime}\right)}
@@ -369,19 +369,18 @@ $$
 \mathcal{L}(\theta ; \mathbf{w})=\sum_{t=1}^{T} \sum_{\Delta \in \mathcal{I}} \log p_{\theta}\left(w^{(t+\Delta)} | w^{(t)}\right)
 $$.
 
-This model basic model comes with certain drawbacks. 
+This basic model comes with drawbacks. 
 Amongst others the distance would be minimized if all word-embeddings would collapse onto a single point. 
-
-No term that forces unrelated words to move away from each other, a property that we are interested in as isotropic properties have shown practical performance \cite{ethayarajh19}.
+No term that forces unrelated words to move away from each other, a property that we are interested in as isotropy for example has shown practical performance \cite{ethayarajh19}.
 
 
 \subsubsection{Word2Vec}
 
 One of the most prominent of word vector models is proposed by \cite{mikolov13, mikolov13b}.
 Here, a neural network with a single embedding layer can be trained to transform one-hot-vectors $\in \{ 0, 1 \}^{| \mathcal{V} |}$ which represents a word $w$ in vocabulary $\mathcal{V}$
-into a latent vector representation $x_w \in \mathbf{R}^{d + 1}$ using a neural network - which boils down to a linear embedding matrix - $W$ both a continuous bag of word and also a continuous skip-gram approach.
+into a latent vector representation $x_w \in \mathbf{R}^{d + 1}$ using a neural network - which boils down to a linear embedding matrix $W$.
+Both a continuous bag of word and also a continuous skip-gram approach can be used.
 The skip-gram approach is preferred in practice.
-
 Specifically, the loss-function that is optimized looks as follows
 
 \begin{align} 
@@ -390,7 +389,7 @@ Specifically, the loss-function that is optimized looks as follows
 & -\log \sum_{v \in \mathcal{V}} \exp \left[\left\langle\mathbf{x}_{v}, \mathbf{x}_{w^{(t)}}\right\rangle+b_{v} \right] 
 \end{align}
 
-As one can see, the loss function takes as input the bilinear loss from the basic model, and complements this by adding a regularizing term , such that random samples are not put next to each other.
+As one can see, the loss function takes as input the bilinear loss from the basic model, and complements this by adding a regularizing term, such that random samples are not put next to each other.
 This idea is referred to as \textit{negative sampling}.
 
 \begin{figure}[h]
@@ -407,13 +406,12 @@ Also, highly frequent words are optionally subsampled and their frequency is re-
 P\left(w_{i}\right)=1-\sqrt{\frac{t}{f\left(w_{i}\right)}}
 $$
 
-where $f( \dot )$ is the function that returns the frequency of a word $w_i$.
+where $f( \cdot )$ is the function that returns the frequency of a word $w_i$ in a given corpus.
 
 \subsubsection{GloVe}
 
-For the global vectors for word representation \textit{GloVe} \cite{pennington14}, the authors follow a more straight-forward matrix factorization approach.
-
-First, a global co-occurence matrix is created $\mathbf{N} = (n_{ij}) \in \mathbb{N}^{|\mathcal{V}| \dot |\mathcal{C}|}$ where each entry $n_{ij}$ is determined by the number of occurrences of word $w_i \in \mathcal{V}$ in context $w_j \in \mathcal{C}$.
+For the global vectors for word representation \textit{GloVe} \cite{pennington14}, the authors follow a matrix factorization approach.
+First, a global co-occurrence matrix is created $\mathbf{N} = (n_{ij}) \in \mathbb{N}^{|\mathcal{V}| \dot |\mathcal{C}|}$ where each entry $n_{ij}$ is determined by the number of occurrences of word $w_i \in \mathcal{V}$ in context $w_j \in \mathcal{C}$.
 Given that the vocabulary size can exceed multiple thousand items, this practically results in a sparse matrix.
 
 \begin{align}
