@@ -171,31 +171,19 @@ In a sentence such as
 The man travelled down the road.
 \end{verbatim}\label{sentence:man_travelled}
 
-the set of word-tokens would constitute the set
-
-$$
-\{ \text{the}, \text{man}, \text{traveled}, \text{down}, \text{road} \}
-$$
-
+the set of word-tokens would constitute would be $\{ \text{down}, \text{man}, \text{road}, \text{the}, \text{traveled} \}$.
 The way a sentence is split up into an ordered array of individual tokens is referred to as \textit{tokenization}.
 Tokenizing the above sentence (assuming we only allow lower-case tokens) would result in 
-
-$$
-\{ \text{the}, \text{man}, \text{traveled}, \text{down}, \text{road} \}
-$$
-
-The way a sentence is split up into individual basic units of language is referred to as \textit{tokenization}.
-As such, the sentence would be tokenized into the sequence (assuming lower-casing is part of the tokenization)
 
 $$
 [the, man, traveled, down, the, road]
 $$
 
 It is important to note that there are also other ways to interpret language tokens. 
-I will provide insights on different formats, as the language models that we will be using other tokenization methods.
+I will provide insights on different formats, as the language models that we will be using a different tokenization method.
 
-\paragraph{Character}s can be considered as another base unit of language.
-For the sentence \eqref{sentence:man_travelled}, the set of basic units would correspond to the Latin alphabet plus whitespace $a - z" "$ (" " denotes whitespace), and the above sentence would be tokenized into the sequence 
+\paragraph{Characters} can be considered as another base unit of language.
+For the sentence \eqref{sentence:man_travelled}, the set of basic units would correspond to the Latin alphabet plus whitespace and numbers $a - z" "0-9$ (" " denotes whitespace), and the above sentence would be tokenized into the sequence 
 
 $$
 [t, h e, " ", m, a, n, " ", t, r, a, v, e, l, e, d, " ", d, o, w, n, " ", t, h, e, " ", r, o, a, d]
@@ -203,8 +191,9 @@ $$
 
 Choosing characters as the basic token levels has shown considerable success and popularity in language modeling \cite{sutskever11} and translation \cite{lee17}.
 
-\paragraph{Byte pair encodings} \cite{gage94} are another popular mechanism to tokenize sentences, and also shows success in the case of language modeling and translation \cite{sennrich16}. 
+\paragraph{Byte pair encodings} \cite{gage94} presents another popular mechanism to tokenize sentences, and also shows success in the case of language modeling and translation \cite{sennrich16}. 
 Here, the most frequent pair of bytes in a sequence is replaced with the most frequent pair of bytes in a sequence with a single, unused byte.
+This can also be used as a compression scheme.
 
 Depending on what corpus this tokenizer is trained on, the above sentence could be tokenized into the following sequence
 
@@ -216,16 +205,16 @@ The tokenization of the sentence above implies that the corpus that the tokenize
 The $.$ (dot) at the end of each character denotes the end of the byte-pair.
 The main idea behind this tokenization is to construct a vocabulary of frequent subwords.
 
-\paragraph{WordPiece tokenizer} \cite{wu16} follows a similar idea as the byte-pair encoding and constructs a vocabulary given a corpus by maximizing the entropy.
+\paragraph{WordPiece tokenizer} \cite{wu16} follows a similar idea as the byte-pair encoding and constructs a vocabulary given a corpus by maximizing entropy.
 The main difference to the byte-pair encoding is that the vocabulary naturally includes a set of the most commonly appearing words in the respective language, and is then aggregated by introducing additional subword units to cover unseen character sequences.
 
-The tokenization of \eqref{sentence:man_travelled} would then look as follows (depending on which implementation and version of the WordPiece tokenizer is used)
+The tokenization of \ref{sentence:man_travelled} would then look as follows (depending on which implementation and version of the WordPiece tokenizer is used)
 
 $$
 [the, man, travel, \#\#led, down., the, ro,  \#\#ad.]
 $$
 
-where we can see that words such as \Verb#the# and \Verb#down# are not further divided into tokens and that suffixes such as \Verb!##led! are introduced, because these are rather unregular patterns, which however allow for better generalization.
+where we can see that words such as \Verb#the# and \Verb#down# are not further divided into tokens and that suffixes such as \Verb!##led! are introduced, because these are unregular patterns which allow for better generalization.
 
 
 
@@ -234,7 +223,7 @@ where we can see that words such as \Verb#the# and \Verb#down# are not further d
 
 \section{Word Embeddings}
 
-Because in the last few decades, computing power has gradually increased, and popularity in using computational methods have surged, we will go over the different word-representations through which we allow computers to execute operations on.
+We will now present ways to capture relations between tokens by representing these through vectors.
 
 \paragraph{Word-Embeddings}
 In general, we want to find a mapping 
@@ -265,26 +254,27 @@ For convenience, whenever I input $a, b, c$ into the distance function $d$, the 
 Also, please notice that I left out the notion of symmetry for distance measures.
 
 \paragraph{Learning a distance}
-A popular paradigm in machine learning is to maximize a certain probability distribution given some data $\mathbf{X}$.
+A popular paradigm in machine learning is to maximize a posterior probability distribution given some data $\mathbf{X}$.
+Following the idea of the distributional structure of language \cite{harris54}.
 In the context of word vectors, we want to maximize the probability that $w$ occurs in the context window of $w \prime$ through some parameters $\theta$.
-Implicitly, this corresponds to minimizing the distance between $w$ and $w^{\prime}$, while keeping the distance between $w$ and all other words constant. 
+Implicitly, this corresponds to minimizing the distance between $x_w$ and $x_w^{\prime}$, while keeping the distance between $x_w$ and all other word-vectors constant. 
 We call $w \prime$ a \textit{context word} for $w$.
 
 \begin{equation}
 p \left(w | w^{\prime}\right)
 \end{equation}
 
-and in the work we focus at, the probabilistic maximization problem corresponds to linear minimization problem
+and in the work we focus at, the probabilistic maximization problem corresponds to minimizing the distance in the embedding space
 
 \begin{equation}
 \forall w, w^{\prime} : \hspace{20pt} \text{max } p \left(w | w^{\prime}\right) \iff \text{min } d(w | w^{\prime})
 \end{equation}
 
-Please note that we do not generalize to formalizing a dual-relationship between the two problem-statements, however.
+Please note that we do not generalize to formalizing a dual-relationship between the two problem-statements.
 
 \paragraph{Exploiting the distributional structure of language:} Our goal is to learn distance between words by exploiting the distributional structure of a set of sentences, which make up a \textit{corpus}. 
 One of the early formalizations of representing the distributional structure of words through was expressed in \cite{bengio03}, which argues that a sequential statistical model can be constructed to estimate this true posterior.  
-In it's most naive form, this would imply that we can estimate the probability of a word $w^{(t)}$ after words $w^{(t-1)}, \ldots, w^{(1)}$ as
+In it's most naive form, this would imply that we can estimate the probability of a sequence of words $\mathbf{w}$ as
 
 \begin{equation}
 p(\mathbf{w}) = \prod_{t=1}^T p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \right)
@@ -293,8 +283,8 @@ p(\mathbf{w}) = \prod_{t=1}^T p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \rig
 %TODO check the underlying equation again!!
 
 where $\mathbf{w} = w^{(1)}, \dots, w^{(T)} $ is the sequence of words, $p(\mathbf{w})$ the probability of this sentence occurring.
-This corresponds to a simple autoregressive model.
-One could for example use (hidden) markov models to model this relation, as we could fix the \textit{context size} $n$ (in this case, only looking at previously occurring words) and include the markov assumption of
+This corresponds to an autoregressive model.
+One could for example use (hidden) markov models to model this relation, as we could fix the \textit{context size} $n$ (in this case, only looking at previously occurring words) and exploit the $n$-step markovian assumption of
 
 \begin{equation}
 p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \right) = p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(t - n + 1)} \right)
@@ -304,6 +294,7 @@ Fixing the context window to $n$ words for each computation (i.e. convolution), 
 \textit{n-grams} can also occur with characters, where $n$ characters are fed in to some model at a certain timestep $t$.
 
 Next to a context which only consists of the \textit{previous} $n$ words, one can also regard a context which includes both the previous \textit{and subsequent} $R$ words. 
+Combining this with a probability model which assumes conditional independence between all but one context word, this leads us to
 
 \begin{equation}
 p(\mathbf{w})=\prod_{t=1}^{T} \prod_{\triangle \in \mathcal{I} } p\left( w^{(t)} | w^{(t +\Delta)}\right)
@@ -313,26 +304,23 @@ whose probability we wish to estimate (and maximize if this is in the given trai
 
 \paragraph{Loss Objective} The above function is a probability estimate of the true underlying distribution.
 However, given that computational power is limited, we are usually interested in learning a parametrized model which captures this underlying distribution.
-One way to learn this parametrized model is to minimize a loss by backpropagating the gradients of the parameters.
+One way to learn this parametrized model is to \textbf{maximize} a loss by backpropagating the gradients of the parameters.
 In that case, the loss function would look as follows.
 
 
 \begin{equation}
-\mathcal{L}(\theta ; \mathbf{w})= - \prod_{t=1}^{T} \prod_{\triangle \in \mathcal{I}} p_{\theta}\left(w^{(t)} | w^{(t +\Delta)}\right)
+\mathcal{L}(\theta ; \mathbf{w})= \prod_{t=1}^{T} \prod_{\triangle \in \mathcal{I}} p_{\theta}\left(w^{(t)} | w^{(t +\Delta)}\right)
 \end{equation}{\label{eq:basic_equation_log_maximization}}
 
-By minimizing the mean loss over all sentences in a big-enough corpus $\mathcal{C}$, we can arrive at a reliable estimator model with parameters $\theta$, given the model is complex enough and generalizes well.
-
-Specifically, if $p_\theta$ is a parametric probability density function, one can then optimize for the most optimal $\hat{\theta} = \text{argmin}_\theta \mathcal{L}(\theta ; \mathbf{w})$ using a maximum likelihood estimation approach.
-One would usually minimize the log-loss as this allows for thee gradients to be more easily computed and avoids numerical issues.
+By maximizing the mean loss over all sentences in a big-enough corpus $\mathcal{C}$, we can find a reliable estimator model with parameters $\hat{\theta} = \text{argmin}_\theta \mathcal{L}(\theta ; \mathbf{w})$ using a maximum likelihood estimation approach.
+One would usually work with the log-loss as this allows for thee gradients to be more easily computed and avoids numerical issues.
 
 %TODO is this only training, or does this also have other implications..?
 Intuitively the above models flow the idea expressed by \cite{harris54} very well, speaking that the meaning of a word is captured by its neighborhood.
 However, the above equations follow a \textit{continuous bag of words CBOW} approach, which aims at predicting a target word $w^t$ given some context words $w^{\prime}$.
-However, it is also possible to follow a \textit{skip-gram SG} approach, where the aim is to predict context words $w^{\prime}$ given a target word $w^t$.
-Both methods result in the same type of model, which is merely trained differently.
+In contrast, it is also possible to follow a \textit{skip-gram SG} approach, where the aim is to predict context words $w^{\prime}$ given a target word $w^t$.
+The set of optimal models usually does not change $\theta \in \Theta$, whereas the chosen model $\hat{\theta}$ is different.
 The skip-gram model is found to work better with rare words, whereas the CBOW model seems to have slightly better accuracy on words that are occurring more frequently.
-
 
 \begin{figure}[h]
 	\center

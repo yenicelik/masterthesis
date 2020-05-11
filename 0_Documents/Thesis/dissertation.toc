@@ -5,15 +5,15 @@
 \contentsline {paragraph}{Polysemy}{8}% 
 \contentsline {paragraph}{Part of Speech \textit {PoS}}{8}% 
 \contentsline {subsection}{\numberline {2.1.1}Tokens and n-grams}{9}% 
-\contentsline {paragraph}{Character}{9}% 
-\contentsline {paragraph}{Byte pair encodings}{10}% 
+\contentsline {paragraph}{Characters}{9}% 
+\contentsline {paragraph}{Byte pair encodings}{9}% 
 \contentsline {paragraph}{WordPiece tokenizer}{10}% 
 \contentsline {section}{\numberline {2.2}Word Embeddings}{11}% 
 \contentsline {paragraph}{Word-Embeddings}{11}% 
 \contentsline {paragraph}{Distance:}{11}% 
 \contentsline {paragraph}{Learning a distance}{12}% 
-\contentsline {paragraph}{Exploiting the distributional structure of language:}{13}% 
-\contentsline {paragraph}{Loss Objective}{14}% 
+\contentsline {paragraph}{Exploiting the distributional structure of language:}{12}% 
+\contentsline {paragraph}{Loss Objective}{13}% 
 \contentsline {subsection}{\numberline {2.2.1}Static Word Embeddings}{16}% 
 \contentsline {subsubsection}{Basic Model}{16}% 
 \contentsline {subsubsection}{Word2Vec}{17}% 
