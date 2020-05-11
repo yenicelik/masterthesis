@@ -2,15 +2,32 @@
 {\Huge \bf Abstract}
 \vspace{24pt} 
 
+One of the goals of Natural Language Understanding \textit{NLU} is to formalize written text in a way, such that linguistic features can be captured through computational models, which can then again be used for downstream machine learning tasks.
+The most popular methodology in NLU is the use of vectors that represent written text, including word-vectors, sentence-vectors, etc. 
+These vectors are often referred to as \textit{embedding} vectors, as they embed more complex concepts into a vector representation.
 
-Write a summary of the whole thing. Make 
-sure it fits in one page. 
+Because embeddings - due to their strong usage in downstream tasks - can be considered as the fundamental unit of machine learning in the domain of natural language, any shortcomings will propagate to the performance of the target task.
+Thus, improving the way these embeddings have strong implications for any subtasks in NLU.
 
-How can we arrive at meaning embeddings?
-Compared to context-embeddings, these should encode meaning better and exclusively.
+Given that language models such as BERT only capture a function black-box function $f$ between input and output, our aim is to understand how the the subspace organization relates to linguistic features.
+Due to the strong importance of \textit{semantics}, which captures meaning in text, we will focus our analysis on \textit{semantics}.
 
-Better represent what a computer means, can be used for interpretability, downstream tasks, better unbiased embeddings which do not entail sentiment but meaning only with the words.
+Our main contribution are two-fold. 
+We first test to what extent the semantic subspace is linearly separable between semantic classes, and then test for multi-modality in these structures through a clusterability test.
+We then analyse the relationship between the linguistic features of part-of-speech and semantics, as these show strong correlation in languages.
+Finally, we introduce new embedding-vectors for tokens with high variance, and try to understand what downstream tasks are affected the most, using this as a proxy to understand what the strong word-based variance in BERT context vectors most corresponds to.
 
+Our findings show that although BERT does not capture an interpretable concept of a semantic subspace, but that it rather focuses on the more broad linguistic features which are imminent to context.
+This can often introduce undesirable features such as strong sentiment, position in sentence, and thus lead to considerable bias in downstream applications.
+
+%- Some properties include that static word vectors like word2vec form a bijection between discrete vectors and word tokens. 
+%However, because a single word can entail multiple meanings, such as the polysemous word "bank" ( (1) financial institution, (2) a sitting bench ), this results in a lossy compression
+%- Other language models like context embeddings entail too much information, and also include other linguistic features such as semantic information, relatenedness to unrelated concepts.
+%These properties can easily introduce bias into any downstream tasks.
+%- We conjecture that many language tasks incl. translation will benefit most from meaning information
+%
+%- Our general approach is to start with a complex language model that outputs context embeddings, and find signals / vectors that entail meaning.
+%- Although this work is dedicated to the domain of natural language understanding, the principles analysed in this work should generalize to other domains with similar structural properties as well, where we want to denoise some embedding space to some select properties.
 
 \newpage
 \vspace*{\fill}

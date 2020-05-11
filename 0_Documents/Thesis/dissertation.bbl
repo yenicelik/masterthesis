@@ -303,6 +303,12 @@ Lawrence Hubert and Phipps Arabie.
 Shankar Iyer, Nikhil Dandekar, and Kornel Csernai.
 \newblock First quora dataset release: Question pairs, 2017.
 
+\bibitem{jawahar19}
+Ganesh Jawahar, Benoit Sagot, and Djame Seddah.
+\newblock What does bert learn about the structure of language?
+\newblock {\em Proceedings ofthe 57th Annual Meeting ofthe Association for
+  Computational Linguistics}, pages 3651--3657, 2019.
+
 \bibitem{jentzsch19}
 Sophie Jentzsch, Constantin Rothkopf, and Patrick Schramowski~Kristian
   Kersting.
@@ -746,6 +752,13 @@ Ziyu Wang, Masrour Zoghi†, Frank Hutter, David Matheson, and Nando
 Alex Warstadt, Amanpreet Singh, and Samuel~R Bowman.
 \newblock Neural network acceptability judgments.
 \newblock {\em arXiv preprint arXiv:1805.12471}, 2018.
+
+\bibitem{whitaker19}
+Brendan Whitaker, Denis Newman-Griffis, Aparajita Haldar, Hakan
+  Ferhatosmanoglu, and Eric Fosler-Lussier.
+\newblock Characterizing the impact of geometric properties of word embeddings
+  on task performance.
+\newblock 2019.
 
 \bibitem{wiedmann19}
 Gregor Wiedemann, Steffen Remus, Avi Chawla, and Chris Biemann.
