@@ -25,6 +25,11 @@ Margareta Ackerman and Shai Ben-David.
 \newblock Clusterability: A theoretical study.
 \newblock 2009.
 
+\bibitem{akbik19}
+Alan Akbik, Tanja Bergmann, and Roland Vollgraf.
+\newblock Pooled contextualized embeddings for named entity recognition.
+\newblock {\em Proceedings of NAACL-HLT 2019}, pages 724--728, 2019.
+
 \bibitem{alvarez18}
 David Alvarez-Melis and Tommi~S. Jaakkola.
 \newblock Gromov-wasserstein alignment of word embedding spaces.
@@ -80,6 +85,12 @@ Chris Biemann.
 Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov.
 \newblock Enriching word vectors with subword information.
 \newblock 2017.
+
+\bibitem{bommasani19}
+Rishi Bommasani, Kelly Davis, and Cardie Claire.
+\newblock Bert wears gloves: Distilling static embeddings from pretrained
+  contextual representations.
+\newblock 2019.
 
 \bibitem{bowman2015}
 Samuel~R Bowman, Gabor Angeli, Christopher Potts, and Christopher~D Manning.
@@ -142,6 +153,12 @@ Sumit Chopra, Raia Hadsell, and Yann LeCun.
   face verification.
 \newblock 2005.
 
+\bibitem{coenen19}
+Andy Coenen, Emily Reif, Ann Yuan, Been Kim, Adam Pearce, Fernanda Viégas, and
+  Martin Wattenberg.
+\newblock Visualizing and measuring the geometry of bert.
+\newblock 2019.
+
 \bibitem{comaniciu02}
 Dorin Comaniciu and Peter Meer.
 \newblock Mean shift: A robust approach toward feature space analysis.
@@ -160,6 +177,11 @@ Ido Dagan, Oren Glickman, and Bernardo Magnini.
 \newblock In {\em Machine Learning Challenges Workshop}, pages 177--190.
   Springer, 2005.
 
+\bibitem{denkowski09}
+Michael Denkowski.
+\newblock A survey of techniques for unsupervised word sense induction.
+\newblock 2009.
+
 \bibitem{devlin18}
 Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
 \newblock Bert: Pre-training of deep bidirectional transformers for language
@@ -176,6 +198,12 @@ William~B Dolan and Chris Brockett.
 Matrin Ester, Hans-Peter Kriegel, Joerg Sander, and Xiaowei Xu.
 \newblock A density-based algorithm for discovering clusters.
 \newblock {\em KDD-96 Proceedings}, 1996.
+
+\bibitem{ethayarajh19}
+Kawin Ethayarajh.
+\newblock How contextual are contextualized word representations? comparing the
+  geometry of bert, elmo, and gpt-2 embeddings.
+\newblock 2019.
 
 \bibitem{francis64}
 W.~N. Francis and H.~Kucera.
@@ -237,6 +265,11 @@ Zellig Harris.
 W.~F. Hegel.
 \newblock Encyclopedia of the philosophical science: Science of logic.
 \newblock 1817.
+
+\bibitem{hewitt19}
+John Hewitt and Christopher~D Manning.
+\newblock A structural probe for finding syntax in word representations.
+\newblock {\em Association for Computational Linguistics}, 2019.
 
 \bibitem{hochreiter97}
 Sepp Hochreiter and Jürgen Schmidhuber.
@@ -325,6 +358,12 @@ Hector Levesque, Ernest Davis, and Leora Morgenstern.
 \newblock In {\em Thirteenth International Conference on the Principles of
   Knowledge Representation and Reasoning}, 2012.
 
+\bibitem{levine19}
+Yoav Levine, Barak Lenz, Or~Dagan, Dan Padnos, Or~Sharir, Shai Shalev-Shwartz,
+  Amnon Shashua, and Yoav Shoham.
+\newblock Sensebert: Driving some sense into bert.
+\newblock 2019.
+
 \bibitem{liebeskind19}
 Chaya Liebeskind, Ido Dagan, and Jonathan Schler.
 \newblock An algorithmic scheme for statistical thesaurus construction in a
@@ -360,6 +399,12 @@ J.~B. MacQueen.
 P.~C. Mahalanobis.
 \newblock On the generalized distance in statistics.
 \newblock {\em Proc. Nat. Inst. Sci.}, 1936.
+
+\bibitem{martinc20}
+Matej Martinc, Jozef Stefan, Institute Slovenia, Syrielle Montariol, Elaine
+  Zosa, and Lidia Pivovarova.
+\newblock Capturing evolution in word usage: Just add more clusters?
+\newblock {\em In Proceedings ofACM Conference (Conference’17)}, 2020.
 
 \bibitem{may19}
 Chandler May, Alex Wang, Shikha Bordia, Samuel~R. Bowman, and Rachel Rudinger.
@@ -503,6 +548,13 @@ William~M. Rand.
 \newblock {\em Journal of the American Statistical Association}, pages
   846--850, 1971.
 
+\bibitem{reimers19}
+Nils Reimers, Benjamin Schiller, Tilman Beck, Johannes Daxenberger, Christian
+  Stab, and Iryna Gurevych.
+\newblock Classification and clustering of arguments with contextualized word
+  embeddings.
+\newblock 2019.
+
 \bibitem{remus13}
 Steffen Remus and Chris Biemann.
 \newblock Retrofitting word representations for unsupervised sense aware word
@@ -551,6 +603,16 @@ Dinghan Shen, Pengyu Cheng, Dhanasekar Sundararaman, Xinyuan Zhang, Qian Yang,
 Peng Shi, Jimmy Lin, and David~R Cheriton.
 \newblock Simple bert models for relation extraction and semantic role
   labeling.
+\newblock 2019.
+
+\bibitem{shin18}
+Jamin Shin, Andrea Madotto, and Pascale Fung.
+\newblock Interpreting word embeddings with eigenvector analysis.
+\newblock 2018.
+
+\bibitem{si19}
+Yuqi Si, Jingqi Wang, Hua Xu, and Kirk Roberts.
+\newblock Enhancing clinical concept extraction with contextual embeddings.
 \newblock 2019.
 
 \bibitem{socher2013}
@@ -612,6 +674,13 @@ Henry Tsai, Jason Riesa, Melvin Johnson, Naveen Arivazhagan, Xin Li, and Amelia
 \newblock Small and practical bert models for sequence labeling.
 \newblock 2019.
 
+\bibitem{tshitoyan19}
+Vahe Tshitoyan, John Dagdelen, Leigh Weston, Alexander Dunn, Ziqin Rong, Olga
+  Kononova, Kristin~A. Persson, Gerbrand Ceder, and Anubhav Jain.
+\newblock Unsupervised word embeddings capture latent knowledge from materials
+  science literature.
+\newblock {\em Nature Vol 571 Issue 7763}, pages 95--98, 2019.
+
 \bibitem{ustinova16}
 Evgeniya Ustinova and Victor Lempitsky.
 \newblock Learning deep embeddings with histogram loss.
@@ -627,6 +696,12 @@ Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
 Luke Vilnis and Andrew McCallum.
 \newblock Word representations via gaussian embedding.
 \newblock {\em CoRR}, abs/1412.6623, 2014.
+
+\bibitem{wang19e}
+Alex Wang and Kyunghyun Cho.
+\newblock Bert has a mouth, and it must speak: Bert as a markov random field
+  language model.
+\newblock 2019.
 
 \bibitem{wang19b}
 Alex Wang, Yada Pruksachatkun, Nikita Nangia, Amanpreet Singh, Julian Michael,

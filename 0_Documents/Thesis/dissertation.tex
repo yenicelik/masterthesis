@@ -20,7 +20,7 @@
 \def\authorcollege{David Yenicelik \\ ETH Zürich\xspace}
 \def\authoremail{yedavid@ethz.ch}
 \def\dissertationtitle{}
-\def\wordcount{14,235}
+\def\wordcount{32,612}
 
 
 %\usepackage[dvips]{epsfig,graphics} 
@@ -37,7 +37,7 @@
 \usepackage{url}
 \usepackage{fancyvrb} % for "\Verb" macro
 \usepackage{verbatim}
-
+\usepackage{fancyhdr}
 
 
 \usepackage[ruled,vlined]{algorithm2e}
@@ -49,7 +49,14 @@
 
 
 %% FRONTMATTER (TITLE PAGE, DECLARATION, ABSTRACT, ETC) 
-\pagestyle{empty}
+% \pagestyle{empty}
+\pagestyle{fancy}
+
+\fancyhf{}
+\fancyhead[L]{\rightmark}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
 \singlespacing
 \input{titlepage}
 \onehalfspacing
@@ -820,6 +827,8 @@ This embedding vector is used by the intermediate layers of the transformer, and
   \label{fig:BERT_vanilla_pipeline}
 \end{figure}
 
+Further work exists in analysing BERT as a Markov Random Field Language Model \cite{wang19e} formalizing a better way to sample sentences.
+
 \subsubsection{Other language models}
 
 Although the subsequent work completely works with the BERT language model, there is a wide variets of other language models which are popular.
@@ -1308,7 +1317,7 @@ The authors create an EGO-network for each concept in the vector space whose cor
 \begin{figure}[h]
 	\center
   \includegraphics[width=0.6\linewidth]{./assets/relatedwork/ego_network.png}
-  \caption{From \cite{pelevina16}. An EGO-network of the word \texttt{table} is created. Then, clustering is applied on the EGO network, to identify different semantic classes}
+  \caption{From \cite{pelevina16}. An EGO-network of the word \texttt{table} is created. Then, clustering is applied on the EGO network, to identify different semantic sets \textit{synsets}.}
   \label{fig:ego_network}
 \end{figure}
 
@@ -1520,166 +1529,100 @@ Besides using SemCor, the authors also focus on medical datasets.
 The authors explore word2vec, GloVe, fastText, ELMo and BERT embeddings.
 The authors demonstrate state-of-the-art results for clinical concept extraction.
 
-%\begin{figure}[H]
-%	\center
-%  \includegraphics[width=0.7\linewidth]{./assets/relatedwork/cold_fictional_desired.png}
-%  \caption{From \cite{coenen19}. \textbf{Fictional} embedding vector points and clusters of \texttt{cold}. This is one of the results that we want to arrive at. }
-%  \label{fig:cold_fictional_desired}
-%\end{figure}
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.4\linewidth]{./assets/relatedwork/cold_fictional_desired.png}
+  \caption{From \cite{si19}. \textbf{Fictional} embedding vector points and clusters of \texttt{cold}. This is one of the results that we want to arrive at, that we have different word-embeddings that capture the modes of the underlying probability distribution. }
+  \label{fig:cold_fictional_desired}
+\end{figure}
 
+The authors also run PCA on semantically tagged data-samples.
 
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.4\linewidth]{./assets/relatedwork/cold_biobert.png}
+  \caption{From \cite{si19}. PCA visualizations using embedding vector of \texttt{cold} from BERT.}
+  \label{fig:cold_fictional_desired}
+\end{figure}
 
+\cite{ethayarajh19} investigates the question of whether context embeddings for a given word $w$ cover a closed area in the embedding space produced by BERT, or if there are infinitely many context-specific representations for each such word.
+The authors analyse ELMo, BERT and GPT-2.
+The authors argue that in all models, context embeddings are not isotropic, and thus not uniformly distributed with respeect to direction, and are instead anisotropic, occupying a narrow cone in the vector space.
+In GPT-2 alone, two random words will almost have perfect cosine-similarity.
+For BERT, words in the same sentence grow more and more dissimilar in upper layers, but stay more similar to each other than randomly sampled vectors.
+The authors use the SemCor corpus to calculate \\
+
+\begin{itemize}
+\item \textit{self-similarity} of a word $w$ in layer $l$ is the average cosine similarity of word $w$ across $n$ different contexts as expressed by 
+$$
+\operatorname{SelfSim}_{\ell}(w)=\frac{1}{n^{2}-n} \sum_{j} \sum_{k \neq j} \cos \left(f_{\ell}\left(s_{j}, i_{j}\right), f_{\ell}\left(s_{k}, i_{k}\right)\right)
+$$
+\item \textit{intra-sentence similarity} is the similarity between the word-vector and the sentence-embedding, which is the mean of the token-embeddings for that sentence. 
+Formally
+$$
+\begin{aligned} \operatorname{Intrasim}_{\ell}(s) &=\frac{1}{n} \sum_{i} \cos \left(\vec{s}_{\ell}, f_{\ell}(s, i)\right) \\ \text { where } \vec{s}_{\ell} &=\frac{1}{n} \sum_{i} f_{\ell}(s, i) \end{aligned}
+$$
+\item \textit{maximum explainable variance} is proportional to the variance in $w$s contextualized representations for a given layer.
+It gives us an upper bound on how well a static embedding could replace word's contextualized representations and is calculated by 
+$$
+\operatorname{MEV}_{\ell}(w)=\frac{\sigma_{1}^{2}}{\sum_{i} \sigma_{i}^{2}}
+$$
+where $\sigma_1, \ldots, \sigma_m$ are the first $m$ singular values of the occurrence matrix $
+\left[f_{\ell}\left(s_{1}, i_{1}\right) \ldots f_{\ell}\left(s_{n}, i_{n}\right)\right]
+$ where $f_l(s, i)$ maps word $w = s[i]$ in sentence $s$ to a context embedding at layer $l$ of the language model.
+\end{itemize}
+
+If both intra-similarity and self-similarity are low, then the model contextuaizes words in that layer by giving each one a context-specific representation that is still distinct from all other word representations.
+If the self-similarity is low, this suggests a less nuances contextualized.
+Due to the models being anisotropic, the evaluations needs to be adjusted for anisotropy, by simply subtracting the mean value for each formula across all words and at layer $l$. 
+For BERT, the average cosine similarity between uniformly randomly sampled words is between 0.2 and 0.6, increasing with the number of layers.
+This value would be close to 0. in a space where embeddings are isotropically / uniformly distributed across the full vectorspace.
+The authors argue that this is inherent to the process contextualization.
+The aturhos further show that stopwords, such as \texttt{the}, \texttt{of} and \texttt{to} have the lowest self-similarity, implying that these have the most context-specific representations.
+Although the authors argue that these words are not polysemous, it seems apparent that these vectors are the ones with highest number of different contexts.
+The authors argue that the language models do not simply assign one of a finite number of word-sense representations to each word, as this would lead to less variation in the representation.
+Finally, the authors take the first principal components from a set of sampled word in different contexts as a static word embedding. 
+They show that for layers 1 and 2 of BERT, these word-embeddings often outperform semantic benchmarks.
+%TODO Should I mention MEN, WS353, RW, Google, MSR, SemEval 2012, BLESS, AP?
+
+\cite{whitaker19} follow a similar and more rigorous analysis with static word vectors. 
+They argue that tuning and improving modern language models should focus explicitly on local geometric structures in sampling and evaluation methods.
+
+\cite{moradshahi19} Include a final linear transformation which mimics the distance learning aspect to filter out the subspace of interesting for downstream tasks.
+This final linear transformation is task-specific and not learned during pre-training.
+
+\cite{tshitoyan19} apply a word2vec type training methodology on chemical publications to encode relationships between chemical compounds.
+
+When we need to arrive a singular word representation from multiple tokens most work such as \cite{bommasani19, akbik19} do a simple mean, max or min pooling over all word-embeddings of all tokens.
+
+\cite{jawahar19} argue that BERT encodes surface features in bottom layers, syntactic features in middle layers, and semantic features in top layers.
+Using normalized mutual information, the authors cluster the representations at different layers $l$ of the model, and argue that lower layers encode phrasal information better.
+The authors use ten probing tasks to evaluate language features extracted through BERT.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.4\linewidth]{./assets/relatedwork/BERT_tsne_layers.png}
+  \caption{From \cite{jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.}
+  \label{fig:cold_fictional_desired}
+\end{figure}
+
+The authors also use a maximum spanning-tree approach to arrive at a dependency parsing tree, using the attention weights.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.4\linewidth]{./assets/relatedwork/BERT_dependency_parsing.png}
+  \caption{From \cite{jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using gold root \texttt{are} as starting node for maximum spanning tree algorithm}
+  \label{fig:cold_fictional_desired}
+\end{figure}
+
+However, the authors do little work on semantics as defined by WordNet classes, but rather focus on part-of-speech, tenses and subject-verb agreement tasks.
 
 \newpage
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-(How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings)
-
-going down the drain of "geometry" of BERT and ELMo.
-
-could also go down the drain of bias (we would prefer to have uniform space over gender etc.)
-
--> does projection into some subspace which has same metric properties perhaps not make it asitropic?
-
-pretty ok summary of what kind of properties we want from word-embeddings... (https://devopedia.org/word-embedding)
-
-
-Especially in Named Entity Recognition (NER), there is a lot of use for static word-embeddings.
-I guess this is because we need static embeddings which represent the individual clusters?
-
--> Using pooling for some 
-
--> Character level operation
-
--> Perhaps make good sense to work towards a word-embeddings where different vectors are close to each other?
-
--> perhaps find a metric space warping the vectors, s.t. an isotropic representation is achieved?
-
--> Perhaps tokenization is a big problem, but perhaps other architecture..? but retraining is too difficult.. probably best to just stick to BERT? one way or the other, we need good word-embeddings derived from good language models to form a probabilistic prediction of the concept
-
-
--> Could perhaps also try to make an adversarial autoencoder after the BERT layer (or continue training, s.t. a second loss is mimized as a downstream task?)
-
--> Perhaps distilling with "correct" tokens? i.e. another network which copies BERT, but instead of outputting \#\#end, it outputs one of most frequent 20k words
-
--> thesaurus using a (set of) words. a little like sentence-generation, but generating most-probable examples
-
--> Everyone just averages token-embeddings..
-
--> perhaps fitting a GMM to the contextualized representations of BERT may give a good probability space..?
-
--> Perhaps make sense to apply MUSE to this?
-
--> Artetxe 2019 uses language models to generate embeddings. we also do this, but do it using 1) better language models, and 2) better 
-
--> QUESTION: Which factors (mapping algo, embedding) is delimiting in automated embedding matching
-
--> perhaps create a GMM for each concept, based on how many modals we identify? how to estimate the number of clusters? by graph-clustering perhaps! (this could be very consuming)
-
--> Adversarial autoencoder on BERTs last models to enforce it to some better distribution
-
 \subsection{Other methods}
 
 Although the above presented methods are the prevailent methods for word-embeddings, there are also other methods which do not clearly fit into one of the above categories.
-
-\subsubsection{Generating "static" word-embeddings through contextual embeddings}
-
-Some work has been done in extracting word-embeddings from contextual language models like BERT or ELMo.
-
-CITE (BERT WEARS GLOVES: DISTILLING STATIC EMBEDDINGS FROM PRETRAINED CONTEXTUAL REPRESENTATIONS)
-
-(1) Uses \textit{pooling} between BERT tokens to arrive at a single representation between words.
-
-Here, sentences are split by space (tokenized).
-Words are tokenized further into a subword as defined by WordPiece (Wu et al. 2016).
-
-The defined pooling operations looks as follows to arrive at the word from the individual subwords:
-
-$$
-\mathbf{w}_{c}=f\left(\mathbf{w}_{c}^{1}, \ldots, \mathbf{w}_{c}^{k}\right) ; f \in\{\min , \max , \text { mean, last }\}
-$$
-
-where we have subwords $w^{1},  \ldots, w^{k}$ such that $\operatorname{cat}\left(w^{1}, \ldots, w^{k}\right)=w$
-
-Why would any of these pooling operations result in a meaninigful source-word? 
-This is just squishing tokens together! \\
-
--> This is a major limitation for which we may need to use ELMo
--> However this may be needed for "unseen concepts" (which are unseen words...)
--> Perhaps check what fasttext does...?
-
-
-(2) Uses \textit{context combination} to map from different contexts $c_1, \ldots, c_n$ to a single static embedding $w$ that is agnostic of context.
-
-Proposed are two ways to represent context.
-
-\textbf{Decontextualization} For a single word-context, we siimply feed-in the word by itself to the model.
-
-\textbf{Aggregated} combine $w$ in multiple contexts.
-n sentences are sampled from the dictionary $\mathcal{D}$.
-From the multiple sampled words, we then apply pooling to arrive at a single representation that aggregates the different tokens into one.
-
-$$
-\mathbf{w}=g\left(\mathbf{w}_{c_{1}}, \dots, \mathbf{w}_{c_{n}}\right) ; g \in\{\min , \max , \text { mean }\}
-$$
-
-
-This post extracts (token?) word-embeddings: 
-(https://towardsdatascience.com/nlp-extract-contextualized-word-embeddings-from-bert-keras-tf-67ef29f60a7b)
-
-This seems to be a way to extract embeddings for tokens from BERT
-(https://github.com/imgarylai/bert-embedding)
-
-(->How can we create a (parametric) probability density from a point-cloud distribution?)
-
-perhaps not necessarily interpretable in standard euclidean space
-(https://www.kdnuggets.com/2019/02/bert-features-interbertible.html)
-original (https://medium.com/thelocalminima/are-bert-features-interbertible-250a91eb9dc)
-
-Perhaps we can mask all but the target token to arrive at one vector per token (and then combine them somehow...).
-But how do they extract the singular word-embeddings...?
-
-(-> you could be like "acquiring bedeutung" is a big problem in many tasks. especially useful when we try to map one concept to another. we look at the NLP task for concreteness)
-
-Generally, really good critique on this paper:
-
-(https://openreview.net/forum?id=SJg3T2EFvr)
-
-usually, we have sentence-embeddings, and do not look at word-embeddings.
-
-(-> we don't want to add more and more context. we want a model which contains the polysemy of different contexts, which could allow for probability maximization..., otherwise we have to look at bigger and bigger documents to build more accurate language models, which becomes infeasible at some point. (although this would be the way humans work, because they live in context as well)
-
-This blog aims to generate word-embeddings (and sentence-embeddings) from the BERT model.
-(https://mccormickml.com/2019/05/14/BERT-word-embeddings-tutorial/)
-
-create word-vectors by taking out what BERT predicts at the nth token.
-create word-vectors by concatenating or summing multiple layer's outputs.
-
-the cosine similarity between these vectors seem pretty well-done!
-
-
-(-> Does it make sense to use BERT and then on calculate word-embeddings through an extended fully-connected model)
-
--> ELMo may provide a better tokenizer, maybe better ot use this? What about GPT? ELMo uses moses tokenizer which seems word-level enough
-
--> How to solve this tokenization problem....
-
--> Can also analyze only words that exist.
-
-\subsection{From token-vectors to word-vectors}
 
 \subsection{Bias in BERT vectors}
 
@@ -2724,7 +2667,7 @@ WNLI & Accuracy & \textbf{0.4649} & 0.4225 & 0.4507 \\
 \bottomrule
 \end{tabular}
 }
-\captionof{table}{GLUE Benchmark performance measures for the BERT model, BERnie PoS and BERnie Cluster.
+\captionof{table}{GLUE Benchmark performance measures for the BERnie Cluster model without any additional pre-training, the BERnie Cluster with full pre-training and BERnie with partial pre-training.
 Higher scores are better.
 The task-wide best-performers are marked in bold.
 All values are the average scores of two runs.}
@@ -3294,7 +3237,7 @@ BERT uses words, subwords and individual characters (in total 30'000) that are t
 Idea is to do the following:
 Concepts (and thus words), are represented across multiple contexts.
 We can create probabilistic word-embeddings by sampling from a corpus the context of a specific word.
-From multiple samples of the context-embedding-vector, we take the mean and stddev, or create a GMM if there are multimodal logic (we can check this multimodality by runniing some sort of rejection sampling algorithm).
+From multiple samples of the context-embedding-vector, we take the mean and stddev, or create a GMM if there are multimodal logic (we can check this multimodality by running some sort of rejection sampling algorithm).
 Then we have a probability density function (one for each language), and can map one into another.
 
 Perhaps we could split up too high-variance embeddings to multimodal embeddings, depending on their use-cases.

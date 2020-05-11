@@ -10,12 +10,16 @@ Warning--to sort, need author or key in pyax
 Warning--empty journal in ackerman09
 Warning--empty journal in alvarez18
 Warning--empty journal in bojanowski17
+Warning--empty journal in bommasani19
 Warning--empty journal in brazinskas19
 Warning--empty journal in bromley94
 Warning--empty journal in camachocollados18
 Warning--empty journal in chen19
 Warning--empty journal in chopra05
+Warning--empty journal in coenen19
 Warning--empty journal in conneau17
+Warning--empty journal in denkowski09
+Warning--empty journal in ethayarajh19
 Warning--empty journal in francis64
 Warning--empty journal in frey07
 Warning--empty journal in ganea18
@@ -28,6 +32,7 @@ Warning--empty journal in joshi19
 Warning--empty journal in joshi19b
 Warning--empty journal in kudugunta18
 Warning--empty journal in lee17
+Warning--empty journal in levine19
 Warning--empty journal in liu19
 Warning--empty journal in ma19
 Warning--empty journal in may19
@@ -38,11 +43,14 @@ Warning--empty journal in moradshahi19
 Warning--empty booktitle in ni17
 Warning--empty journal in peters18
 Warning--empty journal in pilehvar19
+Warning--empty journal in reimers19
 Warning--empty booktitle in rippel16
 Warning--empty journal in rumelhart85
 Warning--empty journal in sennrich16
 Warning--empty journal in shen19
 Warning--empty journal in shi19
+Warning--empty journal in shin18
+Warning--empty journal in si19
 Warning--empty booktitle in sohn16
 Warning--empty booktitle in song17
 Warning--empty booktitle in suarez19
@@ -51,6 +59,7 @@ Warning--empty journal in sutskever11
 Warning--empty journal in tan19
 Warning--empty journal in tang19
 Warning--empty journal in tsai19
+Warning--empty journal in wang19e
 Warning--empty booktitle in wang17
 Warning--empty journal in wang19d
 Warning--empty booktitle in wang19c
@@ -59,45 +68,45 @@ Warning--empty journal in wittgenstein53
 Warning--empty journal in wu16
 Warning--empty journal in yan19
 Warning--empty journal in zhu18
-You've used 124 entries,
+You've used 137 entries,
             2118 wiz_defined-function locations,
-            1013 strings with 23963 characters,
-and the built_in function-call counts, 42364 in all, are:
-= -- 3917
-> -- 2674
-< -- 31
-+ -- 1069
-- -- 928
-* -- 2775
-:= -- 7254
-add.period$ -- 376
-call.type$ -- 124
-change.case$ -- 836
+            1057 strings with 25997 characters,
+and the built_in function-call counts, 46678 in all, are:
+= -- 4300
+> -- 2986
+< -- 33
++ -- 1194
+- -- 1038
+* -- 3074
+:= -- 8031
+add.period$ -- 415
+call.type$ -- 137
+change.case$ -- 930
 chr.to.int$ -- 0
-cite$ -- 180
-duplicate$ -- 1591
-empty$ -- 2753
-format.name$ -- 928
-if$ -- 8687
+cite$ -- 202
+duplicate$ -- 1739
+empty$ -- 3001
+format.name$ -- 1038
+if$ -- 9531
 int.to.chr$ -- 0
-int.to.str$ -- 124
-missing$ -- 117
-newline$ -- 623
-num.names$ -- 240
-pop$ -- 1014
+int.to.str$ -- 137
+missing$ -- 130
+newline$ -- 688
+num.names$ -- 266
+pop$ -- 1126
 preamble$ -- 1
-purify$ -- 712
+purify$ -- 793
 quote$ -- 0
-skip$ -- 1264
+skip$ -- 1378
 stack$ -- 0
-substring$ -- 1523
-swap$ -- 379
-text.length$ -- 31
+substring$ -- 1638
+swap$ -- 399
+text.length$ -- 33
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 496
-warning$ -- 56
-while$ -- 306
-width$ -- 127
-write$ -- 1228
-(There were 56 warnings)
+type$ -- 548
+warning$ -- 65
+while$ -- 336
+width$ -- 140
+write$ -- 1351
+(There were 65 warnings)
