@@ -5,10 +5,12 @@ The style file: plain.bst
 Database file #1: dissertation.bib
 Warning--to sort, need author or key in colahLSTM
 Warning--to sort, need author or key in spacyb
+Warning--to sort, need author or key in cil_slides
 Warning--to sort, need author or key in news_corpus
 Warning--to sort, need author or key in pyax
 Warning--empty journal in ackerman09
 Warning--empty journal in alvarez18
+Warning--empty journal in bahdanau16
 Warning--empty journal in bojanowski17
 Warning--empty journal in bommasani19
 Warning--empty journal in brazinskas19
@@ -30,6 +32,7 @@ Warning--empty journal in hegel17
 Warning--empty journal in hoffer14
 Warning--empty journal in joshi19
 Warning--empty journal in joshi19b
+Warning--empty journal in jozefowicz16
 Warning--empty journal in kudugunta18
 Warning--empty journal in lee17
 Warning--empty journal in levine19
@@ -69,45 +72,45 @@ Warning--empty journal in wittgenstein53
 Warning--empty journal in wu16
 Warning--empty journal in yan19
 Warning--empty journal in zhu18
-You've used 139 entries,
+You've used 142 entries,
             2118 wiz_defined-function locations,
-            1064 strings with 26326 characters,
-and the built_in function-call counts, 47493 in all, are:
-= -- 4379
-> -- 3032
+            1074 strings with 26761 characters,
+and the built_in function-call counts, 48263 in all, are:
+= -- 4448
+> -- 3079
 < -- 34
-+ -- 1212
-- -- 1054
-* -- 3128
-:= -- 8162
-add.period$ -- 421
-call.type$ -- 139
-change.case$ -- 944
++ -- 1231
+- -- 1070
+* -- 3175
+:= -- 8293
+add.period$ -- 430
+call.type$ -- 142
+change.case$ -- 961
 chr.to.int$ -- 0
-cite$ -- 205
-duplicate$ -- 1771
-empty$ -- 3053
-format.name$ -- 1054
-if$ -- 9705
+cite$ -- 211
+duplicate$ -- 1798
+empty$ -- 3110
+format.name$ -- 1070
+if$ -- 9861
 int.to.chr$ -- 0
-int.to.str$ -- 139
-missing$ -- 132
-newline$ -- 698
-num.names$ -- 270
-pop$ -- 1142
+int.to.str$ -- 142
+missing$ -- 134
+newline$ -- 713
+num.names$ -- 274
+pop$ -- 1170
 preamble$ -- 1
-purify$ -- 805
+purify$ -- 819
 quote$ -- 0
-skip$ -- 1407
+skip$ -- 1426
 stack$ -- 0
-substring$ -- 1684
-swap$ -- 411
+substring$ -- 1699
+swap$ -- 412
 text.length$ -- 34
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 556
-warning$ -- 66
-while$ -- 342
-width$ -- 142
-write$ -- 1371
-(There were 66 warnings)
+type$ -- 568
+warning$ -- 69
+while$ -- 346
+width$ -- 145
+write$ -- 1398
+(There were 69 warnings)

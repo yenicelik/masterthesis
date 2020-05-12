@@ -1,5 +1,11 @@
 \begin{thebibliography}{100}
 
+\bibitem{cil_slides}
+Computational intelligence lab: Lecture 5 embeddings.
+\newblock
+  \url{http://da.inf.ethz.ch/teaching/2019/CIL/lecture/CIL2019-05-Word-Embeddings.pdf}.
+\newblock Accessed: 2020-05-11.
+
 \bibitem{pyax}
 facebook/ax: Adaptive experimentation platform.
 \newblock \url{https://github.com/facebook/Ax}.
@@ -47,6 +53,12 @@ Nikolay Arefyev, Boris Sheludko, Adis Davletov, Dmitry Kharchev, Alex
 Jimmy~Lei Ba, Jamie~Ryan Kiros, and Geoffrey~E. Hinton.
 \newblock Layer normalization.
 \newblock {\em arXiv}, 2016.
+
+\bibitem{bahdanau16}
+Dzmitry Bahdanau, KyungHyun Cho, and Yoshua Bengio.
+\newblock Neural machine translation by jointly learning to align and
+  translate.
+\newblock 2016.
 
 \bibitem{baker98}
 Collin~F. Baker, Charles~J. Fillmore, and John~B. Lowe.
@@ -328,6 +340,11 @@ Vidur Joshi, Matthew Peters, and Mark Hopkins.
 \newblock Extending a parser to distant domains using a few dozen partially
   annotated examples.
 \newblock 2018.
+
+\bibitem{jozefowicz16}
+Rafal Jozefowicz, Orriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu.
+\newblock Exploring the limits of language modeling.
+\newblock 2016.
 
 \bibitem{kaya19}
 Mahmut Kaya and Hasan~Sakir Bilge.
