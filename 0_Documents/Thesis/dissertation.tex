@@ -1065,7 +1065,9 @@ where $\sigma_1, \ldots, \sigma_m$ are the first $m$ singular values of the occu
 $ where $f_l(s, i)$ maps word $w = s[i]$ in sentence $s$ to a context embedding at layer $l$ of the language model.
 \end{itemize}
 
-If both intra-similarity and self-similarity are low, then the model contextuaizes words in that layer by giving each one a context-specific representation that is still distinct from all other word representations.
+\quad
+
+If both intra-similarity and self-similarity are low, then the model contextualizes words in that layer by giving each one a context-specific representation that is still distinct from all other word representations.
 If the self-similarity is low, this suggests a less nuances contextualized.
 The authors conclude that all the language models considered are anisotropic in their sampled context embeddings.
 Due to this anisotropic property, the evaluations needs to be adjusted for anisotropy, which can be done by subtracting the mean value for each formula across all words and at layer $l$. 
@@ -1172,7 +1174,7 @@ Next to clustering, \cite{coenen19} analyse how BERT and similar transformer mod
 The authors argue that on a high level, semantic and syntactic features seem to be present in different subspaces.
 Although the authors mention that there is fine-grained geometric representations of word senses, which is encoded in a relatively low-dimensional subspace.
 This conclusion stems mostly from qualitative evaluation.
-The authors use the Penn Treebank \cite{marcu93} to infer a dependency parsing scheme using a linear classifier with output of the transformer context vectors as input.
+The authors use the Penn Treebank \cite{marcus93} to infer a dependency parsing scheme using a linear classifier with output of the transformer context vectors as input.
 The authors achieve above 85.8\% accuracy for two-class classification, and 71.5\% accuracy for multi-class classification.
 In a prior work by \cite{hewitt19} find that BERT encodes a parse tree where the tree distance seems to correspond to specifically to the square of the Euclidean distance.
 The authors argue using a theorem that shows that a tree with $n$ nodes has a Pythagorean embedding in $\mathbb{R}^{n-1}$.
@@ -1214,18 +1216,32 @@ For biLMs, lower layers tend to place words from the same syntactic constituents
 The authors argue that in biLMs, semantics is captured only to a small extent, whereas morphology alone is most often used to answer questions on word analogy tasks.
 The biLM architectures learn syntax, as PoS tags are captured at lower levels of the biLM layers.
 The authors further build a contstituency parser with almost 80\% accuracy, by only adding a linear classifier and the span representation onto the lower layers of the biLMs.
-A parse-tree is built using a greedy decoding step similar to \cite{joshi19b}.
+A parse-tree is built using a greedy decoding step similar to \cite{joshi19b}. \\
+
+In slight contrast to that, \cite{jawahar19} argue that BERT encodes surface features in bottom layers, syntactic features in middle layers, and semantic features in top layers.
+Using normalized mutual information, the authors cluster the representations at different layers $l$ of the model, and argue that lower layers encode phrasal information better.
+The authors use ten probing tasks to evaluate language features extracted through BERT.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/BERT_tsne_layers.png}
+  \caption{From \cite{jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.}
+  \label{fig:cold_fictional_desired}
+\end{figure}
+
+The authors also use a maximum spanning-tree approach to arrive at a dependency parsing tree extracted from the attention matrix.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.7\linewidth]{./assets/relatedwork/BERT_dependency_parsing.png}
+  \caption{From \cite{jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using labelled root \texttt{are} as starting node with the maximum spanning tree algorithm}
+  \label{fig:cold_fictional_desired}
+\end{figure}
+
+The authors do little analysis on how semantics is captured in the outputs of BERT, but rather focus on part-of-speech, tenses and subject-verb agreement conditions. \\
 
 Other lines of work includes models such as \textit{PAFIBERT} \cite{tan19}, which aims to transform sentences into a predicate-argument structure.
 Implicitly, this solves a frame identification, as well as semantic role assignment task. \\
-
-\section{Static embeddings from context embeddings}
-
-The general idea behind distilling static embeddings from context embeddings is that one can arrive at a (1) compressed representation of the context embedding, and (2) capture polysemous concepts through multiple static embeddings rather than one embedding per token. 
-We present a few ways static embeddings can be distilled from BERT.
-
-This includes  distilling knowledge or minimizing BERT to smaller neural network models \cite{tang19}, \cite{tsai19}, and most famously \cite{sanh19}.
-Compressed sentence representations can also be learned i.e. through random projections or architectures similar to autoencoders \cite{shen19}, amongst others, making use of a max-pool operator over sentence-tokens to arrive at a sentence embedding. \\
 
 \section{Sentiment-subspace in BERT}
 
@@ -1242,39 +1258,16 @@ Again, the example with european-american and african-american names is shown. \
 \cite{moradshahi19} Include a final linear transformation which mimics the distance learning aspect to filter out the subspace of interesting for downstream tasks.
 This final linear transformation is task-specific and not learned during pre-training.
 
-When we need to arrive a singular word representation from multiple tokens most work such as \cite{bommasani19, akbik19} do a simple mean, max or min pooling over all word-embeddings of all tokens.
+When we need to arrive a singular word representation from multiple tokens most work such as \cite{bommasani19, akbik19} do a simple mean, max or min pooling over all word-embeddings of all tokens. \\
 
-\cite{jawahar19} argue that BERT encodes surface features in bottom layers, syntactic features in middle layers, and semantic features in top layers.
-Using normalized mutual information, the authors cluster the representations at different layers $l$ of the model, and argue that lower layers encode phrasal information better.
-The authors use ten probing tasks to evaluate language features extracted through BERT.
-
-\begin{figure}[H]
-	\center
-  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/BERT_tsne_layers.png}
-  \caption{From \cite{jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.}
-  \label{fig:cold_fictional_desired}
-\end{figure}
-
-The authors also use a maximum spanning-tree approach to arrive at a dependency parsing tree, using the attention weights.
-
-\begin{figure}[H]
-	\center
-  \includegraphics[width=0.7\linewidth]{./assets/relatedwork/BERT_dependency_parsing.png}
-  \caption{From \cite{jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using labelled root \texttt{are} as starting node with the maximum spanning tree algorithm}
-  \label{fig:cold_fictional_desired}
-\end{figure}
-
-However, the authors do little work on semantics as defined by WordNet classes, but rather focus on part-of-speech, tenses and subject-verb agreement tasks.
 
 \cite{may19} analyse the social biases that are part of the context embeddings and show that depending on the language model (ELMo, BERT), the amount of social bias deviates. 
 Because context embeddings capture more than just semantics, bias is a natural implication of context vectors.
-A by-product of their research includes aggregating token-embeddings (i.e. aggregating the tokens $hav$ and $\#\#\#ing$ to result at the word $having$).
+A by-product of their research includes aggregating token-embeddings (i.e. aggregating the tokens \texttt{hav} and \texttt{\#\#\#ing} to result in the word \texttt{having}).
 Although not very extensive on the topic of aggregation, the authors  use techniques of mean-pooling, max-pooling, and last-pooling to determine arrive at a single context-vector, if the given token is intrinsically split-up by the language-model tokenizer (incl. BERT, ELMo, GPT).
+Finally, evaluation on the corpora also yield inclusion of human-like biases \cite{jentzsch19} by names, races, male-vs-female. \\
 
-Finally, evaluation on the corpora also yield inclusion of human-like biases \cite{jentzsch19} by names, races, male-vs-female.
-This bias can also be seen in how language changes over time.
-
-\cite{martinc20} looks at how language models capture this  changing semantics of language change over time.
+This bias can also be seen in how language changes over time.\cite{martinc20} looks at how language models capture this  changing semantics of language change over time.
 The authors train language models on a balanced set of genres, from the 1960s and the 1990s.
 The authors measure the variation coefficient of words.
 The authors cluster the word embedding spaces, and then calculate the drift measures through pearson and spearman correlations to arrive at a quantitative expression of how much language changes.
@@ -1282,33 +1275,16 @@ Similarly, \cite{hu19} analyse how meanings quantitatively using corpora from di
 Specifically, they measure the similarity scores for select context-vectors based on differently trained corpora.
 They demonstrate through examples of the word \textit{gay} and \textit{alien} that the similarity between certain context-vectors change through time.
 
-\section{Misc}
-
-\cite{shin18} analyse properties of static word vectors by applying eigenvector analysis from Random Matrix Theory.
-The authors show that semantically coherent groups not only form in the row space, but also in the column space, implying that individual word vector dimensions can be interpreted as human-interpretable semantic features.
-The authors make use of positive pointwise mutual information matrix, which is based on a log-ratio between the joint probability of a word $w$ and its context words $c$.
-The authors apply a qualitative analysis by examining the top elements of the eigenvectors by sorting their absolute values in decreasing order.
-The authors analyse salient columns for words like airport.
-High absolute values imply that the word is relevant to the semantic group formed in the rowspace.
-
-\cite{whitaker19} follow a similar and more rigorous analysis with static word vectors. 
-The authors argue that for standard word vectors, downstream tasks rely much more on local similarity rather than absolute positioning, and thus improving modern language models should focus explicitly on local geometric structures in sampling and evaluation methods.
-
 \chapter{Understanding the semantic subspace organization in BERT}\label{section:Understand_BERT}\label{section:UnderstandingBERT} 
 
-%TODO because there is a mismatch between what humans understand between the features in language, and what a neural network records, we analyse ..
-
-We begin our analysis by trying to understanding how BERT organizes its semantic subspace.
+In the previous section we have seen that although considerable work has been done in quantifying the syntactic subspace produced by BERT vectors, little work has been done in quantitatively evaluating the semantic nature of the outputs of BERT context embeddings.
+As such, we begin our analysis by trying to understanding how BERT organizes its semantic subspace.
 
 For this, we conduct three experiments.
 The experiments have varying difficulty for the algorithm to understand the subspace organization for a given word $w$.
 We start with a supervised algorithm which should build a discriminative model of the subspace, where labels are different semantic classes as defined by WordNet.
 The second experiment aims to identify a similar subspace organization through an unsupervised algorithm, implicitly identify a multimodal structure within the subspace at which we look at.
-Finally, we check how part-of-speech relates with semantics within the BERT model, hoping to simplify subsequent work by introducing the assumption that part of speech strongly correlates to semantics within the BERT model.
-
-% Upadhyay et al. argue that the choice of data is more important than the actual algorithm.
-
-% Definitely also look into this, [Analyzing the Limitations of Cross-lingual Word Embedding Mappings] seems to be an analysis of the difficulties etc. 
+Finally, we check how part-of-speech relates with semantics within the BERT model, simplifying subsequent work by showing correlation between syntactic features and semantic properties in both language and modern language models, and also explaining the nature behind some visualizations in \cite{coenen19}.
 
 \section{On the Linear Separability of meaning within sampled BERT vectors}
 
@@ -1682,6 +1658,7 @@ WordNet records 10 different semantic classes for this word.
 To keep this work concise, we will only show this as an explicit example. 
 We refer to appendix \eqref{more_clustering_results_qualitative} for some more examples.
 Because it is difficult to describe each partition through a concise and general statement, we show a few sampled words which represent the given semantic cluster.
+We refer the reader to more examples in section \ref{section:more_clustering_results_qualitative} in the Appendix.
 
 \scalebox{0.7}{
 \begin{minipage}{\linewidth}
@@ -1785,6 +1762,7 @@ Because it is difficult to describe each partition through a concise and general
 }\label{fig:example_arms_negative_crossed}
 \captionof{figure}{Partition 6 for the word \texttt{arms}. This cluster again refers to the arms of a person, however usually with a positive / optimistic sentiment.}
 
+\quad
 
 As one can see, the different partitions do not quite capture semantics.
 Primarily, the different partitions capture context - which should be no surprise when we are sampling context embeddings.
@@ -2039,8 +2017,10 @@ announcement & 2 & 0.275  \\
 
 \section{BERnie: Making the variances across BERT embeddings more equal}
 
-We will introduce two adaptions to the BERT model, BERnie PoS and BERnie semantics.
+We will introduce two adaptions to the BERT model, BERnie PoS and BERnie Cluster.
 We will present the results after having introduced both adaptations.
+For both modifications, we will use the GLUE dataset to understand what property of the language model is most affected.
+In the case of BERnie Cluster, this should tell us what the difference between respective clusters captures the most.
 
 \subsection{BERnie PoS} \label{bernie_pos}
 
@@ -2111,13 +2091,14 @@ To identify whether the occurring \Verb#run# in an example sentence is a verb or
 During training, all weights of BERT are fine-tuned to the downstream GLUE task as described in section 
 %TODO Cite the GLUE section.
 
-\subsection{BERnie Meaning}\label{experiment_bernie_meaning}
+\subsection{BERnie Cluster}\label{experiment_bernie_meaning}
 
 Similar to the above model, we are introducing new BERT tokens and their respective embeddings in the transformer embedding layer, similar to the above section \ref{bernie_pos}.
 This time however, we do not introduce new tokens by part-of-speech, as we did in the previous section, but rather by the clustering algorithms above, which were supposed to cluster by WordNet classes \ref{experiment_BERT_clusterability}.
 Thus, implicitly, we are hoping to cluster by semantics.
 The idea here is to adhere more strongly to the subspace structure as seen in section \ref{correlation_pos_context}, following the investigation from section \ref{section:Understand_BERT}.
 Please notice that although we did optimized the development set to mimick the clustering as is the case analogously to the WordNet classes, that the resulting clusters are implicit latent variables that are not hard-coded, and thus cannot be intuitively understood without further analysis; and also because in most cases we cannot formally describe the concept of semantics and other linguistic properties inside of BERT.
+We will however make use of intuitive concepts like \texttt{bank\_ FINANCE} and \texttt{bank\_ SEA} for the convenience of presentation.
 
 \subsubsection{Experiment setup}
 
@@ -2251,7 +2232,7 @@ Also, compared to BERnie PoS, the BERnie Cluster model amplifies the performance
 
 %TODO Go experiment to experiment, and talk about what implications this has, does this make sense, etc.
 
-\subsection{BERnie Meaning with additional pre-training}
+\subsection{BERnie Cluster with additional pre-training}
 
 Our first idea is that the overall negative trend in performance might be due to the newly initialized vectors not being calibrated enough.
 
@@ -2317,6 +2298,45 @@ Finally, it could also be that the initialization for the newly addeed vectors w
 Due to time-constraints, we decided to not move ahead with this experiment.
 
 \chapter{Conclusion}\label{section:Conclusion}
+
+Although this work does not try to imminently push the performance of these language models, we believe that providing a better understanding of the underlying principles will pave the way for future research to better track these issues, and make language models more interpretable especially w.r.t. semantics. \\
+
+\section{Main Contributions}
+
+Our main contribution are two-fold. 
+We first test to what extent the semantic subspace is linearly separable between semantic classes, and then test for multi-modality in these structures through a clusterability test.
+We then analyse the relationship between the linguistic features of part-of-speech and semantics, as these show strong correlation in languages.
+Finally, we introduce new embedding-vectors for tokens with high variance, and try to understand what downstream tasks are affected the most, using this as a proxy to understand what the strong word-based variance in BERT context vectors most corresponds to.
+
+Our findings show that BERT does not capture an interpretable concept of a semantic subspace, but that it rather focuses on the more broad linguistic features which are imminent to context.
+This can often introduce undesirable features such as strong sentiment, position in sentence, and thus lead to considerable bias in downstream applications.
+
+\section{Future Work}
+
+As this work only concludes a Master Thesis, we were only able to investigate our core hypothesis. 
+A few lines of work that seems apparent given more time could include:
+
+\paragraph{Introducing the WiC benchmark:} One of our main targets with the modifications made by BERnie Cluster was to analyse what effect this modification has on semantics.
+However, we limited our analysis to GLUE tasks only, arguing that merely focussing on these would be sufficient as BERT alone does not reach superhuman performance on these tasks yet.
+However, an ablation study on other benchmarking datasets, most specifically the Word in Context benchmark which is included in SuperGLUE would have been a valuable addition to understand what our modifications had to the modelling power of language models.
+
+\paragraph{Bigger benchmarking dataset:} Within our analysis, we have had countless occasions where the statistical significance and testing power largely suffered due to the limited size of gold-standard datasets which capture semantics.
+Specifically, we chose SemCor as our go-to dataset, as this is the most extensive dataset available in this domain.
+However, even SemCor is too small to do proper evaluation on, strongly limiting the choice of polysemous words analysed in Section \textbf{(4)}.
+A bigger labelled dataset, even only for testing is crucial for future development of this line of work.
+
+\paragraph{Linear subspace still not apparent:} An interesting line of future work could lie in finding a new distance metric which takes into consideration semantic properties (see Appendix), and sample across a line within this subspace. 
+Doing so would possibly give us a good idea about whether or not there is a globally linear semantic subspace contained by BERT embeddings, or whether such a subspace is only locally linearly available as was apparent in section \textbf{(4)}.
+
+\paragraph{Difficulty in quantifying properties behind WordNet:} WordNet is a tool created by linguists over the last few decades.
+Intuitively, we have often seen that certain words such as \texttt{was} were overdefined in terms of semantic classes, where many dozen semantic classes are apparent.
+Generally, it is difficult to quantify "coarseness" between semantic concepts, and this had considerable effect on the clustering performance in section \textbf{(4)}.
+
+\paragraph{Little coherence in lines of work} Although the idea of quantifying meaning within language models seems to be an important issue, there is no coherent line of work.
+Different authors seem to analyse this topic using different tools, leading to statements which do not seem to fully conform.
+Also, the nature that linguistic features are strongly correlated (i.e. PoS and semantics), is not properly noted by a lot of previous work, facilitating premature conclusions.
+Establishing a more formal framework around this could address this, and the previously mentioned issue.
+
 
 \appendix
 \singlespacing
@@ -2560,6 +2580,24 @@ Due to the density criteria, the resulting clusterings don't have to be convex a
 After cluster-centers are randomly initialized, the centroids are updated by the mean of the cluster until convergence in the cluster-assignments is reached.
 A final post-processing step removes near-duplicate clusters.
 
+
+\section{Static embeddings and context embeddings}
+
+The general idea behind distilling static embeddings from context embeddings is that one can arrive at a (1) compressed representation of the context embedding, and (2) capture polysemous concepts through multiple static embeddings rather than one embedding per token. 
+We present a few ways static embeddings can be distilled from BERT.
+
+This includes  distilling knowledge or minimizing BERT to smaller neural network models \cite{tang19}, \cite{tsai19}, and most famously \cite{sanh19}.
+Compressed sentence representations can also be learned i.e. through random projections or architectures similar to autoencoders \cite{shen19}, amongst others, making use of a max-pool operator over sentence-tokens to arrive at a sentence embedding. \\
+
+\cite{shin18} analyse properties of static word vectors by applying eigenvector analysis from Random Matrix Theory.
+The authors show that semantically coherent groups not only form in the row space, but also in the column space, implying that individual word vector dimensions can be interpreted as human-interpretable semantic features.
+The authors make use of positive pointwise mutual information matrix, which is based on a log-ratio between the joint probability of a word $w$ and its context words $c$.
+The authors apply a qualitative analysis by examining the top elements of the eigenvectors by sorting their absolute values in decreasing order.
+The authors analyse salient columns for words like airport.
+High absolute values imply that the word is relevant to the semantic group formed in the rowspace.
+
+\cite{whitaker19} follow a similar and more rigorous analysis with static word vectors. 
+The authors argue that for standard word vectors, downstream tasks rely much more on local similarity rather than absolute positioning, and thus improving modern language models should focus explicitly on local geometric structures in sampling and evaluation methods.
 
 \section{Metric Learning and Disentanglement}
 

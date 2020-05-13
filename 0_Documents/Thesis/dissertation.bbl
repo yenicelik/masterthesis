@@ -26,6 +26,11 @@ Understanding lstms.
 \newblock \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}.
 \newblock Accessed: 2020-05-02.
 
+\bibitem{wiktionary}
+Wiktionary.
+\newblock \url{https://en.wiktionary.org/wiki/Wiktionary:Main_Page}.
+\newblock Accessed: 2020-05-11.
+
 \bibitem{ackerman09}
 Margareta Ackerman and Shai Ben-David.
 \newblock Clusterability: A theoretical study.
@@ -93,6 +98,12 @@ Chris Biemann.
 \newblock {\em In Workshop on Graph-based Methods for Natural Language
   Processing}, pages 73--80, 2006.
 
+\bibitem{biemann13}
+Chris Biemann and Martin Riedl.
+\newblock Text: Now in 2d! a framework for lexical expansion with contextual
+  similar- ity.
+\newblock {\em Journal ofLanguage Modelling, 1(1)}, pages 55--95, 1993.
+
 \bibitem{bojanowski17}
 Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov.
 \newblock Enriching word vectors with subword information.
@@ -118,6 +129,12 @@ Arthur Bražinskas, Serhii Havrylov, and Ivan Titov.
 Jane Bromley, Isabelle Guyon, and Yann LeCun.
 \newblock Signature verification using a "siamese" time delay neural network.
 \newblock 1994.
+
+\bibitem{bruni13}
+Elia Bruni, Nam~Khanh Tran, and Marco Baroni.
+\newblock Multimodal distributional semantics.
+\newblock {\em Journal of Artificial Intelligence Research 49}, pages 1--47,
+  2013.
 
 \bibitem{caliskan19}
 Aylin Caliskan, Joanna~J. Bryson, and Arvind Narayanan.
@@ -153,11 +170,6 @@ Daniel Cer, Mona Diab, Eneko Agirre, Inigo Lopez-Gazpio, and Lucia Specia.
 Gal Chechik, Varun Sharma, Uri Shalit, and Samy Bengio.
 \newblock Large scale online learning of image similarity through ranking.
 \newblock {\em JMLR}, 2010.
-
-\bibitem{chen19}
-Xinlei Chen, Alan Ritter, Abhinav Gupta, and Tom Mitchell.
-\newblock Sense discovery via co-clustering on images and text.
-\newblock 2019.
 
 \bibitem{chopra05}
 Sumit Chopra, Raia Hadsell, and Yann LeCun.
@@ -283,6 +295,12 @@ John Hewitt and Christopher~D Manning.
 \newblock A structural probe for finding syntax in word representations.
 \newblock {\em Association for Computational Linguistics}, 2019.
 
+\bibitem{hill15}
+Felix Hill, Roi Reichart, and Anna Korhonen.
+\newblock Simlex-999: Evaluating semantic models with (genuine) similarity
+  estimation.
+\newblock {\em Computational Linguistics}, 2015.
+
 \bibitem{hochreiter97}
 Sepp Hochreiter and Jürgen Schmidhuber.
 \newblock Long short-term memory.
@@ -374,6 +392,13 @@ Jason Lee, Kyunghyun Cho, and Thomas Hofmann.
 \newblock Fully character-level neural machine translation without explicit
   segmentation.
 \newblock 2017.
+
+\bibitem{lee19}
+Jinhyuk Lee, Wonjin Yoon, Sungdong Kim, Donghyeon Kim, Sunkyu Kim, Chan~Ho So,
+  and Jaewoo Kang.
+\newblock Biobert: pre-trained biomedical language representation model for
+  biomedical text mining.
+\newblock {\em arXiv preprint arXiv 1901.08746}, 2019.
 
 \bibitem{levesque2012}
 Hector Levesque, Ernest Davis, and Leora Morgenstern.
@@ -543,12 +568,6 @@ Sameer Pradhan, Alessandro Moschitti, Nianwen Xue, Hwee~Tou Ng, Anders
 \newblock {\em In Proceedings of the Seventeenth Conference on Computational
   Natural Language Learning}, pages 143--152, 2013.
 
-\bibitem{qasemizadeh19}
-Behrang Qasemizadeh, Miriam R~L Petruck, Laura Kallmeyer, and Marie Candito.
-\newblock Semeval-2019 task 2: Unsupervised lexical frame induction.
-\newblock {\em Proceedings ofthe 13th International Workshop on Semantic
-  Evaluation (SemEval-2019)}, page 16–30, 2019.
-
 \bibitem{radford18}
 Alec Radford, Karthk Narasimhan, Tim Salimans, and Ilya Sutskever.
 \newblock Improving language understanding by generative pre-training.
@@ -578,12 +597,12 @@ Nils Reimers, Benjamin Schiller, Tilman Beck, Johannes Daxenberger, Christian
   embeddings.
 \newblock 2019.
 
-\bibitem{remus13}
+\bibitem{remus18}
 Steffen Remus and Chris Biemann.
 \newblock Retrofitting word representations for unsupervised sense aware word
   similarities.
 \newblock {\em In Pro- ceedings of the Seventeenth Conference on Computational
-  Natural Language Learning}, pages 143--152, 2013.
+  Natural Language Learning}, pages 143--152, 2018.
 
 \bibitem{ribeiro19}
 Eugénio Ribeiro, Vânia Mendonça, Ricardo Ribeiro, David~Martins e~Matos,
@@ -597,6 +616,12 @@ Eugénio Ribeiro, Vânia Mendonça, Ricardo Ribeiro, David~Martins e~Matos,
 Oren Rippel, Manohar Paluri, Piotr Dollar, and Lubomir Bourdev.
 \newblock Metric learning with adaptive density discrimination.
 \newblock 2016.
+
+\bibitem{rousseeuw87}
+Peter~J. Rousseeuw.
+\newblock Silhouettes: a graphical aid to the interpretation and validation of
+  cluster analysis.
+\newblock {\em Computational and Applied Mathematics 20}, pages 53--65, 1987.
 
 \bibitem{rumelhart85}
 David Rumelhart, Geoffrey Hinton, and Ronald Williams.
@@ -816,10 +841,5 @@ Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc~V. Le, and Mohammad~Norouzi et.
 An~Yan, Fanbo Xiang, and Yiming Zhang.
 \newblock Embedding learning by optimal transport.
 \newblock 2019.
-
-\bibitem{zhu18}
-Henghui Zhu, Ioannis~Ch Paschalidis, and Amir Tahmasebi.
-\newblock Clinical concept extraction with contextual word embedding.
-\newblock 2018.
 
 \end{thebibliography}
