@@ -53,6 +53,7 @@
 \@writefile{toc}{\contentsline {paragraph}{Characters}{9}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Byte pair encodings}{9}\protected@file@percent }
 \citation{wu16}
+\newlabel{tokenizer:WordPiece}{{2.1.1}{10}}
 \@writefile{toc}{\contentsline {paragraph}{WordPiece tokenizer}{10}\protected@file@percent }
 \citation{ganea18}
 \@writefile{toc}{\contentsline {section}{\numberline {2.2}Word Embeddings}{11}\protected@file@percent }
@@ -98,7 +99,7 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Context Embeddings}{20}\protected@file@percent }
 \newlabel{map:context_embedding_mapping}{{2.2.2}{20}}
 \newlabel{eq:transformer_probability}{{2.2.2}{20}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces Figure taken from \cite  {devlin18}. BERT uses a bidirectional transformer, which is not limited to reading in all the input from only left to right or right to left. OpenAI GPT (next section) uses a left-to-right Transformer, while ELMo is using a bidirectional LSTM which naturally captures a direction. \relax }}{21}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces Figure taken from \cite  {devlin18}. BERT uses a bidirectional transformer, which is not limited to reading in all the input from only left to right or right to left. OpenAI GPT (next section) uses a left-to-right Transformer, while ELMo is using a bidirectional LSTM which naturally captures a single direction per LSTM. \relax }}{21}\protected@file@percent }
 \newlabel{fig:attention_is_all_you_need}{{2.3}{21}}
 \@writefile{toc}{\contentsline {subsubsection}{ELMo}{21}\protected@file@percent }
 \citation{jozefowicz16}
@@ -116,15 +117,9 @@
 \citation{devlin18}
 \citation{devlin18}
 \citation{devlin18}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces Example from \cite  {devlin18}. An input sentence which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. The word to be predicted is \textit  {the} \relax }}{25}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces Example from \cite  {devlin18}. An sentence where 15\% of the tokens are replaced with the [MASK] token. During the firrst phase of pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the word to be predicted is \texttt  {the} \relax }}{25}\protected@file@percent }
 \citation{devlin18}
 \citation{devlin18}
-\citation{sanh19}
-\citation{shen19}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces Example from \cite  {devlin18}. Two input sequences which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the second sentence is a continuation of the first one, and thus the label would be \textit  {isNext}. \relax }}{26}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces Figure taken from \cite  {devlin18}. BERT takes as input multiple tokens, including a position embedding, the token embedding and the segment embedding. This allows BERT to distinguish between the location of the word within a sentence, and which word token was provided and which sentence the word token is a part of.\relax }}{26}\protected@file@percent }
-\newlabel{fig:cbow_skipgram}{{2.7}{26}}
-\citation{wang19e}
 \citation{radford18}
 \citation{radford19}
 \citation{ba16}
@@ -135,16 +130,22 @@
 \citation{liu19}
 \citation{joshi19}
 \citation{wang19d}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.8}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{27}\protected@file@percent }
-\newlabel{fig:BERT_vanilla_pipeline}{{2.8}{27}}
+\citation{shen19}
+\citation{wang19e}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces Example from \cite  {devlin18}. Two input sequences which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the second sentence is a continuation of the first one, and thus the label would be \textit  {isNext}. \relax }}{26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The pipeline of BERT}{26}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Other language models}{26}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces Figure taken from \cite  {devlin18}. Ways to fine-tune BERT on different GLUE tasks.\relax }}{27}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{2.7}{27}}
 \citation{wang19}
 \citation{wang19b}
 \citation{wang19}
 \citation{wang19}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.8}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{28}\protected@file@percent }
+\newlabel{fig:BERT_vanilla_pipeline}{{2.8}{28}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{28}\protected@file@percent }
 \citation{N18-1101}
 \citation{bowman2015}
-\@writefile{toc}{\contentsline {subsubsection}{Other language models}{28}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{28}\protected@file@percent }
 \citation{rajpurkar2016}
 \@writefile{lof}{\contentsline {figure}{\numberline {2.9}{\ignorespaces Table taken from \cite  {wang19}. Listing of all GLUE tasks including the linguistic phenomenon benchmarked, as well as the domain that the benchmarking data contains. Training and test set sizes are also provided.\relax }}{29}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Inference Tasks}{29}\protected@file@percent }
@@ -160,17 +161,20 @@
 \citation{miller90}
 \citation{miller90}
 \@writefile{lof}{\contentsline {figure}{\numberline {2.10}{\ignorespaces Table taken from \cite  {miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.\relax }}{32}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.11}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {bank}. In total, 18 different concepts are recorded.\relax }}{33}\protected@file@percent }
-\newlabel{fig:bank_synset}{{2.11}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.12}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {was}. In total, 18 different concepts are recorded.\relax }}{33}\protected@file@percent }
-\newlabel{fig:was_synset}{{2.12}{33}}
 \citation{francis64}
 \citation{miller94}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{34}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.11}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {bank}. In total, 18 different concepts are recorded.\relax }}{33}\protected@file@percent }
+\newlabel{fig:bank_synset}{{2.11}{33}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{33}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.12}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {was}. In total, 18 different concepts are recorded.\relax }}{34}\protected@file@percent }
+\newlabel{fig:was_synset}{{2.12}{34}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2.13}{\ignorespaces Shows that the SemCor data is biased towards words with low WordNet class IDs. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5). The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. This is a cumulative plot over all words with WordNet senses within SemCor 3.0. The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words. \relax }}{35}\protected@file@percent }
 \newlabel{fig:embeddings_by_language}{{2.13}{35}}
 \citation{lloyd57}
 \citation{macqueen67}
+\citation{pelevina16}
+\citation{pelevina16}
+\citation{pelevina16}
 \@writefile{toc}{\contentsline {chapter}{\numberline {3}Related Work}{37}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
@@ -178,106 +182,107 @@
 \newlabel{section:RelatedWork}{{3}{37}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}Clustering for Synsets in Static Word Embeddings}{37}\protected@file@percent }
 \newlabel{section_clustering}{{3.1}{37}}
-\citation{pelevina16}
-\citation{conneau17}
-\citation{hagberg04}
-\@writefile{toc}{\contentsline {paragraph}{The Chinese whispers}{38}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{38}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The Chinese whispers algorithm}{37}\protected@file@percent }
 \citation{pelevina16}
 \citation{pelevina16}
-\citation{pelevina16}
-\citation{pelevina16}
-\citation{pelevina16}
-\@writefile{toc}{\contentsline {paragraph}{One example of how the Chinese whispers algorithm}{39}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite  {pelevina16}. An EGO-network of the word \texttt  {table} is created. Then, clustering is applied on the EGO network, to identify different semantic sets \textit  {synsets}.\relax }}{39}\protected@file@percent }
-\newlabel{fig:ego_network}{{3.1}{39}}
-\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Table taken from \cite  {pelevina16}. Neighbors of the word \texttt  {table} and its senses produced. The first row belongs to both senses, while the second and third row are distinct synsets.\relax }}{39}\protected@file@percent }
-\citation{mickus19}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Structure inside BERT}{40}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{40}\protected@file@percent }
 \citation{arefyev19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite  {pelevina16}. An EGO-network of the word \texttt  {table} is created. Then, clustering is applied on the EGO network, to identify different semantic sets \textit  {synsets}.\relax }}{38}\protected@file@percent }
+\newlabel{fig:ego_network}{{3.1}{38}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Table taken from \cite  {pelevina16}. Neighbors of the word \texttt  {table} and its senses produced. The first row belongs to both senses, while the second and third row are distinct synsets.\relax }}{38}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{38}\protected@file@percent }
+\citation{hagberg04}
+\citation{conneau17}
+\citation{biemann13}
+\citation{remus18}
+\citation{biemann06}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{39}\protected@file@percent }
+\citation{bruni13}
+\citation{hill15}
 \citation{pilehvar19}
-\citation{qasemizadeh19}
-\citation{camachocollados18}
+\citation{navigli19}
+\citation{denkowski09}
+\citation{reimers19}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{40}\protected@file@percent }
+\citation{mickus19}
+\citation{rousseeuw87}
+\citation{wiktionary}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{41}\protected@file@percent }
 \citation{wiedmann19}
 \citation{miller91}
 \citation{wiedmann19}
 \citation{wiedmann19}
-\citation{navigli19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces From \cite  {wiedmann19}. T-SNE plots of different senses of \texttt  {bank} and their context embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data. \relax }}{42}\protected@file@percent }
+\newlabel{fig:bert_wsd}{{3.2}{42}}
+\citation{ethayarajh19}
+\citation{camachocollados18}
 \citation{liebeskind19}
 \citation{shi19}
 \citation{carreras04}
 \citation{pradhan13}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces From \cite  {wiedmann19}. T-SNE plots of different senses of \texttt  {bank} and their context embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data. \relax }}{43}\protected@file@percent }
-\newlabel{fig:bert_wsd}{{3.2}{43}}
-\citation{denkowski09}
 \citation{levine19}
 \citation{levine19}
 \citation{levine19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces From \cite  {levine19}. Standard BERT (left) and the SenseBERT adaptations (right), which include an embedding-encoder and an embedding-decoder specifically for WordNet senses.\relax }}{44}\protected@file@percent }
-\newlabel{fig:embeddings_by_language}{{3.3}{44}}
-\citation{martinc20}
-\citation{reimers19}
+\citation{si19}
+\citation{lee19}
 \citation{si19}
 \citation{si19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Figure from \cite  {levine19}. Standard BERT (left) and the SenseBERT adaptations (right), which include an embedding-encoder and an embedding-decoder specifically for WordNet senses.\relax }}{46}\protected@file@percent }
+\newlabel{fig:embeddings_by_language}{{3.3}{46}}
 \citation{si19}
 \citation{si19}
-\citation{si19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces From \cite  {si19}. \textbf  {Fictional} embedding vector points and clusters of \texttt  {cold}. This is one of the results that we want to arrive at, that we have different word-embeddings that capture the modes of the underlying probability distribution. \relax }}{45}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.4}{45}}
-\citation{ethayarajh19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces From \cite  {si19}. PCA visualizations using embedding vector of \texttt  {cold} from BERT.\relax }}{46}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.5}{46}}
-\citation{chen19}
-\citation{hu19}
-\citation{zhu18}
-\citation{tan19}
 \citation{ribeiro19}
 \citation{biemann06}
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{48}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Figure taken from \cite  {si19}. \textbf  {Fictional} embedding vector points and clusters of \texttt  {cold}. This is one of the results that we want to arrive at. Specifically, we desire distinct word-embeddings that capture the modes of the underlying probability distribution. \relax }}{47}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.4}{47}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Figure taken from \cite  {si19}. PCA visualizations using embedding vector of \texttt  {cold} from BERT. The blue data points refer to \texttt  {cold} as a temperature, whereas the red data points refer to \texttt  {cold} as a symptom.\relax }}{47}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.5}{47}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{47}\protected@file@percent }
 \citation{baker98}
 \citation{coenen19}
+\citation{marcu93}
 \citation{hewitt19}
 \citation{coenen19}
 \citation{coenen19}
 \citation{coenen19}
 \citation{coenen19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces From \cite  {coenen19}. Visualizing the embeddings of two sentences after applying the Hewitt Manning probe. Parse tree (left) in comparison to the PCA projection of the context embeddings (right). Small deviations are apparently, but a positive trend exists. The color of an edge determines the squared Euclidean distance.\relax }}{50}\protected@file@percent }
-\newlabel{fig:BERT_tree}{{3.6}{50}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces From \cite  {coenen19}. Visualizing the embeddings of two sentences after applying the Hewitt Manning probe. Parse tree (left) in comparison to the PCA projection of the context embeddings (right). Small deviations are apparently, but an obvious resemblance exists. The color of an edge determines the squared Euclidean distance.\relax }}{49}\protected@file@percent }
+\newlabel{fig:BERT_tree}{{3.6}{49}}
+\citation{peters18}
+\citation{peters18}
+\citation{peters18}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces From \cite  {coenen19}. Embeddings for the word \texttt  {die} in different contexts, visualized through UMAP. The blue text describes general annotations.\relax }}{50}\protected@file@percent }
 \newlabel{fig:BERT_plurality}{{3.7}{50}}
-\citation{remus13}
-\citation{biemann06}
+\citation{joshi19b}
+\citation{tan19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces From \cite  {peters18}. The authors show different similarity intensities (cosine similarity) between token-pairs using the output of a 4-layer LSTM (left), and the output after the first layer (right).\relax }}{51}\protected@file@percent }
+\newlabel{fig:embeddings_by_language}{{3.8}{51}}
 \citation{tang19}
 \citation{tsai19}
 \citation{sanh19}
 \citation{shen19}
-\citation{shin18}
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}Static embeddings from context embeddings}{51}\protected@file@percent }
-\citation{whitaker19}
 \citation{may19}
 \citation{caliskan19}
-\citation{peters18}
-\citation{peters18}
-\citation{peters18}
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}Static embeddings from context embeddings}{52}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3.6}Sentiment-subspace in BERT}{52}\protected@file@percent }
-\citation{joshi19b}
 \citation{moradshahi19}
 \citation{bommasani19}
 \citation{akbik19}
 \citation{jawahar19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces From \cite  {peters18}. The authors show different similarity intensities (cosine similarity) between token-pairs using the output of a 4-layer LSTM (left), and the output after the first layer (right).\relax }}{53}\protected@file@percent }
-\newlabel{fig:embeddings_by_language}{{3.8}{53}}
 \citation{jawahar19}
 \citation{jawahar19}
 \citation{jawahar19}
 \citation{jawahar19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces From \cite  {jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.\relax }}{53}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.9}{53}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces From \cite  {jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using labelled root \texttt  {are} as starting node with the maximum spanning tree algorithm\relax }}{53}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.10}{53}}
 \citation{may19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces From \cite  {jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.\relax }}{54}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.9}{54}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces From \cite  {jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using gold root \texttt  {are} as starting node for maximum spanning tree algorithm\relax }}{54}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.10}{54}}
 \citation{jentzsch19}
+\citation{martinc20}
+\citation{hu19}
+\citation{shin18}
+\@writefile{toc}{\contentsline {section}{\numberline {3.7}Misc}{54}\protected@file@percent }
+\citation{whitaker19}
 \citation{news_corpus}
 \@writefile{toc}{\contentsline {chapter}{\numberline {4}Understanding the semantic subspace organization in BERT}{57}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}

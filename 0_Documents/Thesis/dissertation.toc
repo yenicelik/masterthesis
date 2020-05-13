@@ -22,21 +22,23 @@
 \contentsline {subsubsection}{ELMo}{21}% 
 \contentsline {subsubsection}{The Transformer Architecture}{22}% 
 \contentsline {subsubsection}{BERT}{24}% 
-\contentsline {subsubsection}{Other language models}{28}% 
+\contentsline {paragraph}{The pipeline of BERT}{26}% 
+\contentsline {subsubsection}{Other language models}{26}% 
 \contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{28}% 
 \contentsline {subsubsection}{Inference Tasks}{29}% 
 \contentsline {section}{\numberline {2.4}WordNet}{31}% 
 \contentsline {paragraph}{Lexical matrix:}{31}% 
-\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{34}% 
+\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{33}% 
 \contentsline {chapter}{\numberline {3}Related Work}{37}% 
 \contentsline {section}{\numberline {3.1}Clustering for Synsets in Static Word Embeddings}{37}% 
-\contentsline {paragraph}{The Chinese whispers}{38}% 
-\contentsline {paragraph}{One example of how the Chinese whispers algorithm}{39}% 
-\contentsline {section}{\numberline {3.2}Structure inside BERT}{40}% 
-\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{40}% 
-\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{48}% 
-\contentsline {section}{\numberline {3.5}Static embeddings from context embeddings}{51}% 
+\contentsline {paragraph}{The Chinese whispers algorithm}{37}% 
+\contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{38}% 
+\contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{40}% 
+\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{41}% 
+\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{47}% 
+\contentsline {section}{\numberline {3.5}Static embeddings from context embeddings}{52}% 
 \contentsline {section}{\numberline {3.6}Sentiment-subspace in BERT}{52}% 
+\contentsline {section}{\numberline {3.7}Misc}{54}% 
 \contentsline {chapter}{\numberline {4}Understanding the semantic subspace organization in BERT}{57}% 
 \contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{57}% 
 \contentsline {subsection}{\numberline {4.1.1}Experiment setup}{58}% 
