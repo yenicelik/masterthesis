@@ -1,0 +1,14 @@
+\newpage
+{\Huge \bf Abstract}
+\vspace{24pt} 
+\onehalfspacing
+
+
+In this thesis, I explore the possibility of computationally analysing people's perception of brands using a Neural Network Language Model. Current marketing professional employ a range of inaccurate and inefficient methodologies to gather user feedback in measuring brand perception, including surveys and focus groups. To automate this process, I use a state of the art neural language model called the Skip-gram model and train it on few hundred gigabytes of text mined from Twitter. An immediate benefit of this model is that it enables `on-line learning', in that a trained model can continue training as more dataset becomes available. This forms stark contrast with qualitative methods such as surveys, as the cost of gathering more user data is marginal with this model and the model updates as it learns from more recent data.
+\\ \\
+More specifically, the skip-gram learns low-dimensional, efficient vector representation of words which are shown to be powerful in various NLP tasks including word similarity tasks, POS tagging and parsing. This thesis augments the skip-gram model with embedding matrices for different user \textit{contexts}: \textit{e.g.} gender, age and location. Such metadata of users is available in Twitter as users provide information about themselves in semi-organised manner. I mine and preprocess 8.8 billion tokens from 623 million tweets to obtain a training data with each sentence tagged with a set of contexts in which it is uttered.
+\\ \\
+The model learns context-specific representation of words and successfully reflect variations of language that correspond to particular demographic groups. The evaluation chapter presents both quantative and qualitative comparison of three models and confirms that the best-performing model learns context-dependent word semantics.   
+
+\newpage
+\vspace*{\fill}

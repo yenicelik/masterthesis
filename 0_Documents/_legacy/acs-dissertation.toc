@@ -1,0 +1,26 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}% 
+\contentsline {chapter}{\numberline {2}Background}{5}% 
+\contentsline {section}{\numberline {2.1}Brand analytics and social NLP}{5}% 
+\contentsline {section}{\numberline {2.2}Vector space and language model}{6}% 
+\contentsline {section}{\numberline {2.3}Resources}{12}% 
+\contentsline {chapter}{\numberline {3}Data Mining and Preprocessing}{13}% 
+\contentsline {section}{\numberline {3.1}Mining the corpus}{14}% 
+\contentsline {section}{\numberline {3.2}Tweet normalisation}{15}% 
+\contentsline {section}{\numberline {3.3}User metadata prediction}{18}% 
+\contentsline {section}{\numberline {3.4}Tweet demographic statistics}{21}% 
+\contentsline {chapter}{\numberline {4}Model Design and Training}{25}% 
+\contentsline {section}{\numberline {4.1}Model}{25}% 
+\contentsline {section}{\numberline {4.2}Training}{30}% 
+\contentsline {section}{\numberline {4.3}Implementation}{34}% 
+\contentsline {section}{\numberline {4.4}Measuring brand perception}{38}% 
+\contentsline {chapter}{\numberline {5}Evaluation}{41}% 
+\contentsline {section}{\numberline {5.1}Evaluation setting}{41}% 
+\contentsline {section}{\numberline {5.2}Quantitative evaluation}{42}% 
+\contentsline {subsection}{\numberline {5.2.1}Location}{42}% 
+\contentsline {subsection}{\numberline {5.2.2}Gender}{46}% 
+\contentsline {subsection}{\numberline {5.2.3}General Semantic Similarity}{49}% 
+\contentsline {section}{\numberline {5.3}Qualitative evaluation}{50}% 
+\contentsline {section}{\numberline {5.4}Brand perception analysis}{51}% 
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{55}% 
+\contentsline {section}{\numberline {6.1}Summary}{55}% 
+\contentsline {section}{\numberline {6.2}Future work}{57}% 

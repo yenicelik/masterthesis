@@ -1,0 +1,16 @@
+Rough Cut:
+- [] Background: BERT
+- [] Background: GPT (minimal)
+- [] Related Work: Chinese Whispers & EGO clustering
+
+Final Cut:
+- [] Understanding Subspace BERT: Separability
+- [] Understanding Subspace BERT: Clusterability Results Qualitative + Quantitative
+- [] Understanding Subspace BERT: Correlation PoS Results (short)
+- [] Exploiting Subspace BERnie: 
+
+Not urgent:
+- [] Related Work: Sweep through all gdocs, and record most interesting papers here (final step, really)
+
+Experiments todo: 
+- [] Clustering based on the learned space (siamese network)
