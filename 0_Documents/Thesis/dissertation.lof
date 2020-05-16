@@ -15,7 +15,7 @@
 \contentsline {figure}{\numberline {2.13}{\ignorespaces Shows that the SemCor data is biased towards words with low WordNet class IDs. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5). The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. This is a cumulative plot over all words with WordNet senses within SemCor 3.0. The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words. \relax }}{35}% 
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite {pelevina16}. An EGO-network of the word \texttt {table} is created. Then, clustering is applied on the EGO network, to identify different semantic sets \textit {synsets}.\relax }}{38}% 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces From \cite {wiedmann19}. T-SNE plots of different senses of \texttt {bank} and their context embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data. \relax }}{42}% 
+\contentsline {figure}{\numberline {3.2}{\ignorespaces From \cite {wiedmann19}. T-SNE plots of different senses of \texttt {bank} and their context embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data. \relax }}{43}% 
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Figure from \cite {levine19}. Standard BERT (left) and the SenseBERT adaptations (right), which include an embedding-encoder and an embedding-decoder specifically for WordNet senses.\relax }}{46}% 
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Figure taken from \cite {si19}. \textbf {Fictional} embedding vector points and clusters of \texttt {cold}. This is one of the results that we want to arrive at. Specifically, we desire distinct word-embeddings that capture the modes of the underlying probability distribution. \relax }}{47}% 
 \contentsline {figure}{\numberline {3.5}{\ignorespaces Figure taken from \cite {si19}. PCA visualizations using embedding vector of \texttt {cold} from BERT. The blue data points refer to \texttt {cold} as a temperature, whereas the red data points refer to \texttt {cold} as a symptom.\relax }}{47}% 
@@ -29,7 +29,7 @@
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Partition 2 for the word \texttt {arms}. This cluster contains \texttt {arms} in the context of arms where one person hugs or loves another. Notice that this usually includes a positive sentiment.\relax }}{68}% 
 \contentsline {figure}{\numberline {4.3}{\ignorespaces Partition 3 for the word \texttt {arms}. This cluster contains \texttt {arms} in the context of strong arms, usually in a competitive context.\relax }}{69}% 
 \contentsline {figure}{\numberline {4.4}{\ignorespaces Partition 4 for the word \texttt {arms}. This cluster contains \texttt {arms} in the context of individuals and countries. This uses the semantic definition of arms which is analogous to \texttt {weaponry}.\relax }}{69}% 
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Partition 5 for the word \texttt {arms}. This cluster contains \texttt {arms} in the context of countries (no individuals). This uses the semantic definition of arms which is analogous to \texttt {weaponry}. One can notice that these sentences usually refer to nuclear arms.\relax }}{69}% 
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Partition 5 for the word \texttt {arms}. This cluster contains \texttt {arms} in the context of countries (no individuals). This uses the semantic definition of arms which is analogous to \texttt {weaponry}. One can notice that these sentences usually refer to nuclear arms.\relax }}{70}% 
 \contentsline {figure}{\numberline {4.6}{\ignorespaces Partition 6 for the word \texttt {arms}. This cluster again refers to the arms of a person, however usually with a positive / optimistic sentiment.\relax }}{70}% 
 \contentsline {figure}{\numberline {4.7}{\ignorespaces Cumulative dominance of the most occurring cluster. Dominance of a part of speech tag is measured by the percentage cover that the majority class intakes.\relax }}{73}% 
 \contentsline {figure}{\numberline {4.8}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt {run}. \relax }}{74}% 
@@ -51,16 +51,16 @@
 \contentsline {figure}{\numberline {B.2}{\ignorespaces Taken from \cite {kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.\relax }}{116}% 
 \contentsline {figure}{\numberline {B.3}{\ignorespaces From \cite {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{118}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {C.1}{\ignorespaces Some figure\relax }}{122}% 
-\contentsline {figure}{\numberline {C.2}{\ignorespaces Some figure\relax }}{122}% 
-\contentsline {figure}{\numberline {C.3}{\ignorespaces Some figure\relax }}{123}% 
-\contentsline {figure}{\numberline {C.4}{\ignorespaces Some figure\relax }}{123}% 
-\contentsline {figure}{\numberline {C.5}{\ignorespaces Some figure\relax }}{123}% 
-\contentsline {figure}{\numberline {C.6}{\ignorespaces Some figure\relax }}{123}% 
-\contentsline {figure}{\numberline {C.7}{\ignorespaces Some figure\relax }}{124}% 
-\contentsline {figure}{\numberline {C.8}{\ignorespaces Some figure\relax }}{124}% 
-\contentsline {figure}{\numberline {C.9}{\ignorespaces Some figure\relax }}{124}% 
-\contentsline {figure}{\numberline {C.10}{\ignorespaces Some figure\relax }}{124}% 
-\contentsline {figure}{\numberline {C.11}{\ignorespaces Some figure\relax }}{125}% 
+\contentsline {figure}{\numberline {C.1}{\ignorespaces Partition 1 for the word \texttt {bank}. This cluster contains \texttt {bank} in the context of national banks as financial institutions. Notice that the sentiment is usually a negative one.\relax }}{122}% 
+\contentsline {figure}{\numberline {C.2}{\ignorespaces Partition 2 for the word \texttt {bank}. This cluster contains \texttt {bank} as a sequence of objects.\relax }}{122}% 
+\contentsline {figure}{\numberline {C.3}{\ignorespaces Partition 3 for the word \texttt {bank}. This cluster contains \texttt {bank} as a local, consumer bank (in contrast to institutional, national banks).\relax }}{123}% 
+\contentsline {figure}{\numberline {C.4}{\ignorespaces Partition 4 for the word \texttt {bank}. This cluster contains \texttt {bank} in the context of national banks as financial institutions. Notice that here, the context is usually about interest rates.\relax }}{123}% 
+\contentsline {figure}{\numberline {C.5}{\ignorespaces Partition 5 for the word \texttt {bank}. This cluster contains \texttt {bank} in the context of investment banks (in contrast to consumer, and institutional banks).\relax }}{123}% 
+\contentsline {figure}{\numberline {C.6}{\ignorespaces Partition 1 for the word \texttt {key}. This cluster contains \texttt {key} as a synonym for the word \texttt {main}, which characterizes an important subject. The context is one between large institutions in politics and finance. The sentiment is generally positive.\relax }}{124}% 
+\contentsline {figure}{\numberline {C.7}{\ignorespaces Partition 2 for the word \texttt {key}. This cluster contains \texttt {key} as a synonym for the word \texttt {main}, which characterizes an important subject. The context is one of regulations and elections. The sentiment is serious.\relax }}{124}% 
+\contentsline {figure}{\numberline {C.8}{\ignorespaces Partition 3 for the word \texttt {key}. This cluster contains \texttt {key} as a synonym for the word \texttt {main}, which characterizes an important subject. The context is one of groups of people. The sentiment is neutral to positive.\relax }}{124}% 
+\contentsline {figure}{\numberline {C.9}{\ignorespaces Partition 4 for the word \texttt {key}. This cluster contains \texttt {key} as a synonym for the word \texttt {main}, which characterizes an important subject. The context is one of sports and baseball. The sentiment is mixed.\relax }}{125}% 
+\contentsline {figure}{\numberline {C.10}{\ignorespaces Partition 5 for the word \texttt {key}. This cluster contains \texttt {key} as a synonym for the word \texttt {main}, which characterizes an important subject. The context is mixed. The sentiment is mixed .\relax }}{125}% 
+\contentsline {figure}{\numberline {C.11}{\ignorespaces Partition 6 for the word \texttt {key}. This cluster contains \texttt {key} as a synonym for the word \texttt {main}, which characterizes an important subject. The context is mixed. The sentiment is mixed.\relax }}{125}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Taken from \cite {conneau17}. Each \relax }}{127}% 
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Taken from \cite {conneau17}. Toy illustration of the embedding matching methodology using the MUSE model.\relax }}{127}% 

@@ -3,7 +3,6 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: dissertation.aux
 The style file: plain.bst
 Database file #1: dissertation.bib
-Warning--I didn't find a database entry for "marcu93"
 Warning--to sort, need author or key in colahLSTM
 Warning--to sort, need author or key in spacyb
 Warning--to sort, need author or key in cil_slides
@@ -34,6 +33,7 @@ Warning--empty journal in hoffer14
 Warning--empty journal in joshi19
 Warning--empty journal in joshi19b
 Warning--empty journal in jozefowicz16
+Warning--empty journal in kageback16
 Warning--empty journal in kudugunta18
 Warning--empty journal in lee17
 Warning--empty journal in levine19
@@ -72,45 +72,45 @@ Warning--empty journal in wiedmann19
 Warning--empty journal in wittgenstein53
 Warning--empty journal in wu16
 Warning--empty journal in yan19
-You've used 145 entries,
+You've used 147 entries,
             2118 wiz_defined-function locations,
-            1093 strings with 27293 characters,
-and the built_in function-call counts, 49153 in all, are:
-= -- 4536
-> -- 3110
+            1098 strings with 27522 characters,
+and the built_in function-call counts, 49663 in all, are:
+= -- 4583
+> -- 3141
 < -- 36
-+ -- 1244
-- -- 1080
-* -- 3228
-:= -- 8434
-add.period$ -- 439
-call.type$ -- 145
-change.case$ -- 975
++ -- 1256
+- -- 1090
+* -- 3257
+:= -- 8529
+add.period$ -- 445
+call.type$ -- 147
+change.case$ -- 986
 chr.to.int$ -- 0
-cite$ -- 213
-duplicate$ -- 1831
-empty$ -- 3191
-format.name$ -- 1080
-if$ -- 10063
+cite$ -- 216
+duplicate$ -- 1851
+empty$ -- 3225
+format.name$ -- 1090
+if$ -- 10163
 int.to.chr$ -- 0
-int.to.str$ -- 145
-missing$ -- 136
-newline$ -- 728
-num.names$ -- 278
-pop$ -- 1186
+int.to.str$ -- 147
+missing$ -- 138
+newline$ -- 738
+num.names$ -- 282
+pop$ -- 1199
 preamble$ -- 1
-purify$ -- 830
+purify$ -- 839
 quote$ -- 0
-skip$ -- 1450
+skip$ -- 1465
 stack$ -- 0
-substring$ -- 1755
-swap$ -- 421
+substring$ -- 1765
+swap$ -- 422
 text.length$ -- 36
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 580
-warning$ -- 68
-while$ -- 355
-width$ -- 148
-write$ -- 1431
+type$ -- 588
+warning$ -- 69
+while$ -- 359
+width$ -- 150
+write$ -- 1450
 (There were 69 warnings)

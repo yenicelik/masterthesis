@@ -102,7 +102,7 @@ Chris Biemann.
 Chris Biemann and Martin Riedl.
 \newblock Text: Now in 2d! a framework for lexical expansion with contextual
   similar- ity.
-\newblock {\em Journal ofLanguage Modelling, 1(1)}, pages 55--95, 1993.
+\newblock {\em Journal ofLanguage Modelling, 1(1)}, pages 55--95, 2013.
 
 \bibitem{bojanowski17}
 Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov.
@@ -364,6 +364,11 @@ Rafal Jozefowicz, Orriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu.
 \newblock Exploring the limits of language modeling.
 \newblock 2016.
 
+\bibitem{kageback16}
+Mikael Kageback and Hans Salomonsson.
+\newblock Word sense disambiguation using a bidirectional lstm.
+\newblock 2016.
+
 \bibitem{kaya19}
 Mahmut Kaya and Hasan~Sakir Bilge.
 \newblock Deep metric learning : A survey.
@@ -447,6 +452,11 @@ J.~B. MacQueen.
 P.~C. Mahalanobis.
 \newblock On the generalized distance in statistics.
 \newblock {\em Proc. Nat. Inst. Sci.}, 1936.
+
+\bibitem{marcus93}
+Mitchell~P. Marcus, Mary~Ann Marcinkiewic, and Beatrice Santorini.
+\newblock Building a large annotated corpus of english: the penn treebank.
+\newblock {\em Computational Linguistics}, 1993.
 
 \bibitem{martinc20}
 Matej Martinc, Jozef Stefan, Institute Slovenia, Syrielle Montariol, Elaine
