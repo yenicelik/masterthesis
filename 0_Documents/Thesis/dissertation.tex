@@ -49,6 +49,7 @@
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{tabularx,booktabs}
 
+%TODO caption below table?
 
 %% START OF DOCUMENT
 \begin{document}
@@ -93,9 +94,6 @@
 \pagenumbering{arabic} 
 \setcounter{page}{1} 
 
-%TODO Introduce nominalised verbs
-%TODO Replace all "I" by "We"
-
 \newpage
 \chapter{Introduction}
 
@@ -110,14 +108,14 @@ Optimally, the algebra of the space that we operate in, including the various op
 \\
 
 Language models \textit{LM} are a generalization of NLU models that can both generate word-embeddings, sentence embeddings, but also intermediate representations that can be used for downstream tasks.
-Most commonly, language models create a word embedding by taking into consideration the context with which a word token occurs. 
+Most commonly, language models create a word embedding by taking into consideration the context in which a word token occurs. 
 Because embeddings - due to their strong usage in downstream tasks - can be considered as the fundamental unit of machine learning in the domain of natural language, any shortcomings will influence the performance of the target task.
-Thus, improving the way these embeddings capture linguistic features has strong implications for any subtasks in NLU, including but not limited to named entity recognition \textit{NER}, sentiment analysis, and translation between languages. 
+Thus, improving the way these embeddings capture linguistic features has strong implications for any subtasks in NLU, including but not limited to Named Entity Recognition \textit{NER}, sentiment analysis, and translation between languages. 
 However, most of the modern LMs are so complex that they are considered black-box models.
 \\
 
 Although this work does not try to imminently push the performance of these language models, we believe that providing a better understanding of the underlying principles will pave the way for future research to better track these issues.
-For the sake of focus, and because we believe that meaning is the most important linguistic feature for communication, we will focus on investigating how modern LMs capture semantics. 
+Because we believe that meaning is amongst the most important linguistic feature for communication, we will focus on investigating how modern LMs capture semantics. 
 Notice that the relation between language and thought is a much more fundamental and philosophical one.
 For this work, however, we assume that semantic concepts can be captured through some latent variable, i.e. language is just an expression of thought.
 
@@ -143,8 +141,8 @@ Our findings show that although BERT does not capture a simple semantic subspace
 This can often introduce undesirable features such as strong sentiment, position in sentence, and thus lead to considerable bias in downstream applications.
 We also show that sentiment is particularly more strongly captured in modern language models, allowing for language stereotypes to easily manifest itself, leading to stronger cases of bias in language models.
 
-We will first start with summarizing the required background work \ref{section:Background}, show existing analysis on the inner workings of BERT \ref{section:RelatedWork}, conduct tests that do not modify the BERT model \ref{section:UnderstandingBERT} and make modifications to BERT to understand what effect this has on downstream tasks \ref{section:ExploitingBERT}.
-We will finally draw conclusion and show potential for future work \ref{section:Conclusion}.
+We will first start with summarizing the required background work (Section \ref{section:Background}), show existing analysis on the inner workings of BERT (Section \ref{section:RelatedWork}), conduct tests that do not modify the BERT model (Section \ref{section:UnderstandingBERT}) and make modifications to BERT to understand what effect this has on downstream tasks (Section \ref{section:ExploitingBERT}).
+We will finally draw conclusion and show potential for future work (Section \ref{section:Conclusion}).
 
 
 %\chapter{Background} 
@@ -162,10 +160,8 @@ The formalization of language is not a trivial problem to consider, as this also
 \section{Linguistic Features}
 
 There is a vast number of linguistic features, going from phonological features, morphological and syntactic features to semantic features.
-This is not an exhaustive summary, but focuses on the properties of languages relevant to this work. \\
-
 We will first introduce some linguistic features relevant to this work.
-These make a formal analysis of our topic easier.
+This makes a formal analysis of our topic easier.
 
 \paragraph{Polysemy} describes the phenomenon that a word token $w$ may have multiple meanings.
 As a simple example, the number of meanings that \Verb#cat# can entail is $ | M_\text{cat} | = | \{ m_\text{cat-animal} \} |  = 1$, whereas the number of meanings that \Verb#bank# can entail is $ | M_\text{bank} | = | \{ m_\text{bank-financial instution},  m_\text{bank-sea bank}\} |  = 2$.
@@ -298,8 +294,6 @@ In it's most naive form, this would imply that we can estimate the probability o
 p(\mathbf{w}) = \prod_{t=1}^T p\left( w^{(t)} | w^{(t -1)}, \ldots, w^{(1)} \right)
 \end{equation}{\label{eq:naive_sequential_probability}}
 
-%TODO check the underlying equation again!!
-
 where $\mathbf{w} = w^{(1)}, \dots, w^{(T)} $ is the sequence of words and $p(\mathbf{w})$ the probability of this sentence occurring.
 This corresponds to an autoregressive model.
 One could for example use (hidden) markov models to model this relation, as we could fix the \textit{context size} $n$ (in this case, only looking at previously occurring words) and exploit the $n$-step markovian assumption of
@@ -333,7 +327,6 @@ In that case, the loss function would look as follows.
 By maximizing the mean loss over all sentences in a big-enough corpus $\mathcal{C}$, we can find a reliable estimator model with parameters $\hat{\theta} = \text{argmin}_\theta \mathcal{L}(\theta ; \mathbf{w})$ using a maximum likelihood estimation approach.
 One would usually work with the log-loss as this allows for the gradients to be more easily computed and avoids numerical issues.
 
-%TODO is this only training, or does this also have other implications..?
 Intuitively the above models implement the idea  behind \cite{harris54} very well, specifically the property that the meaning of a word is captured by the context that it occurs in.
 However, the above equations follow a \textit{continuous bag of words CBOW} approach, which aims at predicting a target word $w^t$ given some context words $w^{\prime}$.
 In contrast, it is also possible to follow a \textit{skip-gram SG} approach, where the aim is to predict context words $w^{\prime}$ given a target word $w^t$.
@@ -417,8 +410,6 @@ This idea is referred to as \textit{negative sampling}.
   \caption{Figure taken from \cite{mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.}
   \label{fig:cbow_skipgram}
 \end{figure}
-
-%TODO include difference between target vocabulary V and context vocabulary C
 
 Backpropagation is used to optimize over the networks weights. 
 Also, highly frequent words are optionally subsampled and their frequency is re-weighted using the formula $$
@@ -535,7 +526,7 @@ where $h_{i}$ is the forward-propagation vector outputted by the LSTM cell at ti
 Although intuitively $h_{T-1}$ is supposed to capture information from many timesteps back, there is no explicit information flow between the LSTM cell at timestep $t+1$ and $t-1$ (i.e. any two cells which are more than 2 steps away).
 
 The transformer architecture \cite{vaswani17} improves on this shortcoming.
-The transformer architecture introduces the concept of attention for modern language models, which can model relations between any two input tokens $w_i, w_j$ with $i \neq j$.
+The transformer architecture introduces the concept of attention for modern language models, which can model relations between any two input tokens $w_i, w_j$ with $i \neq j$ and $| i - j |  > 1$.
 For a more detail treatment of the attention mechanism, we refer the reader to \cite{bahdanau16}.
 % A single transformer takes as input a sequence $\mathbf{w} = [w_1, \ldots, w_T]$ and outputs a set of hidden.
 The attention mechanism takes all the latent token representations for the full sample sentence (not only the previous or subsequent context) and calculates a correlation between the hidden representations of each timestep.
@@ -548,21 +539,11 @@ The transformer outputs a latent representation which can be converted to softma
   \label{fig:attention_is_all_you_need}
 \end{figure}
 
-%TODO Not sure if this is well enough written
-
-For each word, a vector representation is computed using an embedding layer.
-This results in a set of vectors $M$ which represents the values, and $K$ which represents the keys.
-One can then take set of query vectors $Q$ and calculate the inner product $\langle K, Q \rangle$.
-A softmax layer is added on top of the of dot-products to denote to what extent two vectors correlate to each other.
-In the case of self-attention, the query vectors $Q$ are equivalent to $K$.
-This allows for the model to be more attentive between two elements, and allows the model to focus exploit relationships between different tokens within a token-sequence better.
-
-%TODO Not sure if this is well enough written
-
+This allows for the model to directly capture and exploit a similarity metrics between any input elements of the sequence.
 This has implications for the complexity of the model.
 Instead of calculating the raw probability of \eqref{eq:naive_sequential_probability}, and even using a markovian assumption because computation power is expensive, the transformer architecture implicitly calculates the joint probability of an entire sequence of words, thus decreasing the step of computations through which information flows. \\
 
-To stay focused, we will not go into further detail of how and why the transformer architecture works better than the LSTM.
+To stay focused, we will not go into further detail of why the transformer architecture works better than the LSTM.
 All of the below presented models use the transformer architecture as a building block instead of the LSTM used in ELMo.
 The following architectures are all based on the transformer module.
 
@@ -583,7 +564,6 @@ In the first phase BERT is trained using a \textbf{masked language model} approa
 Sentences with a maximum length are sampled from a corpus.
 About 15\% of words in the sentence are replaced with the \texttt{[MASK]} token, and the weights are optimized in such a way to predict the word which was replaced by the \Verb#[MASK]# token. 
 
-%TODO Not in outer par mode
 \begin{figure}
 \begin{verbatim}
 [CLS] The man went to [MASK] store. [SEP]
@@ -760,7 +740,6 @@ The dataset includes adversarial examples which test negatively when overfitted.
 Some example sentences include 
 
 \begin{tcolorbox}
-%TODO do code styling
 \begin{verbatim}
 Bob was playing cards with Adam and was way ahead.
 If Adam hadn't had a sudden run of good luck, he would have won.	Adam would have won.
@@ -801,8 +780,6 @@ We will refer to \textit{semantics} whenever we mean \textit{word meaning}.
 The following table captures the concept of a lexical matrix, which encodes word-forms (columns), word-meanings (rows), and the existence of the possibility to express the word-meanings through the corresponding word-form (cell).
 If multiple entries exist for a single column, then the single word-form encode multiple meanings, implying that the word-form is polysemous (it encodes multiple word-forms).
 If multiple entries exist for a single row, the two words express the same underlying concept, and thus the two words-forms are synonyms.
-
-%TODO Throughouly read miller90
 
 \begin{figure}[H]
 \begin{center}
@@ -898,7 +875,6 @@ POS, NN, NNP, VB, JJ, IN, NNP, VP, IN, JJ, NN
 
 with the corresponding WordNet semantic class ids 
 
-%TODO Fix this
 \begin{tcolorbox}
 \begin{verbatim}
 None, Texas.1, halfback.1, None, does.0, not.1, even.7, know, None, team.1, is, play, 
@@ -921,7 +897,7 @@ None, ranks, fourth, in, 3, 1, 1, 1, scoring, None, three, 1, after.1, three.1, 
 
 \chapter{Related Work}\label{section:RelatedWork} 
 
-%TODO Some intersection text?
+We will first turn our attention to existing work in analysing static word embeddings and modern language models for linguistic features, such as sentiment, part-of-speech and semantics.
 
 \section{Clustering for Synsets in Static Word Embeddings}\label{section_clustering}
 
@@ -1018,7 +994,6 @@ The authors introduce the \textbf{Word in Context WiC} dataset of labelled sente
 
 An example of this dataset includes (the first one with the target word \Verb#bed#, the second one with a target word \Verb#window#: \\
 
-%TODO do code styling
 \begin{tcolorbox}
 \begin{verbatim}
 There's a lot of trash on the bed of the river.
@@ -1030,12 +1005,11 @@ label:False
 \begin{tcolorbox}
 \begin{verbatim}
 The expanded window will give us time to catch the thieves.
-You have a two-hour window of clear weather to finish working on the lawn.
+You have a two-hour window of clear weather to finish work.
 label:True
 \end{verbatim} \\
 \end{tcolorbox} 
 
-%TODO Run this (this is the superGlue task)
 A more extensive list of datasets separated by knowledge-based approaches (i.e. making use of external resources like WordNet) and distributional-based approaches (i.e. using merely the distributional assumption of language) can be found in \cite{navigli19}.
 \cite{denkowski09} is another survey which includes clustering of 3-grams, as well as graph-based approaches, where a graph is created in such a way that nouns are nodes, and edges between nodes exist whenever two words occur in the same paragraph.
 
@@ -1455,7 +1429,9 @@ We show the result for 3 of the experiments, for the words \textit{was}, \textit
 \end{center}
 
 There are many permutations 
-We now also employ multi-class classificiation.
+We now also employ multi-class classification.
+
+\quad
 
 \begin{center}
 \captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit{was}.}
@@ -1520,7 +1496,6 @@ $w_{\text{target}}$: The target word whose BERT vectors we want to cluster; \\
 $DimRed$: The dimensionality reduction method; \\
 $k$ : The latent dimensionality for the dimensionality reduction method; \\ 
 $ClusterAlgorithm$: The clustering algorithm to use;
-%TODO insert optional l1/l2 normalization
 }
 \KwResult{The associated cluster-id with each sampled sentence, and the adjusted random index.}
 
@@ -1546,10 +1521,11 @@ return $ score, \mathbf{\hat{y}}$\;
  \caption{Checks sampled BERT vectors for clusters by  meaning}
 \end{algorithm}
 
+\quad
+
 Running this over all possible clustering algorithms, and taking the mean across a set of words, we hope to get a reliable estimate of which clustering approach generalizes best across words.
 This is depicted in the following algorithm
 
-%TODO include optimization loop over all models
 \begin{algorithm}[H]
 \SetAlgoLined
 \SetKwInOut{Input}{Input}
@@ -1596,8 +1572,6 @@ A R I=\frac{\sum_{i j}\left(^{n_{i j}}\right)-\left[\sum_{i}\left(\begin{array}{
 where $n_{i,j}$ is the number of items that are present in both clustering assignment, $a_i = \sum_j n_{i,j}$ , $b_j = \sum_i n_{i,j}$ for two clustering $a$ and $b$.
 
 The resulting score is between $[-1.0, 1.0]$, where a score of $0$ implies completely assignment of cluster-labels into random buckets, $-1.0$ implies a negative correlation, and $1.0$ implies perfect similarity.
-
-%TODO talk about the chinese whispers algorithm bcs this is custom-made
 
 \subsection{Results}
 
@@ -1698,7 +1672,7 @@ Because it is difficult to describe each partition through a concise and general
 We refer the reader to more examples in section \ref{section:more_clustering_results_qualitative} in the Appendix.
 
 \begin{tcolorbox}
-\scalebox{0.7}{
+\scalebox{0.65}{
 \begin{minipage}{\linewidth}
 \begin{align}
 \texttt{                                                                  } & \texttt{- -} \nonumber \\
@@ -1713,6 +1687,8 @@ We refer the reader to more examples in section \ref{section:more_clustering_res
 }\label{fig:example_arms_negative_handcuffed}
 \captionof{figure}{Partition 1 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of hancuffed arms. Notice that the sentiment is usually one of surprise, and rather negative.}
 \end{tcolorbox}
+
+\quad
 
 \begin{tcolorbox}
 \scalebox{0.7}{
@@ -1732,6 +1708,7 @@ We refer the reader to more examples in section \ref{section:more_clustering_res
 \captionof{figure}{Partition 2 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of arms where one person hugs or loves another. Notice that this usually includes a positive sentiment.}
 \end{tcolorbox}
 
+\quad
 
 \begin{tcolorbox}
 \scalebox{0.7}{
@@ -1750,6 +1727,8 @@ We refer the reader to more examples in section \ref{section:more_clustering_res
 }
 \captionof{figure}{Partition 3 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of strong arms, usually in a competitive context.}
 \end{tcolorbox}
+
+\quad
 
 \begin{tcolorbox}
 \scalebox{0.7}{
@@ -1770,6 +1749,8 @@ We refer the reader to more examples in section \ref{section:more_clustering_res
 \captionof{figure}{Partition 4 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of individuals and countries. This uses the semantic definition of arms which is analogous to \texttt{weaponry}.}
 \end{tcolorbox}
 
+\quad
+
 \begin{tcolorbox}
 \scalebox{0.7}{
 \begin{minipage}{\linewidth}
@@ -1789,8 +1770,10 @@ We refer the reader to more examples in section \ref{section:more_clustering_res
 \captionof{figure}{Partition 5 for the word \texttt{arms}. This cluster contains \texttt{arms} in the context of countries (no individuals). This uses the semantic definition of arms which is analogous to \texttt{weaponry}. One can notice that these sentences usually refer to nuclear arms.}
 \end{tcolorbox}
 
+\quad
 
-\scalebox{0.7}{
+\begin{tcolorbox}
+\scalebox{0.65}{
 \begin{minipage}{\linewidth}
 \begin{align}
 \texttt{                                              } & \texttt{ - -} \nonumber \\
@@ -1806,6 +1789,7 @@ We refer the reader to more examples in section \ref{section:more_clustering_res
 \end{minipage}
 }\label{fig:example_arms_negative_crossed}
 \captionof{figure}{Partition 6 for the word \texttt{arms}. This cluster again refers to the arms of a person, however usually with a positive / optimistic sentiment.}
+\end{tcolorbox}
 
 \quad
 
@@ -1825,16 +1809,16 @@ Although the reason for this cannot be trivially concluded, this could also be a
 In this section, we are interested to what extent part-of-speech information entails semantic information.
 We pick part-of-speech because there are robust classifiers built on simple models with high accuracy rates (~92\%).
 Our hypothesis is that part-of-speech has a strong entailment towards semantics.
-One example of this manifestation is by \textit{frozen verbs}.
+One example of this manifestation is by \textit{nominalised verbs}.
 A  verb is a noun which achieved its meaning through its verb form.
-The word \Verb#the run#, for example became a noun through its verb form \Verb#to run#, and thus is considered a frozen verb.
+The word \Verb#the run#, for example became a noun through its verb form \Verb#to run#, and thus is considered a nominalised verbs.
 Although this section is more a qualitative analysis of whether this hypothesis is true, due to the selective nature of samples that we can look at qualitatively.
 We finish this experiment by conducting a more  quantitative approach.
 
 \subsection{Experiment setup}
 
 We test the hypothesis "semantics implies PoS" by conducting the following experiment.
-We define a set of words, including frozen verbs, which can appear as at least two different part-of-speech tags.
+We define a set of words, including nominalised verbs, which can appear as at least two different part-of-speech tags.
 These words are listed in the Appendix under section \eqref{section:frozen_verbs}.
 For this experiment, we choose a word $w_t$ from the above list and iterate over all WordNet meaning classes that this word presents.
 For each of the WordNet classes, we then measure the percentage of the most dominant part-of-speech tag.
@@ -1842,7 +1826,6 @@ We refer to this percentage measure as the \textit{dominance} of the majority cl
 If this percentage is close to 100\%, (and generally above 50\%) we can confidently say that meaning strongly implies part-of-speech, at least as measured in the SemCor dataset.
 More specifically, the algorithm looks as follows:
 
-%TODO include optimization loop over all models
 \begin{algorithm}[H]
 \SetAlgoLined
 \SetKwInOut{Input}{Input}
@@ -1899,8 +1882,6 @@ It is important to notice that some words did not have enough samples in the Sem
 We intentionally left out classes which had less than $5$ samples.
 Also, SemCor is biased, as was previously stated.
 However, the results show that quite a majority of the sampled word-classes only contain a single part-of-speech tag, implying that part-of-speech is strongly correlated to meaning.
-
-%TODO be careful in what direction the correlation is valid for
 Because a numerical value is not intuitively interpretable, we continue with a qualitative evaluation of this phenomenon.
 
 \subsubsection{Qualitative Evaluation}
@@ -1978,24 +1959,6 @@ This is apparent in figures \ref{fig:run_tensorboard} and \ref{fig:cold_tensorbo
 Especially in Figure \ref{fig:run_tensorboard} (a), we can see that in the case of UMAP, the central clsuter strongly mixes nouns with adjectives (red and blue cluster), and that in the case of PCA, the context embeddings are constrained in such a way that embeddings which mix different semantic classes meet in the middle.
 Looking at the different blobs in UMAP we can again confirm the hypothesis that semantics strongly correlates to part-of-speech, as most clusters have a strong predominant color.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%TODO make another plot which is more coarse
-
 %\chapter{Evaluation} 
 \chapter{Exploiting subspace organization of semantics of BERT embeddings}\label{section:ExploitingBERT}
 
@@ -2006,7 +1969,7 @@ Because GLUE is a very general language modelling benchmark, we proceed with GLU
 Our analysis will be limited to BERT only, although similar changes can also be made to modifications of BERT including ALBERT \cite{lan20}, DistillBERT \cite{sanh19}. 
 We will keep the contents of this analysis focused on BERT only, as all transformer models share a similar architecture and as we expect the changes to similarly affect the different models.
 As such, the focus lies on the ablation study with the BERT model  forming our baseline.
-To make the discussion easier, we will refer to any of the models modified by our experiments \textbf{BERnie}. 
+To make the discussion easier, we will refer to any of the models modified by our experiments \textbf{BERNIE}. 
 Please refer to \ref{section:Background} for a refresher on how sentences are tokenized inside BERT, and how tokens are converted to the latent representation and finally into context embeddings through the BERT model.
 \\
 
@@ -2061,27 +2024,28 @@ announcement & 2 & 0.275  \\
   \label{fig:BERT_variance}
 \end{figure}
 
-\section{BERnie: Making the variances across BERT embeddings more equal}
+\section{BERNIE: Equalizing variances across BERT embeddings}
 
-We will introduce two adaptions to the BERT model, BERnie PoS and BERnie Cluster.
+We will introduce two adaptions to the BERT model, BERNIE PoS and BERNIE Cluster.
 We will present the results after having introduced both adaptations.
 For both modifications, we will use the GLUE dataset to understand what property of the language model is most affected.
-In the case of BERnie Cluster, this should tell us what the difference between respective clusters captures the most.
+In the case of BERNIE Cluster, we use the performance of the downstream task as a proxy to understand what information is captured by the high variance.
 
-\subsection{BERnie PoS} \label{bernie_pos}
+\subsection{BERNIE PoS} \label{bernie_pos}
 
 We want to start with a simple model first.
-Because we have seen in the above section, that there is a strong correlation between semantics and part-of-speech, the initial idea is to introduce additional embedding vectors which are able to capture semantics (rather than just purely word tokens) better.
+We have seen in the above section that there is a strong correlation between semantics and part-of-speech.
+As such, the initial idea is to introduce additional embedding vectors which are able to capture semantics (rather than just pure word tokens) better.
 Because of the strong correlation, part-of-speech is used as a proxy for semantics.
 One of the advantages that this carries is that we can use the spaCy PoS tagger \cite{spacyb} to classify the PoS tags with high accuracy.
 
-Our first model adaption is called \textbf{BERnie PoS}.
+Our first model adaption is called \textbf{BERNIE PoS}.
 In this case, we introduce new tokens, and new embedding vectors into the embedding layers of the transformers inside of BERT.
 These newly introduced embedding vectors are supposed to  be able to capture more complex target distributions, as we introduce more weights for regions of semantic ambiguity, which have higher variance as can be seen in Figure \eqref{fig:BERT_variance}.
 
 \subsubsection{Experiment setup}
 
-BERnie PoS introduces one new embedding vector for each possible PoS configuration of the split-words.
+BERNIE PoS introduces one new embedding vector for each possible PoS configuration of the split-words.
 
 As an example, instead of having a single embedding vector for the word \Verb#run#, we introduce two new embeddings \Verb#run_ VERB# and \Verb#run\_NOUN#, which both replace the intial \textit{run}-embedding. 
 We will refer to \Verb#run\_VERB# and \Verb#run\_NOUN# as so called \textit{sub-embeddings}, as these exploit the subspace structure of the context embeddings sampled for the word \Verb#run#.
@@ -2093,7 +2057,7 @@ Specifically, our PoS modified pipeline would now look as follows.
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png}
   \caption{The PoS modified pipeline. 
-  The BERnie PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots, $t_m]$ as defined in a given vocabulary $V$.
+  The BERNIE PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots, $t_m]$ as defined in a given vocabulary $V$.
     This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words.
 For each target token $t_{\text{target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token.
 In this case, $run$ becomes the more specialized $run\_ VERB$.
@@ -2130,16 +2094,15 @@ To identify whether the occurring \Verb#run# in an example sentence is a verb or
   \caption{The part-of-speech modified BERT embedding inside the transformer that BERT uses.}
   \label{fig:sfig2}
 \end{subfigure}
-\caption{The resulting, fully modified BERnie PoS pipeline.}
+\caption{The resulting, fully modified BERNIE PoS pipeline.}
 \label{fig:fig}
 \end{figure}
 
-During training, all weights of BERT are fine-tuned to the downstream GLUE task as described in section 
-%TODO Cite the GLUE section.
+During training, all weights of BERT are fine-tuned to the downstream GLUE task as described in section \ref{section:Background}.
 
-\subsection{BERnie Cluster}\label{experiment_bernie_meaning}
+\subsection{BERNIE Cluster}\label{experiment_bernie_meaning}
 
-Similar to the above model, we are introducing new BERT tokens and their respective embeddings in the transformer embedding layer, similar to the above section \ref{bernie_pos}.
+Similar to the above model, we are introducing new BERT tokens and their respective embeddings in the transformer embedding layer, similar to the previous section \ref{bernie_pos}.
 This time however, we do not introduce new tokens by part-of-speech, as we did in the previous section, but rather by the clustering algorithms above, which were supposed to cluster by WordNet classes \ref{experiment_BERT_clusterability}.
 Thus, implicitly, we are hoping to cluster by semantics.
 The idea here is to adhere more strongly to the subspace structure as seen in section \ref{correlation_pos_context}, following the investigation from section \ref{section:Understand_BERT}.
@@ -2157,7 +2120,7 @@ Again, we start with the standard BERT model, whose pipeline looks as follows.
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png}
   \caption{
   The semantic modified pipeline. 
-  The BERnie Cluster model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots, $t_m]$ as defined in a given vocabulary $V$.
+  The BERNIE Cluster model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots, $t_m]$ as defined in a given vocabulary $V$.
   This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words.
 For each target token $t_{\text{target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the clustereing information as part of the token.
 In this case, $bank$ becomes the more specialized $bank\_FINANCE$.
@@ -2167,10 +2130,10 @@ This embedding vector is used by the intermediate layers of the transformer, and
   \label{fig:BERT_semantic_modified_pipeline}
 \end{figure}
 
-We now also modify the tokenizer in such a way, that ambigious and polysemous words are replaced with a more specific token.
+We now also modify the tokenizer in such a way, that ambiguous and polysemous words are replaced with a more specific token.
 As an example, we want to replace the word $bank$ with a token, which captures whether or not the $bank$ that we refer to implies a 1) financial institution, or 2) a river bank.
 Of course, the individual clusters contain context information, and not purely semantic information.
-For easier explainability, we assume that the different clusters referr to semantic clusters, but this is not always the case as we have seen before.
+For easier explainability, we assume that the different clusters refer to semantic clusters, but this is not always the case as we have seen before.
 
 We use the our clustering approach from \ref{experiment_BERT_clusterability} as the intermediate model to distinguish on which bank the sentence refers to.
 We also introduce new embedding vectors that the new tokens correspond to.
@@ -2194,20 +2157,19 @@ We also introduce new embedding vectors that the new tokens correspond to.
 \end{figure}
 
 After we have concluded these changed, we arrive at the following model, which has a modified tokenizer, and a modified BERT model.
-We call the corresponding model \textbf{BERnie Cluster}.
+We call the corresponding model \textbf{BERNIE Cluster}.
 
 \begin{figure}[H]
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_meaning.png}
   \caption{The BERT model takes as input a sentence $s$. The The resulting, fully modifid BERnie Cluster pipeline.}
-  \label{fig:cbow_skipgram}
+  \label{fig:BERT_Cluster_pipeline}
 \end{figure}
 
-%TODO Show results here...
 
 \subsubsection{Results}
 
-We now do an evaluation of the introduced BERnie PoS and BERnie Cluster model.
+We now do an evaluation of the introduced BERNIE PoS and BERNIE Cluster model.
 To understand the resulting performance as a language model, we refer to the GLUE benchmark dataset.
 Because we want to understand what these modifications have as an affect, we focus on an ablation study rather than absolute performance improvement to state-of-the-art methods like ALBERT.
 Weights which are instantiated specifically for the GLUE tasks (final layer) are once instantiated with a random seed of 42, and once with a random seed of 101.
@@ -2227,7 +2189,7 @@ The scores are the mean of the two runs.
  % *{5}{S[table-format=4.0]} % three columns with numeric data       
 }
 \toprule
-\textbf{Task} & \textbf{Score Measure} &\textbf{BERT} & \textbf{BERnie PoS} & \textbf{BERnie Cluster} \\
+\textbf{Task} & \textbf{Score Measure} &\textbf{BERT} & \textbf{BERNIE PoS} & \textbf{BERNIE Cluster} \\
 \midrule
 CoLA  & Accuracy  &  \textbf{0.5739} & 0.5263 &  0.5457 \\
 
@@ -2259,7 +2221,7 @@ QQP & Accuracy &  \textbf{0.9113} &              &  0.9042 \\
 
 \end{tabular}
 }
-\caption{GLUE Benchmark performance measures for the BERT model, BERnie PoS and BERnie Cluster.
+\caption{GLUE Benchmark performance measures for the BERT model, BERNIE PoS and BERNIE Cluster.
 Higher scores are better.
 The task-wide best-performers are marked in bold.
 All values are the average scores of two runs.
@@ -2267,25 +2229,23 @@ All values are the average scores of two runs.
 \end{table}
 
 
-One can see that for most tasks, the BERnie model modifications performs slightly worse than the standard BERT model by a couple percentage points.
+One can see that for most tasks, the BERNIE model modifications performs slightly worse than the standard BERT model by a couple percentage points.
 However, he WNLI and RTE experiments are considerably deviating in performance through the addition of the additional embedding vectors.
-For the BERnie Cluster model, WNLI performs \textbf{10.56\%} better than standard BERT, and RTE performs  \textbf{-7.40\%} worse than the standard BERT implementation.
-Similar results are observable for the difference between the unmodified BERT and the BERnie PoS model with \textbf{3.52\%} improvement for WLNI and \textbf{-3.79\%} decline in performance for the RTE task.
+For the BERNIE Cluster model, WNLI performs \textbf{10.56\%} better than standard BERT, and RTE performs  \textbf{-7.40\%} worse than the standard BERT implementation.
+Similar results are observable for the difference between the unmodified BERT and the BERNIE PoS model with \textbf{3.52\%} improvement for WLNI and \textbf{-3.79\%} decline in performance for the RTE task.
 
-Also, compared to BERnie PoS, the BERnie Cluster model amplifies the performance-difference to BERT in both the negative and positive direction.
+Also, compared to BERNIE PoS, the BERNIE Cluster model amplifies the performance-difference to BERT in both the negative and positive direction.
 
 %TODO What could this mean?
 
-%TODO Look for papers that look for which WNLI and RTE also show changes ...
-
 %TODO Go experiment to experiment, and talk about what implications this has, does this make sense, etc.
 
-\subsection{BERnie Cluster with additional pre-training}
+\subsection{BERNIE Cluster with additional pre-training}
 
 Our first idea is that the overall negative trend in performance might be due to the newly initialized vectors not being calibrated enough.
 
-We assume that the BERnie require additional pre-training, as we are adding more specific embedding vectors, without fine-tuning them.
-We assume that this is necessary, as this is how the weights of BERT are also trained in the original paper \cite{devlin18} through the masked language model approach.
+We assume that the BERNIE models require additional pre-training, as we are adding more specific embedding vectors, without fine-tuning them.
+We assume that this is necessary, as this is also how BERT is trained in the original paper \cite{devlin18}.
 
 \subsection{Experiment setup}
 
@@ -2295,13 +2255,14 @@ We apply 1 epoch of pre-training on the news corpus described in Section 2.
 We evaluate the models of the same GLUE benchmark tasks as in the previous section.
 This benchmarking allows us to understand how introducing more parameters for polysemous words affects different tasks, and allows us to interpret the effects of this modification.
 We instantiate the additional embeddings as described in the previous section.
-We then run one full epoch of training with the same training parameters as used for GLUE on the news.corpus.2007 dataset using a masked language model methodology.
-%TODO cite BERT training methodology
+We then run one full epoch of training with the same training parameters as used for GLUE on the news.corpus.2007 dataset using a masked language model methodology as described in section \ref{section:Background}.
 We save this model and load it for the GLUE tasks.
-BERnie full Pre-training trains the entire embeddings, whereas BERnie partial Pre-Training fixates all embedding vectors except the ones for the ones that were newly added.
+BERNIE full Pre-training trains all the embeddings, whereas BERNIE partial Pre-Training fixates all embedding vectors except the ones for the ones that were newly added.
 
-We refer to \textit{full pre-training}, resulting in the \textbf{BERnie full Pre} model, when we allow the gradient to be update on all the embedding weights during pre-training.
-We refer to \textit{partial pre-training}, resulting in the \textbf{BERnie partial Pre} model, when we only allow gradient updates for the (sub-)embeddings of the split-words.
+We refer to the model with \textit{full pre-training} as \textbf{BERNIE full Pre}.
+Here, we allow the gradients to update all the embedding weights during pre-training.
+We refer to the model with \textit{partial pre-training} as \textbf{BERNIE partial Pre}.
+Here, we only allow gradient updates for the embeddings of the newly added vocabulary items, i.e. the split-words.
 In this case, only the newly added embeddings vectors are calibrated, while all other embedding vectors are kept constant.
 
 
@@ -2309,8 +2270,6 @@ In this case, only the newly added embeddings vectors are calibrated, while all 
 
 Again, we ran the experiments and show the results as the average of two runs.
 Due to time-constraints and certainty of bugs for some experiments, we only show the results for a subset of the GLUE tasks.
-
-%TODO Write section for GLUE tasks
 
 \scalebox{0.9}{
 \begin{tabular}{
@@ -2323,7 +2282,7 @@ Due to time-constraints and certainty of bugs for some experiments, we only show
 }
 \toprule
 %TODO MRPC has one aligned, and one unaligned test
-\textbf{Task} & \textbf{Score Measure} & \textbf{BERnie} & \textbf{BERnie full\- Pre}  & \textbf{BERnie partial\- Pre}\\
+\textbf{Task} & \textbf{Score Measure} & \textbf{BERNIE} & \textbf{BERNIE full\- Pre}  & \textbf{BERNIE partial\- Pre}\\
 \midrule
 CoLA  & Accuracy  &  0.5457 & 0.5418 & \textbf{0.5731} \\
 SST-2 & Accuracy  &  \textbf{0.9266} & 0.9169 & \textbf{0.9266} \\
@@ -2333,43 +2292,54 @@ WNLI & Accuracy & \textbf{0.4649} & 0.4225 & 0.4507 \\
 \bottomrule
 \end{tabular}
 }
-\captionof{table}{GLUE Benchmark performance measures for the BERnie Cluster model without any additional pre-training, the BERnie Cluster with full pre-training and BERnie with partial pre-training.
+\captionof{table}{GLUE Benchmark performance measures for the BERNIE Cluster model without any additional pre-training, the BERNIE Cluster with full pre-training and BERNIE with partial pre-training.
 Higher scores are better.
 The task-wide best-performers are marked in bold.
 All values are the average scores of two runs.}
 
-As one can see, the additional pre-training does not improve the performance.
+As one can see, the additional pre-training does not improve performance on most of the GLUE tasks.
 However, we assume that this is due to the pre-training corpus not being similar to the pre-training corpus that was initially used for BERT (which is too big to be run for this test), or the hyperparamters not being optimal for this run.
 Finally, it could also be that the initialization for the newly addeed vectors was suboptimal, as we have seen strong deviations (of up to 5\% in performance) over different random seeds for the GLUE tasks.
 Due to time-constraints, we decided to not move ahead with this experiment.
 
 \chapter{Conclusion}\label{section:Conclusion}
 
-Although this work does not try to imminently push the performance of modern language, we believe that providing a better understanding of the underlying principles will pave the way for future research to better address these issues, and make language models more interpretable especially with respect to semantics. \\
+One of the goals of Natural Language Understanding \textit{NLU} is to formalize written text in a way, such that linguistic features can be captured through computational models, which can then again be used for downstream machine learning tasks.
+Because embeddings - due to their strong usage in downstream tasks - can be considered as the fundamental unit of machine learning in the domain of natural language, any shortcomings will influence the performance of the target task.
+Given that language models such as BERT only capture a black-box function $f$ between input and output, our aim is to understand how the subspace organization relates to linguistic features.
+We focus our analysis on \textit{semantics}, which captures a meaning within language, as this is one of the most important features of language. 
+We analyse the BERT language model, as it provides a good balance between popularity, close to state-of-the-art performance, and generalizability to other modern language models.
+\\
 
-\section{Main Contributions}
+\subsection{Main Contributions}
 
-%TODO rewrite this sec
+Our main contributions are the following: 
 
-Our main contributions are two-fold. 
-We first test to what extent the semantic subspace is linearly separable between semantic classes. 
-We test for multi-modality in these structures through a clusterability test.
-We then analyse the relationship between the linguistic features of part-of-speech and semantics, as these show strong correlation in languages.
-Finally, we introduce new embedding-vectors for tokens with high variance, and try to understand what downstream tasks are affected the most, using this as a proxy to understand what the strong word-based variance in BERT context vectors most corresponds to.
+\begin{enumerate}
+\item We test for linear separability and ability to partition the space into semantic clusters within the sampled BERT vectors.
+We show that while linear separability is possible, it is nearly impossible to find modes in the data which correspond to semantic classes that are as cleanly as defined by WordNet.
+We conclude that BERT organized the embedding vectors imminently by context, and very little by semantics alone.
+This can easily introduce undesirable properties such as strong sentiment, leading to considerable bias in downstream tasks.
+\item We analyze the relationship between the two linguistic features of part-of-speech and semantics. 
+We show that these show a strong correlation in languages and that modern language models capture this strong correlation.
+This affects the conclusion of some related work which had analysed language models which capture semantics, but which did not account for the correlation between part-of-speech and semantics.
+\item Finally, we introduce additional parameters for words whose sampled embedding vectors have high variance over the embedding space.
+We investigate what downstream tasks are most affected  and use this as a proxy to understand what information is captured the most by the directions with high variance. 
+\end{enumerate}
 
-Our findings show that BERT does not capture an interpretable concept of a semantic subspace, but that it rather focuses on the more broad linguistic features which are imminent to context.
+Our findings show that BERT does not capture an easily interpretable semantic subspace, it rather imminently organizes the embeddings purely by context.
 This can often introduce undesirable features such as strong sentiment, position in sentence, and thus lead to considerable bias in downstream applications.
 
 \section{Future Work}
 
-As this work only concludes a Master Thesis, we were only able to investigate our core hypothesis. 
-A few lines of work that seems apparent given more time could include:
+As this work only concludes a Master Thesis, we were only able to investigate some of our core hypothesis. 
+Future work could include:
 
-\paragraph{Introducing the WiC benchmark:} One of our main targets with the modifications made by BERnie Cluster was to analyse what effect this modification has on semantics.
+\paragraph{Introducing the WiC benchmark:} One of our main targets with the modifications made by BERNIE Cluster was to analyse what effect this modification has on semantics.
 However, we limited our analysis to GLUE tasks only, arguing that merely focussing on these would be sufficient as BERT alone does not reach superhuman performance on these tasks yet.
 However, an ablation study on other benchmarking datasets, most specifically the Word in Context benchmark which is included in SuperGLUE would have been a valuable addition to understand what our modifications had to the modelling power of language models.
 
-\paragraph{Bigger benchmarking dataset:} Within our analysis, we have had countless occasions where the statistical significance and testing power largely suffered due to the limited size of gold-standard datasets which capture semantics.
+\paragraph{Larger benchmarking dataset:} Within our analysis, we have had countless occasions where the statistical significance and testing power largely suffered due to the limited size of gold-standard datasets which capture semantics.
 Specifically, we chose SemCor as our go-to dataset, as this is the most extensive dataset available in this domain.
 However, even SemCor is too small to do proper evaluation on, strongly limiting the choice of polysemous words analysed in Section \textbf{(4)}.
 A bigger labelled dataset, even only for testing is crucial for future development of this line of work.
@@ -2377,7 +2347,7 @@ A bigger labelled dataset, even only for testing is crucial for future developme
 \paragraph{Linear subspace still not apparent:} An interesting line of future work could lie in finding a new distance metric which takes into consideration semantic properties (see Appendix), and sample across a line within this subspace. 
 Doing so would possibly give us a good idea about whether or not there is a globally linear semantic subspace contained by BERT embeddings, or whether such a subspace is only locally linearly available as was apparent in section \textbf{(4)}.
 
-\paragraph{Difficulty in quantifying properties behind WordNet:} WordNet is a tool created by linguists over the last few decades.
+\paragraph{Difficulty in quantifying semantics:} WordNet is a tool created by linguists over the last few decades.
 Intuitively, we have often seen that certain words such as \texttt{was} were overdefined in terms of semantic classes, where many dozen semantic classes are apparent.
 Generally, it is difficult to quantify "coarseness" between semantic concepts, and this had considerable effect on the clustering performance in section \textbf{(4)}.
 
@@ -2543,12 +2513,8 @@ label:0
 The professor talked us.
 \end{verbatim}
 
-%TODO Perhaps show examples?
-%TODO Cite the underlying paper?
-
-The Stanford Sentiment Treebank \textbf{SST-2} \cite{socher2013} consists of sentences from moview reviews and human annotations of their sentiment.
-This is a binary classificaiton (positive / negative) task.
-
+The Stanford Sentiment Treebank \textbf{SST-2} \cite{socher2013} consists of sentences from movie reviews and human annotations of their sentiment.
+This is a binary classification (positive / negative) task.
 
 \begin{verbatim}
 label:1
@@ -2650,12 +2616,10 @@ The authors argue that for standard word vectors, downstream tasks rely much mor
 
 \section{Metric Learning and Disentanglement}
 
-Althogh difference metric spaces can be considered, we will be refering to Euclidean spaces for simplicity and unless otherwise stated.
+Although difference metric spaces can be considered, we will be referring to Euclidean spaces for simplicity and unless otherwise stated.
 
-%TODO cite the proper definition of Metric learning
 Metric learning is the concept of learning a new space in which distances between data samples 
 
-%TODO mention the survey paper
 Distance metric learning approaches the problem of learning a similarity metric.
 
 We introduce two sets of data-sample pairs, $S$ and $D$:
@@ -2704,7 +2668,6 @@ Whenever, $d < n$, the data is projected to a lower dimensional space $d$, which
 In comparison to a dimensionality reduction such as PCA, it has been obsereved that learning a similarity measure can sometimes be more effective \cite{chechik10}.
 
 Specifically, the data is projected into another  \
-%TODO specify this further
 The authors in \cite{moutafis17} argue that due to this property of measuring similarity between pairs, the metric learning models are able to generalize better across classes.
 
 \subsubsection{Non-Deep Metric Learning}
@@ -2753,9 +2716,6 @@ Although we will not go into too much detail, we will outline some algorithms th
 We will first start with dimensionality reduction techniques, then move to nearest neighbors classifiers, follow with nearest centroids classifiers and finally go over some information theory based algorithms.
 Notice that for almost each one of these methods, kernelized versions are available.
 
-
-
-%TODO Insert some texts from table I
 
 \paragraph{Dimensionality Reduction} techniques include principal component analysis \textit{PCA}, LDA ANMM
 
@@ -2818,9 +2778,6 @@ This general idea can also be extended to angular distance (using cosine distanc
 
 Although we will not go into further detail, other loss functions include histogram loss \cite{ustinova16}, the structured loss \cite{song16} n-pair loss \cite{sohn16}, magnet loss \cite{rippel16}, angular loss \cite{wang17}, quadruple loss \cite{ni17}, clustering loss \cite{song17}, hierarchical triplet loss \cite{ge18} and the multi-similarity loss \cite{wang19c}.
 
-%TODO do back-projection to higher dimenisonal space.
-%TODO check performance on some bias prediction task (to see if sentiment is truly gone ..)
-
 \subsection{Embeddings for translation}
 
 A lot of work is done in the field of analysing embeddings for translation tasks, to further mitigate the black-box behvaior of neural network.
@@ -2838,8 +2795,6 @@ Interestingly, they show that different languages do not project into similar sp
   \label{fig:embeddings_by_language}
 \end{figure}
 
-%TODO What language model do they use? I dont see anything about BERT
-
 
 \cite{lample18} uses a cyclic loss to apply unsupervised machine translation suign monolingual corpora only. 
 Here, sentence-embeddings are learned over time, which follow the cyclic loss constraint, and minimize the sunsupervised translation loss.
@@ -2849,11 +2804,9 @@ A translation model is learned which can not only translate between different do
 
 
 \section{Compressing the non-lexical out}
-%TODO Need to run some more experiments ...
+
 \subsubsection{Motivation}
 \subsubsection{Experiment setup}
-
-%TODO Project back (using the inverse) to "segment out" the bias and sentiment for downstream tasks
 
 We conduct three experiments.
 
@@ -2865,10 +2818,6 @@ Finally, we use a simple algorithm to what extent we can disentangle the semanti
 
 
 \subsubsection{Results}
-
-%TODO These experiments are not final yet ...
-
-%TODO Should I include the experimental data from the individual runs in a table in the Appendix?
 
 
 \chapter{More Results}
@@ -3120,7 +3069,7 @@ EXAMPLES FOR KEY CLUSTERING
 }
 \captionof{figure}{Partition 6 for the word \texttt{key}. This cluster contains \texttt{key} as a synonym for the word \texttt{main}, which characterizes an important subject. The context is mixed. The sentiment is mixed.}
 
-\section{Frozen Verbs}\label{section:frozen_verbs}
+\section{Nominalised Verbs}\label{section:frozen_verbs}
 The words under investigation include
 \Verb#attack#, \Verb#act#, \Verb#die#, \Verb#kick#, \Verb#sand#, \Verb#address#, \Verb#aim#, \Verb#act#, \Verb#address#, \Verb#back#, \Verb#bear#, \Verb#block#, \Verb#catch#, \Verb#charge#, \Verb#crack#, \Verb#double#, \Verb#face#, \Verb#head#, \Verb#march#, \Verb#order#, \Verb#play#, \Verb#roll#, \Verb#saw#, \Verb#tie#, \Verb#train#, \Verb#treat#, \Verb#value#, \Verb#visit#, \Verb#wake#, \Verb#work#, \Verb#zone#, \Verb#act#, \Verb#address#, \Verb#aim#, \Verb#answer#, \Verb#back#, \Verb#balloon#, \Verb#bank#, \Verb#battle#, \Verb#bear#, \Verb#bend#, \Verb#blast#, \Verb#block#, \Verb#break#, \Verb#brush#, \Verb#catch#, \Verb#challenge#, \Verb#charge#, \Verb#cheer#, \Verb#color#, \Verb#cook#, \Verb#crack#, \Verb#curl#, \Verb#cycle#, \Verb#dance#, \Verb#design#, \Verb#die#, \Verb#double#, \Verb#doubt#, \Verb#dust#, \Verb#echo#, \Verb#end#, \Verb#estimate#, \Verb#face#, \Verb#finish#, \Verb#fish#, \Verb#flood#, \Verb#fool#, \Verb#frown#, \Verb#garden#, \Verb#glue#, \Verb#guard#, \Verb#guess#, \Verb#hammer#, \Verb#hand#, \Verb#head#, \Verb#hug#, \Verb#insult#, \Verb#iron#, \Verb#kiss#, \Verb#laugh#, \Verb#loan#, \Verb#love#, \Verb#man#, \Verb#march#, \Verb#milk#, \Verb#object#, \Verb#order#, \Verb#paddle#, \Verb#peel#, \Verb#permit#, \Verb#play#, \Verb#pop#, \Verb#practice#, \Verb#produce#, \Verb#punch#, \Verb#question#, \Verb#quiz#, \Verb#rhyme#, \Verb#rock#, \Verb#roll#, \Verb#run#, \Verb#sand#, \Verb#saw#, \Verb#skate#, \Verb#smell#, \Verb#surprise#, \Verb#thunder#, \Verb#tie#, \Verb#time#, \Verb#toast#, \Verb#trace#, \Verb#train#, \Verb#treat#, \Verb#trick#, \Verb#use#, \Verb#vacuum#, \Verb#value#, \Verb#visit#, \Verb#wake#, \Verb#walk#, \Verb#water#, \Verb#wish#, \Verb#work#, \Verb#x - ray#, \Verb#yawn#, \Verb#zone#, \Verb#cut#, \Verb#break#, \Verb#well#, \Verb#down#, \Verb#run#, \Verb#round#, \Verb#table#, \Verb#bank#, \Verb#cold#, \Verb#good#, \Verb#mouse#, \Verb#was#, \Verb#key#, \Verb#arms#, \Verb#thought#, \Verb#pizza#, \Verb#made#, \Verb#book#, \Verb#damn#.
 
@@ -3163,7 +3112,6 @@ The words under investigation include
 
 \section{Using embeddings in translations}
 
-%TODO Talk about MUSE paper
 
 Although word-vectors can be used for a variety of tasks, we will focus on some varieties of how these vectors are used for machine translation (of human languages) tasks.
 

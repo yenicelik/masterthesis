@@ -7,49 +7,20 @@ The most popular methodology in NLU is the use of vectors that represent written
 These vectors are often referred to as \textit{embedding} vectors, as they embed more complex concepts into a vector representation.
 
 Because embeddings - due to their strong usage in downstream tasks - can be considered as the fundamental unit of machine learning in the domain of natural language, any shortcomings will influence the performance of the target task.
+Given that language models such as BERT only capture a black-box function $f$ between input and output, our aim is to understand how the subspace organization relates to linguistic features.
+We focus our analysis on \textit{semantics}, which captures a meaning within language, as this is one of the most important features of language. 
+We analyse the BERT language model, as it provides a good balance between popularity, close to state-of-the-art performance, and generalizability to other modern language models.
+\\
 
-Given that language models such as BERT only capture a black-box function $f$ between input and output, our aim is to understand how the the subspace organization relates to linguistic features.
-We focus our analysis on \textit{semantics}, which captures a meaning within language, as this is one of the most important features of language.
-
-Our main contribution are two-fold. 
-We first test to what extent the semantic subspace is linearly separable between semantic classes.
-We then test for the ability to identify different conceptual clusters - i.e. multimodality -  within these structures through a clusterability test.
-We analyse the relationship between the linguistic features of part-of-speech and semantics, as these show strong correlation in languages.
-Finally, we introduce new embedding-vectors for tokens with high variance, and try to understand what downstream tasks are affected by the most, using this as a proxy to understand what the strong word-based variance in BERT context vectors most corresponds to.
-
-Our findings show that although BERT does not capture an interpretable concept of a semantic subspace, but it rather focuses on the more broad linguistic features which are imminent to context.
-This can often introduce undesirable properties and thus lead to considerable bias in downstream applications affected by strong sentiments and word-position within sentence.
-
-%%%%%%%%%%%%%%
-
-Although this work does not try to imminently push the performance of these language models, we believe that providing a better understanding of the underlying principles will pave the way for future research to better track these issues.
-For the sake of focus, and because we believe that meaning is the most important linguistic feature for communication, we will focus on investigating how modern LMs capture semantics. 
-Notice that the relation between language and thought is a much more fundamental and philosophical one.
-
-
-\subsection{Main Contributions}
-
-Our main contributions are the following.
-
-\begin{enumerate}
-\item We test to what extent the semantic subspace has multiple modes which correspond to meaning in language.
-We test this by analysing linear separability between semantic classes, and test for clusterability in these structures.
-We show that although linear separability is possible, it is nearly impossible to find modes in the data which correspond to semantic classes.
-\item We analyze the relationship between the two linguistic features of part-of-speech and semantics. 
+Our main contributions are the following: (1) We test for linear separability and ability to partition the space into semantic clusters within the sampled BERT vectors.
+We show that while linear separability is possible, it is nearly impossible to find modes in the data which correspond to semantic classes that are as cleanly as defined by WordNet.
+We conclude that BERT organized the embedding vectors imminently by context, and very little by semantics alone.
+This can easily introduce undesirable properties such as strong sentiment, leading to considerable bias in downstream tasks.
+(2) We analyze the relationship between part-of-speech and semantics. 
 We show that these show a strong correlation in languages and that modern language models capture this strong correlation.
 This affects the conclusion of some related work which had analysed language models which capture semantics, but which did not account for the correlation between part-of-speech and semantics.
-\item Finally, we introduce additional parameters for words whose sampled embedding vectors have high variance over the embedding space.
-We investigate what downstream tasks are most affected  and use this as a proxy to understand what information is captured the most by the directions with high variance.
-\end{enumerate} 
-
-In this work we focus on BERT, as it provides a good balance between popularity, close to state-of-the-art performance, and generalizability to other modern language models.
-
-Our findings show that although BERT does not capture a simple semantic subspace, but rather focuses on the more broad linguistic features which are imminent to context.
-This can often introduce undesirable features such as strong sentiment, position in sentence, and thus lead to considerable bias in downstream applications.
-We also show that sentiment is particularly more strongly captured in modern language models, allowing for language stereotypes to easily manifest itself, leading to stronger cases of bias in language models.
-
-We will first start with summarizing the required background work \ref{section:Background}, show existing analysis on the inner workings of BERT \ref{section:RelatedWork}, conduct tests that do not modify the BERT model \ref{section:UnderstandingBERT} and make modifications to BERT to understand what effect this has on downstream tasks \ref{section:ExploitingBERT}.
-We will finally draw conclusion and show potential for future work \ref{section:Conclusion}.
+(3) Finally, we introduce additional parameters for words whose sampled embedding vectors have high variance over the embedding space.
+We investigate what downstream tasks are most affected  and use this as a proxy to understand what information is captured the most by the directions with high variance. \\
 
 \newpage
 \vspace*{\fill}
