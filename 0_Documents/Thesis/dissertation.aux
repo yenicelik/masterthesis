@@ -76,54 +76,51 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Figure taken from \cite  {mikolov13}. The CBOW architecture predicts the current word based on the context. The Skip-gram predicts surrounding words given the current word.\relax }}{14}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:cbow_skipgram}{{2.1}{14}}
-\newlabel{eq:basic_equation_log_maximization_skipgram}{{2.2}{15}}
 \citation{cil_slides}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Static Word Embeddings}{16}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Basic Model}{16}\protected@file@percent }
+\newlabel{eq:basic_equation_log_maximization_skipgram}{{2.2}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Static Word Embeddings}{15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Basic Model}{15}\protected@file@percent }
 \citation{ethayarajh19}
 \citation{mikolov13}
 \citation{mikolov13b}
+\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{16}\protected@file@percent }
 \citation{mikolov13b}
 \citation{mikolov13b}
-\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{17}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Figure taken from \cite  {mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.\relax }}{17}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{2.2}{17}}
 \citation{pennington14}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Figure taken from \cite  {mikolov13b}. A 2-dimensional PCA projection of the 1000-dimensional skip-gram vectors of countries and their capital cities. The proposed model is able to automatically organize concepts and learn implicit relationships between them. No supervised information was provided about what a capital city means.\relax }}{18}\protected@file@percent }
-\newlabel{fig:cbow_skipgram}{{2.2}{18}}
-\@writefile{toc}{\contentsline {subsubsection}{GloVe}{18}\protected@file@percent }
 \citation{bojanowski17}
 \citation{brazinskas19}
 \citation{yan19}
+\@writefile{toc}{\contentsline {subsubsection}{GloVe}{18}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Context Embeddings}{19}\protected@file@percent }
+\newlabel{map:context_embedding_mapping}{{2.2.2}{19}}
 \citation{devlin18}
 \citation{devlin18}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Context Embeddings}{20}\protected@file@percent }
-\newlabel{map:context_embedding_mapping}{{2.2.2}{20}}
-\newlabel{eq:transformer_probability}{{2}{20}}
 \citation{peters17b}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces Figure taken from \cite  {devlin18}. BERT uses a bidirectional transformer, which is not limited to reading in all the input from only left to right or right to left. OpenAI GPT (next section) uses a left-to-right Transformer, while ELMo is using a bidirectional LSTM which naturally captures a single direction per LSTM. \relax }}{21}\protected@file@percent }
-\newlabel{fig:attention_is_all_you_need}{{2.3}{21}}
-\@writefile{toc}{\contentsline {subsubsection}{ELMo}{21}\protected@file@percent }
+\newlabel{eq:transformer_probability}{{2.2.2}{20}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces Figure taken from \cite  {devlin18}. BERT uses a bidirectional transformer, which is not limited to reading in all the input from only left to right or right to left. OpenAI GPT (next section) uses a left-to-right Transformer, while ELMo is using a bidirectional LSTM which naturally captures a single direction per LSTM. \relax }}{20}\protected@file@percent }
+\newlabel{fig:attention_is_all_you_need}{{2.3}{20}}
+\@writefile{toc}{\contentsline {subsubsection}{ELMo}{20}\protected@file@percent }
 \citation{jozefowicz16}
-\@writefile{toc}{\contentsline {subsubsection}{The Transformer Architecture}{22}\protected@file@percent }
 \citation{vaswani17}
 \citation{bahdanau16}
 \citation{vaswani17}
 \citation{vaswani17}
+\@writefile{toc}{\contentsline {subsubsection}{The Transformer Architecture}{22}\protected@file@percent }
 \citation{devlin18}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.4}{\ignorespaces Figure taken from \cite  {vaswani17}. The architecture of the transformer module which encapsulates multiple attention modules.\relax }}{24}\protected@file@percent }
-\newlabel{fig:attention_is_all_you_need}{{2.4}{24}}
-\citation{devlin18}
-\citation{devlin18}
-\@writefile{toc}{\contentsline {subsubsection}{BERT}{25}\protected@file@percent }
-\newlabel{section:BERT}{{2}{25}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.4}{\ignorespaces Figure taken from \cite  {vaswani17}. The architecture of the transformer module which encapsulates multiple attention modules.\relax }}{23}\protected@file@percent }
+\newlabel{fig:attention_is_all_you_need}{{2.4}{23}}
 \citation{devlin18}
 \citation{devlin18}
+\@writefile{toc}{\contentsline {subsubsection}{BERT: Bidirectional Encoder Representations from Transformers}{24}\protected@file@percent }
+\newlabel{section:BERT}{{2.2.2}{24}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces Example from \cite  {devlin18}. An sentence where 15\% of the tokens are replaced with the [MASK] token. During the first phase of pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. The word to be predicted is \texttt  {the}. \relax }}{24}\protected@file@percent }
 \citation{devlin18}
 \citation{devlin18}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces Example from \cite  {devlin18}. An sentence where 15\% of the tokens are replaced with the [MASK] token. During the first phase of pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the word to be predicted is \texttt  {the} \relax }}{26}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces Example from \cite  {devlin18}. Two input sequences which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the second sentence is a continuation of the first one, and thus the label would be \textit  {isNext}. \relax }}{26}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces Figure taken from \cite  {devlin18}. Ways to fine-tune BERT on different GLUE tasks.\relax }}{27}\protected@file@percent }
-\newlabel{fig:cbow_skipgram}{{2.7}{27}}
-\@writefile{toc}{\contentsline {paragraph}{The pipeline of BERT}{27}\protected@file@percent }
+\citation{devlin18}
+\citation{devlin18}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces Example from \cite  {devlin18}. Two input sequences which where 15\% of the tokens are replaced with the [MASK] token. During pre-training, the weights of the BERT model are optimized in such a way to predict the true underlying words. In this case, the second sentence is a continuation of the first one, and thus the label would be \textit  {isNext}. \relax }}{25}\protected@file@percent }
 \citation{radford18}
 \citation{radford19}
 \citation{ba16}
@@ -136,62 +133,66 @@
 \citation{wang19d}
 \citation{shen19}
 \citation{wang19e}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces Figure taken from \cite  {devlin18}. Ways to fine-tune BERT on different GLUE tasks.\relax }}{26}\protected@file@percent }
+\newlabel{fig:cbow_skipgram}{{2.7}{26}}
+\@writefile{toc}{\contentsline {paragraph}{The pipeline of BERT}{26}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Other language models}{26}\protected@file@percent }
 \citation{wang19}
 \citation{wang19b}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.8}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{28}\protected@file@percent }
-\newlabel{fig:BERT_vanilla_pipeline}{{2.8}{28}}
-\@writefile{toc}{\contentsline {subsubsection}{Other language models}{28}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.8}{\ignorespaces The BERT model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $t_1$, \ldots  , $t_m$ as defined in a given vocabulary $V$. Each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the transformer for any subsequent layers of the transformer. \relax }}{27}\protected@file@percent }
+\newlabel{fig:BERT_vanilla_pipeline}{{2.8}{27}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{27}\protected@file@percent }
 \citation{wang19}
 \citation{wang19}
 \citation{N18-1101}
 \citation{bowman2015}
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{29}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.9}{\ignorespaces Table taken from \cite  {wang19}. Listing of all GLUE tasks including the linguistic phenomenon benchmarked, as well as the domain that the benchmarking data contains. Training and test set sizes are also provided.\relax }}{29}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Inference Tasks}{29}\protected@file@percent }
 \citation{rajpurkar2016}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.9}{\ignorespaces Table taken from \cite  {wang19}. Listing of all GLUE tasks including the linguistic phenomenon benchmarked, as well as the domain that the benchmarking data contains. Training and test set sizes are also provided.\relax }}{28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Inference Tasks}{28}\protected@file@percent }
 \citation{dagan2005}
 \citation{bar2006}
 \citation{bentivogli2009}
 \citation{giampiccolo2007}
 \citation{levesque2012}
 \citation{miller90}
-\citation{miller90}
-\@writefile{toc}{\contentsline {section}{\numberline {2.4}WordNet}{32}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Lexical matrix:}{32}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}WordNet}{30}\protected@file@percent }
 \citation{miller90}
 \citation{miller90}
+\citation{miller90}
+\@writefile{toc}{\contentsline {paragraph}{Lexical matrix:}{31}\protected@file@percent }
 \citation{francis64}
 \citation{miller94}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.10}{\ignorespaces Table taken from \cite  {miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.\relax }}{33}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.11}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {bank}. In total, 18 different concepts are recorded.\relax }}{34}\protected@file@percent }
-\newlabel{fig:bank_synset}{{2.11}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.12}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {was}. In total, 18 different concepts are recorded.\relax }}{34}\protected@file@percent }
-\newlabel{fig:was_synset}{{2.12}{34}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{35}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.13}{\ignorespaces Shows that the SemCor data is biased towards words with low WordNet class IDs. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5). The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. This is a cumulative plot over all words with WordNet senses within SemCor 3.0. The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words. \relax }}{36}\protected@file@percent }
-\newlabel{fig:embeddings_by_language}{{2.13}{36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.10}{\ignorespaces Table taken from \cite  {miller90}. Word-forms $F_1$, and $F_2$ are synonyms of each other, as they share one word meaning $M_1$. Word-form $F_2$, as it entails more than one meaning, namely $M_1$ and $M_2$.\relax }}{32}\protected@file@percent }
+\newlabel{fig:wordnet_table}{{2.10}{32}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.11}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {bank}. In total, 18 different concepts are recorded.\relax }}{32}\protected@file@percent }
+\newlabel{fig:bank_synset}{{2.11}{32}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.12}{\ignorespaces Example output for WordNet 3.1 noun propositions for the word \texttt  {was}. In total, 18 different concepts are recorded.\relax }}{33}\protected@file@percent }
+\newlabel{fig:was_synset}{{2.12}{33}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{33}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.13}{\ignorespaces Shows that the SemCor data is biased towards words with low WordNet class IDs. Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5). The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. This is a cumulative plot over all words with WordNet senses within SemCor 3.0. The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words. \relax }}{34}\protected@file@percent }
+\newlabel{fig:embeddings_by_language}{{2.13}{34}}
 \citation{lloyd57}
 \citation{macqueen67}
 \citation{pelevina16}
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Related Work}{37}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Related Work}{35}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{section:RelatedWork}{{3}{37}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Clustering for Synsets in Static Word Embeddings}{37}\protected@file@percent }
-\newlabel{section_clustering}{{3.1}{37}}
-\citation{pelevina16}
-\citation{pelevina16}
-\@writefile{toc}{\contentsline {paragraph}{The Chinese whispers algorithm}{38}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite  {pelevina16}. An ego-network of the word \texttt  {table} is created. Then, clustering is applied on the ego-network, to identify different semantic sets \textit  {synsets}.\relax }}{38}\protected@file@percent }
-\newlabel{fig:ego_network}{{3.1}{38}}
+\newlabel{section:RelatedWork}{{3}{35}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Clustering for Synsets in Static Word Embeddings}{35}\protected@file@percent }
+\newlabel{section_clustering}{{3.1}{35}}
 \citation{pelevina16}
 \citation{pelevina16}
 \citation{arefyev19}
+\@writefile{toc}{\contentsline {paragraph}{The Chinese whispers algorithm}{36}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure taken from \cite  {pelevina16}. An ego-network of the word \texttt  {table} is created. Then, clustering is applied on the ego-network, to identify different semantic sets \textit  {synsets}.\relax }}{36}\protected@file@percent }
+\newlabel{fig:ego_network}{{3.1}{36}}
+\citation{pelevina16}
+\citation{pelevina16}
 \citation{hagberg04}
-\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Table taken from \cite  {pelevina16}. Neighbors of the word \texttt  {table} and its senses produced. The first row belongs to both senses, while the second and third row are distinct synsets.\relax }}{39}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{39}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{39}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Table taken from \cite  {pelevina16}. Neighbors of the word \texttt  {table} and its senses produced. The first row belongs to both senses, while the second and third row are distinct synsets.\relax }}{37}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{37}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{37}\protected@file@percent }
 \citation{conneau17}
 \citation{biemann13}
 \citation{remus18}
@@ -199,22 +200,22 @@
 \citation{bruni13}
 \citation{hill15}
 \citation{pilehvar19}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{40}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{38}\protected@file@percent }
 \citation{navigli19}
 \citation{denkowski09}
 \citation{reimers19}
 \citation{mickus19}
 \citation{rousseeuw87}
 \citation{wiktionary}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{41}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{39}\protected@file@percent }
 \citation{wiedmann19}
 \citation{kageback16}
 \citation{miller91}
 \citation{wiedmann19}
 \citation{wiedmann19}
 \citation{ethayarajh19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces From \cite  {wiedmann19}. T-SNE plots of different senses of \texttt  {bank} and their context embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data. \relax }}{43}\protected@file@percent }
-\newlabel{fig:bert_wsd}{{3.2}{43}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces From \cite  {wiedmann19}. T-SNE plots of different senses of \texttt  {bank} and their context embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data. \relax }}{41}\protected@file@percent }
+\newlabel{fig:bert_wsd}{{3.2}{41}}
 \citation{camachocollados18}
 \citation{liebeskind19}
 \citation{shi19}
@@ -223,188 +224,186 @@
 \citation{levine19}
 \citation{levine19}
 \citation{levine19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Figure from \cite  {levine19}. Standard BERT (left) and the SenseBERT adaptations (right), which include an embedding-encoder and an embedding-decoder specifically for WordNet senses.\relax }}{46}\protected@file@percent }
-\newlabel{fig:embeddings_by_language}{{3.3}{46}}
 \citation{si19}
 \citation{lee19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Figure from \cite  {levine19}. Standard BERT (left) and the SenseBERT adaptations (right), which include an embedding-encoder and an embedding-decoder specifically for WordNet senses.\relax }}{44}\protected@file@percent }
+\newlabel{fig:embeddings_by_language}{{3.3}{44}}
 \citation{si19}
 \citation{si19}
 \citation{si19}
 \citation{si19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Figure taken from \cite  {si19}. \textbf  {Fictional} embedding vector points and clusters of \texttt  {cold}. This is one of the results that we want to arrive at. Specifically, we desire distinct word-embeddings that capture the modes of the underlying probability distribution. \relax }}{47}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.4}{47}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Figure taken from \cite  {si19}. PCA visualizations using embedding vector of \texttt  {cold} from BERT. The blue data points refer to \texttt  {cold} as a temperature, whereas the red data points refer to \texttt  {cold} as a symptom.\relax }}{47}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.5}{47}}
 \citation{ribeiro19}
 \citation{biemann06}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Figure taken from \cite  {si19}. \textbf  {Fictional} embedding vector points and clusters of \texttt  {cold}. This is one of the results that we want to arrive at. Specifically, we desire distinct word-embeddings that capture the modes of the underlying probability distribution. \relax }}{45}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.4}{45}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Figure taken from \cite  {si19}. PCA visualizations using embedding vector of \texttt  {cold} from BERT. The blue data points refer to \texttt  {cold} as a temperature, whereas the red data points refer to \texttt  {cold} as a symptom.\relax }}{45}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.5}{45}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{45}\protected@file@percent }
 \citation{baker98}
 \citation{coenen19}
 \citation{marcus93}
 \citation{hewitt19}
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{48}\protected@file@percent }
 \citation{coenen19}
 \citation{coenen19}
 \citation{coenen19}
 \citation{coenen19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces From \cite  {coenen19}. Visualizing the embeddings of two sentences after applying the Hewitt Manning probe. Parse tree (left) in comparison to the PCA projection of the context embeddings (right). Small deviations are apparently, but an obvious resemblance exists. The color of an edge determines the squared Euclidean distance.\relax }}{49}\protected@file@percent }
-\newlabel{fig:BERT_tree}{{3.6}{49}}
 \citation{peters18}
 \citation{peters18}
 \citation{peters18}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces From \cite  {coenen19}. Embeddings for the word \texttt  {die} in different contexts, visualized through UMAP. The blue text describes general annotations.\relax }}{50}\protected@file@percent }
-\newlabel{fig:BERT_plurality}{{3.7}{50}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces From \cite  {coenen19}. Visualizing the embeddings of two sentences after applying the Hewitt Manning probe. Parse tree (left) in comparison to the PCA projection of the context embeddings (right). Small deviations are apparently, but an obvious resemblance exists. The color of an edge determines the squared Euclidean distance.\relax }}{47}\protected@file@percent }
+\newlabel{fig:BERT_tree}{{3.6}{47}}
 \citation{joshi19b}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces From \cite  {coenen19}. Embeddings for the word \texttt  {die} in different contexts, visualized through UMAP. The blue text describes general annotations.\relax }}{48}\protected@file@percent }
+\newlabel{fig:BERT_plurality}{{3.7}{48}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces From \cite  {peters18}. The authors show different similarity intensities (cosine similarity) between token-pairs using the output of a 4-layer LSTM (left), and the output after the first layer (right).\relax }}{48}\protected@file@percent }
+\newlabel{fig:embeddings_by_language}{{3.8}{48}}
 \citation{jawahar19}
 \citation{jawahar19}
 \citation{jawahar19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces From \cite  {peters18}. The authors show different similarity intensities (cosine similarity) between token-pairs using the output of a 4-layer LSTM (left), and the output after the first layer (right).\relax }}{51}\protected@file@percent }
-\newlabel{fig:embeddings_by_language}{{3.8}{51}}
 \citation{jawahar19}
 \citation{jawahar19}
 \citation{tan19}
 \citation{may19}
 \citation{caliskan19}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces From \cite  {jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.\relax }}{52}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.9}{52}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces From \cite  {jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using labelled root \texttt  {are} as starting node with the maximum spanning tree algorithm\relax }}{52}\protected@file@percent }
-\newlabel{fig:cold_fictional_desired}{{3.10}{52}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces From \cite  {jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.\relax }}{49}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.9}{49}}
 \citation{moradshahi19}
 \citation{bommasani19}
 \citation{akbik19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces From \cite  {jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using labelled root \texttt  {are} as starting node with the maximum spanning tree algorithm\relax }}{50}\protected@file@percent }
+\newlabel{fig:cold_fictional_desired}{{3.10}{50}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}Sentiment-subspace in BERT}{50}\protected@file@percent }
 \citation{may19}
 \citation{jentzsch19}
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}Sentiment-subspace in BERT}{53}\protected@file@percent }
 \citation{martinc20}
 \citation{hu19}
 \citation{coenen19}
 \citation{news_corpus}
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Understanding the semantic subspace organization in BERT}{55}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Understanding the semantic subspace organization in BERT}{53}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{section:Understand_BERT}{{4}{55}}
-\newlabel{section:UnderstandingBERT}{{4}{55}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{56}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Experiment setup}{56}\protected@file@percent }
+\newlabel{section:Understand_BERT}{{4}{53}}
+\newlabel{section:UnderstandingBERT}{{4}{53}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{54}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Experiment setup}{54}\protected@file@percent }
 \citation{scikit-learn}
 \citation{Wolf2019}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Checks sampled BERT vectors for linear interpretability by meaning\relax }}{58}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Results}{58}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{59}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {is}.\relax }}{59}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {one}.\relax }}{59}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{60}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Checks sampled BERT vectors for linear interpretability by meaning\relax }}{55}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Results}{56}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{56}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {is}.\relax }}{57}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit  {one}.\relax }}{57}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 4 most common classes of WordNet meanings for the word \textit  {was}.\relax }}{57}\protected@file@percent }
 \citation{ackerman09}
 \citation{mccarthy16}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{61}\protected@file@percent }
-\newlabel{experiment_BERT_clusterability}{{4.2}{61}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{59}\protected@file@percent }
+\newlabel{experiment_BERT_clusterability}{{4.2}{59}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Experiment setup}{59}\protected@file@percent }
 \citation{bergstra12}
 \citation{wang13}
 \citation{pyax}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Experiment setup}{62}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{63}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Algorithm to find the best model with the best fitting parameter configuration.\relax }}{64}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Checks sampled BERT vectors for clusters by meaning\relax }}{61}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Algorithm to find the best model with the best fitting parameter configuration.\relax }}{62}\protected@file@percent }
 \citation{rand71}
 \citation{hubert85}
-\newlabel{eq:adjustedrandomindex}{{4.2.1}{65}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Results}{65}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the derivative models as described by experiment for $k=100$ and $n=500$. \relax }}{66}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. \relax }}{66}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{67}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{67}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Qualitative evaluation}{68}\protected@file@percent }
-\newlabel{fig:example_arms_negative_handcuffed}{{4.8}{68}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Partition 1 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of hancuffed arms. Notice that the sentiment is usually one of surprise, and rather negative.\relax }}{68}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Partition 2 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of arms where one person hugs or loves another. Notice that this usually includes a positive sentiment.\relax }}{69}\protected@file@percent }
-\newlabel{fig:example_arms_negative_crossed}{{4.2}{69}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Partition 3 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of strong arms, usually in a competitive context.\relax }}{69}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Partition 4 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of individuals and countries. This uses the semantic definition of arms which is analogous to \texttt  {weaponry}.\relax }}{70}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Partition 5 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of countries (no individuals). This uses the semantic definition of arms which is analogous to \texttt  {weaponry}. One can notice that these sentences usually refer to nuclear arms.\relax }}{70}\protected@file@percent }
-\newlabel{fig:example_arms_negative_crossed}{{4.8}{71}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Partition 6 for the word \texttt  {arms}. This cluster again refers to the arms of a person, however usually with a positive / optimistic sentiment.\relax }}{71}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{71}\protected@file@percent }
-\newlabel{correlation_pos_context}{{4.3}{71}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Experiment setup}{72}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {5}{\ignorespaces Analyzing dominance of part-of-speech within WordNet meaning clusters.\relax }}{73}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Results}{74}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Quantitative Evaluation}{74}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Cumulative dominance of the most occurring cluster. Dominance of a part of speech tag is measured by the percentage cover that the majority class intakes.\relax }}{74}\protected@file@percent }
-\newlabel{fig:BERT_vanilla_pipeline}{{4.7}{74}}
-\@writefile{toc}{\contentsline {subsubsection}{Qualitative Evaluation}{74}\protected@file@percent }
-\newlabel{fig:sfig1}{{4.8a}{75}}
-\newlabel{sub@fig:sfig1}{{a}{75}}
-\newlabel{fig:sfig2}{{4.8b}{75}}
-\newlabel{sub@fig:sfig2}{{b}{75}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt  {run}. \relax }}{75}\protected@file@percent }
-\newlabel{fig:run_tensorboard}{{4.8}{75}}
-\newlabel{fig:sfig1}{{4.9a}{75}}
-\newlabel{sub@fig:sfig1}{{a}{75}}
-\newlabel{fig:sfig2}{{4.9b}{75}}
-\newlabel{sub@fig:sfig2}{{b}{75}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt  {block}. \relax }}{75}\protected@file@percent }
-\newlabel{fig:was_tensorboard}{{4.9}{75}}
-\newlabel{fig:sfig1}{{4.10a}{76}}
-\newlabel{sub@fig:sfig1}{{a}{76}}
-\newlabel{fig:sfig2}{{4.10b}{76}}
-\newlabel{sub@fig:sfig2}{{b}{76}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt  {cold}. \relax }}{76}\protected@file@percent }
-\newlabel{fig:cold_tensorboard}{{4.10}{76}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{77}\protected@file@percent }
+\newlabel{eq:adjustedrandomindex}{{4.2.1}{63}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Results}{63}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the derivative models as described by experiment for $k=100$ and $n=500$. \relax }}{64}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. \relax }}{64}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{65}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{65}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Qualitative evaluation}{66}\protected@file@percent }
+\newlabel{fig:example_arms_negative_handcuffed}{{4.8}{66}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Partition 1 for the word \texttt  {arms}. The context is about handcuffed arms. The sentiment is usually one of negative surprise.\relax }}{66}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Partition 2 for the word \texttt  {arms}. The context is about a persons arms, where one person hugs or loves another (positive sentiment)\relax }}{66}\protected@file@percent }
+\newlabel{fig:example_arms_negative_crossed}{{4.2}{66}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Partition 3 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of strong arms, usually in a competitive context.\relax }}{67}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Partition 4 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of individuals and countries. This uses the semantic definition of arms which is analogous to \texttt  {weaponry}.\relax }}{67}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Partition 5 for the word \texttt  {arms}. This cluster contains \texttt  {arms} in the context of countries (no individuals). This uses the semantic definition of arms which is analogous to \texttt  {weaponry}. One can notice that these sentences usually refer to nuclear arms.\relax }}{68}\protected@file@percent }
+\newlabel{fig:example_arms_negative_crossed}{{4.8}{68}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Partition 6 for the word \texttt  {arms}. This cluster again refers to the arms of a person, however usually with a positive / optimistic sentiment.\relax }}{68}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{69}\protected@file@percent }
+\newlabel{correlation_pos_context}{{4.3}{69}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Experiment setup}{69}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {5}{\ignorespaces Analyzing dominance of part-of-speech within WordNet meaning clusters.\relax }}{70}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Results}{71}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Quantitative Evaluation}{71}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Cumulative dominance of the most occurring cluster. Dominance of a part of speech tag is measured by the percentage cover that the majority class intakes.\relax }}{71}\protected@file@percent }
+\newlabel{fig:POS_dominance}{{4.7}{71}}
+\@writefile{toc}{\contentsline {subsubsection}{Qualitative Evaluation}{71}\protected@file@percent }
+\newlabel{fig:sfig1}{{4.8a}{72}}
+\newlabel{sub@fig:sfig1}{{a}{72}}
+\newlabel{fig:sfig2}{{4.8b}{72}}
+\newlabel{sub@fig:sfig2}{{b}{72}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt  {run}. \relax }}{72}\protected@file@percent }
+\newlabel{fig:run_tensorboard}{{4.8}{72}}
+\newlabel{fig:sfig1}{{4.9a}{72}}
+\newlabel{sub@fig:sfig1}{{a}{72}}
+\newlabel{fig:sfig2}{{4.9b}{72}}
+\newlabel{sub@fig:sfig2}{{b}{72}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt  {block}. \relax }}{72}\protected@file@percent }
+\newlabel{fig:was_tensorboard}{{4.9}{72}}
+\newlabel{fig:sfig1}{{4.10a}{73}}
+\newlabel{sub@fig:sfig1}{{a}{73}}
+\newlabel{fig:sfig2}{{4.10b}{73}}
+\newlabel{sub@fig:sfig2}{{b}{73}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt  {cold}. \relax }}{73}\protected@file@percent }
+\newlabel{fig:cold_tensorboard}{{4.10}{73}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{75}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{section:ExploitingBERT}{{5}{77}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between the number of WordNet senses and the variance amongst sampled BERT vectors.\relax }}{78}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces  For each word $w$, we sample both the number of WordNet semantic classes that are recorded in the WordNet dataset. We also calculate the dimension-wise mean variance between $n=500$ sampled vectors for the word $w$. This constitutes a point on this plot. We repeat this procedure for the most 20'000 most frequent words which consist of a single token (i.e. are not split up into further subtokens when the tokenizer is applied). We show that although the variance is relatively high, especially if only few WordNet classes are present, there is a correlation between the number of WordNet classes and the variance of sampled BERT context embeddings. The right and top distributions show histograms of how occurrent the variance and WordNet classes are respectively. Our assumption is that introducing additional embedding-vectors inside BERT for certain words allows to capture mode complex distributions, i.e. a more complex distribution for words that have a higher number of WordNet classes. \relax }}{79}\protected@file@percent }
-\newlabel{fig:BERT_variance}{{5.1}{79}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{79}\protected@file@percent }
+\newlabel{section:ExploitingBERT}{{5}{75}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between the number of WordNet senses and the variance amongst sampled BERT vectors.\relax }}{76}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces  For each word $w$, we sample both the number of WordNet semantic classes that are recorded in the WordNet dataset. We also calculate the dimension-wise mean variance between $n=500$ sampled vectors for the word $w$. This constitutes a point on this plot. We repeat this procedure for the most 20'000 most frequent words which consist of a single token (i.e. are not split up into further subtokens when the tokenizer is applied). We show that although the variance is relatively high, especially if only few WordNet classes are present, there is a correlation between the number of WordNet classes and the variance of sampled BERT context embeddings. The right and top distributions show histograms of how occurrent the variance and WordNet classes are respectively. Our assumption is that introducing additional embedding-vectors inside BERT for certain words allows to capture mode complex distributions, i.e. a more complex distribution for words that have a higher number of WordNet classes. \relax }}{77}\protected@file@percent }
+\newlabel{fig:BERT_variance}{{5.1}{77}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{77}\protected@file@percent }
 \citation{spacyb}
 \citation{spacyb}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{80}\protected@file@percent }
-\newlabel{bernie_pos}{{5.1.1}{80}}
-\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{80}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces The PoS modified pipeline. The BERNIE PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additional tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes the more specialized $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{81}\protected@file@percent }
-\newlabel{fig:BERnie_POS_pipeline}{{5.2}{81}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Inside the embedding layer of the transformer which occurs at each layer of BERT, we introduce more specific embeddings \texttt  {run\_VERB} and \texttt  {run\_NOUN}. The BERT model should now capture more expressiveness, as more weight got introduced for a part of the model which results in a probability distribution with high variance. The original \texttt  {run} embedding is removed.\relax }}{82}\protected@file@percent }
-\newlabel{fig:BERnie_POS_initialization}{{5.3}{82}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{82}\protected@file@percent }
-\newlabel{experiment_bernie_meaning}{{5.1.2}{82}}
-\newlabel{fig:sfig1}{{5.4a}{83}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{78}\protected@file@percent }
+\newlabel{bernie_pos}{{5.1.1}{78}}
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{78}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces The PoS modified pipeline. The BERNIE PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additional tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes the more specialized $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{79}\protected@file@percent }
+\newlabel{fig:BERnie_POS_pipeline}{{5.2}{79}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Inside the embedding layer of the transformer which occurs at each layer of BERT, we introduce more specific embeddings \texttt  {run\_VERB} and \texttt  {run\_NOUN}. The BERT model should now capture more expressiveness, as more weight got introduced for a part of the model which results in a probability distribution with high variance. The original \texttt  {run} embedding is removed.\relax }}{80}\protected@file@percent }
+\newlabel{fig:BERnie_POS_initialization}{{5.3}{80}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{80}\protected@file@percent }
+\newlabel{experiment_bernie_meaning}{{5.1.2}{80}}
+\newlabel{fig:sfig1}{{5.4a}{81}}
+\newlabel{sub@fig:sfig1}{{a}{81}}
+\newlabel{fig:sfig2}{{5.4b}{81}}
+\newlabel{sub@fig:sfig2}{{b}{81}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces The resulting, fully modified BERNIE PoS pipeline.\relax }}{81}\protected@file@percent }
+\newlabel{fig:BERNIE_POS_full_pipeline}{{5.4}{81}}
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{81}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces The semantic modified pipeline. The BERNIE Cluster model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the clustereing information as part of the token. In this case, $bank$ becomes the more specialized $bank\_FINANCE$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer.\relax }}{82}\protected@file@percent }
+\newlabel{fig:BERT_Cluster_pipeline}{{5.5}{82}}
+\@writefile{toc}{\contentsline {subsubsection}{Results}{82}\protected@file@percent }
+\newlabel{fig:sfig1}{{5.6a}{83}}
 \newlabel{sub@fig:sfig1}{{a}{83}}
-\newlabel{fig:sfig2}{{5.4b}{83}}
+\newlabel{fig:sfig2}{{5.6b}{83}}
 \newlabel{sub@fig:sfig2}{{b}{83}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces The resulting, fully modified BERNIE PoS pipeline.\relax }}{83}\protected@file@percent }
-\newlabel{fig:BERNIE_POS_full_pipeline}{{5.4}{83}}
-\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{83}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces  The semantic modified pipeline. The BERNIE Cluster model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the clustereing information as part of the token. In this case, $bank$ becomes the more specialized $bank\_FINANCE$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{84}\protected@file@percent }
-\newlabel{fig:BERT_semantic_modified_pipeline}{{5.5}{84}}
-\newlabel{fig:sfig1}{{5.6a}{85}}
-\newlabel{sub@fig:sfig1}{{a}{85}}
-\newlabel{fig:sfig2}{{5.6b}{85}}
-\newlabel{sub@fig:sfig2}{{b}{85}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces The resulting, fully modified BERNIE Cluster pipeline.\relax }}{85}\protected@file@percent }
-\newlabel{fig:fig}{{5.6}{85}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces The BERT model takes as input a sentence $s$. The resulting, fully modifid BERnie Cluster pipeline.\relax }}{85}\protected@file@percent }
-\newlabel{fig:BERT_Cluster_pipeline}{{5.7}{85}}
-\@writefile{toc}{\contentsline {subsubsection}{Results}{85}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces GLUE Benchmark performance measures for the BERT model, BERNIE PoS and BERNIE Cluster. Higher scores are better. The task-wide best-performers are marked in bold. All values are the average scores of two runs. \relax }}{86}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces The resulting, fully modified BERNIE Cluster pipeline.\relax }}{83}\protected@file@percent }
+\newlabel{fig:fig}{{5.6}{83}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces GLUE Benchmark performance measures for the BERT model, BERNIE PoS and BERNIE Cluster. Higher scores are better. The task-wide best-performers are marked in bold. All values are the average scores of two runs. \relax }}{83}\protected@file@percent }
 \citation{devlin18}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}BERNIE Cluster with additional pre-training}{87}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{87}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.5}Results}{88}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces GLUE Benchmark performance measures for the BERNIE Cluster model without any additional pre-training, the BERNIE Cluster with full pre-training and BERNIE with partial pre-training. Higher scores are better. The task-wide best-performers are marked in bold. All values are the average scores of two runs.\relax }}{88}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusion}{89}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}BERNIE Cluster with additional pre-training}{85}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{85}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.5}Results}{86}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces GLUE Benchmark performance measures for the BERNIE Cluster model without any additional pre-training, the BERNIE Cluster with full pre-training and BERNIE with partial pre-training. Higher scores are better. The task-wide best-performers are marked in bold. All values are the average scores of two runs.\relax }}{86}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusion}{87}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{section:Conclusion}{{6}{89}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.1}Main Contributions}{89}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Future Work}{90}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Introducing the WiC benchmark:}{90}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Larger benchmarking dataset:}{91}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Linear subspace still not apparent:}{91}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Difficulty in quantifying semantics:}{91}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Limited coherence in lines of work}{91}\protected@file@percent }
+\newlabel{section:Conclusion}{{6}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.1}Main Contributions}{87}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Future Work}{88}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Introducing the WiC benchmark:}{88}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Larger benchmarking dataset:}{89}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Linear subspace still not apparent:}{89}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Difficulty in quantifying semantics:}{89}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Limited coherence in lines of work}{89}\protected@file@percent }
 \bibstyle{plain}
 \bibdata{dissertation}
 \bibcite{cil_slides}{1}
@@ -559,17 +558,17 @@
 \citation{wang19}
 \citation{bengio06}
 \citation{vilnis14}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Background}{105}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Background}{103}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {A.1}Linguistic features}{105}\protected@file@percent }
-\newlabel{appendix:linguistic_features}{{A.1}{105}}
-\@writefile{toc}{\contentsline {paragraph}{Other linguistic features}{105}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {A.1}{\ignorespaces Table from \cite  {wang19}. Types of linguistic phenomena organized under four major categories.\relax }}{105}\protected@file@percent }
-\newlabel{table:1}{{A.1}{105}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.2}Gaussian Embeddings}{105}\protected@file@percent }
-\newlabel{appendix:GaussianEmbeddings}{{A.2}{105}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}Linguistic features}{103}\protected@file@percent }
+\newlabel{appendix:linguistic_features}{{A.1}{103}}
+\@writefile{toc}{\contentsline {paragraph}{Other linguistic features}{103}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {A.1}{\ignorespaces Table from \cite  {wang19}. Types of linguistic phenomena organized under four major categories.\relax }}{103}\protected@file@percent }
+\newlabel{table:1}{{A.1}{103}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}Gaussian Embeddings}{103}\protected@file@percent }
+\newlabel{appendix:GaussianEmbeddings}{{A.2}{103}}
 \citation{vilnis14}
 \citation{hochreiter97}
 \citation{rumelhart85}
@@ -577,40 +576,40 @@
 \citation{colahLSTM}
 \citation{hochreiter97}
 \citation{warstadt2018}
-\@writefile{toc}{\contentsline {section}{\numberline {A.3}Long Short-Term Memory}{108}\protected@file@percent }
-\newlabel{appendix:LSTM}{{A.3}{108}}
-\@writefile{lof}{\contentsline {figure}{\numberline {A.1}{\ignorespaces Figure taken from \cite  {colahLSTM}. The internals of the LSTM cell, and the recurrent flow which is repeated for three consecutive timesteps $t-1, t, t+1$. The LSTM produces an hidden representation at every steep $h_{t-1}, h_{t}, h_{t+1}$ given some inputs $x_{t-1}, x_t, x_{t+1}$. \relax }}{108}\protected@file@percent }
-\newlabel{fig:lstm_internals}{{A.1}{108}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.3}Long Short-Term Memory}{106}\protected@file@percent }
+\newlabel{appendix:LSTM}{{A.3}{106}}
+\@writefile{lof}{\contentsline {figure}{\numberline {A.1}{\ignorespaces Figure taken from \cite  {colahLSTM}. The internals of the LSTM cell, and the recurrent flow which is repeated for three consecutive timesteps $t-1, t, t+1$. The LSTM produces an hidden representation at every steep $h_{t-1}, h_{t}, h_{t+1}$ given some inputs $x_{t-1}, x_t, x_{t+1}$. \relax }}{106}\protected@file@percent }
+\newlabel{fig:lstm_internals}{{A.1}{106}}
 \citation{socher2013}
 \citation{dolan2005}
 \citation{shankar17}
-\@writefile{toc}{\contentsline {section}{\numberline {A.4}GLUE}{109}\protected@file@percent }
-\newlabel{appendix:GLUE}{{A.4}{109}}
-\@writefile{toc}{\contentsline {subsubsection}{Single Sentence Tasks}{109}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Similarity and paraphrase tasks}{109}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.4}GLUE}{107}\protected@file@percent }
+\newlabel{appendix:GLUE}{{A.4}{107}}
+\@writefile{toc}{\contentsline {subsubsection}{Single Sentence Tasks}{107}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Similarity and paraphrase tasks}{107}\protected@file@percent }
 \citation{cer2017}
 \citation{frey07}
 \citation{ester96}
 \citation{campello13}
 \citation{mihael99}
 \citation{comaniciu02}
-\@writefile{toc}{\contentsline {chapter}{\numberline {B}Other lines of work}{111}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Other lines of work}{109}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {B.1}Clustering}{111}\protected@file@percent }
-\newlabel{appendix:Clustering}{{B.1}{111}}
-\@writefile{toc}{\contentsline {paragraph}{Affinity Propagation}{111}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{DBScan}{111}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{MeanShift}{111}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.1}Clustering}{109}\protected@file@percent }
+\newlabel{appendix:Clustering}{{B.1}{109}}
+\@writefile{toc}{\contentsline {paragraph}{Affinity Propagation}{109}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{DBScan}{109}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{MeanShift}{109}\protected@file@percent }
 \citation{tang19}
 \citation{tsai19}
 \citation{sanh19}
 \citation{shen19}
 \citation{shin18}
 \citation{whitaker19}
-\@writefile{toc}{\contentsline {section}{\numberline {B.2}Static embeddings and context embeddings}{112}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {B.3}Metric Learning and Disentanglement}{112}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.2}Static embeddings and context embeddings}{110}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.3}Metric Learning and Disentanglement}{110}\protected@file@percent }
 \citation{moutafis17}
 \citation{mahalanobis36}
 \citation{chechik10}
@@ -618,20 +617,19 @@
 \citation{suarez19}
 \citation{suarez19}
 \citation{suarez19}
-\@writefile{toc}{\contentsline {subsubsection}{Non-Deep Metric Learning}{114}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Non-Deep Metric Learning}{112}\protected@file@percent }
 \citation{suarez19}
 \citation{kaya19}
 \citation{kaya19}
 \citation{kaya19}
-\@writefile{lof}{\contentsline {figure}{\numberline {B.1}{\ignorespaces Taken from \cite  {suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distancee, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducable with this dimension while still matching the classification accuracy (right).\relax }}{115}\protected@file@percent }
-\newlabel{fig:BERT_vanilla_pipeline}{{B.1}{115}}
-\@writefile{toc}{\contentsline {paragraph}{Dimensionality Reduction}{115}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Deep Metric Learning}{115}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {B.1}{\ignorespaces Taken from \cite  {suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distancee, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducable with this dimension while still matching the classification accuracy (right).\relax }}{113}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Dimensionality Reduction}{113}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Deep Metric Learning}{113}\protected@file@percent }
 \citation{bromley94}
 \citation{chopra05}
 \citation{hadsell06}
-\@writefile{lof}{\contentsline {figure}{\numberline {B.2}{\ignorespaces Taken from \cite  {kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.\relax }}{116}\protected@file@percent }
-\newlabel{fig:muse_translation}{{B.2}{116}}
+\@writefile{lof}{\contentsline {figure}{\numberline {B.2}{\ignorespaces Taken from \cite  {kaya19}. An illustration of deep metric learning. The space is transformed in such a way, that similar object are closer to each other, and dissimilar objects are moved away from each other.\relax }}{114}\protected@file@percent }
+\newlabel{fig:muse_translation}{{B.2}{114}}
 \citation{hoffer14}
 \citation{ustinova16}
 \citation{song16}
@@ -648,50 +646,50 @@
 \citation{kudugunta18}
 \citation{lample18}
 \citation{ma19}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.3.1}Embeddings for translation}{118}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {B.3}{\ignorespaces From \cite  {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{118}\protected@file@percent }
-\newlabel{fig:embeddings_by_language}{{B.3}{118}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.4}Compressing the non-lexical out}{119}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Motivation}{119}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{119}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Results}{119}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {C}More Results}{121}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3.1}Embeddings for translation}{116}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {B.3}{\ignorespaces From \cite  {kudugunta18}, visualizing clustering of the encoder representations of all languages, based on ther SVCCA similarity.\relax }}{116}\protected@file@percent }
+\newlabel{fig:embeddings_by_language}{{B.3}{116}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.4}Compressing the non-lexical out}{117}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Motivation}{117}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{117}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Results}{117}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {C}More Results}{119}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {C.1}Finding the best clustering model}{121}\protected@file@percent }
-\newlabel{section:more_clustering_results}{{C.1}{121}}
-\@writefile{toc}{\contentsline {subsubsection}{Quantiative Evaluation}{121}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {C.1}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=500$. \relax }}{121}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {C.2}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=1000$. \relax }}{121}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {C.3}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. \relax }}{122}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Qualitative Evaluation}{122}\protected@file@percent }
-\newlabel{section:more_clustering_results_qualitative}{{C.3}{122}}
-\@writefile{lof}{\contentsline {figure}{\numberline {C.1}{\ignorespaces Partition 1 for the word \texttt  {bank}. This cluster contains \texttt  {bank} in the context of national banks as financial institutions. Notice that the sentiment is usually a negative one.\relax }}{122}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.2}{\ignorespaces Partition 2 for the word \texttt  {bank}. This cluster contains \texttt  {bank} as a sequence of objects.\relax }}{122}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.3}{\ignorespaces Partition 3 for the word \texttt  {bank}. This cluster contains \texttt  {bank} as a local, consumer bank (in contrast to institutional, national banks).\relax }}{123}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.4}{\ignorespaces Partition 4 for the word \texttt  {bank}. This cluster contains \texttt  {bank} in the context of national banks as financial institutions. Notice that here, the context is usually about interest rates.\relax }}{123}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.5}{\ignorespaces Partition 5 for the word \texttt  {bank}. This cluster contains \texttt  {bank} in the context of investment banks (in contrast to consumer, and institutional banks).\relax }}{123}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.6}{\ignorespaces Partition 1 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one between large institutions in politics and finance. The sentiment is generally positive.\relax }}{124}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.7}{\ignorespaces Partition 2 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one of regulations and elections. The sentiment is serious.\relax }}{124}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.8}{\ignorespaces Partition 3 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one of groups of people. The sentiment is neutral to positive.\relax }}{124}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.9}{\ignorespaces Partition 4 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one of sports and baseball. The sentiment is mixed.\relax }}{125}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.10}{\ignorespaces Partition 5 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is mixed. The sentiment is mixed .\relax }}{125}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {C.11}{\ignorespaces Partition 6 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is mixed. The sentiment is mixed.\relax }}{125}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {C.2}Nominalised Verbs}{125}\protected@file@percent }
-\newlabel{section:frozen_verbs}{{C.2}{125}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.1}Finding the best clustering model}{119}\protected@file@percent }
+\newlabel{section:more_clustering_results}{{C.1}{119}}
+\@writefile{toc}{\contentsline {subsubsection}{Quantiative Evaluation}{119}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {C.1}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=500$. \relax }}{119}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {C.2}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=50$ and $n=1000$. \relax }}{119}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {C.3}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. \relax }}{120}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Qualitative Evaluation}{120}\protected@file@percent }
+\newlabel{section:more_clustering_results_qualitative}{{C.3}{120}}
+\@writefile{lof}{\contentsline {figure}{\numberline {C.1}{\ignorespaces Partition 1 for the word \texttt  {bank}. This cluster contains \texttt  {bank} in the context of national banks as financial institutions. Notice that the sentiment is usually a negative one.\relax }}{120}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.2}{\ignorespaces Partition 2 for the word \texttt  {bank}. This cluster contains \texttt  {bank} as a sequence of objects.\relax }}{120}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.3}{\ignorespaces Partition 3 for the word \texttt  {bank}. This cluster contains \texttt  {bank} as a local, consumer bank (in contrast to institutional, national banks).\relax }}{121}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.4}{\ignorespaces Partition 4 for the word \texttt  {bank}. This cluster contains \texttt  {bank} in the context of national banks as financial institutions. Notice that here, the context is usually about interest rates.\relax }}{121}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.5}{\ignorespaces Partition 5 for the word \texttt  {bank}. This cluster contains \texttt  {bank} in the context of investment banks (in contrast to consumer, and institutional banks).\relax }}{121}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.6}{\ignorespaces Partition 1 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one between large institutions in politics and finance. The sentiment is generally positive.\relax }}{122}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.7}{\ignorespaces Partition 2 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one of regulations and elections. The sentiment is serious.\relax }}{122}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.8}{\ignorespaces Partition 3 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one of groups of people. The sentiment is neutral to positive.\relax }}{122}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.9}{\ignorespaces Partition 4 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is one of sports and baseball. The sentiment is mixed.\relax }}{123}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.10}{\ignorespaces Partition 5 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is mixed. The sentiment is mixed .\relax }}{123}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {C.11}{\ignorespaces Partition 6 for the word \texttt  {key}. This cluster contains \texttt  {key} as a synonym for the word \texttt  {main}, which characterizes an important subject. The context is mixed. The sentiment is mixed.\relax }}{123}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C.2}Nominalised Verbs}{123}\protected@file@percent }
+\newlabel{section:frozen_verbs}{{C.2}{123}}
 \citation{tshitoyan19}
 \citation{conneau17}
 \citation{conneau17}
 \citation{conneau17}
-\@writefile{toc}{\contentsline {chapter}{\numberline {D}Applications}{127}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {D}Applications}{125}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{AppendixApplication}{{D}{127}}
-\@writefile{toc}{\contentsline {section}{\numberline {D.1}Using embeddings in other domains}{127}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {D.2}Using embeddings in translations}{127}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {D.1}{\ignorespaces Taken from \cite  {conneau17}. Toy illustration of the embedding matching methodology using the MUSE model.\relax }}{127}\protected@file@percent }
-\newlabel{fig:muse_translation}{{D.1}{127}}
+\newlabel{AppendixApplication}{{D}{125}}
+\@writefile{toc}{\contentsline {section}{\numberline {D.1}Using embeddings in other domains}{125}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {D.2}Using embeddings in translations}{125}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {D.1}{\ignorespaces Taken from \cite  {conneau17}. Toy illustration of the embedding matching methodology using the MUSE model.\relax }}{125}\protected@file@percent }
+\newlabel{fig:muse_translation}{{D.1}{125}}
 \citation{alvarez18}
-\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{130}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Word2Vec}{128}\protected@file@percent }

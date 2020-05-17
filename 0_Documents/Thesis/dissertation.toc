@@ -14,89 +14,89 @@
 \contentsline {paragraph}{Learning a distance}{12}% 
 \contentsline {paragraph}{Exploiting the distributional structure of language:}{12}% 
 \contentsline {paragraph}{Loss Objective}{13}% 
-\contentsline {subsection}{\numberline {2.2.1}Static Word Embeddings}{16}% 
-\contentsline {subsubsection}{Basic Model}{16}% 
-\contentsline {subsubsection}{Word2Vec}{17}% 
+\contentsline {subsection}{\numberline {2.2.1}Static Word Embeddings}{15}% 
+\contentsline {subsubsection}{Basic Model}{15}% 
+\contentsline {subsubsection}{Word2Vec}{16}% 
 \contentsline {subsubsection}{GloVe}{18}% 
-\contentsline {subsection}{\numberline {2.2.2}Context Embeddings}{20}% 
-\contentsline {subsubsection}{ELMo}{21}% 
+\contentsline {subsection}{\numberline {2.2.2}Context Embeddings}{19}% 
+\contentsline {subsubsection}{ELMo}{20}% 
 \contentsline {subsubsection}{The Transformer Architecture}{22}% 
-\contentsline {subsubsection}{BERT}{25}% 
-\contentsline {paragraph}{The pipeline of BERT}{27}% 
-\contentsline {subsubsection}{Other language models}{28}% 
-\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{29}% 
-\contentsline {subsubsection}{Inference Tasks}{29}% 
-\contentsline {section}{\numberline {2.4}WordNet}{32}% 
-\contentsline {paragraph}{Lexical matrix:}{32}% 
-\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{35}% 
-\contentsline {chapter}{\numberline {3}Related Work}{37}% 
-\contentsline {section}{\numberline {3.1}Clustering for Synsets in Static Word Embeddings}{37}% 
-\contentsline {paragraph}{The Chinese whispers algorithm}{38}% 
-\contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{39}% 
-\contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{40}% 
-\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{41}% 
-\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{48}% 
-\contentsline {section}{\numberline {3.5}Sentiment-subspace in BERT}{53}% 
-\contentsline {chapter}{\numberline {4}Understanding the semantic subspace organization in BERT}{55}% 
-\contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{56}% 
-\contentsline {subsection}{\numberline {4.1.1}Experiment setup}{56}% 
-\contentsline {subsection}{\numberline {4.1.2}Results}{58}% 
-\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{61}% 
-\contentsline {subsection}{\numberline {4.2.1}Experiment setup}{62}% 
-\contentsline {subsection}{\numberline {4.2.2}Results}{65}% 
-\contentsline {subsubsection}{Qualitative evaluation}{68}% 
-\contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{71}% 
-\contentsline {subsection}{\numberline {4.3.1}Experiment setup}{72}% 
-\contentsline {subsection}{\numberline {4.3.2}Results}{74}% 
-\contentsline {subsubsection}{Quantitative Evaluation}{74}% 
-\contentsline {subsubsection}{Qualitative Evaluation}{74}% 
-\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{77}% 
-\contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{79}% 
-\contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{80}% 
-\contentsline {subsubsection}{Experiment setup}{80}% 
-\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{82}% 
-\contentsline {subsubsection}{Experiment setup}{83}% 
-\contentsline {subsubsection}{Results}{85}% 
-\contentsline {subsection}{\numberline {5.1.3}BERNIE Cluster with additional pre-training}{87}% 
-\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{87}% 
-\contentsline {subsection}{\numberline {5.1.5}Results}{88}% 
-\contentsline {chapter}{\numberline {6}Conclusion}{89}% 
-\contentsline {subsection}{\numberline {6.0.1}Main Contributions}{89}% 
-\contentsline {section}{\numberline {6.1}Future Work}{90}% 
-\contentsline {paragraph}{Introducing the WiC benchmark:}{90}% 
-\contentsline {paragraph}{Larger benchmarking dataset:}{91}% 
-\contentsline {paragraph}{Linear subspace still not apparent:}{91}% 
-\contentsline {paragraph}{Difficulty in quantifying semantics:}{91}% 
-\contentsline {paragraph}{Limited coherence in lines of work}{91}% 
-\contentsline {chapter}{\numberline {A}Background}{105}% 
-\contentsline {section}{\numberline {A.1}Linguistic features}{105}% 
-\contentsline {paragraph}{Other linguistic features}{105}% 
-\contentsline {section}{\numberline {A.2}Gaussian Embeddings}{105}% 
-\contentsline {section}{\numberline {A.3}Long Short-Term Memory}{108}% 
-\contentsline {section}{\numberline {A.4}GLUE}{109}% 
-\contentsline {subsubsection}{Single Sentence Tasks}{109}% 
-\contentsline {subsubsection}{Similarity and paraphrase tasks}{109}% 
-\contentsline {chapter}{\numberline {B}Other lines of work}{111}% 
-\contentsline {section}{\numberline {B.1}Clustering}{111}% 
-\contentsline {paragraph}{Affinity Propagation}{111}% 
-\contentsline {paragraph}{DBScan}{111}% 
-\contentsline {paragraph}{MeanShift}{111}% 
-\contentsline {section}{\numberline {B.2}Static embeddings and context embeddings}{112}% 
-\contentsline {section}{\numberline {B.3}Metric Learning and Disentanglement}{112}% 
-\contentsline {subsubsection}{Non-Deep Metric Learning}{114}% 
-\contentsline {paragraph}{Dimensionality Reduction}{115}% 
-\contentsline {subsubsection}{Deep Metric Learning}{115}% 
-\contentsline {subsection}{\numberline {B.3.1}Embeddings for translation}{118}% 
-\contentsline {section}{\numberline {B.4}Compressing the non-lexical out}{119}% 
-\contentsline {subsubsection}{Motivation}{119}% 
-\contentsline {subsubsection}{Experiment setup}{119}% 
-\contentsline {subsubsection}{Results}{119}% 
-\contentsline {chapter}{\numberline {C}More Results}{121}% 
-\contentsline {section}{\numberline {C.1}Finding the best clustering model}{121}% 
-\contentsline {subsubsection}{Quantiative Evaluation}{121}% 
-\contentsline {subsubsection}{Qualitative Evaluation}{122}% 
-\contentsline {section}{\numberline {C.2}Nominalised Verbs}{125}% 
-\contentsline {chapter}{\numberline {D}Applications}{127}% 
-\contentsline {section}{\numberline {D.1}Using embeddings in other domains}{127}% 
-\contentsline {section}{\numberline {D.2}Using embeddings in translations}{127}% 
-\contentsline {subsubsection}{Word2Vec}{130}% 
+\contentsline {subsubsection}{BERT: Bidirectional Encoder Representations from Transformers}{24}% 
+\contentsline {paragraph}{The pipeline of BERT}{26}% 
+\contentsline {subsubsection}{Other language models}{26}% 
+\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{27}% 
+\contentsline {subsubsection}{Inference Tasks}{28}% 
+\contentsline {section}{\numberline {2.4}WordNet}{30}% 
+\contentsline {paragraph}{Lexical matrix:}{31}% 
+\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{33}% 
+\contentsline {chapter}{\numberline {3}Related Work}{35}% 
+\contentsline {section}{\numberline {3.1}Clustering for Synsets in Static Word Embeddings}{35}% 
+\contentsline {paragraph}{The Chinese whispers algorithm}{36}% 
+\contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{37}% 
+\contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{38}% 
+\contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{39}% 
+\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{45}% 
+\contentsline {section}{\numberline {3.5}Sentiment-subspace in BERT}{50}% 
+\contentsline {chapter}{\numberline {4}Understanding the semantic subspace organization in BERT}{53}% 
+\contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{54}% 
+\contentsline {subsection}{\numberline {4.1.1}Experiment setup}{54}% 
+\contentsline {subsection}{\numberline {4.1.2}Results}{56}% 
+\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{59}% 
+\contentsline {subsection}{\numberline {4.2.1}Experiment setup}{59}% 
+\contentsline {subsection}{\numberline {4.2.2}Results}{63}% 
+\contentsline {subsubsection}{Qualitative evaluation}{66}% 
+\contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{69}% 
+\contentsline {subsection}{\numberline {4.3.1}Experiment setup}{69}% 
+\contentsline {subsection}{\numberline {4.3.2}Results}{71}% 
+\contentsline {subsubsection}{Quantitative Evaluation}{71}% 
+\contentsline {subsubsection}{Qualitative Evaluation}{71}% 
+\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{75}% 
+\contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{77}% 
+\contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{78}% 
+\contentsline {subsubsection}{Experiment setup}{78}% 
+\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{80}% 
+\contentsline {subsubsection}{Experiment setup}{81}% 
+\contentsline {subsubsection}{Results}{82}% 
+\contentsline {subsection}{\numberline {5.1.3}BERNIE Cluster with additional pre-training}{85}% 
+\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{85}% 
+\contentsline {subsection}{\numberline {5.1.5}Results}{86}% 
+\contentsline {chapter}{\numberline {6}Conclusion}{87}% 
+\contentsline {subsection}{\numberline {6.0.1}Main Contributions}{87}% 
+\contentsline {section}{\numberline {6.1}Future Work}{88}% 
+\contentsline {paragraph}{Introducing the WiC benchmark:}{88}% 
+\contentsline {paragraph}{Larger benchmarking dataset:}{89}% 
+\contentsline {paragraph}{Linear subspace still not apparent:}{89}% 
+\contentsline {paragraph}{Difficulty in quantifying semantics:}{89}% 
+\contentsline {paragraph}{Limited coherence in lines of work}{89}% 
+\contentsline {chapter}{\numberline {A}Background}{103}% 
+\contentsline {section}{\numberline {A.1}Linguistic features}{103}% 
+\contentsline {paragraph}{Other linguistic features}{103}% 
+\contentsline {section}{\numberline {A.2}Gaussian Embeddings}{103}% 
+\contentsline {section}{\numberline {A.3}Long Short-Term Memory}{106}% 
+\contentsline {section}{\numberline {A.4}GLUE}{107}% 
+\contentsline {subsubsection}{Single Sentence Tasks}{107}% 
+\contentsline {subsubsection}{Similarity and paraphrase tasks}{107}% 
+\contentsline {chapter}{\numberline {B}Other lines of work}{109}% 
+\contentsline {section}{\numberline {B.1}Clustering}{109}% 
+\contentsline {paragraph}{Affinity Propagation}{109}% 
+\contentsline {paragraph}{DBScan}{109}% 
+\contentsline {paragraph}{MeanShift}{109}% 
+\contentsline {section}{\numberline {B.2}Static embeddings and context embeddings}{110}% 
+\contentsline {section}{\numberline {B.3}Metric Learning and Disentanglement}{110}% 
+\contentsline {subsubsection}{Non-Deep Metric Learning}{112}% 
+\contentsline {paragraph}{Dimensionality Reduction}{113}% 
+\contentsline {subsubsection}{Deep Metric Learning}{113}% 
+\contentsline {subsection}{\numberline {B.3.1}Embeddings for translation}{116}% 
+\contentsline {section}{\numberline {B.4}Compressing the non-lexical out}{117}% 
+\contentsline {subsubsection}{Motivation}{117}% 
+\contentsline {subsubsection}{Experiment setup}{117}% 
+\contentsline {subsubsection}{Results}{117}% 
+\contentsline {chapter}{\numberline {C}More Results}{119}% 
+\contentsline {section}{\numberline {C.1}Finding the best clustering model}{119}% 
+\contentsline {subsubsection}{Quantiative Evaluation}{119}% 
+\contentsline {subsubsection}{Qualitative Evaluation}{120}% 
+\contentsline {section}{\numberline {C.2}Nominalised Verbs}{123}% 
+\contentsline {chapter}{\numberline {D}Applications}{125}% 
+\contentsline {section}{\numberline {D.1}Using embeddings in other domains}{125}% 
+\contentsline {section}{\numberline {D.2}Using embeddings in translations}{125}% 
+\contentsline {subsubsection}{Word2Vec}{128}% 

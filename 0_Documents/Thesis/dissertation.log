@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.11.14)  17 MAY 2020 11:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.11.14)  17 MAY 2020 13:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -929,9 +929,6 @@ LaTeX Warning: Label `fig:cold_fictional_desired' multiply defined.
 LaTeX Warning: Label `fig:example_arms_negative_crossed' multiply defined.
 
 
-LaTeX Warning: Label `fig:BERT_vanilla_pipeline' multiply defined.
-
-
 LaTeX Warning: Label `fig:sfig1' multiply defined.
 
 
@@ -978,9 +975,6 @@ LaTeX Warning: Label `fig:sfig2' multiply defined.
 
 
 LaTeX Warning: Label `sub@fig:sfig2' multiply defined.
-
-
-LaTeX Warning: Label `fig:BERT_vanilla_pipeline' multiply defined.
 
 
 LaTeX Warning: Label `fig:embeddings_by_language' multiply defined.
@@ -1195,7 +1189,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [6]
-Overfull \hbox (1.14044pt too wide) in paragraph at lines 48--48
+Overfull \hbox (1.14044pt too wide) in paragraph at lines 47--47
  \OT1/cmr/m/n/12 re-cur-rent flow which is re-peated for three con-sec-u-tive t
 imesteps 
  []
@@ -1204,7 +1198,7 @@ imesteps
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1137) has occurred while \output is active []
 
  [8])
 \tf@lof=\write8
@@ -1304,38 +1298,34 @@ Overfull \hbox (4.07785pt too wide) in paragraph at lines 357--360
 his parametriza-
  []
 
-[15] [16]
+[15]
+Underfull \vbox (badness 2181) has occurred while \output is active []
+
+ [16]
 <./assets/background/word2vec_cities.png, id=128, 913.4125pt x 660.4675pt>
 File: ./assets/background/word2vec_cities.png Graphic file (type png)
 <use ./assets/background/word2vec_cities.png>
 Package pdftex.def Info: ./assets/background/word2vec_cities.png  used on input
- line 418.
+ line 417.
 (pdftex.def)             Requested size: 234.00238pt x 169.19801pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Underfull \vbox (badness 1448) has occurred while \output is active []
-
- [17]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [18 <./assets/background/word2vec_cities.png>] [19]
+[17 <./assets/background/word2vec_cities.png>] [18]
 Overfull \hbox (52.46619pt too wide) detected at line 481
 []
  []
 
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [19]
 <./assets/background/BERT_GPT_ELMo.png, id=141, 1217.54875pt x 301.125pt>
 File: ./assets/background/BERT_GPT_ELMo.png Graphic file (type png)
 <use ./assets/background/BERT_GPT_ELMo.png>
 Package pdftex.def Info: ./assets/background/BERT_GPT_ELMo.png  used on input l
 ine 490.
 (pdftex.def)             Requested size: 390.0pt x 96.45386pt.
-[20]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21 <./assets/background/BERT_GPT_ELMo.png>]
+[20 <./assets/background/BERT_GPT_ELMo.png>]
 Overfull \hbox (7.58377pt too wide) in paragraph at lines 517--523
 \OT1/cmr/m/n/12 way through masked pre-training where the in-put se-quence $[\O
 ML/cmm/m/it/12 w[]; [] ; w[]; [] ; w[]\OT1/cmr/m/n/12 ]$
@@ -1349,10 +1339,10 @@ D\OT1/cmr/m/n/12 ]]$.
  []
 
 
-Underfull \vbox (badness 2205) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [22]
-<./assets/background/transformer_module.png, id=153, 515.9275pt x 732.7375pt>
+ [21]
+<./assets/background/transformer_module.png, id=150, 515.9275pt x 732.7375pt>
 File: ./assets/background/transformer_module.png Graphic file (type png)
 <use ./assets/background/transformer_module.png>
 Package pdftex.def Info: ./assets/background/transformer_module.png  used on in
@@ -1361,128 +1351,152 @@ put line 547.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23]
+ [22]
 Underfull \hbox (badness 10000) in paragraph at lines 552--556
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 562--573
 
  []
 
 
 Underfull \vbox (badness 6157) has occurred while \output is active []
 
- [24 <./assets/background/transformer_module.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 574--578
+ [23 <./assets/background/transformer_module.png>]
+Underfull \vbox (badness 3068) has occurred while \output is active []
 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [25]
-<./assets/background/BERT_GLUE_finetune.png, id=164, 799.98875pt x 803.0pt>
+ [24]
+<./assets/background/BERT_GLUE_finetune.png, id=161, 799.98875pt x 803.0pt>
 File: ./assets/background/BERT_GLUE_finetune.png Graphic file (type png)
 <use ./assets/background/BERT_GLUE_finetune.png>
 Package pdftex.def Info: ./assets/background/BERT_GLUE_finetune.png  used on in
-put line 616.
+put line 615.
 (pdftex.def)             Requested size: 312.00119pt x 313.181pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Overfull \hbox (20.30536pt too wide) in paragraph at lines 621--623
+Overfull \hbox (20.30536pt too wide) in paragraph at lines 620--622
 []\OT1/cmr/m/n/12 Multiple ver-sions of BERT are pro-vided, in-clud-ing $\OML/c
 mm/m/it/12 BERT[]$ \OT1/cmr/m/n/12 and $\OML/cmm/m/it/12 BERT[]$\OT1/cmr/m/n/12
  ,
  []
 
-[26] [27 <./assets/background/BERT_GLUE_finetune.png>]
-<./assets/experiments/pipeline_vanilla_BERT.png, id=173, 1192.455pt x 434.62375
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [25]
+<./assets/experiments/pipeline_vanilla_BERT.png, id=165, 1192.455pt x 434.62375
 pt>
 File: ./assets/experiments/pipeline_vanilla_BERT.png Graphic file (type png)
 <use ./assets/experiments/pipeline_vanilla_BERT.png>
 Package pdftex.def Info: ./assets/experiments/pipeline_vanilla_BERT.png  used o
-n input line 630.
+n input line 629.
 (pdftex.def)             Requested size: 390.0pt x 142.14633pt.
- [28 <./assets/experiments/pipeline_vanilla_BERT.png>] [29]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [30]
-Underfull \vbox (badness 1127) has occurred while \output is active []
-
- [31]
-[32]
-Overfull \hbox (23.41008pt too wide) in paragraph at lines 830--841
- [] 
- []
-
-
-Overfull \hbox (23.41008pt too wide) in paragraph at lines 848--860
- [] 
- []
-
-[33] [34]
-Overfull \hbox (166.1732pt too wide) in paragraph at lines 897--897
-[]\OT1/cmtt/m/n/12 None, Texas.1, halfback.1, None, does.0, not.1, even.7, know
-, None, team.1, is, play, 
- []
-
-
-Overfull \hbox (178.52321pt too wide) in paragraph at lines 898--898
-[]\OT1/cmtt/m/n/12 None, ranks, fourth, in, 3, 1, 1, 1, scoring, None, three, 1
-, after.1, three.1, games.1[] 
- []
-
-<./assets/background/semcor_skew.png, id=198, 567.11874pt x 424.58624pt>
-File: ./assets/background/semcor_skew.png Graphic file (type png)
-<use ./assets/background/semcor_skew.png>
-Package pdftex.def Info: ./assets/background/semcor_skew.png  used on input lin
-e 904.
-(pdftex.def)             Requested size: 234.00238pt x 175.18933pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[35] [36 <./assets/background/semcor_skew.png>]
+[26 <./assets/background/BERT_GLUE_finetune.png>] [27 <./assets/experiments/pip
+eline_vanilla_BERT.png>] [28] [29] [30] [31]
+Overfull \hbox (23.41008pt too wide) in paragraph at lines 838--849
+ [] 
+ []
+
+
+Overfull \hbox (23.41008pt too wide) in paragraph at lines 856--868
+ [] 
+ []
+
+
+Underfull \vbox (badness 6284) has occurred while \output is active []
+
+ [32]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [33]
+Overfull \hbox (17.97313pt too wide) in paragraph at lines 904--904
+[]\OT1/cmtt/m/n/12 not.adverb.0, even.adverb.10, know.verb.1, None, team.noun.0
+,[] 
+ []
+
+<./assets/background/semcor_skew.png, id=195, 567.11874pt x 424.58624pt>
+File: ./assets/background/semcor_skew.png Graphic file (type png)
+<use ./assets/background/semcor_skew.png>
+Package pdftex.def Info: ./assets/background/semcor_skew.png  used on input lin
+e 911.
+(pdftex.def)             Requested size: 234.00238pt x 175.18933pt.
+[34 <./assets/background/semcor_skew.png>]
 Chapter 3.
 
-Overfull \hbox (3.59383pt too wide) in paragraph at lines 919--919
+Overfull \hbox (3.59383pt too wide) in paragraph at lines 926--926
 []\OT1/cmr/bx/n/17.28 Clustering for Synsets in Static Word Em-
  []
 
-[37
+[35
 
 ]
-<./assets/relatedwork/ego_network.png, id=209, 611.28375pt x 421.575pt>
+<./assets/relatedwork/ego_network.png, id=203, 611.28375pt x 421.575pt>
 File: ./assets/relatedwork/ego_network.png Graphic file (type png)
 <use ./assets/relatedwork/ego_network.png>
 Package pdftex.def Info: ./assets/relatedwork/ego_network.png  used on input li
-ne 933.
+ne 940.
 (pdftex.def)             Requested size: 234.00238pt x 161.37733pt.
 
 
 Package caption Warning: \captionsetup{type*=...} or \captionof
-(caption)                outside box or environment on input line 956.
+(caption)                outside box or environment on input line 964.
 See the caption package documentation for explanation.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [38 <./assets/relatedwork/ego_network.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 963--965
+ [36 <./assets/relatedwork/ego_network.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 969--971
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 996--997
+
+ []
+
+[37]
+Underfull \hbox (badness 10000) in paragraph at lines 1016--1020
+
+ []
+
+
+Overfull \hbox (5.62312pt too wide) in paragraph at lines 1033--1033
+[]\OT1/cmtt/m/n/12 The expanded window will give us time to catch the thieves. 
+
+ []
+
+
+Overfull \hbox (5.62312pt too wide) in paragraph at lines 1034--1034
+[]\OT1/cmtt/m/n/12 You have a two-hour window of clear weather to finish work.[
+] 
+ []
+
+
+LaTeX Warning: Characters dropped after `\end{verbatim}' on input line 1036.
+
+[38]
+Underfull \hbox (badness 10000) in paragraph at lines 1048--1062
 
  []
 
 [39]
-Underfull \hbox (badness 10000) in paragraph at lines 1008--1011
+<./assets/relatedwork/wsd_bert.png, id=218, 1221.56375pt x 456.70625pt>
+File: ./assets/relatedwork/wsd_bert.png Graphic file (type png)
+<use ./assets/relatedwork/wsd_bert.png>
+Package pdftex.def Info: ./assets/relatedwork/wsd_bert.png  used on input line 
+1076.
+(pdftex.def)             Requested size: 350.99762pt x 131.22885pt.
 
- []
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1012--1013
+Underfull \hbox (badness 10000) in paragraph at lines 1082--1084
 
  []
 
@@ -1490,209 +1504,174 @@ Underfull \hbox (badness 10000) in paragraph at lines 1012--1013
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [40]
-Overfull \hbox (5.62312pt too wide) in paragraph at lines 1026--1026
-[]\OT1/cmtt/m/n/12 The expanded window will give us time to catch the thieves. 
+Underfull \hbox (badness 10000) in paragraph at lines 1085--1092
 
  []
 
 
-Overfull \hbox (5.62312pt too wide) in paragraph at lines 1027--1027
-[]\OT1/cmtt/m/n/12 You have a two-hour window of clear weather to finish work.[
-] 
- []
+Underfull \vbox (badness 3240) has occurred while \output is active []
 
-
-LaTeX Warning: Characters dropped after `\end{verbatim}' on input line 1029.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1041--1055
-
- []
-
-[41]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [42]
-<./assets/relatedwork/wsd_bert.png, id=227, 1221.56375pt x 456.70625pt>
-File: ./assets/relatedwork/wsd_bert.png Graphic file (type png)
-<use ./assets/relatedwork/wsd_bert.png>
-Package pdftex.def Info: ./assets/relatedwork/wsd_bert.png  used on input line 
-1069.
-(pdftex.def)             Requested size: 350.99762pt x 131.22885pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1075--1077
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1078--1085
-
- []
-
-[43 <./assets/relatedwork/wsd_bert.png>]
-Underfull \hbox (badness 1521) in paragraph at lines 1108--1121
+ [41 <./assets/relatedwork/wsd_bert.png>]
+Underfull \hbox (badness 1521) in paragraph at lines 1115--1128
 \OT1/cmr/m/n/12 lan-guage mod-els con-sid-ered are anisotropic in their sam-ple
 d con-text
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1108--1121
+Underfull \hbox (badness 10000) in paragraph at lines 1115--1128
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [44]
-Underfull \hbox (badness 10000) in paragraph at lines 1122--1135
+ [42]
+Underfull \hbox (badness 10000) in paragraph at lines 1129--1142
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1146--1150
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [45]
-Underfull \hbox (badness 10000) in paragraph at lines 1139--1143
-
- []
-
-<./assets/relatedwork/sensebert.png, id=239, 1241.63875pt x 206.7725pt>
+ [43]
+<./assets/relatedwork/sensebert.png, id=232, 1241.63875pt x 206.7725pt>
 File: ./assets/relatedwork/sensebert.png Graphic file (type png)
 <use ./assets/relatedwork/sensebert.png>
 Package pdftex.def Info: ./assets/relatedwork/sensebert.png  used on input line
- 1152.
+ 1159.
 (pdftex.def)             Requested size: 390.0pt x 64.94753pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1157--1160
+Underfull \hbox (badness 10000) in paragraph at lines 1164--1167
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1168--1173
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [46 <./assets/relatedwork/sensebert.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 1161--1166
-
- []
-
-<./assets/relatedwork/cold_fictional_desired.png, id=244, 571.13374pt x 372.391
+ [44 <./assets/relatedwork/sensebert.png>]
+<./assets/relatedwork/cold_fictional_desired.png, id=238, 571.13374pt x 372.391
 25pt>
 File: ./assets/relatedwork/cold_fictional_desired.png Graphic file (type png)
 <use ./assets/relatedwork/cold_fictional_desired.png>
 Package pdftex.def Info: ./assets/relatedwork/cold_fictional_desired.png  used 
-on input line 1169.
+on input line 1176.
 (pdftex.def)             Requested size: 155.99762pt x 101.71182pt.
-<./assets/relatedwork/cold_biobert.png, id=245, 387.4475pt x 389.455pt>
+<./assets/relatedwork/cold_biobert.png, id=239, 387.4475pt x 389.455pt>
 File: ./assets/relatedwork/cold_biobert.png Graphic file (type png)
 <use ./assets/relatedwork/cold_biobert.png>
 Package pdftex.def Info: ./assets/relatedwork/cold_biobert.png  used on input l
-ine 1177.
+ine 1184.
 (pdftex.def)             Requested size: 117.00119pt x 117.60399pt.
-[47 <./assets/relatedwork/cold_fictional_desired.png> <./assets/relatedwork/col
-d_biobert.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 1212--1215
+ [45 <./assets/relatedwork/cold_fictional_desired.png> <./assets/relatedwork/co
+ld_biobert.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 1219--1222
 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [48]
-<./assets/relatedwork/BERT_tree.png, id=254, 905.3825pt x 355.3275pt>
+<./assets/relatedwork/BERT_tree.png, id=245, 905.3825pt x 355.3275pt>
 File: ./assets/relatedwork/BERT_tree.png Graphic file (type png)
 <use ./assets/relatedwork/BERT_tree.png>
 Package pdftex.def Info: ./assets/relatedwork/BERT_tree.png  used on input line
- 1227.
+ 1234.
 (pdftex.def)             Requested size: 390.0pt x 153.05893pt.
-<./assets/relatedwork/BERT_plurality.png, id=255, 911.405pt x 468.75125pt>
-File: ./assets/relatedwork/BERT_plurality.png Graphic file (type png)
-<use ./assets/relatedwork/BERT_plurality.png>
-Package pdftex.def Info: ./assets/relatedwork/BERT_plurality.png  used on input
- line 1243.
-(pdftex.def)             Requested size: 390.0pt x 200.58635pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [49 <./assets/relatedwork/BERT_tree.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 1248--1252
+ [46]
+<./assets/relatedwork/BERT_plurality.png, id=249, 911.405pt x 468.75125pt>
+File: ./assets/relatedwork/BERT_plurality.png Graphic file (type png)
+<use ./assets/relatedwork/BERT_plurality.png>
+Package pdftex.def Info: ./assets/relatedwork/BERT_plurality.png  used on input
+ line 1249.
+(pdftex.def)             Requested size: 350.99762pt x 180.52342pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1254--1258
 
  []
 
-<./assets/relatedwork/self_attention_analysis.png, id=260, 1217.54875pt x 651.4
+<./assets/relatedwork/self_attention_analysis.png, id=250, 1217.54875pt x 651.4
 3375pt>
 File: ./assets/relatedwork/self_attention_analysis.png Graphic file (type png)
 <use ./assets/relatedwork/self_attention_analysis.png>
 Package pdftex.def Info: ./assets/relatedwork/self_attention_analysis.png  used
- on input line 1257.
+ on input line 1263.
 (pdftex.def)             Requested size: 350.99762pt x 187.79765pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [50 <./assets/relatedwork/BERT_plurality.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 1262--1268
+[47 <./assets/relatedwork/BERT_tree.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 1268--1274
 
  []
 
-<./assets/relatedwork/BERT_tsne_layers.png, id=266, 951.555pt x 245.91875pt>
+[48 <./assets/relatedwork/BERT_plurality.png> <./assets/relatedwork/self_attent
+ion_analysis.png>]
+<./assets/relatedwork/BERT_tsne_layers.png, id=260, 951.555pt x 245.91875pt>
 File: ./assets/relatedwork/BERT_tsne_layers.png Graphic file (type png)
 <use ./assets/relatedwork/BERT_tsne_layers.png>
 Package pdftex.def Info: ./assets/relatedwork/BERT_tsne_layers.png  used on inp
-ut line 1275.
+ut line 1281.
 (pdftex.def)             Requested size: 350.99762pt x 90.71083pt.
-
-Underfull \vbox (badness 3271) has occurred while \output is active []
-
- [51 <./assets/relatedwork/self_attention_analysis.png>]
-<./assets/relatedwork/BERT_dependency_parsing.png, id=271, 506.89375pt x 172.64
+<./assets/relatedwork/BERT_dependency_parsing.png, id=261, 506.89375pt x 172.64
 5pt>
 File: ./assets/relatedwork/BERT_dependency_parsing.png Graphic file (type png)
 <use ./assets/relatedwork/BERT_dependency_parsing.png>
 Package pdftex.def Info: ./assets/relatedwork/BERT_dependency_parsing.png  used
- on input line 1284.
+ on input line 1290.
 (pdftex.def)             Requested size: 272.99881pt x 92.98454pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1289--1290
+Underfull \hbox (badness 10000) in paragraph at lines 1295--1296
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1291--1293
+Underfull \hbox (badness 10000) in paragraph at lines 1297--1299
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1296--1305
-
- []
-
-
-Underfull \vbox (badness 5578) has occurred while \output is active []
-
- [52 <./assets/relatedwork/BERT_tsne_layers.png> <./assets/relatedwork/BERT_dep
-endency_parsing.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 1309--1310
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1312--1317
+Underfull \hbox (badness 10000) in paragraph at lines 1302--1311
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [53]
-[54]
+ [49 <./assets/relatedwork/BERT_tsne_layers.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 1315--1316
+
+ []
+
+[50 <./assets/relatedwork/BERT_dependency_parsing.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 1318--1323
+
+ []
+
+[51] [52
+
+]
 Chapter 4.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [55
+ [53]
+Underfull \hbox (badness 10000) in paragraph at lines 1353--1370
 
-]
+ []
+
+[54]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [55]
 [56]
-Underfull \hbox (badness 10000) in paragraph at lines 1365--1366
+Underfull \hbox (badness 10000) in paragraph at lines 1465--1466
 
  []
 
@@ -1700,88 +1679,119 @@ Underfull \hbox (badness 10000) in paragraph at lines 1365--1366
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [57]
-[58]
+Underfull \hbox (badness 10000) in paragraph at lines 1482--1483
+
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [59]
+ [58]
+Underfull \hbox (badness 10000) in paragraph at lines 1509--1512
+
+ []
+
+[59]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [60]
-[61]
-Underfull \hbox (badness 10000) in paragraph at lines 1508--1511
-
- []
-
-[62]
-Underfull \hbox (badness 10000) in paragraph at lines 1553--1554
+Underfull \hbox (badness 10000) in paragraph at lines 1554--1555
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [63]
-Underfull \hbox (badness 10000) in paragraph at lines 1582--1583
+ [61]
+Underfull \hbox (badness 10000) in paragraph at lines 1583--1584
 
  []
 
 
-Underfull \hbox (badness 1142) in paragraph at lines 1587--1593
+Underfull \hbox (badness 1142) in paragraph at lines 1588--1594
 \OT1/cmr/m/n/12 num-ber of clus-ter classes scores our al-go-rithm in the multi
 -modality
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1587--1593
+Underfull \hbox (badness 10000) in paragraph at lines 1588--1594
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [64]
+ [62]
+[63]
+Underfull \hbox (badness 10000) in alignment at lines 1632--1632
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1648--1648
+[][][]
+ []
+
+[64]
+Underfull \hbox (badness 10000) in alignment at lines 1668--1668
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1687--1687
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1690--1693
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1696--1705
+
+ []
+
 [65]
-Underfull \hbox (badness 10000) in alignment at lines 1631--1631
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) in alignment at lines 1647--1647
-[][][]
- []
-
-[66]
-Underfull \hbox (badness 10000) in alignment at lines 1667--1667
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) in alignment at lines 1686--1686
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1689--1692
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1695--1704
-
- []
-
-[67]
-Overfull \hbox (190.87321pt too wide) detected at line 1718
+Overfull \hbox (190.87321pt too wide) detected at line 1719
 []
  []
 
 
-Overfull \hbox (3.61008pt too wide) in paragraph at lines 1718--1719
+Overfull \hbox (3.61008pt too wide) in paragraph at lines 1719--1720
 [][][] 
  []
 
 
-Overfull \hbox (122.94818pt too wide) detected at line 1738
+Overfull \hbox (122.94818pt too wide) detected at line 1737
+[]
+ []
+
+
+Overfull \hbox (141.47319pt too wide) detected at line 1757
+[]
+ []
+
+[66]
+Overfull \hbox (141.47319pt too wide) detected at line 1778
+[]
+ []
+
+
+Overfull \hbox (166.1732pt too wide) detected at line 1799
+[]
+ []
+
+
+Overfull \hbox (14.19226pt too wide) in paragraph at lines 1799--1800
+[][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [67]
+Overfull \hbox (184.69821pt too wide) detected at line 1820
 []
  []
 
@@ -1789,242 +1799,201 @@ Overfull \hbox (122.94818pt too wide) detected at line 1738
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [68]
-Overfull \hbox (141.47319pt too wide) detected at line 1758
-[]
- []
-
-
-Overfull \hbox (141.47319pt too wide) detected at line 1779
-[]
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [69]
-Overfull \hbox (166.1732pt too wide) detected at line 1800
-[]
- []
-
-
-Overfull \hbox (14.19226pt too wide) in paragraph at lines 1800--1801
-[][] 
- []
-
-
-Overfull \hbox (184.69821pt too wide) detected at line 1821
-[]
- []
-
-
+[69]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [70]
-[71]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [72]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [73]
-<./assets/experiments/pos_dominance_calculation.png, id=343, 470.75874pt x 350.
+<./assets/experiments/pos_dominance_calculation.png, id=334, 470.75874pt x 350.
 30875pt>
 File: ./assets/experiments/pos_dominance_calculation.png Graphic file (type png
 )
 <use ./assets/experiments/pos_dominance_calculation.png>
 Package pdftex.def Info: ./assets/experiments/pos_dominance_calculation.png  us
-ed on input line 1907.
+ed on input line 1906.
 (pdftex.def)             Requested size: 195.0pt x 145.10815pt.
 
-[74 <./assets/experiments/pos_dominance_calculation.png>]
-<./assets/analysis/run_pca.png, id=349, 334.24875pt x 272.01625pt>
+[71 <./assets/experiments/pos_dominance_calculation.png>]
+<./assets/analysis/run_pca.png, id=339, 334.24875pt x 272.01625pt>
 File: ./assets/analysis/run_pca.png Graphic file (type png)
 <use ./assets/analysis/run_pca.png>
-Package pdftex.def Info: ./assets/analysis/run_pca.png  used on input line 1932
+Package pdftex.def Info: ./assets/analysis/run_pca.png  used on input line 1931
 .
 (pdftex.def)             Requested size: 140.39958pt x 114.26263pt.
-<./assets/analysis/run_umap.png, id=350, 333.245pt x 263.98625pt>
+<./assets/analysis/run_umap.png, id=340, 333.245pt x 263.98625pt>
 File: ./assets/analysis/run_umap.png Graphic file (type png)
 <use ./assets/analysis/run_umap.png>
 Package pdftex.def Info: ./assets/analysis/run_umap.png  used on input line 193
-9.
+8.
 (pdftex.def)             Requested size: 140.39958pt x 111.21988pt.
-<./assets/analysis/block_pca.png, id=351, 437.635pt x 265.99374pt>
+<./assets/analysis/block_pca.png, id=341, 437.635pt x 265.99374pt>
 File: ./assets/analysis/block_pca.png Graphic file (type png)
 <use ./assets/analysis/block_pca.png>
 Package pdftex.def Info: ./assets/analysis/block_pca.png  used on input line 19
-50.
+49.
 (pdftex.def)             Requested size: 140.39958pt x 85.33484pt.
-<./assets/analysis/block_umap.png, id=352, 304.13625pt x 260.975pt>
+<./assets/analysis/block_umap.png, id=342, 304.13625pt x 260.975pt>
 File: ./assets/analysis/block_umap.png Graphic file (type png)
 <use ./assets/analysis/block_umap.png>
 Package pdftex.def Info: ./assets/analysis/block_umap.png  used on input line 1
-957.
+956.
 (pdftex.def)             Requested size: 140.39958pt x 120.47604pt.
-<./assets/analysis/cold_pca.png, id=353, 337.26pt x 268.00125pt>
+<./assets/analysis/cold_pca.png, id=343, 337.26pt x 268.00125pt>
 File: ./assets/analysis/cold_pca.png Graphic file (type png)
 <use ./assets/analysis/cold_pca.png>
 Package pdftex.def Info: ./assets/analysis/cold_pca.png  used on input line 196
-8.
+7.
 (pdftex.def)             Requested size: 140.39958pt x 111.57011pt.
-<./assets/analysis/cold_umap.png, id=354, 332.24126pt x 265.99374pt>
+<./assets/analysis/cold_umap.png, id=344, 332.24126pt x 265.99374pt>
 File: ./assets/analysis/cold_umap.png Graphic file (type png)
 <use ./assets/analysis/cold_umap.png>
 Package pdftex.def Info: ./assets/analysis/cold_umap.png  used on input line 19
-75.
+74.
 (pdftex.def)             Requested size: 140.39958pt x 112.40253pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [75 <./assets/analysis/run_pca.png> <./assets/analysis/run_umap.png> <./assets
-/analysis/block_pca.png> <./assets/analysis/block_umap.png>] [76 <./assets/anal
-ysis/cold_pca.png> <./assets/analysis/cold_umap.png>]
+ [72 <./assets/analysis/run_pca.png> <./assets/analysis/run_umap.png> <./assets
+/analysis/block_pca.png> <./assets/analysis/block_umap.png>] [73 <./assets/anal
+ysis/cold_pca.png> <./assets/analysis/cold_umap.png>] [74
+
+]
 Chapter 5.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1997--2005
+Underfull \hbox (badness 10000) in paragraph at lines 1996--2004
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [77
-
-]
-Overfull \hbox (8.95662pt too wide) in paragraph at lines 2041--2042
+ [75]
+Overfull \hbox (8.95662pt too wide) in paragraph at lines 2040--2041
 [][] 
  []
 
-<./assets/experiments/variance_in_BERT_embeddings.png, id=371, 524.96124pt x 52
+<./assets/experiments/variance_in_BERT_embeddings.png, id=365, 524.96124pt x 52
 9.98pt>
 File: ./assets/experiments/variance_in_BERT_embeddings.png Graphic file (type p
 ng)
 <use ./assets/experiments/variance_in_BERT_embeddings.png>
 Package pdftex.def Info: ./assets/experiments/variance_in_BERT_embeddings.png  
-used on input line 2045.
+used on input line 2044.
 (pdftex.def)             Requested size: 195.0pt x 196.86586pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [78]
-Underfull \hbox (badness 2253) in paragraph at lines 2057--2057
+ [76]
+Underfull \hbox (badness 2253) in paragraph at lines 2056--2056
 []\OT1/cmr/bx/n/17.28 BERNIE: Equal-iz-ing vari-ances across
  []
 
-[79 <./assets/experiments/variance_in_BERT_embeddings.png>]
-<./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png, id=379, 1172.38p
+[77 <./assets/experiments/variance_in_BERT_embeddings.png>]
+<./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png, id=373, 1172.38p
 t x 439.6425pt>
 File: ./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png Graphic file
  (type png)
 <use ./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png>
 Package pdftex.def Info: ./assets/experiments/pipeline_tokenizer_BERnie_POS_inp
-ut.png  used on input line 2088.
+ut.png  used on input line 2087.
 (pdftex.def)             Requested size: 390.0pt x 146.24973pt.
- [80] [81 <./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png>]
-<./assets/experiments/pipeline_model_BERnie_POS_initialization.png, id=388, 108
+ [78] [79 <./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png>]
+<./assets/experiments/pipeline_model_BERnie_POS_initialization.png, id=381, 108
 1.03876pt x 439.6425pt>
 File: ./assets/experiments/pipeline_model_BERnie_POS_initialization.png Graphic
  file (type png)
 <use ./assets/experiments/pipeline_model_BERnie_POS_initialization.png>
 Package pdftex.def Info: ./assets/experiments/pipeline_model_BERnie_POS_initial
-ization.png  used on input line 2110.
+ization.png  used on input line 2109.
 (pdftex.def)             Requested size: 390.0pt x 158.6066pt.
-<./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png, id=389, 707.6
+<./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png, id=382, 707.6
 4375pt x 418.56375pt>
 File: ./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png Graphic f
 ile (type png)
 <use ./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png>
 Package pdftex.def Info: ./assets/experiments/pipeline_tokenizer_BERnie_POS_sen
-tence.png  used on input line 2118.
+tence.png  used on input line 2117.
 (pdftex.def)             Requested size: 195.0pt x 115.3385pt.
-<./assets/experiments/pipeline_model_BERnie_POS.png, id=390, 871.255pt x 445.66
+<./assets/experiments/pipeline_model_BERnie_POS.png, id=383, 871.255pt x 445.66
 5pt>
 File: ./assets/experiments/pipeline_model_BERnie_POS.png Graphic file (type png
 )
 <use ./assets/experiments/pipeline_model_BERnie_POS.png>
 Package pdftex.def Info: ./assets/experiments/pipeline_model_BERnie_POS.png  us
-ed on input line 2125.
+ed on input line 2124.
 (pdftex.def)             Requested size: 214.50119pt x 109.7159pt.
 
-Overfull \hbox (19.50119pt too wide) in paragraph at lines 2116--2129
+Overfull \hbox (19.50119pt too wide) in paragraph at lines 2115--2128
 []$[]$ $[]$ 
  []
 
-[82 <./assets/experiments/pipeline_model_BERnie_POS_initialization.png>]
-<./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png, id=395, 923.45pt 
-x 345.29pt>
-File: ./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png Graphic file 
-(type png)
-<use ./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png>
-Package pdftex.def Info: ./assets/experiments/pipeline_tokenizer_BERnie_meaning
-_.png  used on input line 2152.
-(pdftex.def)             Requested size: 390.0pt x 145.8269pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [83 <./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png> <./asset
-s/experiments/pipeline_model_BERnie_POS.png>]
-<./assets/experiments/pipeline_tokenizer_BERnie_meaning.png, id=402, 707.64375p
-t x 317.185pt>
-File: ./assets/experiments/pipeline_tokenizer_BERnie_meaning.png Graphic file (
-type png)
-<use ./assets/experiments/pipeline_tokenizer_BERnie_meaning.png>
-Package pdftex.def Info: ./assets/experiments/pipeline_tokenizer_BERnie_meaning
-.png  used on input line 2177.
-(pdftex.def)             Requested size: 195.0pt x 87.40279pt.
-
-Underfull \hbox (badness 2951) in paragraph at lines 2178--2178
-[]\OT1/cmr/m/n/10.95 (a) |The clustering-modified to-k-enizer
- []
-
-<./assets/experiments/pipeline_model_BERnie_meaning_embedding.png, id=403, 698.
-61pt x 343.2825pt>
-File: ./assets/experiments/pipeline_model_BERnie_meaning_embedding.png Graphic 
-file (type png)
-<use ./assets/experiments/pipeline_model_BERnie_meaning_embedding.png>
-Package pdftex.def Info: ./assets/experiments/pipeline_model_BERnie_meaning_emb
-edding.png  used on input line 2183.
-(pdftex.def)             Requested size: 214.50119pt x 105.40028pt.
-
-Overfull \hbox (19.50119pt too wide) in paragraph at lines 2175--2187
- []$$[]$ 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [84 <./assets/experiments/pipeline_tokenizer_BERnie_meaning_.png>]
-<./assets/experiments/pipeline_model_BERnie_meaning.png, id=408, 897.3525pt x 3
+[80 <./assets/experiments/pipeline_model_BERnie_POS_initialization.png>]
+[81 <./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png> <./assets
+/experiments/pipeline_model_BERnie_POS.png>]
+<./assets/experiments/pipeline_model_BERnie_meaning.png, id=394, 897.3525pt x 3
 45.29pt>
 File: ./assets/experiments/pipeline_model_BERnie_meaning.png Graphic file (type
  png)
 <use ./assets/experiments/pipeline_model_BERnie_meaning.png>
 Package pdftex.def Info: ./assets/experiments/pipeline_model_BERnie_meaning.png
-  used on input line 2196.
+  used on input line 2157.
 (pdftex.def)             Requested size: 390.0pt x 150.06294pt.
- [85 <./assets/experiments/pipeline_tokenizer_BERnie_meaning.png> <./assets/exp
-eriments/pipeline_model_BERnie_meaning_embedding.png> <./assets/experiments/pip
-eline_model_BERnie_meaning.png>]
+<./assets/experiments/pipeline_tokenizer_BERnie_meaning.png, id=395, 707.64375p
+t x 317.185pt>
+File: ./assets/experiments/pipeline_tokenizer_BERnie_meaning.png Graphic file (
+type png)
+<use ./assets/experiments/pipeline_tokenizer_BERnie_meaning.png>
+Package pdftex.def Info: ./assets/experiments/pipeline_tokenizer_BERnie_meaning
+.png  used on input line 2173.
+(pdftex.def)             Requested size: 195.0pt x 87.40279pt.
+
+Underfull \hbox (badness 2951) in paragraph at lines 2174--2174
+[]\OT1/cmr/m/n/10.95 (a) |The clustering-modified to-k-enizer
+ []
+
+<./assets/experiments/pipeline_model_BERnie_meaning_embedding.png, id=396, 698.
+61pt x 343.2825pt>
+File: ./assets/experiments/pipeline_model_BERnie_meaning_embedding.png Graphic 
+file (type png)
+<use ./assets/experiments/pipeline_model_BERnie_meaning_embedding.png>
+Package pdftex.def Info: ./assets/experiments/pipeline_model_BERnie_meaning_emb
+edding.png  used on input line 2179.
+(pdftex.def)             Requested size: 214.50119pt x 105.40028pt.
+
+Overfull \hbox (19.50119pt too wide) in paragraph at lines 2171--2183
+ []$$[]$ 
+ []
+
+[82 <./assets/experiments/pipeline_model_BERnie_meaning.png>] [83 <./assets/exp
+eriments/pipeline_tokenizer_BERnie_meaning.png> <./assets/experiments/pipeline_
+model_BERnie_meaning_embedding.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [86]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ [84]
+[85]
+Underfull \hbox (badness 10000) in paragraph at lines 2297--2298
 
- [87]
-Overfull \hbox (27.11707pt too wide) in paragraph at lines 2326--2330
+ []
+
+
+Overfull \hbox (27.11707pt too wide) in paragraph at lines 2319--2323
 [][] 
  []
 
-[88]
-Chapter 6.
 
-Underfull \hbox (badness 10000) in paragraph at lines 2339--2345
+Underfull \hbox (badness 10000) in paragraph at lines 2325--2326
 
  []
 
-[89
+[86]
+Chapter 6.
 
-] [90] [91] (./dissertation.bbl [92]
+Underfull \hbox (badness 10000) in paragraph at lines 2334--2340
+
+ []
+
+[87
+
+] [88] [89] (./dissertation.bbl [90]
 Underfull \hbox (badness 10000) in paragraph at lines 4--8
 []\OT1/cmr/m/n/12 Computational in-tel-li-gence lab: Lec-ture 5 em-bed-dings.
  []
@@ -2044,14 +2013,14 @@ ithub . io / posts /
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [93
+ [91
 
 ]
 Underfull \hbox (badness 1442) in paragraph at lines 108--111
 []\OT1/cmr/m/n/12 Piotr Bo-janowski, Edouard Grave, Ar-mand Joulin, and Tomas
  []
 
-[94] [95] [96]
+[92] [93] [94]
 Underfull \hbox (badness 10000) in paragraph at lines 384--387
 []\OT1/cmr/m/n/12 Guillaume Lam-ple, Alexis Con-neau, Lu-dovic De-noyer, and
  []
@@ -2062,272 +2031,272 @@ Underfull \hbox (badness 1342) in paragraph at lines 384--387
 us-ing
  []
 
-[97] [98] [99] [100] [101]
+[95] [96] [97] [98] [99]
 Underfull \hbox (badness 2547) in paragraph at lines 791--795
 []\OT1/cmr/m/n/12 Xun Wang, Xin-tong Han, Weilin Huang, Dengke Dong, and
  []
 
-[102]) [103] [104
+[100]) [101] [102
 
 ]
 Appendix A.
 
-Overfull \hbox (74.7302pt too wide) in paragraph at lines 2407--2425
+Overfull \hbox (74.7302pt too wide) in paragraph at lines 2402--2420
  [][] 
  []
 
-[105]
-Underfull \hbox (badness 10000) in paragraph at lines 2448--2449
+[103]
+Underfull \hbox (badness 10000) in paragraph at lines 2443--2444
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2456--2458
+Underfull \hbox (badness 10000) in paragraph at lines 2451--2453
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [106]
+ [104]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [107]
-<./assets/background/LSTM.png, id=485, 773.89125pt x 274.02374pt>
+ [105]
+<./assets/background/LSTM.png, id=477, 773.89125pt x 274.02374pt>
 File: ./assets/background/LSTM.png Graphic file (type png)
 <use ./assets/background/LSTM.png>
-Package pdftex.def Info: ./assets/background/LSTM.png  used on input line 2514.
+Package pdftex.def Info: ./assets/background/LSTM.png  used on input line 2509.
 
 (pdftex.def)             Requested size: 390.0pt x 138.09447pt.
 
 Underfull \vbox (badness 7133) has occurred while \output is active []
 
- [108 <./assets/background/LSTM.png>]
-Overfull \hbox (97.82524pt too wide) in paragraph at lines 2569--2569
+ [106 <./assets/background/LSTM.png>]
+Overfull \hbox (97.82524pt too wide) in paragraph at lines 2564--2564
 []\OT1/cmtt/m/n/12 Prosecutors filed a motion informing Lee they intend to seek
  the death penalty.
  []
 
 
-Overfull \hbox (42.25021pt too wide) in paragraph at lines 2575--2575
+Overfull \hbox (42.25021pt too wide) in paragraph at lines 2570--2570
 []\OT1/cmtt/m/n/12 A former teammate , Carlton Dotson , has been charged with t
 he murder.
  []
 
 
-Overfull \hbox (252.20032pt too wide) in paragraph at lines 2576--2576
+Overfull \hbox (252.20032pt too wide) in paragraph at lines 2571--2571
 []\OT1/cmtt/m/n/12 His body was found July 25 , and former teammate Carlton Dot
 son has been charged in his shooting death .[] 
  []
 
-[109] [110]
+[107] [108]
 Appendix B.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [111
+ [109
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 2636--2638
+Underfull \hbox (badness 10000) in paragraph at lines 2631--2633
 
  []
 
-[112]
+[110]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [113]
+ [111]
 \c@mydef=\count327
-<./assets/relatedwork/metric_learning_example.png, id=508, 1361.085pt x 488.826
+<./assets/relatedwork/metric_learning_example.png, id=500, 1361.085pt x 488.826
 25pt>
 File: ./assets/relatedwork/metric_learning_example.png Graphic file (type png)
 <use ./assets/relatedwork/metric_learning_example.png>
 Package pdftex.def Info: ./assets/relatedwork/metric_learning_example.png  used
- on input line 2741.
+ on input line 2736.
 (pdftex.def)             Requested size: 390.0pt x 140.0628pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [114]
-Underfull \hbox (badness 1924) in paragraph at lines 2752--2753
+ [112]
+Underfull \hbox (badness 1924) in paragraph at lines 2746--2747
  \OT1/cmr/bx/n/12 Di-men-sion-al-ity Re-duc-tion[] \OT1/cmr/m/n/12 tech-niques 
 in-clude prin-ci-pal com-po-nent
  []
 
-<./assets/relatedwork/metric_learning.png, id=512, 1048.91875pt x 897.3525pt>
+<./assets/relatedwork/metric_learning.png, id=504, 1048.91875pt x 897.3525pt>
 File: ./assets/relatedwork/metric_learning.png Graphic file (type png)
 <use ./assets/relatedwork/metric_learning.png>
 Package pdftex.def Info: ./assets/relatedwork/metric_learning.png  used on inpu
-t line 2762.
+t line 2756.
 (pdftex.def)             Requested size: 390.0pt x 333.64462pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [115 <./assets/relatedwork/metric_learning_example.png>] [116 <./assets/relate
+ [113 <./assets/relatedwork/metric_learning_example.png>] [114 <./assets/relate
 dwork/metric_learning.png>]
-Overfull \hbox (29.9002pt too wide) in paragraph at lines 2781--2781
+Overfull \hbox (29.9002pt too wide) in paragraph at lines 2775--2775
 []            \OT1/cmtt/m/n/12 torch.sum((latent_1 - latent_2) * (latent_1 - la
 tent_2))[] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2795--2798
+Underfull \hbox (badness 10000) in paragraph at lines 2789--2792
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [117]
-<./assets/relatedwork/embeddings_by_language.png, id=525, 824.07875pt x 630.355
+ [115]
+<./assets/relatedwork/embeddings_by_language.png, id=516, 824.07875pt x 630.355
 pt>
 File: ./assets/relatedwork/embeddings_by_language.png Graphic file (type png)
 <use ./assets/relatedwork/embeddings_by_language.png>
 Package pdftex.def Info: ./assets/relatedwork/embeddings_by_language.png  used 
-on input line 2825.
+on input line 2819.
 (pdftex.def)             Requested size: 234.00238pt x 178.98936pt.
 
 Underfull \vbox (badness 6461) has occurred while \output is active []
 
- [118 <./assets/relatedwork/embeddings_by_language.png>] [119] [120
+ [116 <./assets/relatedwork/embeddings_by_language.png>] [117] [118
 
 ]
 Appendix C.
 
-Underfull \hbox (badness 10000) in alignment at lines 2873--2873
+Underfull \hbox (badness 10000) in alignment at lines 2867--2867
 [][][]
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 2887--2887
+Underfull \hbox (badness 10000) in alignment at lines 2881--2881
 [][][]
  []
 
-[121]
-Underfull \hbox (badness 10000) in alignment at lines 2902--2902
+[119]
+Underfull \hbox (badness 10000) in alignment at lines 2896--2896
 [][][]
  []
 
 
-Overfull \hbox (141.05026pt too wide) detected at line 2922
+Overfull \hbox (141.05026pt too wide) detected at line 2916
 []
  []
 
 
-Overfull \hbox (307.77534pt too wide) detected at line 2939
+Overfull \hbox (307.77534pt too wide) detected at line 2933
 []
  []
 
 
-Overfull \hbox (103.92386pt too wide) in paragraph at lines 2939--2940
+Overfull \hbox (103.92386pt too wide) in paragraph at lines 2933--2934
 [][] 
  []
 
 
-Overfull \hbox (147.22527pt too wide) detected at line 2957
+Overfull \hbox (147.22527pt too wide) detected at line 2951
 []
  []
 
 
 Underfull \vbox (badness 5189) has occurred while \output is active []
 
+ [120]
+Overfull \hbox (425.1004pt too wide) detected at line 2969
+[]
+ []
+
+
+Overfull \hbox (186.05104pt too wide) in paragraph at lines 2969--2970
+[][] 
+ []
+
+
+Overfull \hbox (239.85031pt too wide) detected at line 2987
+[]
+ []
+
+
+Overfull \hbox (56.37654pt too wide) in paragraph at lines 2987--2988
+[][] 
+ []
+
+
+Overfull \hbox (252.20032pt too wide) detected at line 3006
+[]
+ []
+
+
+Overfull \hbox (65.0215pt too wide) in paragraph at lines 3006--3007
+[][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [121]
+Overfull \hbox (246.02531pt too wide) detected at line 3024
+[]
+ []
+
+
+Overfull \hbox (60.69902pt too wide) in paragraph at lines 3024--3025
+[][] 
+ []
+
+
+Overfull \hbox (338.65036pt too wide) detected at line 3044
+[]
+ []
+
+
+Overfull \hbox (125.53627pt too wide) in paragraph at lines 3044--3045
+[][] 
+ []
+
+
+Overfull \hbox (295.42534pt too wide) detected at line 3059
+[]
+ []
+
+
+Overfull \hbox (95.27888pt too wide) in paragraph at lines 3059--3060
+[][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
  [122]
-Overfull \hbox (425.1004pt too wide) detected at line 2975
+Overfull \hbox (270.72533pt too wide) detected at line 3076
 []
  []
 
 
-Overfull \hbox (186.05104pt too wide) in paragraph at lines 2975--2976
+Overfull \hbox (77.98895pt too wide) in paragraph at lines 3076--3077
 [][] 
  []
 
 
-Overfull \hbox (239.85031pt too wide) detected at line 2993
+Overfull \hbox (400.40039pt too wide) detected at line 3095
 []
  []
 
 
-Overfull \hbox (56.37654pt too wide) in paragraph at lines 2993--2994
+Overfull \hbox (168.76111pt too wide) in paragraph at lines 3095--3096
 [][] 
  []
 
-
-Overfull \hbox (252.20032pt too wide) detected at line 3012
-[]
- []
-
-
-Overfull \hbox (65.0215pt too wide) in paragraph at lines 3012--3013
-[][] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [123]
-Overfull \hbox (246.02531pt too wide) detected at line 3030
-[]
- []
-
-
-Overfull \hbox (60.69902pt too wide) in paragraph at lines 3030--3031
-[][] 
- []
-
-
-Overfull \hbox (338.65036pt too wide) detected at line 3050
-[]
- []
-
-
-Overfull \hbox (125.53627pt too wide) in paragraph at lines 3050--3051
-[][] 
- []
-
-
-Overfull \hbox (295.42534pt too wide) detected at line 3065
-[]
- []
-
-
-Overfull \hbox (95.27888pt too wide) in paragraph at lines 3065--3066
-[][] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [124]
-Overfull \hbox (270.72533pt too wide) detected at line 3082
-[]
- []
-
-
-Overfull \hbox (77.98895pt too wide) in paragraph at lines 3082--3083
-[][] 
- []
-
-
-Overfull \hbox (400.40039pt too wide) detected at line 3101
-[]
- []
-
-
-Overfull \hbox (168.76111pt too wide) in paragraph at lines 3101--3102
-[][] 
- []
-
-[125] [126]
+[123] [124]
 Appendix D.
-<./assets/relatedwork/muse.png, id=555, 1045.9075pt x 219.82124pt>
+<./assets/relatedwork/muse.png, id=547, 1045.9075pt x 219.82124pt>
 File: ./assets/relatedwork/muse.png Graphic file (type png)
 <use ./assets/relatedwork/muse.png>
-Package pdftex.def Info: ./assets/relatedwork/muse.png  used on input line 3155
+Package pdftex.def Info: ./assets/relatedwork/muse.png  used on input line 3149
 .
 (pdftex.def)             Requested size: 390.0pt x 81.96652pt.
-[127
+[125
 
  <./assets/relatedwork/muse.png>]
-Underfull \hbox (badness 3138) in paragraph at lines 3168--3172
+Underfull \hbox (badness 3138) in paragraph at lines 3162--3166
 []\OT1/cmr/m/n/12 A gen-er-al-iza-tion of these word vec-tors to point-vector p
 robability-
  []
@@ -2335,8 +2304,8 @@ robability-
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [128]
-[129] [130] (./dissertation.aux)
+ [126]
+[127] [128] (./dissertation.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -2345,10 +2314,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 29077 strings out of 492616
- 583883 string characters out of 6129480
- 597743 words of memory out of 5000000
- 32553 multiletter control sequences out of 15000+600000
+ 29074 strings out of 492616
+ 583607 string characters out of 6129480
+ 598762 words of memory out of 5000000
+ 32551 multiletter control sequences out of 15000+600000
  544635 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  54i,22n,77p,2032b,700s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2373,10 +2342,10 @@ ve/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive
 /2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/
 2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2
 019/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on dissertation.pdf (147 pages, 3580092 bytes).
+Output written on dissertation.pdf (145 pages, 3529983 bytes).
 PDF statistics:
- 643 PDF objects out of 1000 (max. 8388607)
- 393 compressed objects within 4 object streams
+ 635 PDF objects out of 1000 (max. 8388607)
+ 389 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
- 203 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 198 words of extra memory for PDF output out of 10000 (max. 10000000)
 
