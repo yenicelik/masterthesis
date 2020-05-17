@@ -3,13 +3,13 @@
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {3.1}{\ignorespaces Table taken from \cite {pelevina16}. Neighbors of the word \texttt {table} and its senses produced. The first row belongs to both senses, while the second and third row are distinct synsets.\relax }}{39}% 
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {was}.\relax }}{58}% 
-\contentsline {table}{\numberline {4.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {is}.\relax }}{58}% 
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {was}.\relax }}{59}% 
+\contentsline {table}{\numberline {4.2}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {is}.\relax }}{59}% 
 \contentsline {table}{\numberline {4.3}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit {one}.\relax }}{59}% 
-\contentsline {table}{\numberline {4.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{59}% 
-\contentsline {table}{\numberline {4.5}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=500$. \relax }}{66}% 
+\contentsline {table}{\numberline {4.4}{\ignorespaces Mean and standard deviation of the accuracy of a linear classifier trained on the 4 most common classes of WordNet meanings for the word \textit {was}.\relax }}{60}% 
+\contentsline {table}{\numberline {4.5}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the derivative models as described by experiment for $k=100$ and $n=500$. \relax }}{66}% 
 \contentsline {table}{\numberline {4.6}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=100$ and $n=1000$. \relax }}{66}% 
-\contentsline {table}{\numberline {4.7}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{66}% 
+\contentsline {table}{\numberline {4.7}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{67}% 
 \contentsline {table}{\numberline {4.8}{\ignorespaces The maximum ARI score achieved during hyperparameter optimization for the different models as described by experiment for $k=20$ and $n=1000$. \relax }}{67}% 
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {5.1}{\ignorespaces For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between number of WordNet senses and the variance amongst sampled BERT vectors.\relax }}{78}% 

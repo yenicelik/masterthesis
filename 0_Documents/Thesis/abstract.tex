@@ -2,18 +2,19 @@
 {\Huge \bf Abstract}
 \vspace{24pt} 
 
-One of the goals of Natural Language Understanding \textit{NLU} is to formalize written text in a way, such that linguistic features can be captured through computational models, which can then again be used for downstream machine learning tasks.
-The most popular methodology in NLU is the use of vectors that represent written text, including word-vectors, sentence-vectors, etc. 
-These vectors are often referred to as \textit{embedding} vectors, as they embed more complex concepts into a vector representation.
+%One of the goals of Natural Language Understanding \textit{NLU} is to formalize written text in a way, such that linguistic features can be captured through computational models, which can then again be used for downstream machine learning tasks.
+%The most popular methodology in NLU is the use of vectors that represent written text, including word-vectors, sentence-vectors, etc. 
+%These vectors are often referred to as \textit{embedding} vectors, as they embed more complex concepts into a vector representation.
 
-Because embeddings - due to their strong usage in downstream tasks - can be considered as the fundamental unit of machine learning in the domain of natural language, any shortcomings will influence the performance of the target task.
+Word and context embeddings - due to their strong usage in downstream tasks - can be considered as the fundamental unit of machine learning in the domain of natural language.
+Any shortcomings will influence the performance of downstream tasks.
 Given that language models such as BERT only capture a black-box function $f$ between input and output, our aim is to understand how the subspace organization relates to linguistic features.
-We focus our analysis on \textit{semantics}, which captures a meaning within language, as this is one of the most important features of language. 
+We focus our analysis on \textit{semantics}, which captures the meaning within language, as this is one of the most important features of language. 
 We analyse the BERT language model, as it provides a good balance between popularity, close to state-of-the-art performance, and generalizability to other modern language models.
 \\
 
 Our main contributions are the following: (1) We test for linear separability and ability to partition the space into semantic clusters within the sampled BERT vectors.
-We show that while linear separability is possible, it is nearly impossible to find modes in the data which correspond to semantic classes that are as cleanly as defined by WordNet.
+We show that while linear separability is possible, it is nearly impossible to find modes in the data which correspond to semantic classes that are as cleanly defined as by WordNet.
 We conclude that BERT organized the embedding vectors imminently by context, and very little by semantics alone.
 This can easily introduce undesirable properties such as strong sentiment, leading to considerable bias in downstream tasks.
 (2) We analyze the relationship between part-of-speech and semantics. 

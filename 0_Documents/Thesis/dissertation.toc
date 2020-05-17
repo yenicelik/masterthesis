@@ -9,7 +9,7 @@
 \contentsline {paragraph}{Byte pair encodings}{9}% 
 \contentsline {paragraph}{WordPiece tokenizer}{10}% 
 \contentsline {section}{\numberline {2.2}Word Embeddings}{10}% 
-\contentsline {paragraph}{Word-Embeddings}{10}% 
+\contentsline {paragraph}{Word-Embeddings}{11}% 
 \contentsline {paragraph}{Distance:}{11}% 
 \contentsline {paragraph}{Learning a distance}{12}% 
 \contentsline {paragraph}{Exploiting the distributional structure of language:}{12}% 
@@ -21,35 +21,35 @@
 \contentsline {subsection}{\numberline {2.2.2}Context Embeddings}{20}% 
 \contentsline {subsubsection}{ELMo}{21}% 
 \contentsline {subsubsection}{The Transformer Architecture}{22}% 
-\contentsline {subsubsection}{BERT}{24}% 
+\contentsline {subsubsection}{BERT}{25}% 
 \contentsline {paragraph}{The pipeline of BERT}{27}% 
-\contentsline {subsubsection}{Other language models}{27}% 
-\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{28}% 
+\contentsline {subsubsection}{Other language models}{28}% 
+\contentsline {section}{\numberline {2.3}GLUE benchmark dataset}{29}% 
 \contentsline {subsubsection}{Inference Tasks}{29}% 
-\contentsline {section}{\numberline {2.4}WordNet}{30}% 
-\contentsline {paragraph}{Lexical matrix:}{31}% 
-\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{32}% 
+\contentsline {section}{\numberline {2.4}WordNet}{32}% 
+\contentsline {paragraph}{Lexical matrix:}{32}% 
+\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{35}% 
 \contentsline {chapter}{\numberline {3}Related Work}{37}% 
 \contentsline {section}{\numberline {3.1}Clustering for Synsets in Static Word Embeddings}{37}% 
 \contentsline {paragraph}{The Chinese whispers algorithm}{38}% 
 \contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{39}% 
 \contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{40}% 
 \contentsline {section}{\numberline {3.3}Semantic subspace inside BERT}{41}% 
-\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{47}% 
-\contentsline {section}{\numberline {3.5}Sentiment-subspace in BERT}{52}% 
+\contentsline {section}{\numberline {3.4}Syntactic subspace in BERT}{48}% 
+\contentsline {section}{\numberline {3.5}Sentiment-subspace in BERT}{53}% 
 \contentsline {chapter}{\numberline {4}Understanding the semantic subspace organization in BERT}{55}% 
 \contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{56}% 
 \contentsline {subsection}{\numberline {4.1.1}Experiment setup}{56}% 
 \contentsline {subsection}{\numberline {4.1.2}Results}{58}% 
-\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{60}% 
-\contentsline {subsection}{\numberline {4.2.1}Experiment setup}{61}% 
+\contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{61}% 
+\contentsline {subsection}{\numberline {4.2.1}Experiment setup}{62}% 
 \contentsline {subsection}{\numberline {4.2.2}Results}{65}% 
-\contentsline {subsubsection}{Qualitative evaluation}{67}% 
+\contentsline {subsubsection}{Qualitative evaluation}{68}% 
 \contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{71}% 
-\contentsline {subsection}{\numberline {4.3.1}Experiment setup}{71}% 
-\contentsline {subsection}{\numberline {4.3.2}Results}{73}% 
-\contentsline {subsubsection}{Quantitative Evaluation}{73}% 
-\contentsline {subsubsection}{Qualitative Evaluation}{73}% 
+\contentsline {subsection}{\numberline {4.3.1}Experiment setup}{72}% 
+\contentsline {subsection}{\numberline {4.3.2}Results}{74}% 
+\contentsline {subsubsection}{Quantitative Evaluation}{74}% 
+\contentsline {subsubsection}{Qualitative Evaluation}{74}% 
 \contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{77}% 
 \contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{79}% 
 \contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{80}% 
@@ -98,7 +98,5 @@
 \contentsline {section}{\numberline {C.2}Nominalised Verbs}{125}% 
 \contentsline {chapter}{\numberline {D}Applications}{127}% 
 \contentsline {section}{\numberline {D.1}Using embeddings in other domains}{127}% 
-\contentsline {section}{\numberline {D.2}Using embeddings in translations}{127}% 
-\contentsline {subsubsection}{Word2Vec}{130}% 
 \contentsline {section}{\numberline {D.2}Using embeddings in translations}{127}% 
 \contentsline {subsubsection}{Word2Vec}{130}% 
