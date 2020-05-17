@@ -9,7 +9,7 @@
 %%   SMH, May 2010. 
 
 
-\documentclass[a4paper,12pt,twoside,openright]{report}
+\documentclass[a4paper,12pt,oneside,openright]{report}
 
 
 %%
@@ -1987,9 +1987,8 @@ This is also true for part-of-speech tags, however, we cannot generalize this as
 Furthermore, one can see that globally, BERT does seem to organize the context embeddings by semantics. 
 This is apparent in figures \ref{fig:run_tensorboard} and \ref{fig:cold_tensorboard}, where we can see that different blobs (UMAP) and extremes (PCA) in the figures respond to different semantic classes.
 Especially in Figure \ref{fig:run_tensorboard} (a), we can see that in the case of UMAP, the central cluster strongly mixes nouns with adjectives (red and blue cluster), and that in the case of PCA, the context embeddings are constrained in such a way that embeddings which mix different semantic classes meet in the middle.
-Looking at the different blobs in UMAP we can again confirm the hypothesis that semantics strongly correlates to part-of-speech, as most clusters have a strong predominant color.
+Looking at the different blobs in UMAP we can again confirm the hypothesis that semantics strongly correlates to part-of-speech, as most clusters have a strong predominant color. \\
 
-%\chapter{Evaluation} 
 \chapter{Exploiting subspace organization of semantics of BERT embeddings}\label{section:ExploitingBERT}
 
 
@@ -2091,7 +2090,6 @@ Specifically, our PoS modified pipeline would now look as depicted in Figure \re
 For each target token $t_{\text{target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token.
 In this case, $run$ becomes the more specialized $run\_ VERB$.
 Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer.
-This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer.
 }
   \label{fig:BERnie_POS_pipeline}
 \end{figure}
