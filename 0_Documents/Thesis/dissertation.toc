@@ -54,7 +54,7 @@
 \contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{79}% 
 \contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{80}% 
 \contentsline {subsubsection}{Experiment setup}{80}% 
-\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{83}% 
+\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{82}% 
 \contentsline {subsubsection}{Experiment setup}{83}% 
 \contentsline {subsubsection}{Results}{85}% 
 \contentsline {subsection}{\numberline {5.1.3}BERNIE Cluster with additional pre-training}{87}% 

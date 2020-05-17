@@ -349,34 +349,32 @@
 \newlabel{sub@fig:sfig2}{{b}{76}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces PCA and UMAP visualizations for context embeddings $X$ sampled for the word $w=$\texttt  {cold}. \relax }}{76}\protected@file@percent }
 \newlabel{fig:cold_tensorboard}{{4.10}{76}}
-\citation{lan20}
-\citation{sanh19}
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{77}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
 \newlabel{section:ExploitingBERT}{{5}{77}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between number of WordNet senses and the variance amongst sampled BERT vectors.\relax }}{78}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces  For each word $w$, we sample both the number of WordNet semantic classes that are recorded in the WordNet dataset. We also calculate the dimension-wise mean variance between $n=500$ sampled vectors for the word $w$. This constitutes a point on this plot. We repeat this procedure for the most 20'000 most frequent words which consist of a single token (i.e. are not split up into further subtokens when the tokenizer is applied). We show that although the variance is relatively high, especially if only few WordNet classes are present, there is a correlation between the number of WordNet classes and the variance of sampled BERT context embeddings. The right and top distributions show histograms of how occurrent the variance and WordNet classes are respectively. Our assumption is that if we introduce additional embedding-vectors inside BERT for certain words, that more complex distributions can be captures for words that have a higher number of WordNet classes. \relax }}{79}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between the number of WordNet senses and the variance amongst sampled BERT vectors.\relax }}{78}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces  For each word $w$, we sample both the number of WordNet semantic classes that are recorded in the WordNet dataset. We also calculate the dimension-wise mean variance between $n=500$ sampled vectors for the word $w$. This constitutes a point on this plot. We repeat this procedure for the most 20'000 most frequent words which consist of a single token (i.e. are not split up into further subtokens when the tokenizer is applied). We show that although the variance is relatively high, especially if only few WordNet classes are present, there is a correlation between the number of WordNet classes and the variance of sampled BERT context embeddings. The right and top distributions show histograms of how occurrent the variance and WordNet classes are respectively. Our assumption is that introducing additional embedding-vectors inside BERT for certain words allows to capture mode complex distributions, i.e. a more complex distribution for words that have a higher number of WordNet classes. \relax }}{79}\protected@file@percent }
 \newlabel{fig:BERT_variance}{{5.1}{79}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{79}\protected@file@percent }
+\citation{spacyb}
 \citation{spacyb}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{80}\protected@file@percent }
 \newlabel{bernie_pos}{{5.1.1}{80}}
 \@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{80}\protected@file@percent }
-\citation{spacyb}
 \@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces The PoS modified pipeline. The BERNIE PoS model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additional tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the part-of-speech information as part of the token. In this case, $run$ becomes the more specialized $run\_ VERB$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{81}\protected@file@percent }
 \newlabel{fig:BERnie_POS_pipeline}{{5.2}{81}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Inside the embedding layer of the transformer which occurs at each layer of BERT, we introduce more specific embeddings \texttt  {run\_VERB} and \texttt  {run\_NOUN}. The BERT model should now capture more expressiveness, as more weight got introduced for a part of the model which results in a probability distribution with high variance. The original \texttt  {run} embedding is removed.\relax }}{82}\protected@file@percent }
 \newlabel{fig:BERnie_POS_initialization}{{5.3}{82}}
-\newlabel{fig:sfig1}{{5.4a}{82}}
-\newlabel{sub@fig:sfig1}{{a}{82}}
-\newlabel{fig:sfig2}{{5.4b}{82}}
-\newlabel{sub@fig:sfig2}{{b}{82}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces The resulting, fully modified BERNIE PoS pipeline.\relax }}{82}\protected@file@percent }
-\newlabel{fig:fig}{{5.4}{82}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{83}\protected@file@percent }
-\newlabel{experiment_bernie_meaning}{{5.1.2}{83}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{82}\protected@file@percent }
+\newlabel{experiment_bernie_meaning}{{5.1.2}{82}}
+\newlabel{fig:sfig1}{{5.4a}{83}}
+\newlabel{sub@fig:sfig1}{{a}{83}}
+\newlabel{fig:sfig2}{{5.4b}{83}}
+\newlabel{sub@fig:sfig2}{{b}{83}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces The resulting, fully modified BERNIE PoS pipeline.\relax }}{83}\protected@file@percent }
+\newlabel{fig:BERNIE_POS_full_pipeline}{{5.4}{83}}
 \@writefile{toc}{\contentsline {subsubsection}{Experiment setup}{83}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces  The semantic modified pipeline. The BERNIE Cluster model takes as input a sentence $s$. The sentence $s$ is converted to a sequence of BERT tokens $[t_1$, \ldots  , $t_m]$ as defined in a given vocabulary $V$. This vocabulary $V$ is extended with the additionally introduced tokens for each of the split-words. For each target token $t_{\text  {target}}$, we make the token more specific by converting the token to a more specialized token-representation, which specifies the clustereing information as part of the token. In this case, $bank$ becomes the more specialized $bank\_FINANCE$. Again, each item in the vocabulary $V$ has a corresponding embedding vector inside the embedding layer of the transformer. This embedding vector is used by the intermediate layers of the transformer, and thus affects the downstream pipeline of the language model for any subsequent layers of the transformer. \relax }}{84}\protected@file@percent }
 \newlabel{fig:BERT_semantic_modified_pipeline}{{5.5}{84}}

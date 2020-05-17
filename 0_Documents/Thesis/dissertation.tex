@@ -1994,23 +1994,22 @@ Looking at the different blobs in UMAP we can again confirm the hypothesis that 
 \chapter{Exploiting subspace organization of semantics of BERT embeddings}\label{section:ExploitingBERT}
 
 
-So far we have tried to understand how language features are better represented within the BERT language model.
+So far we have tried to understand how language features are represented within the BERT language model.
 Now we want to understand how different modifications to the BERT model affect the performance on language modelling task.
-Because GLUE is a very general language modelling benchmark, we proceed with GLUE.
-Our analysis will be limited to BERT only, although similar changes can also be made to modifications of BERT including ALBERT \cite{lan20}, DistillBERT \cite{sanh19}. 
-We will keep the contents of this analysis focused on BERT only, as all transformer models share a similar architecture and as we expect the changes to similarly affect the different models.
-As such, the focus lies on the ablation study with the BERT model  forming our baseline.
-To make the discussion easier, we will refer to any of the models modified by our experiments \textbf{BERNIE}. 
+We proceed with GLUE, as it is a very versatile language modelling benchmark.
+We will keep the contents of this analysis focused on BERT only, as all transformer models share a similar architecture and as we expect the changes to similarly affect the derivative models.
+As such, the focus lies on an ablation study with the BERT model  forming our baseline.
+To make the discussion easier, we will refer to any of the models modified by our experiments as \textbf{BERNIE}. 
 Please refer to section \ref{section:Background} for a refresher on how sentences are tokenized inside BERT, and how tokens are converted to the latent representation and finally into context embeddings through the BERT model.
 \\
 
-Before we continue, we want to introduce the concept of a \textit{split-word}. A split-word is a word for which we will introduce additional embedding vectors in the BERT model, by some criterion that depends on the experiment setting.
+Before we continue, we want to introduce the concept of a \textit{split-word}. A split-word is a word for which we will introduce additional embedding vectors in the BERT model, defined by some criterion that depends on the experiment setting.
 A split-word will in most cases have high-variance amongst embedding-vectors sampled through BERT.
 Introducing more specialized embeddings for tokens with high variance in context embeddings will allow to model more complex distributions.
-This happens because we introduce additional parameters that can parametrize a specific token distribution, allowing a better approximation of the underlying true distribution.
+This happens because we introduce additional weights that can parametrize a specific token distribution, allowing a better approximation of the underlying true distribution.
 This would result in multiple simple, well-parametrized probability distributions, rather than a single under-parametrized distribution which has high variance due to the low expressiveness.
 
-\captionof{table}{For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between number of WordNet senses and the variance amongst sampled BERT vectors.}
+\captionof{table}{For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between the number of WordNet senses and the variance amongst sampled BERT vectors.}
 \scalebox{0.9}{
 \begin{tabular}{
  l % left aligned column
@@ -2050,7 +2049,7 @@ announcement & 2 & 0.275  \\
   	We repeat this procedure for the most 20'000 most frequent words which consist of a single token (i.e. are not split up into further subtokens when the tokenizer is applied).
 	We show that although the variance is relatively high, especially if only few WordNet classes are present, there is a correlation between the number of WordNet classes and the variance of sampled BERT context embeddings.
 	The right and top distributions show histograms of how occurrent the variance and WordNet classes are respectively.
-	Our assumption is that if we introduce additional embedding-vectors inside BERT for certain words, that more complex distributions can be captures for words that have a higher number of WordNet classes.
+	Our assumption is that introducing additional embedding-vectors inside BERT for certain words allows to capture mode complex distributions, i.e. a more complex distribution for words that have a higher number of WordNet classes.
   }
   \label{fig:BERT_variance}
 \end{figure}
@@ -2060,17 +2059,17 @@ announcement & 2 & 0.275  \\
 We will introduce two adaptions to the BERT model, BERNIE PoS and BERNIE Cluster.
 We will present the results after having introduced both adaptations.
 For both modifications, we will use the GLUE dataset to understand what property of the language model is most affected.
-In the case of BERNIE Cluster, we use the performance of the downstream task as a proxy to understand what information is captured by the high variance.
+In the case of BERNIE Cluster, we use the performance of the downstream task as a proxy to understand what information is captured by the different modes in the data.
 
 \subsection{BERNIE PoS} \label{bernie_pos}
 
 We want to start with a simple model first.
 We have seen in the above section that there is a strong correlation between semantics and part-of-speech.
-As such, the initial idea is to introduce additional embedding vectors which are able to capture semantics (rather than just pure word tokens) better.
-Because of the strong correlation, part-of-speech is used as a proxy for semantics.
+As such, the initial idea is to introduce additional embedding vectors which are able to capture semantics better.
+Because of the strong correlation between the two factors, part-of-speech is used as a proxy for semantics.
 One of the advantages that this carries is that we can use the spaCy PoS tagger \cite{spacyb} to classify the PoS tags with high accuracy.
 
-Our first model adaption is called \textbf{BERNIE PoS}.
+Our first model adoption is called \textbf{BERNIE PoS}.
 In this case, we introduce new tokens, and new embedding vectors into the embedding layers of the transformers inside of BERT.
 These newly introduced embedding vectors are supposed to  be able to capture more complex target distributions, as we introduce more weights for regions of semantic ambiguity, which have higher variance as can be seen in Figure \eqref{fig:BERT_variance}.
 
@@ -2082,9 +2081,9 @@ As an example, instead of having a single embedding vector for the word \Verb#ru
 We will refer to \Verb#run_VERB# and \Verb#run_NOUN# as so called \textit{sub-embeddings}, as these exploit the subspace structure of the context embeddings sampled for the word \Verb#run#.
 As for the tokenizer, we also introduce a mechanism which turns any occurrence of \Verb#run# into one of the sub-embeddings.
 
-Specifically, our PoS modified pipeline would now look as follows.
+Specifically, our PoS modified pipeline would now look as depicted in Figure \ref{fig:BERnie_POS_pipeline}.
 
-\begin{figure}[H]
+\begin{figure}
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_input.png}
   \caption{The PoS modified pipeline. 
@@ -2101,18 +2100,19 @@ This embedding vector is used by the intermediate layers of the transformer, and
 %TODO space
 
 To identify whether the occurring \Verb#run# in an example sentence is a verb or a noun, we use the spaCy part-of-speech tagger \cite{spacyb}, which claims 92.6 \% accuracy for this task.
+When initializing the embeddings for the newly introduced embeddings, we copy the weights of the original embedding.
+This is depicted in Figure \ref{fig:BERnie_POS_initialization}.
+The final pipeline is presented in \ref{fig:BERNIE_POS_full_pipeline}.
+During training, all weights of BERT are fine-tuned to the downstream GLUE task as described in section \ref{section:Background}.
 
-\begin{figure}[H]
+\begin{figure}
 	\center
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_model_BERnie_POS_initialization.png}
   \caption{Inside the embedding layer of the transformer which occurs at each layer of BERT, we introduce more specific embeddings \texttt{run\_VERB} and \texttt{run\_NOUN}. The BERT model should now capture more expressiveness, as more weight got introduced for a part of the model which results in a probability distribution with high variance. The original \texttt{run} embedding is removed.}.
   \label{fig:BERnie_POS_initialization}
 \end{figure}
 
-
-
-
-\begin{figure}[H]
+\begin{figure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{./assets/experiments/pipeline_tokenizer_BERnie_POS_sentence.png}
@@ -2127,10 +2127,8 @@ To identify whether the occurring \Verb#run# in an example sentence is a verb or
   \label{fig:sfig2}
 \end{subfigure}
 \caption{The resulting, fully modified BERNIE PoS pipeline.}
-\label{fig:fig}
+\label{fig:BERNIE_POS_full_pipeline}
 \end{figure}
-
-During training, all weights of BERT are fine-tuned to the downstream GLUE task as described in section \ref{section:Background}.
 
 \subsection{BERNIE Cluster}\label{experiment_bernie_meaning}
 
