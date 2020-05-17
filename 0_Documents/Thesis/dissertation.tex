@@ -20,7 +20,7 @@
 \def\authorcollege{David Yenicelik \\ ETH Zürich\xspace}
 \def\authoremail{yedavid@ethz.ch}
 \def\dissertationtitle{}
-\def\wordcount{32,612}
+\def\wordcount{34'984}
 
 
 %\usepackage[dvips]{epsfig,graphics} 
@@ -99,10 +99,9 @@
 \newcolumntype{s}{>{\hsize=.5\hsize}X}
 
 \pagenumbering{arabic} 
-\setcounter{page}{1} 
 
-\newpage
 \chapter{Introduction}
+\setcounter{page}{1} 
 
 A lot of progress has been made in Natural Language Processing (\textit{NLP}) through programs such as \textit{ELIZA}, and more modern examples such as Siri and Google Duplex which show that a machine can have conversations with humans. 
 However, it is not yet apparent that machines can think, or in other words, operate with semantic concepts.
@@ -2338,7 +2337,7 @@ We analyse the BERT language model, as it provides a good balance between popula
 
 \subsection{Main Contributions}
 
-Our main contributions are the following: 
+Our main contributions are the following: \\
 
 \begin{enumerate}
 \item We test for linear separability and ability to partition the space into semantic clusters within the sampled BERT vectors.
@@ -2364,21 +2363,21 @@ These could include or investigate:
 However, we limited our analysis to GLUE tasks only, arguing that merely focussing on these would be sufficient as BERT alone does not reach superhuman performance on these tasks yet.
 However, an ablation study on other benchmarking datasets, most specifically the Word in Context benchmark which is included in SuperGLUE would have been a valuable addition to understand what our modifications had to the modelling power of language models.
 
-\paragraph{Larger benchmarking dataset:} Within our analysis, we have had countless occasions where the statistical significance and testing power largely suffered due to the limited size of gold-standard datasets which capture semantics.
-Specifically, we chose SemCor as our go-to dataset, as this is the most extensive dataset available in this domain.
-However, even SemCor is too small to do proper evaluation on, strongly limiting the choice of polysemous words analysed in Section \textbf{(4)}.
-A bigger labelled dataset, even only for testing is crucial for future development of this line of work.
+\paragraph{Larger benchmarking dataset:} Within our analysis, we have had numerous occasions where the statistical significance and testing power largely suffered due to the limited size of gold-standard datasets which capture semantics.
+SemCor is one of the most extensive dataset available in this domain, but is still too small to do proper evaluation on.
+This limits the choice of polysemous words analysed in Section \textbf{(4)}.
+A bigger labelled dataset would lead to a more expressive analysis.
 
 \paragraph{Linear subspace still not apparent:} An interesting line of future work could lie in finding a new distance metric which takes into consideration semantic properties (see Appendix), and sample across a line within this subspace. 
-Doing so would possibly give us a good idea about whether or not there is a globally linear semantic subspace contained by BERT embeddings, or whether such a subspace is only available locally linearly as was apparent in section \textbf{(4)}.
+Doing so could indicate  whether or not there is a globally linear semantic subspace contained by BERT embeddings, or whether such a subspace is only available locally linearly as is apparent in section \textbf{(4)}.
 
-\paragraph{Difficulty in quantifying semantics:} WordNet is a tool created by linguists over the last few decades.
+\paragraph{Formalizing semantics:}
 Intuitively, we have often seen that certain words such as \texttt{was} were overdefined in terms of semantic classes, where many dozen semantic classes are apparent.
-Generally, it is difficult to quantify "coarseness" between semantic concepts, and this had considerable effect on the clustering performance in section \textbf{(4)}.
+Generally, it is difficult to quantify "coarseness" between semantic concepts, apparent in section \textbf{(4)}.
 
-\paragraph{Limited coherence in lines of work} Although the idea of quantifying meaning within language models seems to be an important issue, there is no coherent line of work.
-Different authors seem to analyse this topic using different tools, leading to statements which do not seem to fully conform.
-Also, the nature that linguistic features are strongly correlated (i.e. PoS and semantics), is not properly noted by a lot of previous work, facilitating premature conclusions.
+\paragraph{Limited coherence in lines of work} Quantifying meaning within language models is an important issue.
+Different authors seem to analyse this topic using different tools, leading to partially incoherent statements.
+Also, the nature that linguistic features are strongly correlated (i.e. PoS and semantics), is not properly noted by a lot of previous work, making conclusions on semantics when part-of-speech was analysed.
 Establishing a more formal framework could address this, and the previously mentioned issue.
 
 
