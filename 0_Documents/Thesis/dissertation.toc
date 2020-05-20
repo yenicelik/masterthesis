@@ -5,21 +5,15 @@
 \contentsline {paragraph}{Polysemy}{5}% 
 \contentsline {paragraph}{Part of Speech \textit {PoS}}{5}% 
 \contentsline {subsection}{\numberline {2.1.1}Tokens and n-grams}{5}% 
-\contentsline {paragraph}{Characters}{6}% 
 \contentsline {paragraph}{Byte pair encodings}{6}% 
 \contentsline {paragraph}{WordPiece tokenizer}{7}% 
-\contentsline {section}{\numberline {2.2}Word Embeddings}{7}% 
-\contentsline {paragraph}{Word-Embeddings}{8}% 
-\contentsline {paragraph}{Distance:}{8}% 
-\contentsline {paragraph}{Learning a distance}{9}% 
-\contentsline {paragraph}{Exploiting the distributional structure of language:}{9}% 
-\contentsline {paragraph}{Loss Objective}{10}% 
+\contentsline {section}{\numberline {2.2}Word Embeddings}{8}% 
 \contentsline {subsection}{\numberline {2.2.1}Static Word Embeddings}{12}% 
-\contentsline {subsubsection}{Basic Model}{12}% 
-\contentsline {subsubsection}{Word2Vec}{13}% 
+\contentsline {subsubsection}{Basic Model}{13}% 
+\contentsline {subsubsection}{Word2Vec}{14}% 
 \contentsline {subsubsection}{GloVe}{15}% 
 \contentsline {subsection}{\numberline {2.2.2}Contextual Word Embeddings}{16}% 
-\contentsline {subsection}{\numberline {2.2.3}ELMo}{17}% 
+\contentsline {subsection}{\numberline {2.2.3}ELMo}{18}% 
 \contentsline {subsection}{\numberline {2.2.4}The Transformer Architecture}{19}% 
 \contentsline {subsection}{\numberline {2.2.5}BERT: Bidirectional Encoder Representations from Transformers}{21}% 
 \contentsline {paragraph}{The pipeline of BERT}{23}% 
