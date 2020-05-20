@@ -103,32 +103,32 @@
 \chapter{Introduction}
 \setcounter{page}{1} 
 
-The field of Natural Language Processing (\textit{NLP}) aims at developing algorithms that are able to operate with human language.
+One of the goals of Natural Language Understanding (\textit{NLU}) is to develop algorithms that are able to operate with human language.
 However, it is not yet apparent that machines can think, or even operate with semantic concepts.
-In most of these cases, the underlying language model uses heuristics, or black-box function which simply maps an input text to output text.
+In most of these cases, the underlying language model uses heuristics, or black-box functions which simply maps an input text to output text merely satisfying the constraints set up by the target task.
+
  
-One of the goals of Natural Language Understanding (\textit{NLU}) is to address this shortcoming by modelling written text in such a way that linguistic features can be captured.
-These models can then be used for other machine learning tasks, consequently referred to as \textit{downstream tasks}.
+These shortcomings can be addrressed by modelling written text in such a way that linguistic features can be captured.
+Models can then be used for other machine learning tasks, referred to as \textit{downstream tasks}.
 The most popular methodology in NLU is the use of vectors that represent written text, including word-vectors, sentence-vectors, and more. 
 These vectors are often referred to as \textit{embedding} vectors, as they embed more complex concepts into a vector representation.
 Optimally, the algebra of the space that we operate in, including the various operations such as multiplication and addition should have a meaningful correspondence to the concepts captured by these embeddings.
 \\
 
-Language representation models, also called Language Models (\textit{LM}) are a category of NLU models that can both generate word embeddings, sentence embeddings, but also intermediate representations that can be used for downstream tasks.
+Language representation models, also called Language Models (\textit{LM}) are a category of NLU models that can be used to generate word embeddings, sentence embeddings, and also intermediate representations that can be used for downstream tasks.
 Most commonly, language models create vector representations by taking into consideration the context in which a word token occurs. 
-Because embeddings - due to their strong usage in downstream tasks - can be considered as the fundamental unit of machine learning in the domain of natural language, any shortcomings will influence the performance of the target task.
-Thus, improving the way these embeddings capture linguistic features has strong implications for any subtasks in NLU.
-These can include Named Entity Recognition (\textit{NER}), sentiment understanding, and automatic language-translation. 
+Because embeddings - due to their strong usage in downstream tasks - can be considered as a fundamental unit in NLU, any shortcomings will influence the performance of the target task.
+Improving the way these embeddings capture linguistic features has strong implications for a wide category of tasks including Named Entity Recognition (\textit{NER}), sentiment understanding, and automatic language-translation. 
 However, most of the modern LMs are so complex that they are considered black-box models.
 \\
 
-Although this work does not try to imminently push the performance of these language models, we believe that providing a better understanding of the underlying principles will pave the way for future research to better track these issues.
+We believe that providing a better understanding of the underlying principles will pave the way for future research to better track these issues.
 The semantic attribute of a word is amongst the most important linguistic features.
 It tells us what we mean when we say \texttt{dog} or \texttt{car}.
-It can also be ambigious, when we use words such as \texttt{bank}.
+It can also be ambigious, when we use words such as \texttt{bank}, requiring us to look at the context to understand what meaning of \texttt{bank} one refers to.
 Due to the significance of meaning in language, we will focus our analysis on how modern LMs capture semantics. 
 Notice that the relation between language and thought is a much more fundamental and philosophical one.
-For this work, however, we assume that semantic concepts can be captured through some latent variable, i.e. language is just an expression of thought.
+Here, we assume that language is just an expression of thought, but that the two concepts are not equivalent.
 
 \paragraph{Our main contributions are the following:}
 
@@ -137,19 +137,19 @@ For this work, however, we assume that semantic concepts can be captured through
 We test this by analysing linear separability between semantic classes, and test for clusterability in these structures.
 We show that although linear separability is possible, it is nearly impossible to find modes in the data which correspond to semantic classes.
 \item We analyze the relationship between the two linguistic features of part-of-speech and semantics. 
-We show that these show a strong correlation in languages and that modern language models capture this strong correlation.
-This affects the conclusion of some related work which had analysed language models which capture semantics, but which did not account for the correlation between part-of-speech and semantics.
+We show that these show a strong correlation in languages and that this correlation is reflected in modern language models.
+This observation affects the conclusion made in some related work that analysed language models for semantics, but that did not account for the correlation between part-of-speech and semantics.
 \item Finally, we introduce additional parameters for words whose sampled embedding vectors have high variance over the embedding space.
 We investigate what downstream tasks are most affected  and use this as a proxy to understand what information is captured the most by the directions with high variance.
 \end{enumerate} 
 
 In this work we focus on BERT, as it provides a good balance between popularity, close to state-of-the-art performance, and generalizability to other modern language models.
 
-Our findings show that although BERT does not capture a simple semantic subspace, but rather focuses on the more broad linguistic features which are imminent to context.
+Our findings show that although BERT does not capture a simple semantic subspace, but organizes the embedding vectory more broadly by context.
 This can often introduce undesirable features such as strong sentiment, position in sentence, and thus lead to considerable bias in downstream applications.
 We also show that sentiment is particularly more strongly captured in modern language models, allowing for language stereotypes to easily manifest itself, leading to stronger cases of bias in language models.
 
-We will first start with summarizing the required background work (Section \ref{section:Background}), show existing analysis on the inner workings of BERT (Section \ref{section:RelatedWork}), conduct tests that do not modify the BERT model (Section \ref{section:UnderstandingBERT}) and make modifications to BERT to understand what effect this has on downstream tasks (Section \ref{section:ExploitingBERT}).
+We will first start with summarizing the required background work (Section \ref{section:Background}), show existing analysis on the inner workings of BERT (Section \ref{section:RelatedWork}), conduct tests that do not modify the BERT model (Section \ref{section:UnderstandingBERT}) and make modifications to the embeddings in BERT to understand what effect this has on downstream tasks (Section \ref{section:ExploitingBERT}).
 We will finally draw conclusion and show potential for future work (Section \ref{section:Conclusion}).
 
 
@@ -172,15 +172,15 @@ We will first introduce some linguistic features relevant to this work.
 These make a formal analysis of our topic easier.
 
 \paragraph{Polysemy} describes the phenomenon that a word token $w$ may have multiple meanings.
-As a simple example, the number of meanings that \Verb#cat# can entail is $ | M_\text{cat} | = | \{ m_\text{cat-animal} \} |  = 1$, whereas the number of meanings that \Verb#bank# can entail is $ | M_\text{bank} | = | \{ m_\text{bank-financial instution},  m_\text{bank-sea bank}\} |  = 2$.
-These are just examples, but the true numbers vary on the granularity chosen and the language at hand. 
-The granularity is a non-trivial question as this decides at what point one concept stops and another concept starts.
-This definition and investigation are often left to linguists to decide. \\
+As a simple example, the number of meanings that \Verb#cat# can entail is $ | M_\text{cat} | = | \{ m_\text{cat-animal} \} |  = 1$, whereas the number of meanings that \Verb#bank# can entail is $ | M_\text{bank} | = | \{ m_\text{bank-financial instution},  m_\text{bank-sea bank}\} |  = 2$ (In fact, there are many more meanings of \texttt{bank}, but we will keep the examples concise).
+The true numbers vary on the granularity chosen and the language at hand. 
+The chosen granularity is a non-trivial question as this decides at what point one concept stops and another concept starts.
+These definitions are often left to linguists to decide. \\
 
 \paragraph{Part of Speech \textit{PoS}} implies the category of the syntactic function of a word.
 Classes including adjectives \textit{ADJ}, adposition \textit{ADP}, adverbs \textit{ADV}, auxiliary \textit{AUX}, conjunction \textit{CONJ}, coordinating conjunction \textit{CCONJ}, determiner \textit{DET}, interjection noun \textit{INTJ}, noun \textit{NOU}, numeral \textit{NUM}, particle \textit{PART}, pronoun \textit{PRON}, proper noun \textit{PROPN}, punctuation \textit{PUNCT}, subordinating conjunction \textit{SCONJ}, symbol \textit{SYM}, verb \textit{VERB}, as is defined by \cite{spacyb}.
-In this work, we will be using the spaCy python package  \cite{spacy} whenever we need to apply computation on word-tokens to identify the underlying part of speech class, and limit ourselves to high-level part-of-speech tags include nouns, verbs, and adjectives.
-For a more extensive list of linguistic features, please refer to section \ref{appendix:linguistic_features}.
+In this work, we will be using the spaCy python package  \cite{spacy} whenever we need to predict the part-of-speech class of a word-tokens and limit ourselves to high-level part-of-speech which consist of nouns, verbs, and adjectives.
+For a more extensive list of linguistic features, please refer to section \ref{appendix:linguistic_features} in the Appendix.
 
 
 \subsection{Tokens and n-grams}
@@ -922,17 +922,18 @@ is.verb.4, play.noun.14,
 
 \chapter{Related Work}\label{section:RelatedWork} 
 
-%TODO Restructure this section ...
-%TODO A bit long and dry
-%TODO Dry section
 %TODO Add more structure
+%TODO Organize by topics, not by papers ...
 
 We will first turn our attention to existing work in analysing static word embeddings and modern language models for linguistic features.
 Existing work investigates to what extent language models can be used to predict sentiment, part-of-speech and semantics.
 
-\section{Finding Synsets in Static Word Embeddings}\label{section_clustering}
+\section{Creating Synsets from Static Word Embeddings}\label{section_clustering}
 
-Most notably \textbf{the Chinese Whispers algorithm} is used to cluster for synsets is described in \cite{pelevina16}.
+\cite{pelevina16, biemann13, remus18, arefyev19, denkowski09} provide examples by which semantic embeddings or synsets are created using knowledge graphs or static word embeddings.
+
+\cite{pelevina16, biemann13} use the Chinese Whispers algorithm initially proposed in \cite{biemann06} to cluster for synsets in word2vec vectors and the JoBimText framework \cite{biemann13} specifically.
+\cite{denkowski09} uses 3-grams and creates a graph by drawing edges between words (nodes) that co-occur in the same phrase.
 The authors create an ego-network for each concept in the vector space whose correlation matrix $G(X)$ is the adjacency matrix for a resulting subgraph $\tilde{G}$
 
 \begin{figure}[h]
@@ -942,13 +943,16 @@ The authors create an ego-network for each concept in the vector space whose cor
   \label{fig:ego_network}
 \end{figure}
 
-The authors propose a multi-step approach, where they (1) learn static word embeddings, (2) build a graph of nearest neighbours based on vector similarities, (3) apply induction of word senses using ego-network clustering and (4) aggregate the word-vectors with respect to the induced senses.
-The authors use the static word2vec word embeddings as the starting step.
-A graph is created by only keeping the $N$ nodes with highest weight (denoted by a similarity value).
-Clustering is done using the Chinese Whispers algorithm.
-The result of this clustering conceptually corresponds to the synsets captured by WordNet sense classes.
-However, the underlying limitation lies in the choice of the word-vectors, as well as the graph-construction and graph-clustering.
-Other similar work includes \cite{arefyev19}.
+Generally the methodology to arrive at synsets is as follows: 
+
+\begin{enumerate}
+\item Learn static word embeddings.
+\item Build a graph of nearest neighbours based on vector similarities.
+\item Cluster word senses using ego-network and applying the Chinese Whispers algorithm.
+\item Aggregate the word-vectors with respect to the induced senses
+\end{enumerate}
+
+The underlying limitation lies in the choice of the word-vectors, as well as the graph-construction and graph-clustering. \\
 
 \begin{table}[H]
     \centering
@@ -965,16 +969,15 @@ Other similar work includes \cite{arefyev19}.
 Neighbors of the word \texttt{table} and its senses produced.
 The first row belongs to both senses, while the second and third row are distinct synsets.}
 
+\cite{remus18} skip the clustering step and makes use of existing WordNet semantic class definitions, averaging the word vectors of synsets to arrive at synset vector representation.
+Such mehodologies prove to be useful in data-mining and document classification problems \cite{reimers19}.
 
-
-Similarly the JoBimText framework \cite{biemann13}, which provides a graph-based and sparse word similarity model, can be used to cluster for synsets between words. 
-\cite{remus18} average the word vectors of synsets to arrive at vectors which described semantics.
-Synsets are calculated using the same clustering approach which is applied on ego-graphs of the network as is done in \cite{biemann06}.
-
+Notice that if we have words that consist of multiple tokens, popular methods include applying a simple mean, max or min pooling over all token-embeddings (see \cite{bommasani19, akbik19, may19}) to arrive at a word-embedding. 
+This is true for both contextual and static word embeddings. \\
 
 \section{Quantifying word sense disambiguation}
 
-Datasets have been proposed to benchmark word sense disambiguation performance for static word embeddings\cite{bruni13, hill15}.
+Datasets have been proposed to benchmark word sense disambiguation performance for static word embeddings \cite{bruni13, hill15}.
 \cite{pilehvar19} address the problem of a missing benchmark dataset for \textit{contextual word embeddings} to test contextual word embeddings for word sense disambiguation tasks.
 The authors introduce the \textbf{Word in Context WiC} dataset of labelled sentence pairs, where the language model is supposed to learn the different semantic classes of a target word $w$. 
 An example of this dataset includes (the first one with the target word \Verb#bed#, the second one with a target word \Verb#window#): \\
@@ -997,51 +1000,18 @@ label:True
 \end{verbatim} \\
 \end{tcolorbox} 
 
-A more extensive list of datasets separated by knowledge-based approaches and distributional-based approaches can be found in \cite{navigli19}.
-\cite{denkowski09} is another survey which includes clustering of 3-grams, as well as graph-based approaches, where a graph is created in such a way that nouns are nodes, and edges between nodes exist whenever two words occur in the same paragraph.
-
-Similar lines of work exist where clustering is applied on topic-dependent arguments \cite{reimers19} to improve data mining and document classification performance.
+A more extensive list of datasets separated by knowledge-based approaches and distributional-based approaches can be found in \cite{camachocollados18, liebeskind19, navigli19}.
+Generally, it is assumed that occurrences in numerous different contexts implies polysemy.
+\cite{camachocollados18} argues that about 80\% of all words in WordNet  3.0 are monosemous, with less than 5\% having more than 3 senses, making this distinction effective. \\
 
 \section{Semantic subspace inside BERT}
 
-Due to the different ways semantics can be quantified, different papers show mixed results in extracting a subspace inside of BERT which captures mostly semantic information.
+There are mixed results when it comes to showing semantic structures in the contextual word embeddings produced by BERT.
+We want to emphasize that most work deals with measuring the different between two distinct words $w_1 \neq w_2$, thus not always measuring phenomena such as polysemy. 
 
-\cite{mickus19} analyses the structure inside BERT, and show that there is no strong correlation between the semantic feature of a word, and the location of the contextual word embedding produced by BERT.
-They go so far as to say that the position $i$ of the word $w_i$ inside the sequence $s = [w_1, \ldots, w_i, \ldots, w_T]$ has a stronger implication on the position of the produced contextual word embedding than the word token does.
-This is strongly manifested in contextual word embeddings with changing parity of the sentence position, i.e. when $w_i$ where $i$ is odd / even.
-It is also mentioned that most papers that do an active analysis on this topic do not go enough into depth on the topic of the theory of meaning, but rather are trying to identify common patterns in modern language models.
-The paper analyses these properties by conducting three experiments.
-The first one is about \textit{word type cohesion}, which tests if similar words are projected into similar points in the contextual word embedding space.
-\cite{mickus19} analyses if words with the same WordNet semantic class are projected to the same space inside BERT when sampled in different contexts.
-They make use of the silhouette score \cite{rousseeuw87}, and a clustering scheme of words - where a cluster is defined by words in the same semantic classes.
-Similar words are not projected to similar points in the context space.
-The authors use the Wiktionary dictionary \cite{wiktionary} as an alternative to  semantic classes defined by WordNet.
-They conclude that polysemous words result in degraded cohesion scores and decreased silhouette scores.
-Despite all this, transformer-based LMs show great success of for downstream tasks.
-Finally, \cite{mickus19} argues that the cosine similarity is a good distance measure for semantic similarity between contextual word embedding vectors, analogous to what was observedin \cite{mikolov13}.
-The authors continue with a sentence-pair similarity analysis, as well an analysis of the sentence-level structure, which is not of strong interest for our investigation. \\
+\subsection{Geometric analysis}
 
-In slight contrast to the conclusion of the above work, \cite{wiedmann19} analyses to what extent contextual word embeddings are better at word sense disambiguation tasks.
-The authors use a nearest neighbour classifier to measure the performance on  for two standard WSD benchmark datasets.
-The authors show that BERT is able to put polysemic words into distinct 'sense' regions of the embeddings space, while ELMo and other models do not seem to possess this ability.
-The authors argue that for static word vectors, different word senses are collapsed into the same string representation.
-The number of senses can be defined by a given parameter, or derived automatically through a non-parametric estimation.
-Prior work on using recurrent neural networks to classify sense labels exists \cite{kageback16}.
-The authors argue that because for most NLP tasks, the fact that contextual word embeddings perform better implies that they also capture polysemy much differently.
-The authors look at different contextual language models, including BERT and ELMo.
-The distributional hypothesis includes that if the same word regularly occurs in different, distinct contextes, we may assume polysemy of its meaning \cite{miller91}.
-The authors use the concatenation of the averaged wordpiece vectors of the last four layers as the contextual word embedding.
-
-\begin{figure}[h]
-	\center
-  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/wsd_bert.png}
-  \caption{From \cite{wiedmann19}. T-SNE plots of different senses of \texttt{bank} and their contextual word embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data.
-  }
-  \label{fig:bert_wsd}
-\end{figure}
-
-The authors conclude that word-sense-disambiguation \textit{WSD} can be surprisingly effective using solely contextual word embeddings.
-Different SensEval datasets are used for benchmarking, which also including SemCor. \\
+\cite{ethayarajh19, mickus19} use tools such as silhouette scores, and other measurements based on sampled contextual embedding vectors to draw conclusion on the semantic subspace of embedding vectors produced by BERT.
 
 \cite{ethayarajh19} investigates the question of whether contextual word embeddings for a given word $w$ cover a closed area in the embedding space produced by BERT, or if there are infinitely many context-specific representations for each such word.
 Models analyse include ELMo, BERT and GPT-2.
@@ -1072,7 +1042,6 @@ $ where $f_l(s, i)$ maps word $w = s[i]$ in sentence $s$ to a contextual word em
 \end{itemize}
 
 %TODO Replace all "The author"
-%TODO Replace all PoS with part-of-speech
 
 \quad
 
@@ -1090,28 +1059,33 @@ Finally, \cite{ethayarajh19} takes the first principal component for each contex
 They show that for layers 1 and 2 of BERT, these word-embeddings often outperform word sense disambiguation benchmarks.
 \\
 
-\cite{camachocollados18} concludes a survey on vector representations of meanings.
-The authors present different sense representations.
-Some exploit monolingual corpora by applying clustering-based models to extract senses from text.
-Some other jointly learn word sense induction and representation learning together.
-The paper also introduces learned topic embeddings and word-embeddings that are separately learned, jointly or subsequently.
-The different types of models include: 
-(1) Dynamic polysemy, which is a direct solution to the varying  problem of sense representation models for polysemous words.
-In this case, an external sense inventory such as WordNet is used. 
-Often, heuristics are used, such as that the frequency of a model is correlated with polysemy, as - according to the authors - more frequent words are probably more polysemous.
-(2) Pure sense-based models which implicitly learn polysemy through an unsupervised corpus by exploiting relations between target words and their co-occuring context-words.
-Generally, different contexts imply polysemy.
-The authors re-iterate that about 80\% of all words in WordNet  3.0 are monosemous, with less than 5\% having more than 3 senses. \\
-%TODO Should I mention MEN, WS353, RW, Google, MSR, SemEval 2012, BLESS, AP? 
+\cite{mickus19} analyses the structure inside BERT, and show that there is no strong correlation between the semantic feature of a word, and the location of the contextual word embedding produced by BERT.
+Oddly, they find out that the position $i$ of the word $w_i$ inside the sequence $s = [w_1, \ldots, w_i, \ldots, w_T]$ has a stronger implication on the position of the produced contextual word embedding than the inputted word token does.
+This is strongly manifested in contextual word embeddings with changing parity of the sentence position, i.e. when $w_i$ where $i$ is odd / even.
+It is also mentioned that most papers that do an active analysis on this topic do not go enough into depth on the topic of the theory of meaning, but rather are trying to identify common patterns in modern language models.
+The paper analyses these properties by conducting three experiments.
+The first one is about \textit{word type cohesion}, which tests if similar words are projected into similar points in the contextual word embedding space.
+\cite{mickus19} analyses if words with the same WordNet semantic class are projected to the same space inside BERT when sampled in different contexts.
+They make use of the silhouette score \cite{rousseeuw87}, and a clustering scheme of words - where a cluster is defined by words in the same semantic classes.
+Similar words are not projected to similar points in the context space.
+The authors use the Wiktionary dictionary \cite{wiktionary} as an alternative to  semantic classes defined by WordNet.
+They conclude that polysemous words result in degraded cohesion scores and decreased silhouette scores.
+Despite all this, transformer-based LMs show great success of for downstream tasks.
+Finally, \cite{mickus19} argues that the cosine similarity is a good distance measure for semantic similarity between contextual word embedding vectors, analogous to what was observed with static word vectors \cite{mikolov13}.
+The authors continue with a sentence-pair similarity analysis, as well an analysis of the sentence-level structure, which is not of strong interest for our investigation. \\
 
-\cite{liebeskind19} create a thesaurus through a co-occurrence-based approach to select a list of first-order candidates, and a list of second-order candidates by using a  distributional-based approach.
-However, their approach makes strong use of part-of-speech taggers to disambiguate between word-senses by the presumed correlation to the part-of-speech tag.
+We repeatedly find however, that the correlation between certain linguistic features, such as part-of-speech and semantics, is not well noted when conclusions are drawn and examples are shown.
 
+\subsection{Probing for semantics}
+
+A \textit{probing task} refers to adding a (linear) modification to an underlying module (such as BERT), and then measuring performance for a downstream task.
+This performance is used as an indication of how well the underlying module captures the concept scored by the task.
+
+\cite{shi19, levine19, wiedmann19} revise modifications to BERT which allow BERT to predict sense labels or perform word sense disambiguation \textit{WSD} tasks. 
 \cite{shi19} creates a relation extraction and semantic role labelling model using BERT as the underlying model.
 The authors extend the BERT Model with a simple linear layer on top of the last hidden layer. 
 The authors use the CoNLL 2005 \cite{carreras04} and the 2012  dataset \cite{pradhan13} for labelled training.
-The authors are able to supersede prior non-BERT models with this simple BERT extension for the tasks of semantic role labelling. \\
-
+The authors are able to supersede prior non-BERT models with this simple BERT extension for the tasks of semantic role labelling. 
 Similarly, \cite{levine19} revise a modification to BERT resulting in \textit{SenseBERT}.
 This predicts not only the word-form of the masked words, but also the WordNet semantic classes (also called superenses).
 A linear layer is appended on top of the final layer of BERT, making use of the final hidden representation.
@@ -1128,10 +1102,53 @@ The authors record an up to 12\% gain in accuracy for in the SemEval-SS task (pr
 Even withouth fine-tuning, SenseBERT achieves competitive results with fine-tuned BERT.
 The authors show that globally, these vectors seem to be properly aligned by their senses, even though they do not formally quantify this statement. \\
 
-A derivate to linguistic semantic concepts are semantic concepts specialized to a certain domain.
+\cite{wiedmann19} analyses to what extent contextual word embeddings are better at word sense disambiguation tasks.
+The authors use a nearest neighbour classifier to measure the performance on  for two standard WSD benchmark datasets.
+The authors show that BERT is able to put polysemic words into distinct 'sense' regions of the embeddings space, while ELMo and other models do not seem to possess this ability.
+Prior work on using recurrent neural networks to classify sense labels exists \cite{kageback16}.
+The authors argue that because for most NLP tasks, the fact that contextual word embeddings perform better implies that they also capture polysemy much differently.
+The authors look at different contextual language models, including BERT and ELMo.
+The distributional hypothesis includes that if the same word regularly occurs in different, distinct contextes, we may assume polysemy of its meaning \cite{miller91}.
+The authors use the concatenation of the averaged wordpiece vectors of the last four layers as the contextual word embedding.
+
+\begin{figure}[h]
+	\center
+  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/wsd_bert.png}
+  \caption{From \cite{wiedmann19}. T-SNE plots of different senses of \texttt{bank} and their contextual word embeddings. The legend shows a short description of the different WordNet sensees and the frequency of occurrence in the training data.
+  }
+  \label{fig:bert_wsd}
+\end{figure}
+
+The authors conclude that word-sense-disambiguation \textit{WSD} can be surprisingly effective using solely contextual word embeddings.
+Different SensEval datasets are used for benchmarking, which also including SemCor. \\
+
+\cite{coenen19} analyse semantic features qualitatively.
+However, it is important to realize that the qualitative evaluation is not extensive, and only considers the linguistic feature of \textit{plurality}, and only on hand-picked examples.
+Also, it is important to consider what causes the separation between clusters.
+Given figure \ref{fig:BERT_plurality}, one cannot reliably say that the part-of-speech feature \textit{causes} the partition into clusters.
+\texttt{die} has different meanings when interpreted as a verb and as a noun, which could also be the reason the clusters are so strongly visible.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/BERT_plurality.png}
+  \caption{From \cite{coenen19}. Embeddings for the word \texttt{die} in different contexts, visualized through UMAP. The blue text describes general annotations.
+  Notice that in this case, the two semantic classes \texttt{die} also have two distinct part-of-speech tags.
+  }
+  \label{fig:BERT_plurality}
+\end{figure}
+
+A nearest neighbour classifier is built using the BERT embeddings resulting from the labelled SemCor corpus, achieving state-of-the-art results on this particular word-sense-disambiguation tasks.
+The authors try to find a linear transformation matrix under which the word-sense-disambiguation task performs even better, however this results only in marginal benefit.
+The underlying assumption is that the semantic features are encoded in an underlying subspace of the BERT context vectors.
+The authors also note that this suggests that more semantic information may be available in lower layers. \\
+
+\subsection{Word sense disambiguation in specialized domains}
+
+Semantic class prediction can be extended to other domains. 
+For example, in the medical domain, different tokens can be interpreted as different medicines. 
+\texttt{cold} can be interpreted as either a symptom, or temperature.
 \cite{si19} use contextual word embeddings to better extract clinic concepts. 
-This is a task similar to extract semantic meanings, with the differrence that meanings consists of medical concepts only, rather than the more non-domain-specific WordNet classes.
-Besides using SemCor, the authors also focus on medical datasets annotated with clinical concepts and amongst others, making use of BioBERT \cite{lee19}.
+Instead of WordNet semantic classes, medical entities are introduced, using medical datasets annotated with clinical concepts and amongst others, making use of BioBERT \cite{lee19}.
 The authors demonstrate state-of-the-art results for clinical concept extraction. \\
 
 \begin{figure}[H]
@@ -1149,16 +1166,59 @@ The authors demonstrate state-of-the-art results for clinical concept extraction
   \label{fig:cold_fictional_desired}
 \end{figure}
 
-%\cite{chen19} apply a co-clustering framework that discovery multiple semantic and visual senses of a given noun phrase.
-%They use an structure-EM-like algorithm to achive this.
-
-%\cite{zhu18} trains a LSTM-Conditional-Random-Field to extract concepts.
-%They used annotated corpora from doctors notes to train the model and model this as a named-entity-recognition task.
-
 
 \section{Syntactic subspace in BERT}
 
 The output of BERT can also be analysed for syntactical properties.
+
+\subsection{Extracting Parse-Trees}
+
+\cite{coenen19, jawahar19} analyse how BERT encodes parse-trees in their attention mechanisms, and the distance between the produced contextual word embeddings. \\
+
+\cite{coenen19} argue that on a high level, semantic and syntactic features seem to be present in different subspaces.
+\cite{jawahar19} specifies this by arguing that BERT encodes surface features in bottom layers, syntactic features in middle layers, and semantic features in top layers.
+\cite{coenen19} mention that there are fine-grained geometric representations of word senses, which is encoded in a relatively low-dimensional subspace.
+However, this conclusion stems mostly from qualitative evaluation.
+In slight contrast, \cite{jawahar19} cluster the representations (using normalized mutual information) at different layers $l$ of the model, and claim that lower layers encode phrasal information better, which is in slight contradiction to.
+\cite{coenen19} use the Penn Treebank \cite{marcus93} to infer a dependency parsing scheme using a linear classifier with output of the transformer context vectors as input.
+They achieve above 85.8\% accuracy for two-class classification, and 71.5\% accuracy for multi-class classification.
+Prior work by \cite{hewitt19} finds that BERT encodes a parse tree where the tree distance seems to correspond to specifically to the square of the Euclidean distance.
+A theorem is presented that shows that a tree with $n$ nodes has a Pythagorean embedding in $\mathbb{R}^{n-1}$.
+
+\begin{figure}
+	\center
+  \includegraphics[width=\linewidth]{./assets/relatedwork/BERT_tree.png}
+  \caption{From \cite{coenen19}. Visualizing the embeddings of two sentences after applying the Hewitt Manning probe. Parse tree (left) in comparison to the PCA projection of the contextual word embeddings (right). Small deviations are apparently, but an obvious resemblance exists. The color of an edge determines the squared Euclidean distance.}
+  \label{fig:BERT_tree}
+\end{figure}
+
+\cite{jawahar19}  use a maximum spanning-tree approach to arrive at a dependency parsing tree extracted from the attention matrix.
+
+\begin{figure}
+	\center
+  \includegraphics[width=0.7\linewidth]{./assets/relatedwork/BERT_dependency_parsing.png}
+  \caption{From \cite{jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using labelled root \texttt{are} as starting node with the maximum spanning tree algorithm}
+  \label{fig:cold_fictional_desired}
+\end{figure}
+
+The authors do little analysis on how semantics is captured in the outputs of BERT, but rather focus on part-of-speech, tenses and subject-verb agreement conditions. \\
+
+\begin{figure}
+	\center
+  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/self_attention_analysis.png}
+  \caption{From \cite{peters18}. The authors show different similarity intensities (cosine similarity) between token-pairs using the output of a 4-layer LSTM (left), and the output after the first layer (right).}
+  \label{fig:embeddings_by_language}
+\end{figure}
+
+\cite{peters18} do a similar analysis on a 4-layer deep LSTM-based language model. 
+Similar to \cite{jawahar19}, they find that in general, lower layers mostly capture local information, while top layers represent longer range relationships, as the attention matrix has local spikes.
+For bidirectional LMs, lower layers tend to place words from the same syntactic constituents in similar parts of the vector space.
+The authors argue that in bidirectional LMs, semantics is captured only to a small extent, whereas morphology alone is most often used to answer questions on word analogy tasks.
+The LM architectures learn syntax, as part-of-speech tags are captured at lower levels of the bidirectional LM layers.
+The authors further build a contstituency parser with almost 80\% accuracy, by only adding a linear classifier and the span representation onto the lower layers of the bidirectional LMs.
+A parse-tree is built using a greedy decoding step similar to \cite{joshi19b}. \\
+ 
+\subsection{Subspace representing part-of-speech, verbs and arguments}
 
 \cite{ribeiro19} aims to devise a verb-clustering and an argument-clustering approach which is supposed to devise a clustering that evokes frame-specific slots and thus semantic roles.
 The authors again make use of the Chinese Whispers algorithm
@@ -1166,6 +1226,14 @@ The authors again make use of the Chinese Whispers algorithm
 The authors use ELMo and BERT contextual word embeddings.
 For the Chinese Whispers algorithm again, a graph is devised from the set of sampled contextual word embeddings $X$.
 Edges all have the same weight, thus a cutoff function is defined by  which edges of lower weight (and thus lower similarity) are removed.
+
+\begin{figure}[H]
+	\center
+  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/BERT_tsne_layers.png}
+  \caption{From \cite{jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.}
+  \label{fig:cold_fictional_desired}
+\end{figure}
+
 The cutoff function for the verb-clustering task is
 
 \begin{equation}
@@ -1183,91 +1251,24 @@ as a higher neighboring threshold is needed as the authors found out empirically
 Clustering performance is measured by the number of clusters found, and a purity metric which describes how homogenous the created clusters are. 
 Labels from FrameNet \cite{baker98} are used for the homogenuity test. \\
 
-Next to clustering, \cite{coenen19} analyse how BERT and similar transformer models capture syntactic parse-trees.
-The authors argue that on a high level, semantic and syntactic features seem to be present in different subspaces.
-The authors mention that there are fine-grained geometric representations of word senses, which is encoded in a relatively low-dimensional subspace.
-However, this conclusion stems mostly from qualitative evaluation.
-\cite{coenen19} use the Penn Treebank \cite{marcus93} to infer a dependency parsing scheme using a linear classifier with output of the transformer context vectors as input.
-They achieve above 85.8\% accuracy for two-class classification, and 71.5\% accuracy for multi-class classification.
-Prior work by \cite{hewitt19} finds that BERT encodes a parse tree where the tree distance seems to correspond to specifically to the square of the Euclidean distance.
-Finally, a theorem is presented that shows that a tree with $n$ nodes has a Pythagorean embedding in $\mathbb{R}^{n-1}$.
+\cite{peters18} analyses the choice of different neural networks (i.e. LSTM, CNN or self-attention) and the effect it has on the underlying syntactical subspace produced. \\
 
-\begin{figure}
-	\center
-  \includegraphics[width=\linewidth]{./assets/relatedwork/BERT_tree.png}
-  \caption{From \cite{coenen19}. Visualizing the embeddings of two sentences after applying the Hewitt Manning probe. Parse tree (left) in comparison to the PCA projection of the contextual word embeddings (right). Small deviations are apparently, but an obvious resemblance exists. The color of an edge determines the squared Euclidean distance.}
-  \label{fig:BERT_tree}
-\end{figure}
-
-%TODO check tenses in this section ...
-
-The authors also analyse semantic features qualitatively.
-However, it is important to realize that the qualitative evaluation is not extensive, and only considers the linguistic feature of \textit{plurality}, and only on hand-picked examples.
-Also, it is important to consider what causes the separation between clusters.
-Given figure \ref{fig:BERT_plurality}, one cannot reliably say that the part-of-speech feature \textit{causes} the partition into clusters.
-\texttt{die} has different meanings when interpreted as a verb and as a noun, which could also be the reason the clusters are so strongly visible.
-
-\begin{figure}
-	\center
-  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/BERT_plurality.png}
-  \caption{From \cite{coenen19}. Embeddings for the word \texttt{die} in different contexts, visualized through UMAP. The blue text describes general annotations.}
-  \label{fig:BERT_plurality}
-\end{figure}
-
-A nearest neighbour classifier is built using the BERT embeddings resulting from the labelled SemCor corpus, achieving state-of-the-art results on this particular word-sense-disambiguation tasks.
-The authors try to find a linear transformation matrix under which the word-sense-disambiguation task performs even better, however this results only in marginal benefit.
-The underlying assumption is that the semantic features are encoded in an underlying subspace of the BERT context vectors.
-The authors also note that this suggests that more semantic information may be available in lower layers. \\
-
-\cite{peters18} analyses the choice of different neural networks (i.e. LSTM, CNN or self-attention) and the effect it has on the underlying syntactical subspace produced.
-
-\begin{figure}[H]
-	\center
-  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/self_attention_analysis.png}
-  \caption{From \cite{peters18}. The authors show different similarity intensities (cosine similarity) between token-pairs using the output of a 4-layer LSTM (left), and the output after the first layer (right).}
-  \label{fig:embeddings_by_language}
-\end{figure}
-
-The authors argue that in general, lower layers mostly capture local information, while top layers represent longer range relationships, as the attention matrix has local spikes.
-For bidirectional LMs, lower layers tend to place words from the same syntactic constituents in similar parts of the vector space.
-The authors argue that in bidirectional LMs, semantics is captured only to a small extent, whereas morphology alone is most often used to answer questions on word analogy tasks.
-The biLM architectures learn syntax, as part-of-speech tags are captured at lower levels of the bidirectional LM layers.
-The authors further build a contstituency parser with almost 80\% accuracy, by only adding a linear classifier and the span representation onto the lower layers of the bidirectional LMs.
-A parse-tree is built using a greedy decoding step similar to \cite{joshi19b}. \\
-
-In slight contrast to that, \cite{jawahar19} argue that BERT encodes surface features in bottom layers, syntactic features in middle layers, and semantic features in top layers.
-Using normalized mutual information, the authors cluster the representations at different layers $l$ of the model, and argue that lower layers encode phrasal information better.
-The authors use ten probing tasks to evaluate language features extracted through BERT.
-
-\begin{figure}
-	\center
-  \includegraphics[width=0.9\linewidth]{./assets/relatedwork/BERT_tsne_layers.png}
-  \caption{From \cite{jawahar19}. 2D t-SNE plot of span embeddings computed from the first and last two layers of BERT.}
-  \label{fig:cold_fictional_desired}
-\end{figure}
-
-The authors also use a maximum spanning-tree approach to arrive at a dependency parsing tree extracted from the attention matrix.
-
-\begin{figure}
-	\center
-  \includegraphics[width=0.7\linewidth]{./assets/relatedwork/BERT_dependency_parsing.png}
-  \caption{From \cite{jawahar19}. Dependency parse tree induced from attention head in layer 11 in layer 2 using labelled root \texttt{are} as starting node with the maximum spanning tree algorithm}
-  \label{fig:cold_fictional_desired}
-\end{figure}
-
-The authors do little analysis on how semantics is captured in the outputs of BERT, but rather focus on part-of-speech, tenses and subject-verb agreement conditions. \\
-
-Other lines of work includes models such as \textit{PAFIBERT} \cite{tan19}, which aims to transform sentences into a predicate-argument structure.
+Other lines of work includes models such as \textit{PAFIBERT} \cite{tan19}, which aims to transform sentences into a predicate-argument structure through additional modifications to BERT.
 Implicitly, this solves a frame identification, as well as semantic role assignment task. \\
 
 \section{Sentiment subspace in BERT}
+
+Because context also implies sentiment, the context embeddings produced by BERT introduce a bias through the corpus that the LM was trained on.
+Language models can also be used to evaluate how meaning and sentiment for certain words change over time.
+
+\subsection{Bias} 
 
 \cite{may19} measure social biases in BERT contextual word embeddings.
 For this, they use static word embeddings by averaging over token-embeddings produced by BERT.
 Although the authors cannot prove general trends, they show that certain suspicious patterns of sensitivity suggest that bias is occurring in different contexts.
 Specifically, this is done by identifying relationships between concepts and attributes. 
 The authors find that in the embedding space, concepts such as \texttt{European American names} are much more closely related to concepts such as \texttt{pleasant} than concepts such as \texttt{African American names}, which is a strong indication of bias.
-\cite{caliskan19} follows a similar analysis, focussin much more on the properties of corpora used for training.
+\cite{caliskan19} follows a similar analysis, focusing much more on the properties of corpora used for training.
 The authors analyse the social bias contained in semantics derived from corpora, which is also the case for modern language models like BERT.
 The authors hint that word-embeddings like word2vec also contain biases, where male names are more biased with career settings than female names.
 Again, the example with european-american and african-american names is shown. \\
@@ -1275,14 +1276,13 @@ Again, the example with european-american and african-american names is shown. \
 \cite{moradshahi19} Include a final linear transformation which mimics the distance learning aspect to filter out the subspace of interesting for downstream tasks.
 This final linear transformation is task-specific and not learned during pre-training.
 
-For words that consist of multiple tokens, \cite{bommasani19, akbik19} do a simple mean, max or min pooling over all token-embeddings to arrive at a word-embedding (both static and contextual word embeddings). \\
-
 
 \cite{may19} analyse the social biases that are part of the contextual word embeddings and show that depending on the language model (ELMo, BERT), the amount of social bias deviates. 
 Because contextual word embeddings capture more than just semantics, bias is a natural implication of context vectors.
-A by-product of their research includes aggregating token-embeddings (i.e. aggregating the tokens \texttt{hav} and \texttt{\#\#\#ing} to result in the word \texttt{having}).
 Although not very extensive on the topic of aggregation, the authors use techniques of mean-pooling, max-pooling, and last-pooling to arrive at a single context-vector, if the given token is intrinsically split-up by the language-model tokenizer (incl. BERT, ELMo, GPT).
 Finally, evaluation on the corpora also yield inclusion of human-like biases \cite{jentzsch19} by names, races, male-vs-female. \\
+
+\subsection{Change of language over time}
 
 This bias can also be seen in how language changes over time. \cite{martinc20} looks at how language models capture the of change of meaning for different words over time.
 The authors train language models on a balanced set of genres, from the 1960s and the 1990s.
