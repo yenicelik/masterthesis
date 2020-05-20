@@ -658,8 +658,8 @@ Other lines of work compress representations produces by BERT \cite{shen19}, or 
 \section{GLUE benchmark dataset}
 
 The GLUE benchmark dataset was first introduced by \cite{wang19}.
-We will be using the standard GLUE benchmarking, as BERT does not out-perform human-level scores on this dataset.
 Please note that most state-of-the-art models achieve human-level accuracies for standard GLUE benchmarks, which is the reason \cite{wang19b} introduced SuperGLUE with even more advanced language tasks.
+We will be using the standard GLUE benchmarking, as the basic BERT model does not out-perform human-level scores on this dataset.
 
 \begin{figure}[h]
 \center
@@ -702,22 +702,22 @@ WNLI & 634 &  146   & coreference/NLI & fiction books \\
 \end{figure}
 
 We use an accuracy score for the majority of benchmarks. 
-Some tasks have unbalanced classes or a rank metrics, so the F1-score or a correlation metrics. 
-In later experiments, the inference datasets are the most interesting tasks for us. 
+Some tasks have unbalanced classes or rank metrics, resulting in the F1-score or a correlation metric as the scoring function. 
+The inference datasets are the most interesting tasks for us. 
 Thus we will give a short outline of these benchmarking tasks. 
 For a description on all other GLUE tasks, please refer to section \ref{appendix:GLUE} in the Appendix.
 
 \subsubsection{Inference Tasks}
 
 The Multi-Genre Natural Language Inference Corpus \textbf{MNLI} \cite{N18-1101} \cite{bowman2015} is a crowd-sourced collection of annotated sentence pairs for a textual entailment task.
-For each premise and hypothesis sentence, the task is to predict whether the premise entails the hypothesis, contradicts the hypothesis, or neither.
+For each premise and hypothesis sentence, the task is to predict whether the premise entails the hypothesis, contradicts the hypothesis, or does neither.
 This is a 3-class classification problem.
-The matched MNLI version tests on data which is in the same domain as the training set, while the mis-matched MLNI tests on a training set which is cross-domain.
-The MNLI contains parse-trees, which is the reason we do not display these here.
-We will be working with the matched MNLI task only for reasons of convenience.
+The matched MNLI version tests on data which is in the same domain as the training set, while the mismatched MLNI tests on a training set which is cross-domain.
+The MNLI data samples consist of parse-trees, which is the reason we do not display these here.
+We will be working with the matched MNLI task only for convenience reasons.
 
 The Stanford Question Answering Dataset is a question-answering dataset \cite{rajpurkar2016}. 
-The authors of GLUE augment this dataset and create the Question answering NLI \textbf{QNLI} benchmark, by relaxing the requirements that the model selects the exact answer, as well as the simplifying assumption that the answer is always present in the input and that lexical overlap is a reliable cue.
+The authors of GLUE augment this dataset and create the Question answering Natural Language Induction \textbf{QNLI} benchmark, by relaxing the requirements that the model selects the exact answer, as well as the simplifying assumption that the answer is always present in the input and that lexical overlap is a reliable cue.
 The task is to determine whether a context sentence contains the answer to the initially posed question. 
 
 \begin{tcolorbox}
@@ -740,7 +740,7 @@ entailment
 
 The Recognizing Textual Entailment \textbf{RTE} consists of a series of annual textual entailment challenges. 
 Data is combined from RTE1, RTE2, RTE3 and RTE5 \cite{dagan2005} \cite{bar2006} \cite{bentivogli2009} \cite{giampiccolo2007}. 
-This is a classification task where the inputs are two sentences, and the models task is to predict one of the possible outputs \textit{neutral}, \textit{contradiction} and \textit{no entailment}.
+This is a classification task where the inputs are two sentences, and the models task is to predict one of the possible outputs \texttt{neutral}, \texttt{contradiction} and \texttt{no entailment}.
 
 \begin{tcolorbox}
 \begin{verbatim}
@@ -758,11 +758,10 @@ entailment
 \end{verbatim}
 \end{tcolorbox}
 
-The Winograd NLI \textbf{WNLI} dataset uses the original Winograd Schema Challenge dataset \cite{levesque2012}, which is a reading comprehension task where the reader must read a sentence with a pronoun and select the referent of that pronoun from a list of choices. 
+The Winograd NLI \textbf{WNLI} dataset uses the original Winograd Schema Challenge dataset \cite{levesque2012}, which is a reading comprehension task where the model must read a sentence with a pronoun and select the referent of that pronoun from a list of choices. 
 Sentence pairs are constructed by replacing the ambiguous pronoun with each possible referent.
 The task is to predict if the sentence with the pronoun substituted is entailed by the original sentence.
 The dataset includes adversarial examples which test negatively when overfitted.
-
 Some example sentences include 
 
 \begin{tcolorbox}
@@ -787,25 +786,24 @@ label:1
 \section{WordNet}
 
 The online lexical database WordNet was original introduced in \cite{miller90}.
-WordNet is a semantic reference system similar to a thesaurus whose design is inspired by current psycholinguistic theories of human lexical memory.
+WordNet is a semantic reference system similar but not identical to a thesaurus whose design is inspired by current psycholinguistic theories of human lexical memory.
 English nouns, verbs and adjectives are organized into synonym sets, each representing one underlying lexical concept.
 Different relations link the synonym sets.
-WordNet 1 contains of 95,600 different word forms (51,500 simple words and 44,100 collocations), and include a total of 70,100 word meanings, or sets of synonyms.
-Compared to a standard dictionary, WordNet divides the lexicon into five categories, namely nouns, verbs, adjectives, adverbs and function words. 
+The first version of WordNet contains of 95,600 different word forms (51,500 simple words and 44,100 collocations), and include a total of 70,100 word meanings, or sets of synonyms.
 The authors argue that the rest of language is probably stored separately as part of the syntactic component of language.
 The most ambitious feature of WordNet, however, is to attempt to organize lexical information in terms of semantics (word meaning).
 
 The problem with alphabetical thesaurus is redundant entries. If Word $w_a$ and word $w_b$ are synonyms, the pair should be entered twice.
 The problem with a topical thesaurus is that two look-ups are required, first on an alphabetical list and again in the thesaurus proper.
-WordNet addresses this shortcoming through the concept of a \textit{lexical matrix}.
+WordNet addresses these shortcoming through the concept of a \textit{lexical matrix}.
 
 \paragraph{Lexical matrix:} 
-The expression \textit{Word} are often referred to both the utterance and to its associated concept.
+The expression \textit{word} is often referred to both an utterance and to its associated concept.
 \cite{miller90} specifies the difference between the two concepts as "word form", which refers to the physical utterance or inscription, and "word meaning", which refers to the lexicalized concept that a form can be used to express.
 We will refer to \textit{semantics} whenever we mean \textit{word meaning}.
 
-Table \ref{fig:wordnet_table} is a lexical matrix, which encodes word-forms (columns), word-meanings (rows), and the existence of the possibility to express the word-meanings through the corresponding word-form (cell).
-If multiple entries exist for a single column, then the single word-form encode multiple meanings, implying that the word-form is polysemous (it encodes multiple word-forms).
+Figure \ref{fig:wordnet_table} depicts a lexical matrix, which encodes word-forms (columns), word-meanings (rows), and the existence of the possibility to express the word-meanings through the corresponding word-form (cell).
+If multiple entries exist for a single column, then the single word-form encode multiple meanings, implying that the word-form is polysemous.
 If multiple entries exist for a single row, the two words express the same underlying concept, and thus the two words-forms are synonyms.
 
 \begin{figure}
@@ -827,16 +825,16 @@ If multiple entries exist for a single row, the two words express the same under
 \label{fig:wordnet_table}
 \end{figure}
 
-WordNet also includes synonym sets referred to as \textit{synsets}, which are a collection of word-forms that together determine a single meaning.
+WordNet refers to sets of synonyms as \textit{synsets}, which are a collection of word-forms that together determine a single meaning.
 WordNet represents a semantic unit through such synsets.
 WordNet is organized by semantic relations.
-Thus, WordNet includes a set of semantic relations.
 WordNet defines synonyms as a set of words, where one word is interchangable for another.
 Because words in a synsets are interchangable due to their synonymous nature, WordNet organizes words into nouns, verbs, adjectives and adverbs, as the syntactic rules of language must also stay conform.
 
 The authors mention that synonyms should be best thought of a continuum along which similarity of meaning can be graded.
 However, through the introduction of synsets, the authors determine similarity in terms of a binary event, something which is either present, or not present.
-The two tables \ref{fig:bank_synset} and \ref{fig:was_synset} show examples of how WordNet 3.1 introduces different semantic classes for the words \Verb#bank# and \Verb#was#
+The two tables \ref{fig:bank_synset} and \ref{fig:was_synset} show examples of how WordNet 3.1 introduces different semantic classes for the words \Verb#bank# and \texttt{was}.
+We will make frequent use of WordNet, as it allows us to quantify semantics amongst word-forms.
 
 \begin{figure}
 \begin{center}
@@ -871,15 +869,13 @@ verb    & (work in a specific place, with a specific subject, or in a specific f
  \hline
 \end{tabular}
 \end{center}
-\caption{Example output for WordNet 3.1 noun propositions for the word \texttt{was}. In total, 18 different concepts are recorded.}
+\caption{Example output for WordNet 3.1 noun propositions for the word \texttt{was}. In total, 14 different concepts are recorded.}
 \label{fig:was_synset}
 \end{figure}
 
-We will make frequent use of WordNet, as it allows us to quantify semantics amongst word-forms.
-
 \subsection{SemCor dataset}
 
-The SemCor 3.0 corpus is an aggregation of the various Brown corpora \cite{francis64}, where each noun, adjective and verb is tagged with the WordNet 3.0 senses.
+The SemCor 3.0 corpus is an aggregation of the various Brown corpora \cite{francis64}, where each noun, adjective and verb is tagged with their respective ground-truth WordNet 3.0 sense.
 SemCor was part of the early WordNet project, initially introduced in \cite{miller94}.
 We provide some examples to give an idea of what the SemCor dataset looks like.
 Looking at the example sentence
@@ -907,7 +903,7 @@ with the corresponding WordNet semantic class ids (for the first line only)
 \begin{verbatim}
 None, Texas.noun.0, halfback.verb.1, None, does.verb.6,
 not.adverb.0, even.adverb.10, know.verb.1, None, team.noun.0,
-is.verb.4, play.noun.14,
+is.verb.4, play.noun.14
 \end{verbatim}
 \end{tcolorbox}
 
@@ -918,6 +914,7 @@ is.verb.4, play.noun.14,
   Words with a low WordNet sense index (i.e. close to 0) occur much more often than words that have a high WordNet sense index (i.e. above 5).
   The x-axis shows the WordNet sense index for a chosen word, while the y-axis shows the log-frequency within SemCor. 
   This is a cumulative plot over all words with WordNet senses within SemCor 3.0.
+    There would be no bias if the two distributions would overlap.
   The skew could be a natural effect of how word lower WordNet indecies are assigned to more commonly used words.
   }
   \label{fig:embeddings_by_language}
@@ -929,8 +926,8 @@ is.verb.4, play.noun.14,
 %TODO Add more structure
 %TODO Organize by topics, not by papers ...
 
-We will first turn our attention to existing work in analysing static word embeddings and modern language models for linguistic features.
-Existing work investigates to what extent language models can be used to predict sentiment, part-of-speech and semantics.
+Previous work analyses to what extent language models capture sentiment, part-of-speech and semantics.
+We will present a few relevant papers for each of these categories.
 
 \section{Creating Synsets from Static Word Embeddings}\label{section_clustering}
 
@@ -938,7 +935,7 @@ Existing work investigates to what extent language models can be used to predict
 
 \cite{pelevina16, biemann13} use the Chinese Whispers algorithm initially proposed in \cite{biemann06} to cluster for synsets in word2vec vectors and the JoBimText framework \cite{biemann13} specifically.
 \cite{denkowski09} uses 3-grams and creates a graph by drawing edges between words (nodes) that co-occur in the same phrase.
-The authors create an ego-network for each concept in the vector space whose correlation matrix $G(X)$ is the adjacency matrix for a resulting subgraph $\tilde{G}$
+For static word vectors, an ego-network is created for each concept in the vector space whose correlation matrix $G(X)$ is the adjacency matrix for a resulting subgraph $\tilde{G}$
 
 \begin{figure}[h]
 	\center
@@ -947,7 +944,7 @@ The authors create an ego-network for each concept in the vector space whose cor
   \label{fig:ego_network}
 \end{figure}
 
-Generally the methodology to arrive at synsets is as follows: 
+Generalizing these approaches, one arrives at synsets as follows: 
 
 \begin{enumerate}
 \item Learn static word embeddings.
@@ -956,7 +953,7 @@ Generally the methodology to arrive at synsets is as follows:
 \item Aggregate the word-vectors with respect to the induced senses
 \end{enumerate}
 
-The underlying limitation lies in the choice of the word-vectors, as well as the graph-construction and graph-clustering. \\
+The biggest limitation lies in the word vectors or underlying data structure, as this already needs to capture the relevant information for clustering. \\
 
 \begin{table}[H]
     \centering
@@ -974,8 +971,7 @@ Neighbors of the word \texttt{table} and its senses produced.
 The first row belongs to both senses, while the second and third row are distinct synsets.}
 
 \cite{remus18} skip the clustering step and makes use of existing WordNet semantic class definitions, averaging the word vectors of synsets to arrive at synset vector representation.
-Such mehodologies prove to be useful in data-mining and document classification problems \cite{reimers19}.
-
+Such methodologies prove to be useful in data-mining and document classification problems \cite{reimers19}.
 Notice that if we have words that consist of multiple tokens, popular methods include applying a simple mean, max or min pooling over all token-embeddings (see \cite{bommasani19, akbik19, may19}) to arrive at a word-embedding. 
 This is true for both contextual and static word embeddings. \\
 

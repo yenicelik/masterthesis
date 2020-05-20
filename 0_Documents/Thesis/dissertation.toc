@@ -22,7 +22,7 @@
 \contentsline {subsubsection}{Inference Tasks}{25}% 
 \contentsline {section}{\numberline {2.4}WordNet}{28}% 
 \contentsline {paragraph}{Lexical matrix:}{28}% 
-\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{31}% 
+\contentsline {subsection}{\numberline {2.4.1}SemCor dataset}{29}% 
 \contentsline {chapter}{\numberline {3}Related Work}{33}% 
 \contentsline {section}{\numberline {3.1}Creating Synsets from Static Word Embeddings}{33}% 
 \contentsline {section}{\numberline {3.2}Quantifying word sense disambiguation}{35}% 
