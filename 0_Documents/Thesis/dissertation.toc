@@ -39,35 +39,34 @@
 \contentsline {chapter}{\numberline {4}How is semantics captured through contextual word embeddings produced by BERT?}{50}% 
 \contentsline {section}{\numberline {4.1}On the Linear Separability of meaning within sampled BERT vectors}{51}% 
 \contentsline {subsection}{\numberline {4.1.1}Experiment setup}{51}% 
-\contentsline {subsection}{\numberline {4.1.2}Results}{53}% 
+\contentsline {subsection}{\numberline {4.1.2}Results}{54}% 
 \contentsline {section}{\numberline {4.2}On the Clusterability of meaning within sampled BERT vectors}{56}% 
 \contentsline {subsection}{\numberline {4.2.1}Experiment setup}{57}% 
-\contentsline {paragraph}{We will use a modified version of the Chinese Whispers algorithm.}{58}% 
 \contentsline {subsection}{\numberline {4.2.2}Results}{62}% 
-\contentsline {subsubsection}{Qualitative evaluation}{65}% 
+\contentsline {subsubsection}{Qualitative evaluation}{64}% 
 \contentsline {section}{\numberline {4.3}Correlation between Part of Speech and Context within BERT}{68}% 
 \contentsline {subsection}{\numberline {4.3.1}Experiment setup}{68}% 
 \contentsline {subsection}{\numberline {4.3.2}Results}{70}% 
 \contentsline {subsubsection}{Quantitative Evaluation}{70}% 
 \contentsline {subsubsection}{Qualitative Evaluation}{71}% 
-\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{73}% 
-\contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{75}% 
-\contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{76}% 
-\contentsline {subsubsection}{Experiment setup}{76}% 
-\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{77}% 
-\contentsline {subsubsection}{Experiment setup}{79}% 
-\contentsline {subsubsection}{Results}{79}% 
-\contentsline {subsection}{\numberline {5.1.3}BERNIE Cluster with additional pre-training}{82}% 
-\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{83}% 
-\contentsline {subsection}{\numberline {5.1.5}Results}{83}% 
-\contentsline {chapter}{\numberline {6}Conclusion}{85}% 
-\contentsline {section}{\numberline {6.1}Main Contributions}{85}% 
-\contentsline {section}{\numberline {6.2}Future Work}{86}% 
-\contentsline {paragraph}{Introducing the WiC benchmark:}{86}% 
+\contentsline {chapter}{\numberline {5}Exploiting subspace organization of semantics of BERT embeddings}{74}% 
+\contentsline {section}{\numberline {5.1}BERNIE: Equalizing variances across BERT embeddings}{76}% 
+\contentsline {subsection}{\numberline {5.1.1}BERNIE PoS}{77}% 
+\contentsline {subsubsection}{Experiment setup}{77}% 
+\contentsline {subsection}{\numberline {5.1.2}BERNIE Cluster}{78}% 
+\contentsline {subsubsection}{Experiment setup}{80}% 
+\contentsline {subsubsection}{Results}{80}% 
+\contentsline {subsection}{\numberline {5.1.3}BERNIE Cluster with additional pre-training}{83}% 
+\contentsline {subsection}{\numberline {5.1.4}Experiment setup}{84}% 
+\contentsline {subsection}{\numberline {5.1.5}Results}{84}% 
+\contentsline {chapter}{\numberline {6}Conclusion}{86}% 
+\contentsline {section}{\numberline {6.1}Main Contributions}{86}% 
+\contentsline {section}{\numberline {6.2}Future Work}{87}% 
+\contentsline {paragraph}{Introducing the WiC benchmark:}{87}% 
 \contentsline {paragraph}{Larger benchmarking dataset:}{87}% 
-\contentsline {paragraph}{Linear subspace still not apparent:}{87}% 
-\contentsline {paragraph}{Formalizing semantics:}{87}% 
-\contentsline {paragraph}{Limited coherence in lines of work}{87}% 
+\contentsline {paragraph}{Semantic subspace not apparent:}{88}% 
+\contentsline {paragraph}{Formalizing semantics:}{88}% 
+\contentsline {paragraph}{Limited coherence in lines of work}{88}% 
 \contentsline {chapter}{\numberline {A}Background}{100}% 
 \contentsline {section}{\numberline {A.1}Linguistic features}{100}% 
 \contentsline {paragraph}{Other linguistic features}{100}% 

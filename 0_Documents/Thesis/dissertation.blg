@@ -72,45 +72,45 @@ Warning--empty journal in wiedmann19
 Warning--empty journal in wittgenstein53
 Warning--empty journal in wu16
 Warning--empty journal in yan19
-You've used 147 entries,
+You've used 148 entries,
             2118 wiz_defined-function locations,
-            1098 strings with 27522 characters,
-and the built_in function-call counts, 49663 in all, are:
-= -- 4583
-> -- 3141
+            1101 strings with 27554 characters,
+and the built_in function-call counts, 49965 in all, are:
+= -- 4610
+> -- 3164
 < -- 36
-+ -- 1256
-- -- 1090
-* -- 3257
-:= -- 8529
-add.period$ -- 445
-call.type$ -- 147
-change.case$ -- 986
++ -- 1265
+- -- 1098
+* -- 3278
+:= -- 8586
+add.period$ -- 448
+call.type$ -- 148
+change.case$ -- 993
 chr.to.int$ -- 0
-cite$ -- 216
-duplicate$ -- 1851
-empty$ -- 3225
-format.name$ -- 1090
-if$ -- 10163
+cite$ -- 217
+duplicate$ -- 1861
+empty$ -- 3242
+format.name$ -- 1098
+if$ -- 10221
 int.to.chr$ -- 0
-int.to.str$ -- 147
-missing$ -- 138
-newline$ -- 738
-num.names$ -- 282
-pop$ -- 1199
+int.to.str$ -- 148
+missing$ -- 139
+newline$ -- 743
+num.names$ -- 284
+pop$ -- 1206
 preamble$ -- 1
-purify$ -- 839
+purify$ -- 845
 quote$ -- 0
-skip$ -- 1465
+skip$ -- 1472
 stack$ -- 0
-substring$ -- 1765
-swap$ -- 422
+substring$ -- 1770
+swap$ -- 423
 text.length$ -- 36
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 588
+type$ -- 592
 warning$ -- 69
-while$ -- 359
-width$ -- 150
-write$ -- 1450
+while$ -- 361
+width$ -- 151
+write$ -- 1460
 (There were 69 warnings)

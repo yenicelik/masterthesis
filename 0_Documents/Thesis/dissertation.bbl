@@ -374,6 +374,11 @@ Mahmut Kaya and Hasan~Sakir Bilge.
 \newblock Deep metric learning : A survey.
 \newblock {\em MDPI Symmetry}, 2019.
 
+\bibitem{kovaleva19}
+Olga Kovaleva, Alexey Romanov, Anna Rogers, and Anna Rumshisky.
+\newblock Revealing the dark secrets of bert.
+\newblock {\em EMNLP 2019}, 2019.
+
 \bibitem{kudugunta18}
 Sneha Kudugunta, Ankur Bapna, Isaac Caswell, Naveen Arivazhagan, and Orhan
   Firat.
@@ -611,7 +616,7 @@ Nils Reimers, Benjamin Schiller, Tilman Beck, Johannes Daxenberger, Christian
 Steffen Remus and Chris Biemann.
 \newblock Retrofitting word representations for unsupervised sense aware word
   similarities.
-\newblock {\em In Pro- ceedings of the Seventeenth Conference on Computational
+\newblock {\em In Proceedings of the Seventeenth Conference on Computational
   Natural Language Learning}, pages 143--152, 2018.
 
 \bibitem{ribeiro19}
