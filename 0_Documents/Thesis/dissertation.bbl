@@ -719,12 +719,6 @@ Ilya Sutskever, James Martens, and Geoffrey Hinton.
 \newblock Generating text with recurrent neural networks.
 \newblock 2011.
 
-\bibitem{tan19}
-Sang-Sang Tan and Jin-Cheon Na.
-\newblock Position atteention-based frame identification with bert: A deep
-  learning approach to target disambiguation and semantic frame selection.
-\newblock 2019.
-
 \bibitem{tang19}
 Raphael Tang, Yao Lu, Linqing Liu, Lili Mou, Olga Vechtomova, and Jimmy Lin.
 \newblock Distilling task-specific knowledge from bert into simple neural

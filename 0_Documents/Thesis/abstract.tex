@@ -7,22 +7,22 @@
 %These vectors are often referred to as \textit{embedding} vectors, as they embed more complex concepts into a vector representation.
 
 Word and contextual word embeddings can be considered as the fundamental unit in machine learning for natural language applications.
-For a variety of downstream tasks, any shortcomings in the embeddings will propagate on to the performance of the target task.
+For a variety of downstream tasks, any shortcomings in the embeddings will propagate on to the performance of the target task and worsen performance of the target task.
+A good understanding of the embeddings is required to address these shortcomings.
 Given that language representation models such as BERT only capture a black-box function between input and output, our aim is to understand how the subspace organization of context embeddings relates to linguistic features.
 We focus our analysis on \textit{semantics}, which captures meaning, as this is one of the most important features of language. 
-We analyse the BERT language model, as it provides a good balance between popularity, close to state-of-the-art performance, and generalizability to other modern language models due to it being based on the transformer architecture.
+We analyse the BERT language model, as it provides a good balance between popularity, close to state-of-the-art performance, and generalizability to other modern language models as it is based on the transformer architecture.
 \\
 
 Our main contributions are the following: (1) We test for linear separability and ability to partition the space into semantic clusters within the sampled BERT vectors.
-On one side, we show that while linear separability is possible. 
-On the other side, it seems nearly impossible to cleanly cluster the set of contextual word embeddings produced by BERT into different semantic classes as defined by WordNet.
+We show that while linear separability is possible, it appears almost impossible to cleanly cluster the set of contextual word embeddings produced by BERT into different semantic classes as defined by WordNet.
 We conclude that BERT organizes the embedding vectors not by semantics, but rather by context alone.
 This can easily introduce undesirable properties such as strong sentiment, leading to considerable bias in downstream tasks.
 (2) We analyze the relationship between part-of-speech and semantics. 
-We show that these show a strong correlation in languages and reflected in the embeddings produced by modern language models captures.
+We show that there exists a strong correlation in languages, which is reflected in the embeddings produced by modern language models captures.
 This affects the conclusion of some related work which analysed language models that capture semantics, but which did not account for the correlation between multiple linguistic features such as part-of-speech and semantics.
 (3) Finally, we introduce additional model-parameters for words whose sampled embedding vectors have high variance over the embedding space.
-We investigate what downstream tasks are most affected and use this as a proxy to understand what information is captured the most by the directions with high variance. \\
+We investigate what downstream tasks are most affected by and use this as a proxy to understand what information is captured the most by the directions with high variance. \\
 
 \newpage
 \vspace*{\fill}
