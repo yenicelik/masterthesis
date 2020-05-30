@@ -5,111 +5,48 @@ The style file: plain.bst
 Database file #1: dissertation.bib
 Warning--to sort, need author or key in colahLSTM
 Warning--to sort, need author or key in spacyb
-Warning--to sort, need author or key in cil_slides
 Warning--to sort, need author or key in wiktionary
 Warning--to sort, need author or key in news_corpus
 Warning--to sort, need author or key in pyax
-Warning--empty journal in ackerman09
-Warning--empty journal in alvarez18
-Warning--empty journal in bahdanau16
-Warning--empty journal in bojanowski17
-Warning--empty journal in bommasani19
-Warning--empty journal in brazinskas19
-Warning--empty journal in bromley94
-Warning--empty journal in camachocollados18
-Warning--empty journal in chopra05
-Warning--empty journal in coenen19
-Warning--empty journal in conneau17
-Warning--empty journal in denkowski09
-Warning--empty journal in ethayarajh19
-Warning--empty journal in francis64
-Warning--empty journal in frey07
-Warning--empty journal in ganea18
-Warning--empty booktitle in ge18
-Warning--empty journal in hadsell06
-Warning--can't use both volume and number fields in bar2006
-Warning--empty journal in hegel17
-Warning--empty journal in hoffer14
-Warning--empty journal in joshi19
-Warning--empty journal in joshi19b
-Warning--empty journal in jozefowicz16
-Warning--empty journal in kageback16
-Warning--empty journal in kudugunta18
-Warning--empty journal in lee17
-Warning--empty journal in levine19
-Warning--empty journal in liu19
-Warning--empty journal in ma19
-Warning--empty journal in may19
-Warning--empty journal in mccarthy16
-Warning--empty journal in mickus19
-Warning--empty booktitle in miller94
-Warning--empty journal in moradshahi19
-Warning--empty booktitle in ni17
-Warning--empty journal in peters18
-Warning--empty journal in pilehvar19
-Warning--empty journal in reimers19
-Warning--empty booktitle in rippel16
-Warning--empty journal in rumelhart85
-Warning--empty journal in sennrich16
-Warning--empty journal in shen19
-Warning--empty journal in shi19
-Warning--empty journal in shin18
-Warning--empty journal in si19
-Warning--empty booktitle in sohn16
-Warning--empty booktitle in song17
-Warning--empty booktitle in suarez19
-Warning--empty journal in sun19
-Warning--empty journal in sutskever11
-Warning--empty journal in tang19
-Warning--empty journal in tsai19
-Warning--empty journal in wang19e
-Warning--empty booktitle in wang17
-Warning--empty journal in wang19d
-Warning--empty booktitle in wang19c
-Warning--empty journal in whitaker19
-Warning--empty journal in wiedmann19
-Warning--empty journal in wittgenstein53
-Warning--empty journal in wu16
-Warning--empty journal in yan19
 You've used 147 entries,
             2118 wiz_defined-function locations,
-            1098 strings with 27383 characters,
-and the built_in function-call counts, 49726 in all, are:
-= -- 4588
-> -- 3151
-< -- 36
-+ -- 1260
-- -- 1094
-* -- 3266
-:= -- 8542
-add.period$ -- 445
+            1148 strings with 29266 characters,
+and the built_in function-call counts, 50756 in all, are:
+= -- 4796
+> -- 3157
+< -- 42
++ -- 1262
+- -- 1096
+* -- 3317
+:= -- 8711
+add.period$ -- 446
 call.type$ -- 147
-change.case$ -- 988
+change.case$ -- 989
 chr.to.int$ -- 0
-cite$ -- 215
-duplicate$ -- 1851
-empty$ -- 3225
-format.name$ -- 1094
-if$ -- 10174
+cite$ -- 152
+duplicate$ -- 1901
+empty$ -- 3237
+format.name$ -- 1096
+if$ -- 10489
 int.to.chr$ -- 0
 int.to.str$ -- 147
 missing$ -- 138
-newline$ -- 738
-num.names$ -- 282
-pop$ -- 1199
+newline$ -- 739
+num.names$ -- 284
+pop$ -- 1055
 preamble$ -- 1
-purify$ -- 841
+purify$ -- 842
 quote$ -- 0
-skip$ -- 1464
+skip$ -- 1557
 stack$ -- 0
-substring$ -- 1765
-swap$ -- 423
-text.length$ -- 36
+substring$ -- 1935
+swap$ -- 544
+text.length$ -- 42
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 588
-warning$ -- 68
-while$ -- 359
+warning$ -- 5
+while$ -- 372
 width$ -- 150
-write$ -- 1451
-(There were 68 warnings)
+write$ -- 1519
+(There were 5 warnings)

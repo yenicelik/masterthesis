@@ -16,11 +16,11 @@
 %% EDIT THE BELOW TO CUSTOMIZE
 %%
 
-\def\authorname{Understanding and exploiting subspace organization in contextual word embeddings \xspace}
+\def\authorname{Understanding and Exploiting Subspace Organization in Contextual Word Embeddings \xspace}
 \def\authorcollege{David Yenicelik \\ ETH Zürich\xspace}
 \def\authoremail{yedavid@ethz.ch}
 \def\dissertationtitle{}
-\def\wordcount{34'331}
+\def\wordcount{34'606}
 
 
 %\usepackage[dvips]{epsfig,graphics} 
@@ -151,7 +151,7 @@ We also show that particularly sentiment is more strongly captured in modern lan
 
 We will start with summarizing background work (Section \ref{section:Background}), show existing analyses on the inner workings of BERT (Section \ref{section:RelatedWork}), conduct tests that do not modify the BERT model (Section \ref{section:UnderstandingBERT}) and make modifications to the embeddings in BERT to understand what effect this has on downstream tasks (Section \ref{section:ExploitingBERT}).
 We will finally draw conclusion and show potential for future work (Section \ref{section:Conclusion}).
-We adopt the terminology used in background and related work.
+We adopt the terminology used in background and related work, and thus also refer to BERT as a language model, even though it cannot capture arbitrary probability distributions such as $p(w_t|w_{t-1}, \ldots, w_{1})$.
 
 
 %\chapter{Background} 
@@ -1306,10 +1306,9 @@ A "variance kept" value of $1$ corresponds to no information loss in terms of ei
 We show the result for three candidate experiments, for the words \Verb#was#, \texttt{is}, and \Verb#one# respectively, as these are the words that have the highest number of occurrences within the 
 SemCor dataset.
 In high dimensions, there are many possible separating hyperplanes due to candidate model space growing exponentially with the number of dimensions.
-We refer the reader to Appendix \ref{appendix:linear_sep_results} for more results.
+We refer the reader to Appendix \ref{appendix:linear_sep_results} for more results. \\
 
 \begin{center}
-\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{is}.}
 \begin{tabular}{SSSSSSSS} \toprule
     {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
        2  & 0.09 & 0.57 / $\pm$ 0.02 \\ \midrule
@@ -1320,13 +1319,13 @@ We refer the reader to Appendix \ref{appendix:linear_sep_results} for more resul
      75  & 0.78 & 0.84 / $\pm$ 0.04 \\ \midrule
     100 & 0.79 & 0.85 / $\pm$ 0.03  \\ \midrule
 \end{tabular}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{is}.}
 \end{center}
 
 % -> show which two different word meanings are sampled
 \quad
 
 \begin{center}
-\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{one}.}
 \begin{tabular}{SSSSSSSS} \toprule
     {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
        2  & 0.10 & 0.55 / $\pm$ 0.10 \\ \midrule
@@ -1338,12 +1337,12 @@ We refer the reader to Appendix \ref{appendix:linear_sep_results} for more resul
      75  & 0.87 & 0.87 / $\pm$ 0.05 \\ \midrule
     100 & 0.94 & 0.87 / $\pm$ 0.05  \\ \midrule
 \end{tabular}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 2 most common classes of WordNet meanings for the word \textit{one}.}
 \end{center}
 
 \hfill \break
 
 \begin{center}
-\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 4 most common classes of WordNet meanings for the word \textit{was}.}
 \begin{tabular}{SSSSSSSS} \toprule
     {dimensionality} & {variance kept} & {accuracy (mean / $\pm$ stddev)}  \\ \midrule
        2  & 0.08 & 0.38 / $\pm$ 0.03 \\ \midrule
@@ -1355,6 +1354,7 @@ We refer the reader to Appendix \ref{appendix:linear_sep_results} for more resul
      75  & 0.77 & 0.95 / $\pm$ 0.01 \\ \midrule
     100 & 0.83 & 0.95 / $\pm$ 0.01  \\ \midrule
 \end{tabular}
+\captionof{table}{Mean and standard deviation of the accuracy of a linear classifier trained on the 4 most common classes of WordNet meanings for the word \textit{was}.}
 \end{center}
 
 \hfill \break
@@ -1521,7 +1521,7 @@ We apply 5-fold cross-validation to ensure a good performance of the algorithms.
 Due to the limited size of the SemCor dataset, we aggregate the matrix of context vectors $X$ with sentences from an unsupervised news corpus as well.
 Because we don't have labels for the unsupervised corpus, however, we only apply scoring on the samples for which we have the WordNet labels (i.e. sentences sampled from SemCor). \\
 
-The scoring scheme we use is the adjusted random index \textit{ARI} \cite{rand71}, \cite{hubert85} which compares to what extent two clusterings are identical.
+The scoring scheme we use is the adjusted random index \textit{ARI} \cite{rand71, hubert85} which compares to what extent two clusterings are identical.
 This is necessary because clusters across clustering episodes will not produce the same cluster labels when run repeatedly.
 The ARI is computed by going through all possible permutations of the cluster-labels and normalizing the score of the match for each permutation by a normalizing value.
 Because all possible permutations are taken into account, the ARI is \textit{adjusted for chance}.
@@ -1929,9 +1929,8 @@ A split-word will in most cases have high-variance amongst embedding-vectors sam
 Some split-words are present in Table \ref{table:wordsvariance} which sorts words by the number of WordNet meanings recorded, and the mean variance over 500 sampled contextual word embeddings.
 Introducing more specialized embeddings for tokens with high variance in contextual word embeddings will allow us to model more complex distributions.
 This happens because we introduce additional weights that can parametrize a specific token distribution, allowing a better approximation of the underlying true distribution.
-This would result in multiple simple, well-parametrized probability distributions, rather than a single under-parametrized distribution which has high variance due to the low expressiveness.
+This would result in multiple simple, well-parametrized probability distributions, rather than a single under-parametrized distribution which has high variance due to the low expressiveness. \\
 
-\captionof{table}{For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between the number of WordNet senses and the variance amongst sampled BERT vectors.}
 \scalebox{0.9}{
 \begin{tabular}{
  l % left aligned column
@@ -1962,6 +1961,7 @@ humans & 2 & 0.275 \\
 \label{table:wordsvariance}
 \end{tabular}
 }
+\captionof{table}{For each word in the SemCor dataset, the number of WordNet senses, and the mean variance of $n=500$ sampled embedding vectors, across all embedding dimensions. The table shows a subset of the words with highest and lowest variance. There seems to be a strong correlation between the number of WordNet senses and the variance amongst sampled BERT vectors.}
 
 \begin{figure}[H]
 	\center
@@ -2658,14 +2658,14 @@ Distance metric learning approaches the problem of learning a similarity metric.
 We introduce two sets of data-sample pairs, $S$ and $D$:
 
 \begin{align}
-S &= \{ (x_i, x_j) : x_i and x_j should be similar\} \\
-D &= \{ (x_i, x_j) : x_i and x_j should be dissimilar\}
+S &= \{ (x_i, x_j) : x_i \text{ and } x_j \text{ should be similar } \} \\
+D &= \{ (x_i, x_j) : x_i \text{ and } x_j \text{ should be dissimilar } \}
 \end{align}
 
 As is also mentioned in \cite{moutafis17}, the proximity relation can also be captured through \textit{relation triplets}
 
 \begin{align}
-R &= \{ (x_i, x_j, j_l) : x_i is more similar to x_j than x_l \} \\
+R &= \{ (x_i, x_j, j_l) : x_i \text{ is more similar to } x_j \text{ than  } x_l \} \\
 \end{align}
 
 The general notion of a distance in the euclidean space can be defined as 
@@ -2708,7 +2708,6 @@ The authors in \cite{moutafis17} argue that due to this property of measuring si
 Although we focus on deep metric learning during our experiments, due to the additional flexibility that deep neural networks provide, a good understanding of the underlying mechanisms is useful.
 
 \cite{suarez19} provides a good introduction to the literature of metric learning algorithms.
-
 We first define by a proper definition of a distance \\
 
 \newtheorem{mydef}{Definition}
@@ -2726,7 +2725,7 @@ We will be assuming a euclidean metric space unless otherwise specified.
 
 \quad
 
-Because the coincidence property is not always important to us, but because word-embeddings are more interested in measuring relative distances, we will also consider mappings known as \textit{pseudoinstances} which relax the coincidence property to merely fulfill $d(x, x) = 0$.
+Because the coincidence property is not always important to us, but because word-embeddings are more interested in measuring relative distances, we will also consider mappings known as \textit{pseudo-dinstances} which relax the coincidence property to merely fulfill $d(x, x) = 0$.
 In the $d$ dimensional euclidean space, the set of \textit{Mahalanobis distances}, which is parametrized by positive semidefinite matrices are useful.
 
 Using the above similarity, dissimilarity and relation triplets, an optimal distance $d$ from a set of distances $\mathcal{D}$ can be found
@@ -2745,10 +2744,7 @@ where $l$ is one of the loss metrics shown below.
   \caption{Taken from \cite{suarez19}. The individual tiles show the kNN prediction regions by color for every point in the image. Using the unmodified euclidean distance, this would result in classification regions on the left. The reader can see, learning an appropriate distance, the classification is much more effective (middle). Finally, the dimensionality is also reducible with this dimension while still matching the classification accuracy (right).}
 \end{figure}
 
-Although we will not go into too much detail, we will outline some algorithms that \cite{suarez19} mentions in their work.
-
-We will first start with dimensionality reduction techniques, then move to nearest neighbor classifiers, follow with nearest centroids classifiers and finally go over some information theory based algorithms.
-Notice that for almost each one of these methods, kernelized versions are available.
+\cite{suarez19} offers a survey on this work.
 
 \subsubsection{Deep Metric Learning}
 
@@ -2836,8 +2832,7 @@ Interestingly, they show that different languages do not project into similar sp
 
 
 \cite{lample18} uses a cyclic loss to apply unsupervised machine translation suign monolingual corpora only. 
-Here, sentence-embeddings are learned over time, which follow the cyclic loss constraint and minimize the unsupervised translation loss.
-
+Here, sentence-embeddings are learned over time, which follow the cyclic loss constraint and minimize the unsupervised translation loss. 
 Other work tries to disentangle the different linguistic, visual, and audio-based features by supplying multi-modal input at once \cite{ma19}.
 A translation model is learned which can not only translate between different domains, but also between different modalities (i.e. from image to audio, audio to text, and any such combination).
 
@@ -3114,7 +3109,7 @@ We now present a full partitioning over the samples of word \texttt{key}. \\
 \end{align}
 \end{minipage}
 }
-\captionof{figure}{Partition 5 for the word \texttt{key}. This cluster contains \texttt{key} as a synonym for the word \texttt{main}, which characterizes an important subject. The context is mixed. The sentiment is mixed .}
+\captionof{figure}{Partition 5 for the word \texttt{key}. This cluster contains \texttt{key} as a synonym for the word \texttt{main}, which characterizes an important subject. The context is one about physical activity. The sentiment is mixed.}
 \end{tcolorbox}
 
 \quad
